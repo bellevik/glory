@@ -1,3 +1,7 @@
+# LibGDX Compile files #
+########################
+*/bin/**
+
 # OS generated files #
 ######################
 .DS_Store
