@@ -2,6 +2,8 @@ package se.glory.entities;
 
 import java.util.ArrayList;
 
+import se.glory.utilities.Constants;
+
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -11,19 +13,17 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 public class Zombie {
-	private static final float WORLD_TO_BOX = 0.01f;
-	
 	private Body body;
 	private BodyDef bodyDef;
 	
 	public Zombie(World world, int x, int y) {
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;
-		bodyDef.position.set(new Vector2(x * WORLD_TO_BOX, y * WORLD_TO_BOX));
+		bodyDef.position.set(new Vector2(x * Constants.WORLD_TO_BOX, y * Constants.WORLD_TO_BOX));
 		body = world.createBody(bodyDef);
 		
 		CircleShape circleShape = new CircleShape();
-		circleShape.setRadius(15 * WORLD_TO_BOX);
+		circleShape.setRadius(15 * Constants.WORLD_TO_BOX);
 		
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = circleShape;
