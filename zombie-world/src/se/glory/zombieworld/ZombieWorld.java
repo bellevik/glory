@@ -28,7 +28,7 @@ public class ZombieWorld implements ApplicationListener {
 	    camera.setToOrtho(false, 800, 480);
 	    
 	    batch = new SpriteBatch();
-		texture = new Texture(Gdx.files.internal("data/Zombie.png"));
+		texture = new Texture(Gdx.files.internal("img/Zombie.png"));
 		
 		
 		ball = new Rectangle();
