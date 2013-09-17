@@ -2,10 +2,10 @@
 ########################
 */bin/**
 */bin
-.dex
-.ap_
-.apk
-.class
+*.dex
+*.ap_
+*.apk
+*.class
 
 # OS generated files #
 ######################
