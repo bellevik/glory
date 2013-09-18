@@ -4,17 +4,21 @@ import java.util.ArrayList;
 
 import se.glory.utilities.Constants;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
-public class Zombie {
+public class Zombie implements Creature {
 	private Body body;
 	private BodyDef bodyDef;
+	private Texture texture;
 	
 	public Zombie(World world, int x, int y) {
 		bodyDef = new BodyDef();
@@ -27,29 +31,27 @@ public class Zombie {
 		
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = circleShape;
-		fixtureDef.density = 0.5f;
-		fixtureDef.friction = 0.4f;
-		fixtureDef.restitution = 0.6f;
+		fixtureDef.density = 10f;
+		fixtureDef.friction = 10f;
+		fixtureDef.restitution = .5f;
+		
+		texture = new Texture(Gdx.files.internal("img/Zombie.png"));
 		
 		body.createFixture(fixtureDef);
 		body.setUserData(this);
 	}
 	
-	public Vector2 getPos() {
-		return body.getPosition();
-	}
-	
-	private Human getClosestHuman(ArrayList<Human> humans) {
+	private Creature getClosestHuman(ArrayList<Creature> humans) {
 		double distance = Double.MAX_VALUE;
-		Human closestHuman = null;
+		Creature closestHuman = null;
 		
-		for (Human h : humans) {
-			float tmpX = h.getPos().x - body.getPosition().x;
-			float tmpY = h.getPos().y - body.getPosition().y;
+		for (Creature h : humans) {
+			float tmpX = h.getPosition().x - body.getPosition().x;
+			float tmpY = h.getPosition().y - body.getPosition().y;
 			
 			double size = Math.sqrt(tmpX*tmpX+tmpY*tmpY);
 			
-			if (size < 1.5 && size < distance) {
+			if (size < 3.5 && size < distance) {
 				closestHuman = h;
 				distance = size;
 			}
@@ -58,18 +60,34 @@ public class Zombie {
 		return closestHuman;
 	}
 	
-	public void autoUpdateMovement(ArrayList<Human> humans) {
-		Human h = getClosestHuman(humans);
+	public void draw (SpriteBatch batch) {
+		batch.begin();
+		batch.draw(texture, body.getPosition().x * Constants.BOX_TO_WORLD, body.getPosition().y * Constants.BOX_TO_WORLD);
+		batch.end();
+	}
+	
+	public void autoUpdateMovement(ArrayList<Creature> creatures2, Player player) {
+		ArrayList<Creature> creatures = (ArrayList<Creature>) creatures2.clone();
+		creatures.add((Creature) player);
+		
+		Creature h = getClosestHuman(creatures);
 		
 		if (h != null) {
-			float tmpX = h.getPos().x - body.getPosition().x;
-			float tmpY = h.getPos().y - body.getPosition().y;
+			float tmpX = h.getPosition().x - body.getPosition().x;
+			float tmpY = h.getPosition().y - body.getPosition().y;
 			
 			double size = Math.sqrt(tmpX*tmpX+tmpY*tmpY);
-			tmpX = (float) (tmpX/(size*0.9));
-			tmpY = (float) (tmpY/(size*0.9));
+			tmpX = (float) (tmpX/(size*2));
+			tmpY = (float) (tmpY/(size*2));
 			
 			body.setLinearVelocity(tmpX, tmpY);
+		} else {
+			body.setLinearVelocity(0, 0);
 		}
+	}
+
+	@Override
+	public Vector2 getPosition() {
+		return body.getPosition();
 	}
 }

@@ -15,7 +15,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
-public class Player {
+public class Player implements Creature {
 	
 	private Body playerBody;
 	private BodyDef playerDef;
@@ -37,7 +37,7 @@ public class Player {
 		fixtureDef.restitution = 0.6f;
 		
 		playerBody.createFixture(fixtureDef);
-		texture = new Texture(Gdx.files.internal("img/mario.png"));
+		texture = new Texture(Gdx.files.internal("img/player.gif"));
 	}
 	
 	public void draw (SpriteBatch batch) {
@@ -48,6 +48,11 @@ public class Player {
 	
 	public Body getPlayerBody() {
 		return playerBody;
+	}
+
+	@Override
+	public Vector2 getPosition() {
+		return playerBody.getPosition();
 	}
 	
 }

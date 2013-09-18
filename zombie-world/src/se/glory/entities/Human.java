@@ -4,17 +4,21 @@ import java.util.ArrayList;
 
 import se.glory.utilities.Constants;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
-public class Human {
+public class Human implements Creature{
 	private Body body;
 	private BodyDef bodyDef;
+	private Texture texture;
 	
 	public Human(World world, int x, int y) {
 		bodyDef = new BodyDef();
@@ -31,12 +35,16 @@ public class Human {
 		fixtureDef.friction = 0.4f;
 		fixtureDef.restitution = 0.6f;
 		
+		texture = new Texture(Gdx.files.internal("img/mario.png"));
+		
 		body.createFixture(fixtureDef);
 		body.setUserData(this);
 	}
 	
-	public Vector2 getPos() {
-		return body.getPosition();
+	public void draw (SpriteBatch batch) {
+		batch.begin();
+		batch.draw(texture, body.getPosition().x * Constants.BOX_TO_WORLD, body.getPosition().y * Constants.BOX_TO_WORLD);
+		batch.end();
 	}
 	
 	public void autoUpdateMovement(ArrayList<Zombie> zombies) {
@@ -44,8 +52,8 @@ public class Human {
 		float totY = 0;
 		
 		for (Zombie z : zombies) {
-			float tmpX = body.getPosition().x - z.getPos().x;
-			float tmpY = body.getPosition().y - z.getPos().y;
+			float tmpX = body.getPosition().x - z.getPosition().x;
+			float tmpY = body.getPosition().y - z.getPosition().y;
 			
 			double size = Math.sqrt(tmpX*tmpX+tmpY*tmpY);
 			
@@ -63,10 +71,17 @@ public class Human {
 		double size = Math.sqrt(totX*totX+totY*totY);
 		
 		if (size > 0) {
-			totX = (float) (totX/size);
-			totY = (float) (totY/size);
+			totX = (float) (totX/(size*2));
+			totY = (float) (totY/(size*2));
 			
 			body.setLinearVelocity(totX, totY);
+		} else {
+			body.setLinearVelocity(0, 0);
 		}
+	}
+
+	@Override
+	public Vector2 getPosition() {
+		return body.getPosition();
 	}
 }
