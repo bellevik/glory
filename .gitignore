@@ -1,7 +1,5 @@
 # LibGDX Compile files #
 ########################
-*/bin/**
-*/bin
 *.dex
 *.ap_
 *.apk
