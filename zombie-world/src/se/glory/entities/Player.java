@@ -15,7 +15,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
-public class Player implements InputProcessor {
+public class Player {
 	
 	private Body playerBody;
 	private BodyDef playerDef;
@@ -44,80 +44,6 @@ public class Player implements InputProcessor {
 		batch.begin();
 		batch.draw(texture, playerBody.getPosition().x * Constants.BOX_TO_WORLD, playerBody.getPosition().y * Constants.BOX_TO_WORLD);
 		batch.end();
-	}
-
-	@Override
-	public boolean keyDown(int keycode) {
-		if (keycode == Keys.W) {
-			playerBody.setLinearVelocity(0, 1);
-			return true;
-		} else if (keycode == Keys.A) {
-			playerBody.setLinearVelocity(-1, 0);
-			return true;
-		} else if (keycode == Keys.S) {
-			playerBody.setLinearVelocity(0, -1);
-			return true;
-		} else if (keycode == Keys.D) {
-			playerBody.setLinearVelocity(1, 0);
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	@Override
-	public boolean keyUp(int keycode) {
-		if (keycode == Keys.W) {
-			playerBody.setLinearVelocity(0, 0);
-			return true;
-		} else if (keycode == Keys.A) {
-			playerBody.setLinearVelocity(0, 0);
-			return true;
-		} else if (keycode == Keys.S) {
-			playerBody.setLinearVelocity(0, 0);
-			return true;
-		} else if (keycode == Keys.D) {
-			playerBody.setLinearVelocity(0, 0);
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	@Override
-	public boolean keyTyped(char character) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean mouseMoved(int screenX, int screenY) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean scrolled(int amount) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 	
 	public Body getPlayerBody() {
