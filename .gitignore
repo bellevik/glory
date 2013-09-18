@@ -4,6 +4,7 @@
 *.ap_
 *.apk
 *.class
+zombie-world-android/bin/dexedLibs/*
 
 # OS generated files #
 ######################
