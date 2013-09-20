@@ -13,6 +13,14 @@
 *.sql
 *.sqlite
 
+# LibGDX Compile files #
+########################
+*.dex
+*.ap_
+*.apk
+*.class
+zombie-world-android/bin/dexedLibs/*
+
 # OS generated files #
 ######################
 .DS_Store
@@ -20,5 +28,4 @@
 ._*
 .Spotlight-V100
 .Trashes
-ehthumbs.db
 Thumbs.db
