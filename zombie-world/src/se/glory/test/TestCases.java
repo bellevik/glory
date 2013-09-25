@@ -15,7 +15,10 @@ import se.glory.entities.Zombie;
 
 public class TestCases {
 
-	
+	World testWorld;
+	ArrayList<Zombie> zombies = new ArrayList<Zombie>();
+	ArrayList<Creature> humans = new ArrayList<Creature>();
+	Human testHuman;
 	
 	@Test
 	public void test() {
@@ -25,19 +28,15 @@ public class TestCases {
 	@Test
 	public void testReactions() {
 	//	assertTrue("truetrue", new Vector2(20,0).x==20);
-	//	World testWorld = new World(new Vector2(0, 0), true);
-	//	ArrayList<Zombie> zombies = new ArrayList<Zombie>();
-	//	ArrayList<Creature> humans = new ArrayList<Creature>();
-//		zombies = new ArrayList<Zombie>();
-//		humans = new ArrayList<Creature>();
-		
-	//	Human testHuman = new Human(testWorld, 150, 150);
+	//	testWorld = new World(new Vector2(0, 0), true);
+	//	testHuman = new Human(testWorld, 150, 150);
 	//	humans.add(testHuman);
 	//	zombies.add(new Zombie(testWorld, 200,150));
 		
 	//	assertsEquals("Human starts at correct x position", 150, 150);
 	//	assertsEquals(150, 150);
-	//	assertTrue("truetrue", testHuman.getPosition().x==150);
+		assertNotNull("Human object null", testHuman);
+		assertTrue("truetrue", testHuman.getPosition().x==150);
 //		assertsEquals("Human starts at correct y position", expected, actual)
 		
 	//	testHuman.autoUpdateMovement(zombies);
