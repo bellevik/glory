@@ -64,11 +64,22 @@ public class AStarPathFinder {
 	}
 	
 	private static boolean isBlockedOrClosed(int x, int y, SortedNodeList closed, ArrayList<Point> blocked) {
+		if (isBlocked(x, y, blocked) || isClosed(x, y, closed))
+			return true;
+		
+		return false;
+	}
+	
+	private static boolean isBlocked(int x, int y, ArrayList<Point> blocked) {
 		for (Point p : blocked) {
 			if (p.x == x && p.y == y)
 				return true;
 		}
 		
+		return false;
+	}
+	
+	private static boolean isClosed(int x, int y, SortedNodeList closed) {
 		return closed.contains(new Node(x, y));
 	}
 	
