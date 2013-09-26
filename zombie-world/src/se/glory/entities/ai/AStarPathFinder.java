@@ -4,46 +4,68 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/*
+ * This is a static class implementing the path finding algorithm known as A*. 
+ * Read about the algorithm on Wikipedia: http://en.wikipedia.org/wiki/A*_search_algorithm
+ */
+
 public class AStarPathFinder {
+	
+	/*
+	 * Given a start position, a goal position and a list of "blocked" positions 
+	 * the function returns an ArrayList of Points, key positions to go through 
+	 * to get to the goal without entering a blocked position. 
+	 */
 	public static ArrayList<Point> getShortestPath(int startX, int startY, int goalX, int goalY, ArrayList<Point> blocked) {
+		// Create the open and the closed list.
 		SortedNodeList open = new SortedNodeList();
 		SortedNodeList closed = new SortedNodeList();
 		
-		// Create goal node
+		// Create a node with the goal position.
 		Node goal = new Node(goalX, goalY);
 		
-		// Add start node
+		// Add a node with the start position in the open list.
 		open.add(new Node(startX, startY, goal));
 		
-		// Setup the "current" node
+		// Declare the "current" node, this is the node we are currently looking into.
 		Node current;
 		
 		while (true) {
-			// Get the square from the open list with the lowest F value
+			// Get the node from the open list with the lowest F value.
 			current = open.getFirst();
 			
-			// If the current node we are checking is located at the goal, we are done
+			// If the current node we are checking is located at the goal, we are done.
 			if (current.equals(goal))
 				break;
 			
-			// Switch to closed list
+			// Remove the node from the open list and add it to the closed list.
 			open.remove(current);
 			closed.add(current);
-						
+			
+			// Add all the surrounding nodes which are valid.
 			addSurroundingNodes(current, goal, open, closed, blocked);
 		}
 		
 		ArrayList<Point> shortestPath = new ArrayList<Point>();
 		
+		/*
+		 * Trace the path backwards through the use of every nodes parent 
+		 * and add the position to the list of key positions.
+		 */
 		while (current.getParent() != null) {
 			shortestPath.add(new Point(current.getX(), current.getY()));
 			current = current.getParent();
 		}
 		
+		// Reverse the list of key positions and return the list.
 		Collections.reverse(shortestPath);
 		return shortestPath;
 	}
 	
+	/*
+	 * Check all nodes in all 8 directions from the node n, 
+	 * if valid, add the node to the open list.
+	 */
 	private static void addSurroundingNodes(Node n, Node goal, SortedNodeList open, SortedNodeList closed, ArrayList<Point> blocked) {
 		boolean north = false, east = false, south = false, west = false;
 		boolean ne, se, sw, nw;
@@ -72,7 +94,11 @@ public class AStarPathFinder {
 			west = true;
 		}
 		
-		// Diagonal movement
+		/*
+		 * Diagonal movement, check for corner cutting.
+		 * E.g. if the north and east node isn't blocked, 
+		 * we may walk on the north-east node - if it isn't blocked.
+		 */
 		ne = north && east;
 		se = south && east;
 		sw = south && west;
@@ -91,6 +117,7 @@ public class AStarPathFinder {
 			addToOpenList(new Node(n.getX()-1, n.getY()+1, n, goal), open, closed);
 	}
 	
+	// Check if the position [x, y] is on the list of blocked positions.
 	private static boolean isBlocked(int x, int y, ArrayList<Point> blocked) {
 		for (Point p : blocked) {
 			if (p.x == x && p.y == y)
@@ -100,21 +127,23 @@ public class AStarPathFinder {
 		return false;
 	}
 	
+	// Check if the position [x, y] is on the list of closed positions.
 	private static boolean isClosed(int x, int y, SortedNodeList closed) {
 		return closed.contains(new Node(x, y));
 	}
 	
 	private static void addToOpenList(Node n, SortedNodeList open, SortedNodeList closed) {
-		// Don't add it to the open list if already on the closed list
+		// Don't add the node to the open list if it is already on the closed list.
 		if (isClosed(n.getX(), n.getY(), closed))
 			return;
 		
+		// If the node isn't on the open list, add it.
 		if (!open.contains(n)) {
 			open.add(n);
 		} else {
-			// Check if this is a better path
+			// If the node is already on the open list, check if going this way is better
 			if (open.get(n).getG() > n.getG()) {
-				// Set the "current" node as parent
+				// If so, set the "current" node as the parent
 				open.get(n).setParent(n.getParent());
 				open.sort();
 			}
@@ -160,7 +189,7 @@ public class AStarPathFinder {
         }
 	}
 	
-	public static class Node implements Comparable<Node> {
+	private static class Node implements Comparable<Node> {
 		private int x, y;
 		private double f, g, h;
 		private Node parent;
@@ -173,10 +202,10 @@ public class AStarPathFinder {
 		public Node(int x, int y, Node goal) {
 			this(x, y);	
 			
-			// Manhattan distance
+			// Calculate the distance cost (H) with the Manhattan-formula.
 			h = (Math.abs(x - goal.getX()) + Math.abs(y - goal.getY())) * 10;
 			
-			// Euclidean distance
+			// Calculate the distance cost (H) with the Euclidean-formula.
 			// h = Math.sqrt((x - goal.getX()) * (x - goal.getX()) + (y - goal.getY()) * (y - goal.getY())) * 10;
 		}
 
@@ -189,24 +218,8 @@ public class AStarPathFinder {
 			return f;
 		}
 
-		public void setF(double f) {
-			this.f = f;
-		}
-
 		public double getG() {
 			return g;
-		}
-
-		public void setG(double g) {
-			this.g = g;
-		}
-
-		public double getH() {
-			return h;
-		}
-
-		public void setH(double h) {
-			this.h = h;
 		}
 
 		public Node getParent() {
@@ -216,13 +229,17 @@ public class AStarPathFinder {
 		public void setParent(Node parent) {
 			this.parent = parent;
 			
-			// Cost of direction
+			/*
+			 * Calculate the direction cost (G).
+			 * If the direction is straight, set it to 10 + [the parent's G value].
+			 * If the direction is diagonal, set it to 14 + [the parent's G value].
+			 */
 			if (getX() != parent.getX() && getY() != parent.getY())
 				g = 14 + parent.getG();
 			else
 				g = 10 + parent.getG();
 			
-			// Update F
+			// Update F, the total cost of going through this node.
 			f = g + h;
 		}
 
