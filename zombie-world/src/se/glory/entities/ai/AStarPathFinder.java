@@ -135,8 +135,11 @@ public class AStarPathFinder {
 		}
 		
 		public Node(int x, int y, Node goal) {
-			this(x, y);	
+			// Manhattan distance
 			h = (Math.abs(x - goal.getX()) + Math.abs(y - goal.getY())) * 10;
+			
+			// Euclidean distance
+			// h = Math.sqrt((x - goal.getX()) * (x - goal.getX()) + (y - goal.getY()) * (y - goal.getY())) * 10;
 		}
 
 		public Node(int x, int y, Node parent, Node goal) {
@@ -177,9 +180,9 @@ public class AStarPathFinder {
 			
 			// Cost of direction
 			if (getX() != parent.getX() && getY() != parent.getY())
-				g = 14;
+				g = parent.getG() + 14;
 			else
-				g = 10;
+				g = parent.getG() + 10;
 			
 			// Update F
 			f = g + h;
