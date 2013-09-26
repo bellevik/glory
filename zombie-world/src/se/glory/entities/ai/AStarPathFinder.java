@@ -45,29 +45,50 @@ public class AStarPathFinder {
 	}
 	
 	private static void addSurroundingNodes(Node n, Node goal, SortedNodeList open, SortedNodeList closed, ArrayList<Point> blocked) {
-		if (!isBlockedOrClosed(n.getX(), n.getY()+1, closed, blocked))
-			addToOpenList(new Node(n.getX(), n.getY()+1, n, goal), open);
-		if (!isBlockedOrClosed(n.getX()+1, n.getY()+1, closed, blocked))
-			addToOpenList(new Node(n.getX()+1, n.getY()+1, n, goal), open);
-		if (!isBlockedOrClosed(n.getX()+1, n.getY(), closed, blocked))
-			addToOpenList(new Node(n.getX()+1, n.getY(), n, goal), open);
-		if (!isBlockedOrClosed(n.getX()+1, n.getY()-1, closed, blocked))
-			addToOpenList(new Node(n.getX()+1, n.getY()-1, n, goal), open);
-		if (!isBlockedOrClosed(n.getX(), n.getY()-1, closed, blocked))
-			addToOpenList(new Node(n.getX(), n.getY()-1, n, goal), open);
-		if (!isBlockedOrClosed(n.getX()-1, n.getY()-1, closed, blocked))
-			addToOpenList(new Node(n.getX()-1, n.getY()-1, n, goal), open);
-		if (!isBlockedOrClosed(n.getX()-1, n.getY(), closed, blocked))
-			addToOpenList(new Node(n.getX()-1, n.getY(), n, goal), open);
-		if (!isBlockedOrClosed(n.getX()-1, n.getY()+1, closed, blocked))
-			addToOpenList(new Node(n.getX()-1, n.getY()+1, n, goal), open);
-	}
-	
-	private static boolean isBlockedOrClosed(int x, int y, SortedNodeList closed, ArrayList<Point> blocked) {
-		if (isBlocked(x, y, blocked) || isClosed(x, y, closed))
-			return true;
+		boolean north = false, east = false, south = false, west = false;
+		boolean ne, se, sw, nw;
 		
-		return false;
+		// North
+		if (!isBlocked(n.getX(), n.getY()+1, blocked)) {
+			addToOpenList(new Node(n.getX(), n.getY()+1, n, goal), open, closed);
+			north = true;
+		}
+		
+		// East
+		if (!isBlocked(n.getX()+1, n.getY(), blocked)) {
+			addToOpenList(new Node(n.getX()+1, n.getY(), n, goal), open, closed);
+			east = true;
+		}
+		
+		// South
+		if (!isBlocked(n.getX(), n.getY()-1, blocked)) {
+			addToOpenList(new Node(n.getX(), n.getY()-1, n, goal), open, closed);
+			south = true;
+		}
+		
+		// West
+		if (!isBlocked(n.getX()-1, n.getY(), blocked)) {
+			addToOpenList(new Node(n.getX()-1, n.getY(), n, goal), open, closed);
+			west = true;
+		}
+		
+		// Diagonal movement
+		ne = north && east;
+		se = south && east;
+		sw = south && west;
+		nw = north && west;
+		
+		if (ne && !isBlocked(n.getX()+1, n.getY()+1, blocked))
+			addToOpenList(new Node(n.getX()+1, n.getY()+1, n, goal), open, closed);
+		
+		if (se && !isBlocked(n.getX()+1, n.getY()-1, blocked))
+			addToOpenList(new Node(n.getX()+1, n.getY()-1, n, goal), open, closed);
+		
+		if (sw && !isBlocked(n.getX()-1, n.getY()-1, blocked))
+			addToOpenList(new Node(n.getX()-1, n.getY()-1, n, goal), open, closed);
+		
+		if (nw && !isBlocked(n.getX()-1, n.getY()+1, blocked))
+			addToOpenList(new Node(n.getX()-1, n.getY()+1, n, goal), open, closed);
 	}
 	
 	private static boolean isBlocked(int x, int y, ArrayList<Point> blocked) {
@@ -83,7 +104,11 @@ public class AStarPathFinder {
 		return closed.contains(new Node(x, y));
 	}
 	
-	private static void addToOpenList(Node n, SortedNodeList open) {
+	private static void addToOpenList(Node n, SortedNodeList open, SortedNodeList closed) {
+		// Don't add it to the open list if already on the closed list
+		if (isClosed(n.getX(), n.getY(), closed))
+			return;
+		
 		if (!open.contains(n)) {
 			open.add(n);
 		} else {
@@ -146,6 +171,8 @@ public class AStarPathFinder {
 		}
 		
 		public Node(int x, int y, Node goal) {
+			this(x, y);	
+			
 			// Manhattan distance
 			h = (Math.abs(x - goal.getX()) + Math.abs(y - goal.getY())) * 10;
 			
@@ -191,9 +218,9 @@ public class AStarPathFinder {
 			
 			// Cost of direction
 			if (getX() != parent.getX() && getY() != parent.getY())
-				g = parent.getG() + 14;
+				g = 14 + parent.getG();
 			else
-				g = parent.getG() + 10;
+				g = 10 + parent.getG();
 			
 			// Update F
 			f = g + h;
