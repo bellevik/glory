@@ -1,12 +1,10 @@
 package se.glory.entities;
 
 import se.glory.utilities.Constants;
+import se.glory.utilities.Identity;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -38,12 +36,14 @@ public class Player implements Creature {
 		
 		playerBody.createFixture(fixtureDef);
 		texture = new Texture(Gdx.files.internal("img/player.gif"));
-	}
-	
-	public void draw (SpriteBatch batch) {
-		batch.begin();
-		batch.draw(texture, playerBody.getPosition().x * Constants.BOX_TO_WORLD, playerBody.getPosition().y * Constants.BOX_TO_WORLD);
-		batch.end();
+		
+		Identity playerIdentity = new Identity();
+		playerIdentity.setTexture(texture);
+		playerIdentity.setWidth(width);
+		playerIdentity.setHeight(height);
+		playerIdentity.setType("Player");
+		
+		playerBody.setUserData(playerIdentity);
 	}
 	
 	public Body getPlayerBody() {

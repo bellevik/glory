@@ -3,6 +3,7 @@ package se.glory.entities;
 import java.util.ArrayList;
 
 import se.glory.utilities.Constants;
+import se.glory.utilities.Identity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -38,7 +39,14 @@ public class Human implements Creature{
 		texture = new Texture(Gdx.files.internal("img/mario.png"));
 		
 		body.createFixture(fixtureDef);
-		body.setUserData(this);
+		
+		Identity humanIdentity = new Identity();
+		humanIdentity.setTexture(texture);
+		humanIdentity.setWidth(15);
+		humanIdentity.setHeight(15);
+		humanIdentity.setType("Human");
+		
+		body.setUserData(humanIdentity);
 	}
 	
 	public void draw (SpriteBatch batch) {

@@ -3,6 +3,7 @@ package se.glory.entities;
 import java.util.ArrayList;
 
 import se.glory.utilities.Constants;
+import se.glory.utilities.Identity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -38,7 +39,14 @@ public class Zombie implements Creature {
 		texture = new Texture(Gdx.files.internal("img/Zombie.png"));
 		
 		body.createFixture(fixtureDef);
-		body.setUserData(this);
+		
+		Identity zombieIdentity = new Identity();
+		zombieIdentity.setTexture(texture);
+		zombieIdentity.setWidth(15);
+		zombieIdentity.setHeight(15);
+		zombieIdentity.setType("Zombie");
+		
+		body.setUserData(zombieIdentity);
 	}
 	
 	private Creature getClosestHuman(ArrayList<Creature> humans) {
