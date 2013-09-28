@@ -32,7 +32,7 @@ public class Human implements Creature{
 		
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = circleShape;
-		fixtureDef.density = 0.5f;
+		fixtureDef.density = 0.5f; 
 		fixtureDef.friction = 0.4f;
 		fixtureDef.restitution = 0.6f;
 		
