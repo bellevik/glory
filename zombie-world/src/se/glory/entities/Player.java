@@ -15,15 +15,15 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class Player implements Creature {
 	
-	private Body playerBody;
-	private BodyDef playerDef;
+	private Body body;
+	private BodyDef bodyDef;
 	private Texture texture;
 
 	public Player (World world, float x, float y, float width, float height) {
-		playerDef = new BodyDef();
-		playerDef.type = BodyType.DynamicBody;
-		playerDef.position.set(new Vector2(x * Constants.WORLD_TO_BOX, y * Constants.WORLD_TO_BOX));
-		playerBody = world.createBody(playerDef);
+		bodyDef = new BodyDef();
+		bodyDef.type = BodyType.DynamicBody;
+		bodyDef.position.set(new Vector2(x * Constants.WORLD_TO_BOX, y * Constants.WORLD_TO_BOX));
+		body = world.createBody(bodyDef);
 		
 		PolygonShape playerShape = new PolygonShape();
 		playerShape.setAsBox(width * Constants.WORLD_TO_BOX, height * Constants.WORLD_TO_BOX);
@@ -34,7 +34,7 @@ public class Player implements Creature {
 		fixtureDef.friction = 0.4f;
 		fixtureDef.restitution = 0.6f;
 		
-		playerBody.createFixture(fixtureDef);
+		body.createFixture(fixtureDef);
 		texture = new Texture(Gdx.files.internal("img/player.gif"));
 		
 		Identity playerIdentity = new Identity();
@@ -43,16 +43,16 @@ public class Player implements Creature {
 		playerIdentity.setHeight(height);
 		playerIdentity.setType("Player");
 		
-		playerBody.setUserData(playerIdentity);
+		body.setUserData(playerIdentity);
 	}
 	
 	public Body getPlayerBody() {
-		return playerBody;
+		return body;
 	}
 
 	@Override
 	public Vector2 getPosition() {
-		return playerBody.getPosition();
+		return body.getPosition();
 	}
 	
 }
