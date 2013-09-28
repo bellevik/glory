@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -34,6 +35,8 @@ public class GameScreen implements Screen {
 	private Joystick moveStick;
 	private Joystick fireStick;
 	
+	private Box2DDebugRenderer debugRenderer;
+	
 	private Array<Body> drawableBodies = new Array<Body>();
 	
 	private ArrayList<Zombie> zombies = new ArrayList<Zombie>();
@@ -45,6 +48,10 @@ public class GameScreen implements Screen {
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		
+		if(Constants.DEBUG_MODE){
+			useDebugRenderer();
+		}
 		
 		camera.position.set(player.getPlayerBody().getPosition().x * Constants.BOX_TO_WORLD, player.getPlayerBody().getPosition().y * Constants.BOX_TO_WORLD, 0);
 		camera.update();
@@ -94,6 +101,12 @@ public class GameScreen implements Screen {
 		}
 		drawableBodies.clear();
 	}
+	
+	public void useDebugRenderer (){
+		Matrix4 matrix4 = new Matrix4(camera.combined);
+		matrix4.scale(100f, 100f, 1f);
+		debugRenderer.render(world, matrix4);
+	}
 
 	@Override
 	public void resize(int width, int height) {
@@ -109,6 +122,8 @@ public class GameScreen implements Screen {
 		player = new Player (world, 300, 400, 32, 32);
 		batch = new SpriteBatch();
 		bkg = new Texture(Gdx.files.internal("img/bkg.png"));
+		
+		debugRenderer = new Box2DDebugRenderer();
 		
 		moveStick = new Joystick(stage, 15, 15);
 		fireStick = new Joystick(stage, Gdx.graphics.getWidth() - 15 - 128, 15);
