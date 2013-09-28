@@ -21,6 +21,10 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
@@ -37,6 +41,8 @@ public class GameScreen implements Screen {
 	
 	private Box2DDebugRenderer debugRenderer;
 	
+	//Consider change of variable name. This array will contain
+	//all the bodies in the world. And is used to draw them.
 	private Array<Body> drawableBodies = new Array<Body>();
 	
 	private ArrayList<Zombie> zombies = new ArrayList<Zombie>();
@@ -142,6 +148,7 @@ public class GameScreen implements Screen {
 		}
 		
 		Gdx.input.setInputProcessor(stage);
+		attachContactListener();
 	}
 
 	@Override
@@ -161,7 +168,41 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void dispose() {
-		
+		world.dispose();
+		batch.dispose();
+		stage.dispose();
+		debugRenderer.dispose();
+	}
+	
+	public void attachContactListener(){
+		world.setContactListener(new ContactListener(){
+
+			@Override
+			public void beginContact(Contact contact) {
+				Body a = contact.getFixtureA().getBody();
+				Body b = contact.getFixtureB().getBody();
+				String typeA = ((Identity)(a.getUserData())).getType();
+				String typeB = ((Identity)(b.getUserData())).getType();
+			}
+
+			@Override
+			public void endContact(Contact contact) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void preSolve(Contact contact, Manifold oldManifold) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void postSolve(Contact contact, ContactImpulse impulse) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
 
 }
