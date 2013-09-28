@@ -12,14 +12,30 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
+import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 
 public class Player implements Creature {
+	
+	private World world;
+	
+	private float x, y, width, height;
 	
 	private Body body;
 	private BodyDef bodyDef;
 	private Texture texture;
+	
+	private Body weaponBody;
+	
+	private RevoluteJoint joint;
 
 	public Player (World world, float x, float y, float width, float height) {
+		this.world = world;
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+		
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;
 		bodyDef.position.set(new Vector2(x * Constants.WORLD_TO_BOX, y * Constants.WORLD_TO_BOX));
@@ -44,6 +60,43 @@ public class Player implements Creature {
 		playerIdentity.setType("Player");
 		
 		body.setUserData(playerIdentity);
+		
+		createWeaponBody();
+		attachWeapon();
+	}
+	
+	public void createWeaponBody() {
+		//Creating the weapon
+		BodyDef weapon = new BodyDef();
+		weapon.type = BodyType.DynamicBody;
+		weapon.position.set(x * Constants.WORLD_TO_BOX + width * Constants.WORLD_TO_BOX, y * Constants.WORLD_TO_BOX + height * Constants.WORLD_TO_BOX);
+		weaponBody = world.createBody(weapon);
+		PolygonShape weaponShape = new PolygonShape();
+		weaponShape.setAsBox(16 * Constants.WORLD_TO_BOX, 8 * Constants.WORLD_TO_BOX);
+		
+		FixtureDef weaponFixture = new FixtureDef();
+		weaponFixture.shape = weaponShape;
+		weaponFixture.density = 0.5f;
+		weaponFixture.friction = 0.4f;
+		weaponFixture.restitution = 0.6f;
+		weaponBody.createFixture(weaponFixture);
+		
+		Identity weaponIdentity = new Identity();
+		weaponIdentity.setTexture(null);
+		weaponIdentity.setType("Weapon");
+		weaponBody.setUserData(weaponIdentity);
+	}
+	
+	public void attachWeapon() {
+		//The joint between weapon and player
+		RevoluteJointDef jointDef = new RevoluteJointDef();
+        jointDef.bodyA = body;
+        jointDef.bodyB = weaponBody;
+        //16 here is equal to the weapons width!
+        jointDef.localAnchorB.x = -width * Constants.WORLD_TO_BOX - 16 * Constants.WORLD_TO_BOX;
+        jointDef.enableLimit = true;
+
+        joint = (RevoluteJoint) world.createJoint(jointDef);
 	}
 	
 	public Body getPlayerBody() {
