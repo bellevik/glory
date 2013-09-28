@@ -134,18 +134,7 @@ public class GameScreen implements Screen {
 		moveStick = new Joystick(stage, 15, 15);
 		fireStick = new Joystick(stage, Gdx.graphics.getWidth() - 15 - 128, 15);
 		
-		for (int i = 1; i < 6; i++) {
-			for (int j = 1; j < 4; j++) {
-				zombies.add(new Zombie(world, i*200, j*200));
-				System.out.println(i*200 + ":" + j*200);
-			}
-		}
-		
-		for (int i = 1; i < 6; i+=2) {
-			for (int j = 1; j < 6; j+=2) {
-				humans.add(new Human(world, i*150, j*150));
-			}
-		}
+		generateDummyAI();
 		
 		Gdx.input.setInputProcessor(stage);
 		attachContactListener();
@@ -172,6 +161,20 @@ public class GameScreen implements Screen {
 		batch.dispose();
 		stage.dispose();
 		debugRenderer.dispose();
+	}
+	
+	public void generateDummyAI() {
+		for (int i = 1; i < 6; i++) {
+			for (int j = 1; j < 4; j++) {
+				zombies.add(new Zombie(world, i*200, j*200));
+			}
+		}
+		
+		for (int i = 1; i < 6; i+=2) {
+			for (int j = 1; j < 6; j+=2) {
+				humans.add(new Human(world, i*150, j*150));
+			}
+		}
 	}
 	
 	public void attachContactListener(){
