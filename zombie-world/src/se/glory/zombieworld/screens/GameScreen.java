@@ -1,12 +1,14 @@
 package se.glory.zombieworld.screens;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import se.glory.entities.Creature;
 import se.glory.entities.Human;
 import se.glory.entities.Player;
 import se.glory.entities.Zombie;
 import se.glory.utilities.Constants;
+import se.glory.utilities.Identity;
 import se.glory.utilities.Joystick;
 
 import com.badlogic.gdx.Gdx;
@@ -16,9 +18,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
 
 public class GameScreen implements Screen {
 	
@@ -29,6 +33,8 @@ public class GameScreen implements Screen {
 	private Texture bkg;
 	private Joystick moveStick;
 	private Joystick fireStick;
+	
+	private Array<Body> drawableBodies = new Array<Body>();
 	
 	private ArrayList<Zombie> zombies = new ArrayList<Zombie>();
 	private ArrayList<Creature> humans = new ArrayList<Creature>();
@@ -48,15 +54,13 @@ public class GameScreen implements Screen {
 		batch.draw(bkg, 0, 0);
 		batch.end();
 		
-		player.draw(batch);
+		drawEntites();
 		
 		for (Zombie z: zombies) {
-			z.draw(batch);
 			z.autoUpdateMovement(humans, player);
 		}
 		
 		for (Creature h: humans) {
-			((Human) h).draw(batch);
 			((Human) h).autoUpdateMovement(zombies);
 		}
 		
@@ -66,6 +70,29 @@ public class GameScreen implements Screen {
 		stage.draw();
 		
 		world.step(1/60f, 6, 2);
+	}
+	
+	/*
+	 * This method will get all the Box2d bodies from the world and iterate
+	 * through all of them. The method will grab the texture form every one
+	 * and draw them to the screen.
+	 * We figured this is easier than letting all of the Classes have
+	 * its own draw method.
+	 */
+	public void drawEntites() {
+		world.getBodies(drawableBodies);
+		
+		for (Body body : drawableBodies) {
+			//The != null test is for test purposes at the moment.
+			if (((Identity)(body.getUserData())).getTexture() != null) {
+				float width = ((Identity)(body.getUserData())).getWidth();
+				float height = ((Identity)(body.getUserData())).getHeight();
+				batch.begin();
+				batch.draw(((Identity)(body.getUserData())).getTexture(), body.getPosition().x * Constants.BOX_TO_WORLD - width , body.getPosition().y * Constants.BOX_TO_WORLD - height);
+				batch.end();
+			}
+		}
+		drawableBodies.clear();
 	}
 
 	@Override
