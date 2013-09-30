@@ -32,9 +32,9 @@ public class Zombie implements Creature {
 		
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = circleShape;
-		fixtureDef.density = 10f;
-		fixtureDef.friction = 10f;
-		fixtureDef.restitution = .5f;
+		fixtureDef.density = 0.5f; 
+		fixtureDef.friction = 0.4f;
+		fixtureDef.restitution = 0.6f;
 		
 		texture = new Texture(Gdx.files.internal("img/Zombie.png"));
 		
