@@ -53,6 +53,7 @@ public class GameScreen implements Screen {
 	//Consider change of variable name. This array will contain
 	//all the bodies in the world. And is used to draw them.
 	private Array<Body> drawableBodies = new Array<Body>();
+	private Array<Body> removeableBodies = new Array<Body>();
 	
 	private Stage stage;
 	private float timeStamp = 0;
@@ -88,6 +89,7 @@ public class GameScreen implements Screen {
 		stage.draw();
 		
 		world.step(1/60f, 6, 2);
+		sweepDeadBodies();
 	}
 	
 	public void applyRotationToPlayer(float delta) {
@@ -174,7 +176,7 @@ public class GameScreen implements Screen {
 		
 		for (Body body : drawableBodies) {
 			//The != null test is for test purposes at the moment.
-			if (((Identity)(body.getUserData())).getTexture() != null) {
+			if ( body.getUserData().getClass().equals(Identity.class) ) {
 				float width = ((Identity)(body.getUserData())).getWidth();
 				float height = ((Identity)(body.getUserData())).getHeight();
 				batch.begin();
@@ -183,6 +185,23 @@ public class GameScreen implements Screen {
 			}
 		}
 		drawableBodies.clear();
+	}
+	
+	public void sweepDeadBodies() {
+		world.getBodies(removeableBodies);
+		
+		for (Body body : removeableBodies) {
+			if ( body.getUserData().getClass().equals(Identity.class) ) {
+				if(body!=null) {
+					if (((Identity)(body.getUserData())).isDead()) {
+						if (!world.isLocked()) {
+							world.destroyBody(body);
+						}
+					}
+				}
+			}
+		}
+		removeableBodies.clear();
 	}
 	
 	public void useDebugRenderer (){
