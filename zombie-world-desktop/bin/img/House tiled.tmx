@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="100" height="100" tilewidth="20" tileheight="20">
+ <tileset firstgid="1" name="Hubben body" tilewidth="20" tileheight="20">
+  <image source="Hubben body.png" width="900" height="449"/>
+ </tileset>
+ <tileset firstgid="991" name="House" tilewidth="20" tileheight="20">
+  <image source="House.jpg" width="640" height="394"/>
+ </tileset>
+ <layer name="floor" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt0UEJACAAwEAfNrN/J0OoMOQOlmBjAADw0pp344wfLX60+NHiR4sfLX60+NHiR4sfLX60+NHiR4sfLX60+NHiBwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8LsNvNpeTQ==
+  </data>
+ </layer>
+ <layer name="Wall" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt0bENwjAQhtGLWwoGgEGYIezHQCzEClCmIJIlDPqF35OvS86WvioAAL7ptlS9zpA5/Prxf+i4jNt1GbdqWnpk0SOLHln0yKJHFj2y6JFFjyx6ZNEjix5Z9MiiR5aRPe4Dd81qbVXXjtna++ahx8dOrW96/jm393cAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMBsnnbdDSU=
+  </data>
+ </layer>
+</map>
