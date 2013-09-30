@@ -2,6 +2,7 @@ package se.glory.entities;
 
 import se.glory.utilities.Constants;
 import se.glory.utilities.Identity;
+import se.glory.utilities.WorldHandler;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -18,11 +19,11 @@ public class Zombie implements Creature {
 	private BodyDef bodyDef;
 	private Texture texture;
 	
-	public Zombie(World world, int x, int y) {
+	public Zombie(int x, int y) {
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;
 		bodyDef.position.set(new Vector2(x * Constants.WORLD_TO_BOX, y * Constants.WORLD_TO_BOX));
-		body = world.createBody(bodyDef);
+		body = WorldHandler.world.createBody(bodyDef);
 		
 		CircleShape circleShape = new CircleShape();
 		circleShape.setRadius(15 * Constants.WORLD_TO_BOX);

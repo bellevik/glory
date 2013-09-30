@@ -2,6 +2,7 @@ package se.glory.entities.obstacles;
 
 import se.glory.utilities.Constants;
 import se.glory.utilities.Identity;
+import se.glory.utilities.WorldHandler;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -24,7 +25,7 @@ public class House {
 	PolygonShape houseShape;
 	
 
-	public House (World world, float x, float y, float width, float height, String texture){
+	public House (float x, float y, float width, float height, String texture){
 		this.width=width;
 		this.height=height;
 		
@@ -32,7 +33,7 @@ public class House {
 		houseDef.type=BodyType.StaticBody;
 		houseDef.position.set(new Vector2((x+width)*Constants.WORLD_TO_BOX,(y-height)*Constants.WORLD_TO_BOX));
 		//houseDef.position.set(x, y);
-		houseBody=world.createBody(houseDef);
+		houseBody= WorldHandler.world.createBody(houseDef);
 		
 		houseShape= new PolygonShape();
 		houseShape.setAsBox(width*Constants.WORLD_TO_BOX, height*Constants.WORLD_TO_BOX);

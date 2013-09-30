@@ -2,6 +2,7 @@ package se.glory.entities.weapons;
 
 import se.glory.utilities.Constants;
 import se.glory.utilities.Identity;
+import se.glory.utilities.WorldHandler;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -22,11 +23,11 @@ public class Bullet {
 	private float range;
 	private Texture[] textures;
 	
-	public Bullet (float x, float y, float xAngle, float yAngle, World world) {
+	public Bullet (float x, float y, float xAngle, float yAngle) {
 		BodyDef bulletDef = new BodyDef();
 		bulletDef.type = BodyType.DynamicBody;
 		bulletDef.position.set(x, y);
-		Body bulletBody = world.createBody(bulletDef);
+		Body bulletBody = WorldHandler.world.createBody(bulletDef);
 		
 		CircleShape bulletShape = new CircleShape();
 		bulletShape.setRadius(6 * Constants.WORLD_TO_BOX);

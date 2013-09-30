@@ -14,11 +14,11 @@ public class AIController {
 	private World world;
 	
 	public void addHuman(int x, int y) {
-		humans.add(new Human(world, x, y));
+		humans.add(new Human(x, y));
 	}
 	
 	public void addZombie(int x, int y) {
-		zombies.add(new Zombie(world, x, y));
+		zombies.add(new Zombie(x, y));
 	}
 	
 	public void update() {

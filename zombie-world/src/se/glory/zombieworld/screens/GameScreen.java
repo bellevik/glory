@@ -2,9 +2,11 @@ package se.glory.zombieworld.screens;
 
 import se.glory.entities.Player;
 import se.glory.entities.obstacles.House;
+import se.glory.utilities.CollisionDetection;
 import se.glory.utilities.Constants;
 import se.glory.utilities.Identity;
 import se.glory.utilities.Joystick;
+import se.glory.utilities.WorldHandler;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -41,18 +43,12 @@ public class GameScreen implements Screen {
 	private TiledMap map;
 	
 	private OrthographicCamera camera;
-	private World world;
 	private Player player;
 	private SpriteBatch batch;
 	private Joystick moveStick;
 	private Joystick fireStick;
 	
 	private Box2DDebugRenderer debugRenderer;
-	
-	//Consider change of variable name. This array will contain
-	//all the bodies in the world. And is used to draw them.
-	private Array<Body> drawableBodies = new Array<Body>();
-	private Array<Body> removeableBodies = new Array<Body>();
 	
 	private Stage stage;
 	private float timeStamp = 0;
@@ -84,7 +80,7 @@ public class GameScreen implements Screen {
 		stage.act(delta);
 		stage.draw();
 		
-		world.step(1/60f, 6, 2);
+		WorldHandler.world.step(1/60f, 6, 2);
 		sweepDeadBodies();
 	}
 	
@@ -146,9 +142,9 @@ public class GameScreen implements Screen {
 	 * its own draw method.
 	 */
 	public void drawEntites() {
-		world.getBodies(drawableBodies);
+		WorldHandler.world.getBodies(WorldHandler.drawableBodies);
 		
-		for (Body body : drawableBodies) {
+		for (Body body : WorldHandler.drawableBodies) {
 			if ( body.getUserData().getClass().equals(Identity.class) ) {
 				float width = ((Identity)(body.getUserData())).getWidth();
 				float height = ((Identity)(body.getUserData())).getHeight();
@@ -157,30 +153,30 @@ public class GameScreen implements Screen {
 				batch.end();
 			}
 		}
-		drawableBodies.clear();
+		WorldHandler.drawableBodies.clear();
 	}
 	
 	public void sweepDeadBodies() {
-		world.getBodies(removeableBodies);
+		WorldHandler.world.getBodies(WorldHandler.removeableBodies);
 		
-		for (Body body : removeableBodies) {
+		for (Body body : WorldHandler.removeableBodies) {
 			if ( body.getUserData().getClass().equals(Identity.class) ) {
 				if(body!=null) {
 					if (((Identity)(body.getUserData())).isDead()) {
-						if (!world.isLocked()) {
-							world.destroyBody(body);
+						if (!WorldHandler.world.isLocked()) {
+							WorldHandler.world.destroyBody(body);
 						}
 					}
 				}
 			}
 		}
-		removeableBodies.clear();
+		WorldHandler.removeableBodies.clear();
 	}
 	
 	public void useDebugRenderer (){
 		Matrix4 matrix4 = new Matrix4(camera.combined);
 		matrix4.scale(100f, 100f, 1f);
-		debugRenderer.render(world, matrix4);
+		debugRenderer.render(WorldHandler.world, matrix4);
 	}
 
 	@Override
@@ -204,9 +200,9 @@ public class GameScreen implements Screen {
 		mapRenderer = new OrthogonalTiledMapRenderer(map);
 		
 		camera = new OrthographicCamera();
-		world = new World(new Vector2(0, 0), true);
+		WorldHandler.createWorld();
 		stage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true, batch);
-		player = new Player (world, 300, 400, 32, 32);
+		player = new Player (300, 400, 32, 32);
 		batch = new SpriteBatch();
 		
 		createHouse(MapWidth,MapHeight);
@@ -228,8 +224,8 @@ public class GameScreen implements Screen {
 				if (collide.getCell(i, j).getTile().getProperties().containsKey("Blocked")){
 					Width = Integer.parseInt(collide.getCell(i,j).getTile().getProperties().get("Width").toString());
 					Height = Integer.parseInt(collide.getCell(i,j).getTile().getProperties().get("Height").toString());
-					topWall = new House (world,i*16,(j+1)*16,Width*8,8,"img/Topwall2.png");
-					sideWall = new House (world,i*16,(j+1)*16,8,Height*8,"img/Sidewall2.png");
+					topWall = new House (i*16,(j+1)*16,Width*8,8,"img/Topwall2.png");
+					sideWall = new House (i*16,(j+1)*16,8,Height*8,"img/Sidewall2.png");
 
 				}
 			}
@@ -253,41 +249,14 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void dispose() {
-		world.dispose();
+		WorldHandler.world.dispose();
 		batch.dispose();
 		stage.dispose();
 		debugRenderer.dispose();
 	}
 	
 	public void attachContactListener(){
-		world.setContactListener(new ContactListener(){
-
-			@Override
-			public void beginContact(Contact contact) {
-				Body a = contact.getFixtureA().getBody();
-				Body b = contact.getFixtureB().getBody();
-				String typeA = ((Identity)(a.getUserData())).getType();
-				String typeB = ((Identity)(b.getUserData())).getType();
-			}
-
-			@Override
-			public void endContact(Contact contact) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void preSolve(Contact contact, Manifold oldManifold) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void postSolve(Contact contact, ContactImpulse impulse) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
+		WorldHandler.world.setContactListener(new CollisionDetection());
 	}
 	
 }

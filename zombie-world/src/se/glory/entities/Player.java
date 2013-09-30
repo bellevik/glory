@@ -3,6 +3,7 @@ package se.glory.entities;
 import se.glory.entities.weapons.Bullet;
 import se.glory.utilities.Constants;
 import se.glory.utilities.Identity;
+import se.glory.utilities.WorldHandler;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -19,8 +20,6 @@ import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 
 public class Player implements Creature {
 	
-	private World world;
-	
 	private float x, y, width, height;
 	
 	private Body body;
@@ -31,8 +30,7 @@ public class Player implements Creature {
 	
 	private RevoluteJoint joint;
 
-	public Player (World world, float x, float y, float width, float height) {
-		this.world = world;
+	public Player (float x, float y, float width, float height) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
@@ -41,7 +39,7 @@ public class Player implements Creature {
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;
 		bodyDef.position.set(new Vector2(x * Constants.WORLD_TO_BOX, y * Constants.WORLD_TO_BOX));
-		body = world.createBody(bodyDef);
+		body = WorldHandler.world.createBody(bodyDef);
 		
 		PolygonShape playerShape = new PolygonShape();
 		playerShape.setAsBox(width * Constants.WORLD_TO_BOX, height * Constants.WORLD_TO_BOX);
@@ -73,7 +71,7 @@ public class Player implements Creature {
 		BodyDef weapon = new BodyDef();
 		weapon.type = BodyType.DynamicBody;
 		weapon.position.set(x * Constants.WORLD_TO_BOX + width * Constants.WORLD_TO_BOX, y * Constants.WORLD_TO_BOX + height * Constants.WORLD_TO_BOX);
-		weaponBody = world.createBody(weapon);
+		weaponBody = WorldHandler.world.createBody(weapon);
 		PolygonShape weaponShape = new PolygonShape();
 		weaponShape.setAsBox(16 * Constants.WORLD_TO_BOX, 8 * Constants.WORLD_TO_BOX);
 		
@@ -100,7 +98,7 @@ public class Player implements Creature {
         jointDef.localAnchorB.set(-16 * Constants.WORLD_TO_BOX, 0);
         jointDef.enableLimit = true;
 
-        joint = (RevoluteJoint) world.createJoint(jointDef);
+        joint = (RevoluteJoint) WorldHandler.world.createJoint(jointDef);
 	}
 	
 	public void shoot() {
@@ -108,7 +106,7 @@ public class Player implements Creature {
         float xAngle = MathUtils.cos(rot);
         float yAngle = MathUtils.sin(rot);
 		
-		new Bullet(weaponBody.getPosition().x + 14 * xAngle * Constants.WORLD_TO_BOX, weaponBody.getPosition().y + 14 * yAngle * Constants.WORLD_TO_BOX, xAngle, yAngle, world);
+		new Bullet(weaponBody.getPosition().x + 14 * xAngle * Constants.WORLD_TO_BOX, weaponBody.getPosition().y + 14 * yAngle * Constants.WORLD_TO_BOX, xAngle, yAngle);
 	}
 	
 	public Body getPlayerBody() {
