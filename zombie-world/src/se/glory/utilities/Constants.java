@@ -5,4 +5,11 @@ public class Constants {
 	public static final float BOX_TO_WORLD = 100f;
 	
 	public static final boolean DEBUG_MODE = true;
+	
+	public static final int WEAPON_DAMAGE = 1;
+	public static final int WEAPON_RANGE = 2;
+	public static final int WEAPON_CLIP_SIZE = 3;
+	public static final int WEAPON_CLIPS = 4;
+	public static final int WEAPON_CURRENT_CLIP = 5;
+	
 }
