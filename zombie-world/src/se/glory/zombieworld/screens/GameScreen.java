@@ -44,7 +44,6 @@ public class GameScreen implements Screen {
 	private World world;
 	private Player player;
 	private SpriteBatch batch;
-	private Texture bkg;
 	private Joystick moveStick;
 	private Joystick fireStick;
 	
@@ -74,9 +73,6 @@ public class GameScreen implements Screen {
 		camera.update();
 		
 		batch.setProjectionMatrix(camera.combined);
-		batch.begin();
-		batch.draw(bkg, 0, 0);
-		batch.end();
 		
 		//drawEntites();
 		
@@ -235,7 +231,6 @@ public class GameScreen implements Screen {
 		stage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true, batch);
 		player = new Player (world, 300, 400, 32, 32);
 		batch = new SpriteBatch();
-		bkg = new Texture(Gdx.files.internal("img/bkg.png"));
 		
 		createHouse(MapWidth,MapHeight);
 
