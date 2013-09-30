@@ -1,6 +1,7 @@
 package se.glory.zombieworld.screens;
 
 import se.glory.entities.Player;
+import se.glory.entities.obstacles.House;
 import se.glory.utilities.Constants;
 import se.glory.utilities.Identity;
 import se.glory.utilities.Joystick;
@@ -36,8 +37,6 @@ public class GameScreen implements Screen {
 	private House topWall;
 	private House sideWall;
 	
-	private Weapon chainsaw;
-
 	private OrthogonalTiledMapRenderer mapRenderer;
 	private TiledMap map;
 	
@@ -221,8 +220,6 @@ public class GameScreen implements Screen {
 		
 		createHouse(MapWidth,MapHeight);
 
-		chainsaw = new Weapon(world, MeleeWeapons.CHAINSAW, 200 , 200, 36, 50);
-		
 		debugRenderer = new Box2DDebugRenderer();
 		
 		moveStick = new Joystick(stage, 15, 15);
