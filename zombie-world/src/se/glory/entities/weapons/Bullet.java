@@ -45,7 +45,7 @@ public class Bullet {
 		
 		Identity i = new Identity();
 		i.setTexture(bulletTexture);
-		i.setType("Bullet");
+		i.setType(Constants.MoveableBodyType.BULLET);
 		i.setWidth(6);
 		i.setHeight(6);
 		bulletBody.setUserData(i);

@@ -12,4 +12,11 @@ public class Constants {
 	public static final int WEAPON_CLIPS = 4;
 	public static final int WEAPON_CURRENT_CLIP = 5;
 	
+	public static enum MoveableBodyShape {
+		CIRCLE, SQUARE;
+	}
+	
+	public static enum MoveableBodyType {
+		PLAYER, HUMAN, ZOMBIE, BULLET, HOUSE, WEAPON;
+	}
 }

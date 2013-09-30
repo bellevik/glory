@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 public class Identity {
 	private Texture texture;
 	private boolean isDead = false;
-	private String type;
+	private Constants.MoveableBodyType type;
 	private float width, height;
 	
 	public Texture getTexture() {
@@ -24,10 +24,10 @@ public class Identity {
 	public void setDead(boolean isDead) {
 		this.isDead = isDead;
 	}
-	public String getType() {
+	public Constants.MoveableBodyType getType() {
 		return type;
 	}
-	public void setType(String type) {
+	public void setType(Constants.MoveableBodyType type) {
 		this.type = type;
 	}
 	public float getWidth() {

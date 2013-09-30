@@ -40,26 +40,27 @@ public class Player implements Creature {
 		bodyDef.type = BodyType.DynamicBody;
 		bodyDef.position.set(new Vector2(x * Constants.WORLD_TO_BOX, y * Constants.WORLD_TO_BOX));
 		body = WorldHandler.world.createBody(bodyDef);
-		
+
 		PolygonShape playerShape = new PolygonShape();
 		playerShape.setAsBox(width * Constants.WORLD_TO_BOX, height * Constants.WORLD_TO_BOX);
-		
+
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = playerShape;
 		fixtureDef.density = 0.5f; 
 		fixtureDef.friction = 0.4f;
 		fixtureDef.restitution = 0.6f;
-		
+
 		body.createFixture(fixtureDef);
 		texture = new Texture(Gdx.files.internal("img/player.gif"));
-		
+
 		Identity playerIdentity = new Identity();
 		playerIdentity.setTexture(texture);
 		playerIdentity.setWidth(width);
 		playerIdentity.setHeight(height);
-		playerIdentity.setType("Player");
-		
+		playerIdentity.setType(Constants.MoveableBodyType.PLAYER);
+
 		body.setUserData(playerIdentity);
+		
 		body.setFixedRotation(true);
 		
 		createWeaponBody();
@@ -84,7 +85,7 @@ public class Player implements Creature {
 		
 		Identity weaponIdentity = new Identity();
 		weaponIdentity.setTexture(null);
-		weaponIdentity.setType("Weapon");
+		weaponIdentity.setType(Constants.MoveableBodyType.WEAPON);
 		weaponBody.setUserData(weaponIdentity);
 	}
 	
@@ -117,5 +118,4 @@ public class Player implements Creature {
 	public Vector2 getPosition() {
 		return body.getPosition();
 	}
-	
 }

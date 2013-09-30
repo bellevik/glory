@@ -47,7 +47,7 @@ public class House {
 		Identity identity = new Identity();
 		identity.setWidth(width);
 		identity.setHeight(height);
-		identity.setType("Weapon");
+		identity.setType(Constants.MoveableBodyType.HOUSE);
 		
 		houseBody.setUserData(identity);
 		
