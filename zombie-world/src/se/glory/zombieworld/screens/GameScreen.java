@@ -1,12 +1,6 @@
 package se.glory.zombieworld.screens;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
-import se.glory.entities.Creature;
-import se.glory.entities.Human;
 import se.glory.entities.Player;
-import se.glory.entities.Zombie;
 import se.glory.utilities.Constants;
 import se.glory.utilities.Identity;
 import se.glory.utilities.Joystick;
@@ -17,6 +11,11 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.MapProperties;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
@@ -32,6 +31,16 @@ import com.badlogic.gdx.utils.Array;
 
 public class GameScreen implements Screen {
 	
+	private TiledMapTileLayer collide;
+
+	private House topWall;
+	private House sideWall;
+	
+	private Weapon chainsaw;
+
+	private OrthogonalTiledMapRenderer mapRenderer;
+	private TiledMap map;
+	
 	private OrthographicCamera camera;
 	private World world;
 	private Player player;
@@ -46,17 +55,16 @@ public class GameScreen implements Screen {
 	//all the bodies in the world. And is used to draw them.
 	private Array<Body> drawableBodies = new Array<Body>();
 	
-	private ArrayList<Zombie> zombies = new ArrayList<Zombie>();
-	private ArrayList<Creature> humans = new ArrayList<Creature>();
-	
 	private Stage stage;
-	
 	private float timeStamp = 0;
 	
 	
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		
+		mapRenderer.setView(camera);
+		mapRenderer.render();
 		
 		if(Constants.DEBUG_MODE){
 			useDebugRenderer();
@@ -71,14 +79,6 @@ public class GameScreen implements Screen {
 		batch.end();
 		
 		//drawEntites();
-		
-		for (Zombie z: zombies) {
-			z.autoUpdateMovement(humans, player);
-		}
-		
-		for (Creature h: humans) {
-			((Human) h).autoUpdateMovement(zombies);
-		}
 		
 		player.getPlayerBody().setLinearVelocity(moveStick.getTouchpad().getKnobPercentX() * 2, moveStick.getTouchpad().getKnobPercentY() * 2);
 		
@@ -200,12 +200,28 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void show() {
+		debugRenderer = new Box2DDebugRenderer();
+
+		map = new TmxMapLoader().load("img/firstwall.tmx");
+
+		collide =(TiledMapTileLayer) map.getLayers().get(0);
+
+		MapProperties prop = map.getProperties();
+		String MapWidth = prop.get("Width", String.class);
+		String MapHeight = prop.get("Height", String.class);
+
+		mapRenderer = new OrthogonalTiledMapRenderer(map);
+		
 		camera = new OrthographicCamera();
 		world = new World(new Vector2(0, 0), true);
 		stage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true, batch);
 		player = new Player (world, 300, 400, 32, 32);
 		batch = new SpriteBatch();
 		bkg = new Texture(Gdx.files.internal("img/bkg.png"));
+		
+		createHouse(MapWidth,MapHeight);
+
+		chainsaw = new Weapon(world, MeleeWeapons.CHAINSAW, 200 , 200, 36, 50);
 		
 		debugRenderer = new Box2DDebugRenderer();
 		
@@ -218,11 +234,24 @@ public class GameScreen implements Screen {
 		fireStick.getTouchpad().setDeadzone(fireStick.getTouchpad().getWidth() / 2 - 1);
 		moveStick.getTouchpad().setDeadzone(fireStick.getTouchpad().getWidth() / 2 - 1);
 		
-		
-		generateDummyAI();
-		
 		Gdx.input.setInputProcessor(stage);
 		attachContactListener();
+	}
+	
+	public void createHouse(String MapWidth,String MapHeight){
+		float Width;
+		float Height;
+		for (int i=0;i<Integer.parseInt(MapWidth);i++){
+			for (int j=0;j<Integer.parseInt(MapHeight);j++){
+				if (collide.getCell(i, j).getTile().getProperties().containsKey("Blocked")){
+					Width = Integer.parseInt(collide.getCell(i,j).getTile().getProperties().get("Width").toString());
+					Height = Integer.parseInt(collide.getCell(i,j).getTile().getProperties().get("Height").toString());
+					topWall = new House (world,i*16,(j+1)*16,Width*8,8,"img/Topwall2.png");
+					sideWall = new House (world,i*16,(j+1)*16,8,Height*8,"img/Sidewall2.png");
+
+				}
+			}
+		}
 	}
 
 	@Override
@@ -246,20 +275,6 @@ public class GameScreen implements Screen {
 		batch.dispose();
 		stage.dispose();
 		debugRenderer.dispose();
-	}
-	
-	public void generateDummyAI() {
-		for (int i = 1; i < 6; i++) {
-			for (int j = 1; j < 4; j++) {
-				zombies.add(new Zombie(world, i*200, j*200));
-			}
-		}
-		
-		for (int i = 1; i < 6; i+=2) {
-			for (int j = 1; j < 6; j+=2) {
-				humans.add(new Human(world, i*150, j*150));
-			}
-		}
 	}
 	
 	public void attachContactListener(){
@@ -292,5 +307,5 @@ public class GameScreen implements Screen {
 			}
 		});
 	}
-
+	
 }
