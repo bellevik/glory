@@ -1,10 +1,12 @@
 package se.glory.entities;
 
+import se.glory.entities.weapons.Bullet;
 import se.glory.utilities.Constants;
 import se.glory.utilities.Identity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -60,6 +62,7 @@ public class Player implements Creature {
 		playerIdentity.setType("Player");
 		
 		body.setUserData(playerIdentity);
+		body.setFixedRotation(true);
 		
 		createWeaponBody();
 		attachWeapon();
@@ -93,10 +96,19 @@ public class Player implements Creature {
         jointDef.bodyA = body;
         jointDef.bodyB = weaponBody;
         //16 here is equal to the weapons width!
-        jointDef.localAnchorB.x = -width * Constants.WORLD_TO_BOX - 16 * Constants.WORLD_TO_BOX;
+        jointDef.localAnchorA.set(width * Constants.WORLD_TO_BOX, 0);
+        jointDef.localAnchorB.set(-16 * Constants.WORLD_TO_BOX, 0);
         jointDef.enableLimit = true;
 
         joint = (RevoluteJoint) world.createJoint(jointDef);
+	}
+	
+	public void shoot() {
+		float rot = (float) (weaponBody.getTransform().getRotation());
+        float xAngle = MathUtils.cos(rot);
+        float yAngle = MathUtils.sin(rot);
+		
+		new Bullet(weaponBody.getPosition().x + 14 * xAngle * Constants.WORLD_TO_BOX, weaponBody.getPosition().y + 14 * yAngle * Constants.WORLD_TO_BOX, xAngle, yAngle, world);
 	}
 	
 	public Body getPlayerBody() {
