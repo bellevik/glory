@@ -67,14 +67,14 @@ public class GameScreen implements Screen {
 		
 		if(Constants.DEBUG_MODE){
 			useDebugRenderer();
+		} else {
+			drawEntites();
 		}
 		
 		camera.position.set(player.getPlayerBody().getPosition().x * Constants.BOX_TO_WORLD, player.getPlayerBody().getPosition().y * Constants.BOX_TO_WORLD, 0);
 		camera.update();
 		
 		batch.setProjectionMatrix(camera.combined);
-		
-		//drawEntites();
 		
 		player.getPlayerBody().setLinearVelocity(moveStick.getTouchpad().getKnobPercentX() * 2, moveStick.getTouchpad().getKnobPercentY() * 2);
 		
@@ -99,36 +99,18 @@ public class GameScreen implements Screen {
 			float knobY = fireStick.getTouchpad().getKnobPercentY();
 			
 			float playerDegree = (int) (player.getPlayerBody().getTransform().getRotation() * MathUtils.radiansToDegrees);
-			float knobDegree, nextAngle, totalRotation;
+			float knobDegree, totalRotation;
 			
 			if (knobY >= 0) {
-				//System.out.println((int) (Math.acos(knobX) * MathUtils.radiansToDegrees) );
 				knobDegree = (int) (Math.acos(knobX) * MathUtils.radiansToDegrees);
-				//nextAngle = (float) (playerDegree + player.getPlayerBody().getAngularVelocity() / 3.0);
 			} else {
-				//System.out.println((int) (-Math.acos(knobX) * MathUtils.radiansToDegrees) );
 				knobDegree = -(int) (Math.acos(knobX) * MathUtils.radiansToDegrees);
-				//nextAngle = (float) (playerDegree - player.getPlayerBody().getAngularVelocity() / 3.0);
 			}
 			totalRotation = knobDegree - playerDegree;
 			
 			player.getPlayerBody().setTransform(player.getPosition(), knobDegree * MathUtils.degreesToRadians);
 			player.getPlayerBody().getJointList().get(0).joint.getBodyB().setTransform(player.getPlayerBody().getJointList().get(0).joint.getBodyB().getPosition(), knobDegree * MathUtils.degreesToRadians);
 			player.getPlayerBody().getJointList().get(0).joint.getBodyB().setAwake(true);
-			
-			/*
-			if (totalRotation > 0) {
-				player.getPlayerBody().applyTorque((float)1, true);
-			}else if (totalRotation < 0) {
-				player.getPlayerBody().applyTorque((float)-1, true);
-			}
-			
-			if (Math.abs(playerDegree - knobDegree) < 5) {
-				player.getPlayerBody().setAngularVelocity(0);
-				player.getPlayerBody().setFixedRotation(true);
-			} else {
-				player.getPlayerBody().setFixedRotation(false);
-			}*/
 			
 			if(timeStamp > 1) {
 				player.shoot();
@@ -143,13 +125,9 @@ public class GameScreen implements Screen {
 				float knobDegree, nextAngle, totalRotation;
 				
 				if (knobY >= 0) {
-					//System.out.println((int) (Math.acos(knobX) * MathUtils.radiansToDegrees) );
 					knobDegree = (int) (Math.acos(knobX) * MathUtils.radiansToDegrees);
-					//nextAngle = (float) (playerDegree + player.getPlayerBody().getAngularVelocity() / 3.0);
 				} else {
-					//System.out.println((int) (-Math.acos(knobX) * MathUtils.radiansToDegrees) );
 					knobDegree = -(int) (Math.acos(knobX) * MathUtils.radiansToDegrees);
-					//nextAngle = (float) (playerDegree - player.getPlayerBody().getAngularVelocity() / 3.0);
 				}
 				totalRotation = knobDegree - playerDegree;
 				
@@ -171,7 +149,6 @@ public class GameScreen implements Screen {
 		world.getBodies(drawableBodies);
 		
 		for (Body body : drawableBodies) {
-			//The != null test is for test purposes at the moment.
 			if ( body.getUserData().getClass().equals(Identity.class) ) {
 				float width = ((Identity)(body.getUserData())).getWidth();
 				float height = ((Identity)(body.getUserData())).getHeight();
@@ -238,12 +215,6 @@ public class GameScreen implements Screen {
 		
 		moveStick = new Joystick(stage, 15, 15);
 		fireStick = new Joystick(stage, Gdx.graphics.getWidth() - 15 - 128, 15);
-		
-		//This line will set a dead zone to the whole touchpad except a 1pixel
-		//wide circle at the outer of the touchpad. This is because we only want
-		//the x and y value to be minumum 1 and maximum 1. Not any digits in between
-		fireStick.getTouchpad().setDeadzone(fireStick.getTouchpad().getWidth() / 2 - 1);
-		moveStick.getTouchpad().setDeadzone(fireStick.getTouchpad().getWidth() / 2 - 1);
 		
 		Gdx.input.setInputProcessor(stage);
 		attachContactListener();
