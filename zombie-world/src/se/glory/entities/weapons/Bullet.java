@@ -22,7 +22,7 @@ public class Bullet {
 	private float range;
 	private Texture[] textures;
 	
-	public Bullet (float x, float y, World world) {
+	public Bullet (float x, float y, float xAngle, float yAngle, World world) {
 		BodyDef bulletDef = new BodyDef();
 		bulletDef.type = BodyType.DynamicBody;
 		bulletDef.position.set(x, y);
@@ -49,7 +49,7 @@ public class Bullet {
 		i.setHeight(6);
 		bulletBody.setUserData(i);
 		
-		bulletBody.setLinearVelocity(2, 0);
+		bulletBody.setLinearVelocity(2 * xAngle, 2 * yAngle);
 	}
 
 	public Bullet(String name, float damage, float range, World world) {
