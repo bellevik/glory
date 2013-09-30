@@ -2,6 +2,7 @@ package se.glory.entities.weapons;
 
 import se.glory.utilities.Constants;
 import se.glory.utilities.Identity;
+import se.glory.utilities.TextureHandler;
 import se.glory.utilities.WorldHandler;
 
 import com.badlogic.gdx.Gdx;
@@ -39,7 +40,7 @@ public class Bullet {
 		fixtureDef.restitution = 0.6f;
 		
 		bulletBody.createFixture(fixtureDef);
-		Texture bulletTexture = new Texture(Gdx.files.internal("img/bullet.png"));
+		Texture bulletTexture = TextureHandler.bulletTexture;
 		
 		bulletShape.dispose();
 		

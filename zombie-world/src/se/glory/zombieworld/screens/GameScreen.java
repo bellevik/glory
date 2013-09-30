@@ -6,6 +6,7 @@ import se.glory.utilities.CollisionDetection;
 import se.glory.utilities.Constants;
 import se.glory.utilities.Identity;
 import se.glory.utilities.Joystick;
+import se.glory.utilities.TextureHandler;
 import se.glory.utilities.WorldHandler;
 
 import com.badlogic.gdx.Gdx;
@@ -190,6 +191,8 @@ public class GameScreen implements Screen {
 		debugRenderer = new Box2DDebugRenderer();
 
 		map = new TmxMapLoader().load("img/firstwall.tmx");
+		//This line will import all the images that will be used multiple times
+		TextureHandler.createTextures();
 
 		collide =(TiledMapTileLayer) map.getLayers().get(0);
 
