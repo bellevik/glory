@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -50,6 +51,8 @@ public class GameScreen implements Screen {
 	
 	private Stage stage;
 	
+	private float timeStamp = 0;
+	
 	
 	@Override
 	public void render(float delta) {
@@ -67,7 +70,7 @@ public class GameScreen implements Screen {
 		batch.draw(bkg, 0, 0);
 		batch.end();
 		
-		drawEntites();
+		//drawEntites();
 		
 		for (Zombie z: zombies) {
 			z.autoUpdateMovement(humans, player);
@@ -79,10 +82,85 @@ public class GameScreen implements Screen {
 		
 		player.getPlayerBody().setLinearVelocity(moveStick.getTouchpad().getKnobPercentX() * 2, moveStick.getTouchpad().getKnobPercentY() * 2);
 		
+		//-------------REFACTOR THIS METHOD!-------------
+		applyRotationToPlayer(delta);
+		
 		stage.act(delta);
 		stage.draw();
 		
 		world.step(1/60f, 6, 2);
+	}
+	
+	public void applyRotationToPlayer(float delta) {
+		timeStamp += delta;
+		
+		//-------RECHECK THIS CONDITION. IT WILL STOP AT x=0 and y=0. i.e MOVE
+		//-------STRAIGHT TO THE RIGHT
+		if (fireStick.getTouchpad().getKnobPercentX() != 0 && fireStick.getTouchpad().getKnobPercentY() != 0) {
+			
+			float knobX = fireStick.getTouchpad().getKnobPercentX();
+			float knobY = fireStick.getTouchpad().getKnobPercentY();
+			
+			float playerDegree = (int) (player.getPlayerBody().getTransform().getRotation() * MathUtils.radiansToDegrees);
+			float knobDegree, nextAngle, totalRotation;
+			
+			if (knobY >= 0) {
+				//System.out.println((int) (Math.acos(knobX) * MathUtils.radiansToDegrees) );
+				knobDegree = (int) (Math.acos(knobX) * MathUtils.radiansToDegrees);
+				//nextAngle = (float) (playerDegree + player.getPlayerBody().getAngularVelocity() / 3.0);
+			} else {
+				//System.out.println((int) (-Math.acos(knobX) * MathUtils.radiansToDegrees) );
+				knobDegree = -(int) (Math.acos(knobX) * MathUtils.radiansToDegrees);
+				//nextAngle = (float) (playerDegree - player.getPlayerBody().getAngularVelocity() / 3.0);
+			}
+			totalRotation = knobDegree - playerDegree;
+			
+			player.getPlayerBody().setTransform(player.getPosition(), knobDegree * MathUtils.degreesToRadians);
+			player.getPlayerBody().getJointList().get(0).joint.getBodyB().setTransform(player.getPlayerBody().getJointList().get(0).joint.getBodyB().getPosition(), knobDegree * MathUtils.degreesToRadians);
+			player.getPlayerBody().getJointList().get(0).joint.getBodyB().setAwake(true);
+			
+			/*
+			if (totalRotation > 0) {
+				player.getPlayerBody().applyTorque((float)1, true);
+			}else if (totalRotation < 0) {
+				player.getPlayerBody().applyTorque((float)-1, true);
+			}
+			
+			if (Math.abs(playerDegree - knobDegree) < 5) {
+				player.getPlayerBody().setAngularVelocity(0);
+				player.getPlayerBody().setFixedRotation(true);
+			} else {
+				player.getPlayerBody().setFixedRotation(false);
+			}*/
+			
+			if(timeStamp > 1) {
+				player.shoot();
+				timeStamp = 0;
+			}
+		} else {
+			if (moveStick.getTouchpad().getKnobPercentX() != 0 && moveStick.getTouchpad().getKnobPercentY() != 0) {
+				float knobX = moveStick.getTouchpad().getKnobPercentX();
+				float knobY = moveStick.getTouchpad().getKnobPercentY();
+				
+				float playerDegree = (int) (player.getPlayerBody().getTransform().getRotation() * MathUtils.radiansToDegrees);
+				float knobDegree, nextAngle, totalRotation;
+				
+				if (knobY >= 0) {
+					//System.out.println((int) (Math.acos(knobX) * MathUtils.radiansToDegrees) );
+					knobDegree = (int) (Math.acos(knobX) * MathUtils.radiansToDegrees);
+					//nextAngle = (float) (playerDegree + player.getPlayerBody().getAngularVelocity() / 3.0);
+				} else {
+					//System.out.println((int) (-Math.acos(knobX) * MathUtils.radiansToDegrees) );
+					knobDegree = -(int) (Math.acos(knobX) * MathUtils.radiansToDegrees);
+					//nextAngle = (float) (playerDegree - player.getPlayerBody().getAngularVelocity() / 3.0);
+				}
+				totalRotation = knobDegree - playerDegree;
+				
+				player.getPlayerBody().setTransform(player.getPosition(), knobDegree * MathUtils.degreesToRadians);
+				player.getPlayerBody().getJointList().get(0).joint.getBodyB().setTransform(player.getPlayerBody().getJointList().get(0).joint.getBodyB().getPosition(), knobDegree * MathUtils.degreesToRadians);
+				player.getPlayerBody().getJointList().get(0).joint.getBodyB().setAwake(true);
+			}
+		}
 	}
 	
 	/*
@@ -133,6 +211,13 @@ public class GameScreen implements Screen {
 		
 		moveStick = new Joystick(stage, 15, 15);
 		fireStick = new Joystick(stage, Gdx.graphics.getWidth() - 15 - 128, 15);
+		
+		//This line will set a dead zone to the whole touchpad except a 1pixel
+		//wide circle at the outer of the touchpad. This is because we only want
+		//the x and y value to be minumum 1 and maximum 1. Not any digits in between
+		fireStick.getTouchpad().setDeadzone(fireStick.getTouchpad().getWidth() / 2 - 1);
+		moveStick.getTouchpad().setDeadzone(fireStick.getTouchpad().getWidth() / 2 - 1);
+		
 		
 		generateDummyAI();
 		
