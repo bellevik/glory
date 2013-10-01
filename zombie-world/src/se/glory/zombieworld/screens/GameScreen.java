@@ -78,12 +78,17 @@ public class GameScreen implements Screen {
 		
 		//-------------REFACTOR THIS METHOD!-------------
 		applyRotationToPlayer(delta);
+		selectWeapon();
 		
 		stage.act(delta);
 		stage.draw();
 		
 		WorldHandler.world.step(1/60f, 6, 2);
 		sweepDeadBodies();
+	}
+	
+	public void selectWeapon() {
+		
 	}
 	
 	public void applyRotationToPlayer(float delta) {
