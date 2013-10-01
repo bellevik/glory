@@ -17,10 +17,14 @@ public class Constants {
 	}
 	
 	public static enum MoveableBodyType {
-		PLAYER, HUMAN, ZOMBIE, BULLET, HOUSE, WEAPON;
+		PLAYER, HUMAN, ZOMBIE, BULLET, HOUSE, ITEM, WEAPON;
 	}
 	
 	public static enum TouchpadType {
 		MOVEMENT, FIRE, WEAPON_SELECTION
+	}
+	
+	public static enum ItemType {
+		WEAPON, CONSUMABLE;
 	}
 }

@@ -1,5 +1,7 @@
 package se.glory.entities.items;
 
-public interface Item {
+import se.glory.utilities.Constants;
 
+public interface Item {
+	public Constants.ItemType getItemType();
 }

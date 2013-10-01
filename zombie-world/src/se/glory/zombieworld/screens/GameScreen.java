@@ -1,6 +1,7 @@
 package se.glory.zombieworld.screens;
 
 import se.glory.entities.Player;
+import se.glory.entities.items.WeaponLoot;
 import se.glory.entities.obstacles.House;
 import se.glory.utilities.CollisionDetection;
 import se.glory.utilities.Constants;
@@ -209,6 +210,7 @@ public class GameScreen implements Screen {
 		batch = new SpriteBatch();
 		
 		createHouse(MapWidth,MapHeight);
+		WeaponLoot loot = new WeaponLoot("weaponName", 14, 15);
 
 		debugRenderer = new Box2DDebugRenderer();
 		
