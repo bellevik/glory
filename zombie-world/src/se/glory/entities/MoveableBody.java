@@ -54,9 +54,7 @@ public class MoveableBody implements Creature {
 	}
 
 	@Override
-	public Vector2 getPosition() {
-		return body.getPosition();
+	public Body getBody() {
+		return body;
 	}
-	
-	
 }

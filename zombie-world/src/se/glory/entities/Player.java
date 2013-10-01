@@ -53,13 +53,13 @@ public class Player implements Creature {
 		body.createFixture(fixtureDef);
 		texture = new Texture(Gdx.files.internal("img/player.gif"));
 
-		Identity playerIdentity = new Identity();
-		playerIdentity.setTexture(texture);
-		playerIdentity.setWidth(width);
-		playerIdentity.setHeight(height);
-		playerIdentity.setType(Constants.MoveableBodyType.PLAYER);
+		Identity identity = new Identity();
+		identity.setTexture(texture);
+		identity.setWidth(width);
+		identity.setHeight(height);
+		identity.setType(Constants.MoveableBodyType.PLAYER);
 
-		body.setUserData(playerIdentity);
+		body.setUserData(identity);
 		
 		body.setFixedRotation(true);
 		
@@ -110,12 +110,8 @@ public class Player implements Creature {
 		new Bullet(weaponBody.getPosition().x + 14 * xAngle * Constants.WORLD_TO_BOX, weaponBody.getPosition().y + 14 * yAngle * Constants.WORLD_TO_BOX, xAngle, yAngle);
 	}
 	
-	public Body getPlayerBody() {
-		return body;
-	}
-
 	@Override
-	public Vector2 getPosition() {
-		return body.getPosition();
+	public Body getBody() {
+		return body;
 	}
 }

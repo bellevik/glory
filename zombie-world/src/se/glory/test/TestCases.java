@@ -36,7 +36,7 @@ public class TestCases {
 	//	assertsEquals("Human starts at correct x position", 150, 150);
 	//	assertsEquals(150, 150);
 		assertNotNull("Human object null", testHuman);
-		assertTrue("truetrue", testHuman.getPosition().x==150);
+		assertTrue("truetrue", testHuman.getBody().getPosition().x==150);
 //		assertsEquals("Human starts at correct y position", expected, actual)
 		
 	//	testHuman.autoUpdateMovement(zombies);

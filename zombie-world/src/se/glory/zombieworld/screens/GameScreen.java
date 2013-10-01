@@ -68,12 +68,12 @@ public class GameScreen implements Screen {
 			drawEntites();
 		}
 		
-		camera.position.set(player.getPlayerBody().getPosition().x * Constants.BOX_TO_WORLD, player.getPlayerBody().getPosition().y * Constants.BOX_TO_WORLD, 0);
+		camera.position.set(player.getBody().getPosition().x * Constants.BOX_TO_WORLD, player.getBody().getPosition().y * Constants.BOX_TO_WORLD, 0);
 		camera.update();
 		
 		batch.setProjectionMatrix(camera.combined);
 		
-		player.getPlayerBody().setLinearVelocity(moveStick.getTouchpad().getKnobPercentX() * 2, moveStick.getTouchpad().getKnobPercentY() * 2);
+		player.getBody().setLinearVelocity(moveStick.getTouchpad().getKnobPercentX() * 2, moveStick.getTouchpad().getKnobPercentY() * 2);
 		
 		//-------------REFACTOR THIS METHOD!-------------
 		applyRotationToPlayer(delta);
@@ -95,7 +95,7 @@ public class GameScreen implements Screen {
 			float knobX = fireStick.getTouchpad().getKnobPercentX();
 			float knobY = fireStick.getTouchpad().getKnobPercentY();
 			
-			float playerDegree = (int) (player.getPlayerBody().getTransform().getRotation() * MathUtils.radiansToDegrees);
+			float playerDegree = (int) (player.getBody().getTransform().getRotation() * MathUtils.radiansToDegrees);
 			float knobDegree, totalRotation;
 			
 			if (knobY >= 0) {
@@ -105,9 +105,9 @@ public class GameScreen implements Screen {
 			}
 			totalRotation = knobDegree - playerDegree;
 			
-			player.getPlayerBody().setTransform(player.getPosition(), knobDegree * MathUtils.degreesToRadians);
-			player.getPlayerBody().getJointList().get(0).joint.getBodyB().setTransform(player.getPlayerBody().getJointList().get(0).joint.getBodyB().getPosition(), knobDegree * MathUtils.degreesToRadians);
-			player.getPlayerBody().getJointList().get(0).joint.getBodyB().setAwake(true);
+			player.getBody().setTransform(player.getBody().getPosition(), knobDegree * MathUtils.degreesToRadians);
+			player.getBody().getJointList().get(0).joint.getBodyB().setTransform(player.getBody().getJointList().get(0).joint.getBodyB().getPosition(), knobDegree * MathUtils.degreesToRadians);
+			player.getBody().getJointList().get(0).joint.getBodyB().setAwake(true);
 			
 			if(timeStamp > 1) {
 				player.shoot();
@@ -118,7 +118,7 @@ public class GameScreen implements Screen {
 				float knobX = moveStick.getTouchpad().getKnobPercentX();
 				float knobY = moveStick.getTouchpad().getKnobPercentY();
 				
-				float playerDegree = (int) (player.getPlayerBody().getTransform().getRotation() * MathUtils.radiansToDegrees);
+				float playerDegree = (int) (player.getBody().getTransform().getRotation() * MathUtils.radiansToDegrees);
 				float knobDegree, nextAngle, totalRotation;
 				
 				if (knobY >= 0) {
@@ -128,9 +128,9 @@ public class GameScreen implements Screen {
 				}
 				totalRotation = knobDegree - playerDegree;
 				
-				player.getPlayerBody().setTransform(player.getPosition(), knobDegree * MathUtils.degreesToRadians);
-				player.getPlayerBody().getJointList().get(0).joint.getBodyB().setTransform(player.getPlayerBody().getJointList().get(0).joint.getBodyB().getPosition(), knobDegree * MathUtils.degreesToRadians);
-				player.getPlayerBody().getJointList().get(0).joint.getBodyB().setAwake(true);
+				player.getBody().setTransform(player.getBody().getPosition(), knobDegree * MathUtils.degreesToRadians);
+				player.getBody().getJointList().get(0).joint.getBodyB().setTransform(player.getBody().getJointList().get(0).joint.getBodyB().getPosition(), knobDegree * MathUtils.degreesToRadians);
+				player.getBody().getJointList().get(0).joint.getBodyB().setAwake(true);
 			}
 		}
 	}
