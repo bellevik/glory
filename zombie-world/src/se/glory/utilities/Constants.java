@@ -21,6 +21,6 @@ public class Constants {
 	}
 	
 	public static enum TouchpadType {
-		MOVEMENT, FIRE, WEAPON_SELECTION
+		MOVEMENT, FIRE, ITEM_SELECTION
 	}
 }

@@ -48,6 +48,7 @@ public class GameScreen implements Screen {
 	private SpriteBatch batch;
 	private Joystick moveStick;
 	private Joystick fireStick;
+	private Joystick selectionStick;
 	
 	private Box2DDebugRenderer debugRenderer;
 	
@@ -214,6 +215,7 @@ public class GameScreen implements Screen {
 		
 		moveStick = new Joystick(stage, 15, 15, 128, 128, Constants.TouchpadType.MOVEMENT);
 		fireStick = new Joystick(stage, Gdx.graphics.getWidth() - 15 - 128, 15, 128, 128, Constants.TouchpadType.FIRE);
+		selectionStick = new Joystick(stage, Gdx.graphics.getWidth() - 15 - 128, Gdx.graphics.getHeight() - 15 - 64, 64, 64, Constants.TouchpadType.ITEM_SELECTION);
 		
 		Gdx.input.setInputProcessor(stage);
 		attachContactListener();
