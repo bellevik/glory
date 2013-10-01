@@ -1,6 +1,5 @@
 package se.glory.utilities;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -18,10 +17,21 @@ public class Joystick {
 	public Joystick (Stage stage, float x, float y, float width, float height, Constants.TouchpadType type) {
 		//Create a touchpad skin    
         touchpadSkin = new Skin();
-        //Set background image
-        touchpadSkin.add("touchBackground", new Texture("img/touchBackground.png"));
-        //Set knob image
-        touchpadSkin.add("touchKnob", new Texture("img/touchKnob.png"));
+        
+        //Set Base- and Knob-image
+        switch (type) {
+        case MOVEMENT:			touchpadSkin.add("touchBackground", new Texture("img/joystickBase.png"));
+								touchpadSkin.add("touchKnob", new Texture("img/joystickKnob.png"));
+								break;
+        case FIRE:				touchpadSkin.add("touchBackground", new Texture("img/joystickBase.png"));
+								touchpadSkin.add("touchKnob", new Texture("img/joystickKnob.png"));
+								break;
+        case ITEM_SELECTION:	touchpadSkin.add("touchBackground", new Texture("img/selectionBase.png"));
+        						touchpadSkin.add("touchKnob", new Texture("img/selectionKnob.png"));
+        						break;
+        }
+        
+        
         //Create TouchPad Style
         touchpadStyle = new TouchpadStyle();
         //Create Drawable's from TouchPad skin
