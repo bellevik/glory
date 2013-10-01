@@ -45,7 +45,6 @@ public class GameScreen implements Screen {
 	private TiledMap map;
 	
 	private OrthographicCamera camera;
-	private Player player;
 	private SpriteBatch batch;
 	private Joystick moveStick;
 	private Joystick fireStick;
@@ -70,12 +69,12 @@ public class GameScreen implements Screen {
 			drawEntites();
 		}
 		
-		camera.position.set(player.getBody().getPosition().x * Constants.BOX_TO_WORLD, player.getBody().getPosition().y * Constants.BOX_TO_WORLD, 0);
+		camera.position.set(WorldHandler.player.getBody().getPosition().x * Constants.BOX_TO_WORLD, WorldHandler.player.getBody().getPosition().y * Constants.BOX_TO_WORLD, 0);
 		camera.update();
 		
 		batch.setProjectionMatrix(camera.combined);
 		
-		player.getBody().setLinearVelocity(moveStick.getTouchpad().getKnobPercentX() * 2, moveStick.getTouchpad().getKnobPercentY() * 2);
+		WorldHandler.player.getBody().setLinearVelocity(moveStick.getTouchpad().getKnobPercentX() * 2, moveStick.getTouchpad().getKnobPercentY() * 2);
 		
 		//-------------REFACTOR THIS METHOD!-------------
 		applyRotationToPlayer(delta);
@@ -120,7 +119,7 @@ public class GameScreen implements Screen {
 			float knobX = fireStick.getTouchpad().getKnobPercentX();
 			float knobY = fireStick.getTouchpad().getKnobPercentY();
 			
-			float playerDegree = (int) (player.getBody().getTransform().getRotation() * MathUtils.radiansToDegrees);
+			float playerDegree = (int) (WorldHandler.player.getBody().getTransform().getRotation() * MathUtils.radiansToDegrees);
 			float knobDegree, totalRotation;
 			
 			if (knobY >= 0) {
@@ -130,12 +129,12 @@ public class GameScreen implements Screen {
 			}
 			totalRotation = knobDegree - playerDegree;
 			
-			player.getBody().setTransform(player.getBody().getPosition(), knobDegree * MathUtils.degreesToRadians);
-			player.getBody().getJointList().get(0).joint.getBodyB().setTransform(player.getBody().getJointList().get(0).joint.getBodyB().getPosition(), knobDegree * MathUtils.degreesToRadians);
-			player.getBody().getJointList().get(0).joint.getBodyB().setAwake(true);
+			WorldHandler.player.getBody().setTransform(WorldHandler.player.getBody().getPosition(), knobDegree * MathUtils.degreesToRadians);
+			WorldHandler.player.getBody().getJointList().get(0).joint.getBodyB().setTransform(WorldHandler.player.getBody().getJointList().get(0).joint.getBodyB().getPosition(), knobDegree * MathUtils.degreesToRadians);
+			WorldHandler.player.getBody().getJointList().get(0).joint.getBodyB().setAwake(true);
 			
 			if(timeStamp > 1) {
-				player.shoot();
+				WorldHandler.player.shoot();
 				timeStamp = 0;
 			}
 		} else {
@@ -143,7 +142,7 @@ public class GameScreen implements Screen {
 				float knobX = moveStick.getTouchpad().getKnobPercentX();
 				float knobY = moveStick.getTouchpad().getKnobPercentY();
 				
-				float playerDegree = (int) (player.getBody().getTransform().getRotation() * MathUtils.radiansToDegrees);
+				float playerDegree = (int) (WorldHandler.player.getBody().getTransform().getRotation() * MathUtils.radiansToDegrees);
 				float knobDegree, nextAngle, totalRotation;
 				
 				if (knobY >= 0) {
@@ -153,9 +152,9 @@ public class GameScreen implements Screen {
 				}
 				totalRotation = knobDegree - playerDegree;
 				
-				player.getBody().setTransform(player.getBody().getPosition(), knobDegree * MathUtils.degreesToRadians);
-				player.getBody().getJointList().get(0).joint.getBodyB().setTransform(player.getBody().getJointList().get(0).joint.getBodyB().getPosition(), knobDegree * MathUtils.degreesToRadians);
-				player.getBody().getJointList().get(0).joint.getBodyB().setAwake(true);
+				WorldHandler.player.getBody().setTransform(WorldHandler.player.getBody().getPosition(), knobDegree * MathUtils.degreesToRadians);
+				WorldHandler.player.getBody().getJointList().get(0).joint.getBodyB().setTransform(WorldHandler.player.getBody().getJointList().get(0).joint.getBodyB().getPosition(), knobDegree * MathUtils.degreesToRadians);
+				WorldHandler.player.getBody().getJointList().get(0).joint.getBodyB().setAwake(true);
 			}
 		}
 	}
@@ -230,7 +229,6 @@ public class GameScreen implements Screen {
 		camera = new OrthographicCamera();
 		WorldHandler.createWorld();
 		stage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true, batch);
-		player = new Player (300, 400, 32, 32);
 		batch = new SpriteBatch();
 		
 		createHouse(MapWidth,MapHeight);
