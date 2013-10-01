@@ -1,5 +1,6 @@
 package se.glory.entities;
 
+import se.glory.entities.items.Item;
 import se.glory.entities.weapons.Bullet;
 import se.glory.utilities.Constants;
 import se.glory.utilities.Identity;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
+import com.badlogic.gdx.utils.Array;
 
 public class Player implements Creature {
 	
@@ -27,6 +29,8 @@ public class Player implements Creature {
 	private Texture texture;
 	
 	private Body weaponBody;
+	
+	private Array<Item> itemList = new Array<Item>();
 	
 	private RevoluteJoint joint;
 
@@ -102,6 +106,18 @@ public class Player implements Creature {
         jointDef.enableLimit = true;
 
         joint = (RevoluteJoint) WorldHandler.world.createJoint(jointDef);
+	}
+	
+	/*
+	 * This method will add an Item to the item list. If it fails it
+	 * will return false. If it succeeds it will return true
+	 */
+	public boolean addToItemList(Item item) {
+		if(itemList.size < 5) {
+			itemList.add(item);
+			return true;
+		}
+		return false;
 	}
 	
 	public void shoot() {

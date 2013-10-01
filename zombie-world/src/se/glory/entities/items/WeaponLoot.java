@@ -48,6 +48,7 @@ public class WeaponLoot implements Item {
 		identity.setHeight(height);
 		identity.setTexture(texture);
 		identity.setType(Constants.MoveableBodyType.ITEM);
+		identity.setObj(this);
 		
 		body.setUserData(identity);
 	}
@@ -55,6 +56,11 @@ public class WeaponLoot implements Item {
 	@Override
 	public ItemType getItemType() {
 		return type;
+	}
+
+	@Override
+	public String getItemName() {
+		return weaponName;
 	}
 
 }

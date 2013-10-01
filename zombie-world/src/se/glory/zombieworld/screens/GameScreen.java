@@ -232,7 +232,7 @@ public class GameScreen implements Screen {
 		batch = new SpriteBatch();
 		
 		createHouse(MapWidth,MapHeight);
-		WeaponLoot loot = new WeaponLoot("weaponName", 14, 15);
+		WeaponLoot loot = new WeaponLoot("Bazooka", 14, 15);
 
 		debugRenderer = new Box2DDebugRenderer();
 		
