@@ -1,6 +1,7 @@
 package se.glory.zombieworld.screens;
 
 import se.glory.entities.Player;
+import se.glory.entities.items.ItemContainer;
 import se.glory.entities.items.WeaponLoot;
 import se.glory.entities.obstacles.House;
 import se.glory.utilities.CollisionDetection;
@@ -48,7 +49,11 @@ public class GameScreen implements Screen {
 	private SpriteBatch batch;
 	private Joystick moveStick;
 	private Joystick fireStick;
+	
 	private Joystick selectionStick;
+	float selectionX;
+	float selectionY;
+	private ItemContainer[] itemContainers;
 	
 	private Box2DDebugRenderer debugRenderer;
 	
@@ -247,7 +252,17 @@ public class GameScreen implements Screen {
 		
 		moveStick = new Joystick(stage, 15, 15, 128, 128, Constants.TouchpadType.MOVEMENT);
 		fireStick = new Joystick(stage, Gdx.graphics.getWidth() - 15 - 128, 15, 128, 128, Constants.TouchpadType.FIRE);
-		selectionStick = new Joystick(stage, Gdx.graphics.getWidth() - 15 - 128, Gdx.graphics.getHeight() - 15 - 64, 64, 64, Constants.TouchpadType.ITEM_SELECTION);
+		
+		selectionX = (Gdx.graphics.getWidth() - 15 - 196);
+		selectionY = (Gdx.graphics.getHeight() - 15 - 64);
+		selectionStick = new Joystick(stage, selectionX, selectionY, 64, 64, Constants.TouchpadType.ITEM_SELECTION);
+		
+		itemContainers = new ItemContainer[5];
+		itemContainers[4] = new ItemContainer(stage, selectionX - 16 - 64, selectionY);
+		itemContainers[3] = new ItemContainer(stage, selectionX - 16 - 64, selectionY - 16 - 64);
+		itemContainers[2] = new ItemContainer(stage, selectionX, selectionY - 16 - 64);
+		itemContainers[1] = new ItemContainer(stage, selectionX + 16 + 64, selectionY - 16 - 64);
+		itemContainers[0] = new ItemContainer(stage, selectionX + 16 + 64, selectionY);
 		
 		Gdx.input.setInputProcessor(stage);
 		attachContactListener();
