@@ -127,8 +127,6 @@ public class GameScreen implements Screen {
 				knobDegree = (int) (Math.acos(knobX) * MathUtils.radiansToDegrees);
 			}
 			
-			System.out.println(knobDegree);
-			
 			if (knobDegree > 0 && knobDegree < 180) {
 				selection = (int) (knobDegree / 36);
 				
