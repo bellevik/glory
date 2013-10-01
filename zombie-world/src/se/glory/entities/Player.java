@@ -85,7 +85,9 @@ public class Player implements Creature {
 		
 		Identity weaponIdentity = new Identity();
 		weaponIdentity.setTexture(null);
-		weaponIdentity.setType(Constants.MoveableBodyType.WEAPON);
+		//Rethink if the weapons type should be player or weapon. 
+		//This will cause problem in the loot pickup
+		weaponIdentity.setType(Constants.MoveableBodyType.PLAYER);
 		weaponBody.setUserData(weaponIdentity);
 	}
 	
