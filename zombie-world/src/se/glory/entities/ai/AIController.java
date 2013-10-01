@@ -108,7 +108,7 @@ public class AIController {
 		double distance = Double.MAX_VALUE;
 		Creature closestTarget = null;
 		
-		for (Creature h : humans) {
+		for (Human h : humans) {
 			float tmpX = h.getBody().getPosition().x - z.getBody().getPosition().x;
 			float tmpY = h.getBody().getPosition().y - z.getBody().getPosition().y;
 			
