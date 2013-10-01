@@ -1,8 +1,5 @@
 package se.glory.utilities;
 
-import se.glory.utilities.Constants.TouchpadType;
-
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -23,11 +20,11 @@ public class Joystick {
         
         //Set Base- and Knob-image
         switch (type) {
-        case MOVEMENT:			touchpadSkin.add("touchBackground", new Texture("img/moveBase.png"));
-								touchpadSkin.add("touchKnob", new Texture("img/moveKnob.png"));
+        case MOVEMENT:			touchpadSkin.add("touchBackground", new Texture("img/joystickBase.png"));
+								touchpadSkin.add("touchKnob", new Texture("img/joystickKnob.png"));
 								break;
-        case FIRE:				touchpadSkin.add("touchBackground", new Texture("img/fireBase.png"));
-								touchpadSkin.add("touchKnob", new Texture("img/fireKnob.png"));
+        case FIRE:				touchpadSkin.add("touchBackground", new Texture("img/joystickBase.png"));
+								touchpadSkin.add("touchKnob", new Texture("img/joystickKnob.png"));
 								break;
         case ITEM_SELECTION:	touchpadSkin.add("touchBackground", new Texture("img/selectionBase.png"));
         						touchpadSkin.add("touchKnob", new Texture("img/selectionKnob.png"));
