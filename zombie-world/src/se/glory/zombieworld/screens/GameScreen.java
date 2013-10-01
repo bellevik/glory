@@ -89,7 +89,22 @@ public class GameScreen implements Screen {
 	}
 	
 	public void selectWeapon() {
-		
+		if(selectionStick.getTouchpad().getKnobPercentX() != 0 && selectionStick.getTouchpad().getKnobPercentY() != 0) {
+			float knobX = selectionStick.getTouchpad().getKnobPercentX();
+			float knobY = selectionStick.getTouchpad().getKnobPercentY();
+			
+			float knobDegree;
+			
+			if (knobY >= 0) {
+				knobDegree = -(int) (Math.acos(knobX) * MathUtils.radiansToDegrees);
+			} else {
+				knobDegree = (int) (Math.acos(knobX) * MathUtils.radiansToDegrees);
+			}
+			
+			
+			
+			System.out.println(knobDegree);
+		}
 	}
 	
 	public void applyRotationToPlayer(float delta) {
