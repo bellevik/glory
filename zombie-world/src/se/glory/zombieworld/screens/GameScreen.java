@@ -2,6 +2,7 @@ package se.glory.zombieworld.screens;
 
 import se.glory.entities.Player;
 import se.glory.entities.obstacles.House;
+import se.glory.utilities.Animator;
 import se.glory.utilities.CollisionDetection;
 import se.glory.utilities.Constants;
 import se.glory.utilities.Identity;
@@ -13,7 +14,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -22,16 +22,9 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.ContactListener;
-import com.badlogic.gdx.physics.box2d.Manifold;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Array;
 
 public class GameScreen implements Screen {
 	
@@ -53,6 +46,8 @@ public class GameScreen implements Screen {
 	
 	private Stage stage;
 	private float timeStamp = 0;
+	
+	private Animator animation;
 	
 	
 	@Override
@@ -77,6 +72,8 @@ public class GameScreen implements Screen {
 		
 		//-------------REFACTOR THIS METHOD!-------------
 		applyRotationToPlayer(delta);
+		
+		animation.drawAnimation(batch);
 		
 		stage.act(delta);
 		stage.draw();
@@ -193,6 +190,8 @@ public class GameScreen implements Screen {
 		map = new TmxMapLoader().load("img/firstwall.tmx");
 		//This line will import all the images that will be used multiple times
 		TextureHandler.createTextures();
+		
+		animation = new Animator();
 
 		collide =(TiledMapTileLayer) map.getLayers().get(0);
 
