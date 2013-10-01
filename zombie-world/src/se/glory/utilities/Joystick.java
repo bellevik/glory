@@ -15,7 +15,7 @@ public class Joystick {
 	private Drawable touchBackground, touchKnob;
 	private Touchpad touchpad;
 	
-	public Joystick (Stage stage, float x, float y) {
+	public Joystick (Stage stage, float x, float y, float width, float height) {
 		//Create a touchpad skin    
         touchpadSkin = new Skin();
         //Set background image
@@ -33,7 +33,7 @@ public class Joystick {
         //Create new TouchPad with the created style
         touchpad = new Touchpad(10, touchpadStyle);
         //setBounds(x,y,width,height)
-        touchpad.setBounds(x, y, 128, 128);
+        touchpad.setBounds(x, y, width, height);
  
         //Create a Stage and add TouchPad
         stage.addActor(touchpad);
