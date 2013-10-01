@@ -3,9 +3,13 @@ package se.glory.entities;
 import se.glory.utilities.Constants;
 import se.glory.utilities.TextureHandler;
 
-public class Human extends MoveableBody {
+public class Human extends MoveableBody implements Creature {
 	
 	public Human(int x, int y) {
 		super(x, y, 15, 15, TextureHandler.humanTexture, Constants.MoveableBodyShape.CIRCLE , Constants.MoveableBodyType.HUMAN);
+	}
+	
+	public enum State {
+		FLEEING, WALKING, IDLE;
 	}
 }
