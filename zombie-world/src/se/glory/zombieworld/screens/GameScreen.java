@@ -94,6 +94,7 @@ public class GameScreen implements Screen {
 			float knobY = selectionStick.getTouchpad().getKnobPercentY();
 			
 			float knobDegree;
+			int selection = 0;
 			
 			if (knobY >= 0) {
 				knobDegree = -(int) (Math.acos(knobX) * MathUtils.radiansToDegrees);
@@ -101,9 +102,11 @@ public class GameScreen implements Screen {
 				knobDegree = (int) (Math.acos(knobX) * MathUtils.radiansToDegrees);
 			}
 			
-			
-			
-			System.out.println(knobDegree);
+			if (knobDegree > 0 && knobDegree < 180) {
+				selection = (int) (knobDegree / 36) + 1;
+			} else {
+				selection = 0;
+			}
 		}
 	}
 	
