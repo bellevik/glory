@@ -13,6 +13,8 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 
 /*
  * This class will represent a Bullet. The bullet will be used to kill
@@ -28,7 +30,7 @@ public class Bullet {
 		BodyDef bulletDef = new BodyDef();
 		bulletDef.type = BodyType.DynamicBody;
 		bulletDef.position.set(x, y);
-		Body bulletBody = WorldHandler.world.createBody(bulletDef);
+		final Body bulletBody = WorldHandler.world.createBody(bulletDef);
 		
 		CircleShape bulletShape = new CircleShape();
 		bulletShape.setRadius(6 * Constants.WORLD_TO_BOX);
@@ -52,6 +54,16 @@ public class Bullet {
 		bulletBody.setUserData(i);
 		
 		bulletBody.setLinearVelocity(2 * xAngle, 2 * yAngle);
+		
+		float delay = 1; // seconds
+
+		Timer.schedule(new Task(){
+		    @Override
+		    public void run() {
+		    	Identity tmp = (Identity) bulletBody.getUserData();
+		    	tmp.setDead(true);
+		    }
+		}, delay);
 	}
 
 	public Bullet(String name, float damage, float range, World world) {
