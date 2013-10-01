@@ -1,5 +1,6 @@
 package se.glory.entities.ai;
 
+import java.awt.Point;
 import java.util.ArrayList;
 
 import se.glory.entities.Creature;
@@ -10,6 +11,7 @@ import se.glory.utilities.WorldHandler;
 public class AIController {
 	private ArrayList<Human> humans = new ArrayList<Human>();
 	private ArrayList<Zombie> zombies = new ArrayList<Zombie>();
+	private ArrayList<Point> blockedTiles = new ArrayList<Point>();
 	
 	public void addHuman(float x, float y) {
 		humans.add(new Human(x, y));
@@ -66,7 +68,14 @@ public class AIController {
 				h.setState(Human.State.FLEEING);
 			} else {
 				if (h.getState() == Human.State.IDLE) {
-					// TODO: Calculate a path to a random spot on the map
+					int startX = 0; // TODO: get X in tile grid
+					int startY = 0; // TODO: get Y in tile grid
+					int goalX = 0;  // TODO: random X in tile grid
+					int goalY = 0;  // TODO: random X in tile grid
+					
+					ArrayList<Point> walkPath = AStarPathFinder.getShortestPath(startX, startY, goalX, goalY, blockedTiles);
+					h.setWalkPath(walkPath);
+					
 					h.setState(Human.State.WALKING);
 				}
 				
@@ -94,7 +103,14 @@ public class AIController {
 				z.setState(Zombie.State.CHASING);
 			} else {
 				if (z.getState() == Zombie.State.IDLE) {
-					// TODO: Calculate a path to a random spot on the map
+					int startX = 0; // TODO: get X in tile grid
+					int startY = 0; // TODO: get Y in tile grid
+					int goalX = 0;  // TODO: random X in tile grid
+					int goalY = 0;  // TODO: random X in tile grid
+					
+					ArrayList<Point> walkPath = AStarPathFinder.getShortestPath(startX, startY, goalX, goalY, blockedTiles);
+					z.setWalkPath(walkPath);
+					
 					z.setState(Zombie.State.WALKING);
 				}
 				

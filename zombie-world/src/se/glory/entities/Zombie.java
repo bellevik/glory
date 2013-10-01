@@ -14,6 +14,10 @@ public class Zombie extends MoveableBody implements Creature {
 		super(x, y, 15, 15, TextureHandler.zombieTexture, Constants.MoveableBodyShape.CIRCLE , Constants.MoveableBodyType.ZOMBIE);
 	}
 	
+	public void setWalkPath(ArrayList<Point> walkPath) {
+		this.walkPath = walkPath;
+	}
+	
 	public void walk() {
 		if (walkPath.size() > 0) {
 			if (Math.abs(walkPath.get(0).x - getBody().getPosition().x) < 0.02 && Math.abs(walkPath.get(0).y - getBody().getPosition().y) < 0.02) {

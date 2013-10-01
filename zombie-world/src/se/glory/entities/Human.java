@@ -9,9 +9,13 @@ import se.glory.utilities.TextureHandler;
 public class Human extends MoveableBody implements Creature {
 	private State state = State.IDLE;
 	private ArrayList<Point> walkPath = new ArrayList<Point>();
-	
+
 	public Human(float x, float y) {
 		super(x, y, 15, 15, TextureHandler.humanTexture, Constants.MoveableBodyShape.CIRCLE , Constants.MoveableBodyType.HUMAN);
+	}
+	
+	public void setWalkPath(ArrayList<Point> walkPath) {
+		this.walkPath = walkPath;
 	}
 	
 	public void walk() {
