@@ -37,7 +37,7 @@ public class House {
 		
 		houseShape= new PolygonShape();
 		houseShape.setAsBox(width*Constants.WORLD_TO_BOX, height*Constants.WORLD_TO_BOX);
-		System.out.println("Skapats" + x + " , " + y);
+		//System.out.println("Skapats" + x + " , " + y);
 		
 		FixtureDef fixtureDef= new FixtureDef();
 		fixtureDef.shape=houseShape;
