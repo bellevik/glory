@@ -212,8 +212,8 @@ public class GameScreen implements Screen {
 
 		debugRenderer = new Box2DDebugRenderer();
 		
-		moveStick = new Joystick(stage, 15, 15, 128, 128);
-		fireStick = new Joystick(stage, Gdx.graphics.getWidth() - 15 - 128, 15, 128, 128);
+		moveStick = new Joystick(stage, 15, 15, 128, 128, Constants.TouchpadType.MOVEMENT);
+		fireStick = new Joystick(stage, Gdx.graphics.getWidth() - 15 - 128, 15, 128, 128, Constants.TouchpadType.FIRE);
 		
 		Gdx.input.setInputProcessor(stage);
 		attachContactListener();

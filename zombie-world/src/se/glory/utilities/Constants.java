@@ -19,4 +19,8 @@ public class Constants {
 	public static enum MoveableBodyType {
 		PLAYER, HUMAN, ZOMBIE, BULLET, HOUSE, WEAPON;
 	}
+	
+	public static enum TouchpadType {
+		MOVEMENT, FIRE, WEAPON_SELECTION
+	}
 }

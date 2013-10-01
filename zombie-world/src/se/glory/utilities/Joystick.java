@@ -15,7 +15,7 @@ public class Joystick {
 	private Drawable touchBackground, touchKnob;
 	private Touchpad touchpad;
 	
-	public Joystick (Stage stage, float x, float y, float width, float height) {
+	public Joystick (Stage stage, float x, float y, float width, float height, Constants.TouchpadType type) {
 		//Create a touchpad skin    
         touchpadSkin = new Skin();
         //Set background image
