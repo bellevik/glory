@@ -109,6 +109,9 @@ public class GameScreen implements Screen {
 		}
 	}
 	
+	/*
+	 * This method will rotate the player according to what angle the touchpads got
+	 */
 	public void applyRotationToPlayer(float delta) {
 		timeStamp += delta;
 		
@@ -181,6 +184,12 @@ public class GameScreen implements Screen {
 		WorldHandler.drawableBodies.clear();
 	}
 	
+	/*
+	 * This method will loop through all the bodies in the world and check if the
+	 * body got the isDead boolean as true. If it is true then remove the body from
+	 * the world. This needs to be done separately and after the world.step
+	 * method. Otherwise libgdx will crash. 
+	 */
 	public void sweepDeadBodies() {
 		WorldHandler.world.getBodies(WorldHandler.removeableBodies);
 		

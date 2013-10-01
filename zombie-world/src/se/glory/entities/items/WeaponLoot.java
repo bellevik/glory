@@ -14,6 +14,12 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 
+/*
+ * This class represents a weapon lying on the ground. All WeaponLoot is
+ * available for pick-up by the player. If the player collides with a WeaponLoot
+ * in the world and got space in its inventory the player will get the Weapon in its
+ * inventory. 
+ */
 public class WeaponLoot implements Item {
 	private String weaponName;
 	private Constants.ItemType type;

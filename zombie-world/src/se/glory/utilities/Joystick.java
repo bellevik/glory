@@ -7,6 +7,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad.TouchpadStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
+/*
+ * This class will represent the joysticks available for movement of our player.
+ * Libgdx give us a ready-to-use joystick that calculates what direction we move the
+ * joystick. With this information we can give the player a speed and rotation.
+ */
 public class Joystick {
 	
 	private TouchpadStyle touchpadStyle;

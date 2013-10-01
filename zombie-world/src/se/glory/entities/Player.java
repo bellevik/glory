@@ -120,6 +120,10 @@ public class Player implements Creature {
 		return false;
 	}
 	
+	/*
+	 * First we calculate the angle. Then we create a bullet with a constant velocity
+	 * to be fired at the angle we calculated
+	 */
 	public void shoot() {
 		float rot = (float) (weaponBody.getTransform().getRotation());
         float xAngle = MathUtils.cos(rot);
