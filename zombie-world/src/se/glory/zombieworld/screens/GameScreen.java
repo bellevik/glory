@@ -4,6 +4,10 @@ import java.awt.Point;
 import java.util.ArrayList;
 
 import se.glory.entities.Player;
+import se.glory.entities.items.ItemContainer;
+import se.glory.entities.items.CurrentSelection;
+import se.glory.entities.items.QuickSelection;
+import se.glory.entities.items.WeaponLoot;
 import se.glory.entities.obstacles.House;
 import se.glory.utilities.CollisionDetection;
 import se.glory.utilities.Constants;
@@ -27,6 +31,11 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+<<<<<<< HEAD
+=======
+import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
+import com.badlogic.gdx.utils.Array;
+>>>>>>> weaponselection
 
 public class GameScreen implements Screen {
 	
@@ -39,10 +48,11 @@ public class GameScreen implements Screen {
 	private TiledMap map;
 	
 	private OrthographicCamera camera;
-	private Player player;
 	private SpriteBatch batch;
 	private Joystick moveStick;
 	private Joystick fireStick;
+	
+	private QuickSelection quickSelection;
 	
 	private Box2DDebugRenderer debugRenderer;
 	
@@ -63,17 +73,22 @@ public class GameScreen implements Screen {
 			drawEntites();
 		}
 		
+<<<<<<< HEAD
 		
 		
 		camera.position.set(player.getBody().getPosition().x * Constants.BOX_TO_WORLD, player.getBody().getPosition().y * Constants.BOX_TO_WORLD, 0);
+=======
+		camera.position.set(WorldHandler.player.getBody().getPosition().x * Constants.BOX_TO_WORLD, WorldHandler.player.getBody().getPosition().y * Constants.BOX_TO_WORLD, 0);
+>>>>>>> weaponselection
 		camera.update();
 		
 		batch.setProjectionMatrix(camera.combined);
 		
-		player.getBody().setLinearVelocity(moveStick.getTouchpad().getKnobPercentX() * 2, moveStick.getTouchpad().getKnobPercentY() * 2);
+		WorldHandler.player.getBody().setLinearVelocity(moveStick.getTouchpad().getKnobPercentX() * 2, moveStick.getTouchpad().getKnobPercentY() * 2);
 		
 		//-------------REFACTOR THIS METHOD!-------------
 		applyRotationToPlayer(delta);
+		quickSelection.selectItem();
 		
 		stage.act(delta);
 		stage.draw();
@@ -82,6 +97,9 @@ public class GameScreen implements Screen {
 		sweepDeadBodies();
 	}
 	
+	/*
+	 * This method will rotate the player according to what angle the touchpads got
+	 */
 	public void applyRotationToPlayer(float delta) {
 		timeStamp += delta;
 		
@@ -92,7 +110,7 @@ public class GameScreen implements Screen {
 			float knobX = fireStick.getTouchpad().getKnobPercentX();
 			float knobY = fireStick.getTouchpad().getKnobPercentY();
 			
-			float playerDegree = (int) (player.getBody().getTransform().getRotation() * MathUtils.radiansToDegrees);
+			float playerDegree = (int) (WorldHandler.player.getBody().getTransform().getRotation() * MathUtils.radiansToDegrees);
 			float knobDegree, totalRotation;
 			
 			if (knobY >= 0) {
@@ -102,12 +120,12 @@ public class GameScreen implements Screen {
 			}
 			totalRotation = knobDegree - playerDegree;
 			
-			player.getBody().setTransform(player.getBody().getPosition(), knobDegree * MathUtils.degreesToRadians);
-			player.getBody().getJointList().get(0).joint.getBodyB().setTransform(player.getBody().getJointList().get(0).joint.getBodyB().getPosition(), knobDegree * MathUtils.degreesToRadians);
-			player.getBody().getJointList().get(0).joint.getBodyB().setAwake(true);
+			WorldHandler.player.getBody().setTransform(WorldHandler.player.getBody().getPosition(), knobDegree * MathUtils.degreesToRadians);
+			WorldHandler.player.getBody().getJointList().get(0).joint.getBodyB().setTransform(WorldHandler.player.getBody().getJointList().get(0).joint.getBodyB().getPosition(), knobDegree * MathUtils.degreesToRadians);
+			WorldHandler.player.getBody().getJointList().get(0).joint.getBodyB().setAwake(true);
 			
 			if(timeStamp > 1) {
-				player.shoot();
+				WorldHandler.player.shoot();
 				timeStamp = 0;
 			}
 		} else {
@@ -115,7 +133,7 @@ public class GameScreen implements Screen {
 				float knobX = moveStick.getTouchpad().getKnobPercentX();
 				float knobY = moveStick.getTouchpad().getKnobPercentY();
 				
-				float playerDegree = (int) (player.getBody().getTransform().getRotation() * MathUtils.radiansToDegrees);
+				float playerDegree = (int) (WorldHandler.player.getBody().getTransform().getRotation() * MathUtils.radiansToDegrees);
 				float knobDegree, nextAngle, totalRotation;
 				
 				if (knobY >= 0) {
@@ -125,9 +143,9 @@ public class GameScreen implements Screen {
 				}
 				totalRotation = knobDegree - playerDegree;
 				
-				player.getBody().setTransform(player.getBody().getPosition(), knobDegree * MathUtils.degreesToRadians);
-				player.getBody().getJointList().get(0).joint.getBodyB().setTransform(player.getBody().getJointList().get(0).joint.getBodyB().getPosition(), knobDegree * MathUtils.degreesToRadians);
-				player.getBody().getJointList().get(0).joint.getBodyB().setAwake(true);
+				WorldHandler.player.getBody().setTransform(WorldHandler.player.getBody().getPosition(), knobDegree * MathUtils.degreesToRadians);
+				WorldHandler.player.getBody().getJointList().get(0).joint.getBodyB().setTransform(WorldHandler.player.getBody().getJointList().get(0).joint.getBodyB().getPosition(), knobDegree * MathUtils.degreesToRadians);
+				WorldHandler.player.getBody().getJointList().get(0).joint.getBodyB().setAwake(true);
 			}
 		}
 	}
@@ -154,6 +172,12 @@ public class GameScreen implements Screen {
 		WorldHandler.drawableBodies.clear();
 	}
 	
+	/*
+	 * This method will loop through all the bodies in the world and check if the
+	 * body got the isDead boolean as true. If it is true then remove the body from
+	 * the world. This needs to be done separately and after the world.step
+	 * method. Otherwise libgdx will crash. 
+	 */
 	public void sweepDeadBodies() {
 		WorldHandler.world.getBodies(WorldHandler.removeableBodies);
 		
@@ -202,15 +226,21 @@ public class GameScreen implements Screen {
 		camera = new OrthographicCamera();
 		WorldHandler.createWorld();
 		stage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true, batch);
-		player = new Player (300, 400, 32, 32);
 		batch = new SpriteBatch();
 		
+<<<<<<< HEAD
 		createHouse(MapWidth, MapHeight);
+=======
+		createHouse(MapWidth,MapHeight);
+		WeaponLoot loot = new WeaponLoot("Bazooka", 14, 15);
+>>>>>>> weaponselection
 
 		debugRenderer = new Box2DDebugRenderer();
 		
-		moveStick = new Joystick(stage, 15, 15);
-		fireStick = new Joystick(stage, Gdx.graphics.getWidth() - 15 - 128, 15);
+		moveStick = new Joystick(stage, 15, 15, 128, 128, Constants.TouchpadType.MOVEMENT);
+		fireStick = new Joystick(stage, Gdx.graphics.getWidth() - 15 - 128, 15, 128, 128, Constants.TouchpadType.FIRE);
+		
+		quickSelection = new QuickSelection(stage);
 		
 		Gdx.input.setInputProcessor(stage);
 		attachContactListener();

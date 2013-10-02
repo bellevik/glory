@@ -11,6 +11,7 @@ public class Identity {
 	private boolean isDead = false;
 	private Constants.MoveableBodyType type;
 	private float width, height;
+	private Object obj = null;
 	
 	public Texture getTexture() {
 		return texture;
@@ -41,5 +42,11 @@ public class Identity {
 	}
 	public void setHeight(float height) {
 		this.height = height;
+	}
+	public Object getObj() {
+		return obj;
+	}
+	public void setObj(Object obj) {
+		this.obj = obj;
 	}
 }
