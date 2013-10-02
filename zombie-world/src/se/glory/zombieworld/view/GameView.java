@@ -70,7 +70,6 @@ public class GameView {
 		camera.update();
 		
 		batch.setProjectionMatrix(camera.combined);
-		useDebugRenderer();
 	}
 	
 	/*
