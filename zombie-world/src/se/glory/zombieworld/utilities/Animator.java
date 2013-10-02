@@ -107,29 +107,6 @@ public class Animator {
 		default:
 			return null;
 		}
-		
-		/*int index = 0;
-		
-		switch(isRunning){
-		case 0:
-			for (int i = 0; i < FRAME_ROWS/2 ; i++) {
-				for (int j = 0; j < FRAME_COLS; j++) {
-					frames[index++] = tmp[i][j];
-				}
-				animation = new Animation(0.125f, frames);
-				stateTimer = 0f;
-			};
-		case 1:
-			for (int i = 6; i < FRAME_ROWS; i++) {
-				for (int j = 0; j < FRAME_COLS; j++) {
-					frames[index++] = tmp[i][j];
-				}
-				animation = new Animation(0.085f, frames);
-				stateTimer = 0f;
-			};
-		}*/
-		
-		
 	}
 	
 	public static void drawAnimation(SpriteBatch batch, float x, float y){
