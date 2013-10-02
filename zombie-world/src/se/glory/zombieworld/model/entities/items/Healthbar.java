@@ -14,25 +14,32 @@ public class Healthbar extends Actor{
 	private int currentHealth;
 	private int maxHealth;
 	
-	private HealthFill[] healthBarAmount = new HealthFill[100];
+	//Positioning for the healthbar
+	private int x = 25;
+	private int y = 525;
+	
+	private HealthFill[] healthBarAmount;
 	
 	
 	public Healthbar(Stage stage, int currentHealth, int maxHealth){
 		this.currentHealth = currentHealth;
 		this.maxHealth = maxHealth;
-		int x = 25;
-		int y = 525;
 		
-	//	texture = new Texture(Gdx.files.internal("img/itemBase.png"));
+		healthBarAmount = new HealthFill[maxHealth];
+		
 		texture = new Texture(Gdx.files.internal("img/healthBase.png"));
 		
 		actor = new Image(texture);
-		for(int i=0; i<100; i++) {
-			healthBarAmount[i] = new HealthFill(stage, x+2+i*3, y);
-		}
 		
 		stage.addActor(actor);
 		actor.setPosition(x, y);
+		
+		//Creating all the HealthFills and places them in the array
+		for(int i=0; i<maxHealth; i++) {
+			int newX = i*3+x+2;
+			healthBarAmount[i] = new HealthFill(stage, newX, y);
+		}
+		updateHealth(currentHealth);
 		
 	}
 	
@@ -58,6 +65,12 @@ public class Healthbar extends Actor{
 	
 	public void updateHealth(int healthToUpdate) {
 		currentHealth = healthToUpdate;
+		for(int i=0; i<currentHealth; i++) {
+			healthBarAmount[i].show();
+		}
+		for(int j=currentHealth; j<maxHealth; j++) {
+			healthBarAmount[j].hide();
+		}
 	}
 
 }

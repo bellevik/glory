@@ -46,6 +46,9 @@ public class GameScreen implements Screen {
 		
 		WorldModel.world.step(1/60f, 6, 2);
 		worldModel.update();
+		
+		//Testing to be removed later
+		testHealthBar();
 	}
 	
 	/*
@@ -92,6 +95,19 @@ public class GameScreen implements Screen {
 				WorldModel.player.getBody().getJointList().get(0).joint.getBodyB().setTransform(WorldModel.player.getBody().getJointList().get(0).joint.getBodyB().getPosition(), knobDegree * MathUtils.degreesToRadians);
 				WorldModel.player.getBody().getJointList().get(0).joint.getBodyB().setAwake(true);
 			}
+		}
+	}
+	
+	/*
+	 * Testing the healthbar. Will be removed later
+	 */
+	private int healthVar = 0;
+	private int varNeg = 1;
+	private void testHealthBar() {
+		healthVar += varNeg;
+		healthBar.updateHealth(healthVar);
+		if(healthVar == 99 || healthVar == 0) {
+			varNeg *= -1;
 		}
 	}
 

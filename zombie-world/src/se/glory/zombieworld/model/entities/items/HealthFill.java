@@ -16,7 +16,6 @@ public class HealthFill {
 		
 		stage.addActor(actor);
 		actor.setPosition(x, y);
-		hide();
 	}
 	
 	public boolean isActorVisible() {

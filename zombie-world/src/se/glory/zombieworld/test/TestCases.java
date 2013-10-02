@@ -9,12 +9,16 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import se.glory.zombieworld.model.entities.Creature;
 import se.glory.zombieworld.model.entities.Human;
 import se.glory.zombieworld.model.entities.Zombie;
+import se.glory.zombieworld.model.entities.items.Healthbar;
 import se.glory.zombieworld.utilities.AStarPathFinder;
 
 public class TestCases {
@@ -25,12 +29,9 @@ public class TestCases {
 	Human testHuman;
 	
 	@Test
-	public void test() {
-		//fail("Not yet implemented");
-	}
-	
-	@Test
 	public void testReactions() {
+		//difficult without creating a world...
+		
 	//	assertTrue("truetrue", new Vector2(20,0).x==20);
 	//	testWorld = new World(new Vector2(0, 0), true);
 	//	testHuman = new Human(testWorld, 150, 150);
@@ -44,6 +45,7 @@ public class TestCases {
 //		assertsEquals("Human starts at correct y position", expected, actual)
 		
 	//	testHuman.autoUpdateMovement(zombies);
+		fail("Test not finished");
 	}
 	
 	@Test
@@ -89,5 +91,11 @@ public class TestCases {
 		assertThat(correctPath, is(shortestPath));
 		//Asserts the false path does not have the same points as the shortestPath to make sure the assertThat doesn't accept all paths
 		assertThat(falsePath, not(shortestPath));
+	}
+	
+	@Test
+	public void testHealthBar() {
+		//Difficult without creating a stage....
+		fail("Test not finished");
 	}
 }
