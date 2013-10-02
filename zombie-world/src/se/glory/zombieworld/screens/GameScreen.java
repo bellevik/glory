@@ -3,19 +3,15 @@ package se.glory.zombieworld.screens;
 import java.awt.Point;
 import java.util.ArrayList;
 
-import se.glory.entities.Player;
-import se.glory.entities.items.ItemContainer;
-import se.glory.entities.items.CurrentSelection;
-import se.glory.entities.items.QuickSelection;
-import se.glory.entities.items.WeaponLoot;
-import se.glory.entities.obstacles.House;
-import se.glory.utilities.Animator;
-import se.glory.utilities.CollisionDetection;
-import se.glory.utilities.Constants;
-import se.glory.utilities.Identity;
-import se.glory.utilities.Joystick;
-import se.glory.utilities.TextureHandler;
-import se.glory.utilities.WorldHandler;
+import se.glory.zombieworld.model.entities.items.QuickSelection;
+import se.glory.zombieworld.model.entities.items.WeaponLoot;
+import se.glory.zombieworld.model.entities.obstacles.House;
+import se.glory.zombieworld.utilities.CollisionDetection;
+import se.glory.zombieworld.utilities.Constants;
+import se.glory.zombieworld.utilities.Identity;
+import se.glory.zombieworld.utilities.Joystick;
+import se.glory.zombieworld.utilities.TextureHandler;
+import se.glory.zombieworld.utilities.WorldHandler;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -32,14 +28,6 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
-import com.badlogic.gdx.utils.Array;
->>>>>>> weaponselection
-=======
->>>>>>> animation
 
 public class GameScreen implements Screen {
 	
@@ -76,13 +64,7 @@ public class GameScreen implements Screen {
 			drawEntites();
 		}
 		
-<<<<<<< HEAD
-		
-		
-		camera.position.set(player.getBody().getPosition().x * Constants.BOX_TO_WORLD, player.getBody().getPosition().y * Constants.BOX_TO_WORLD, 0);
-=======
 		camera.position.set(WorldHandler.player.getBody().getPosition().x * Constants.BOX_TO_WORLD, WorldHandler.player.getBody().getPosition().y * Constants.BOX_TO_WORLD, 0);
->>>>>>> weaponselection
 		camera.update();
 		
 		batch.setProjectionMatrix(camera.combined);
@@ -93,7 +75,7 @@ public class GameScreen implements Screen {
 		applyRotationToPlayer(delta);
 		quickSelection.selectItem();
 		
-		Animator.drawAnimation(batch, player.getBody().getPosition().x, player.getBody().getPosition().y);
+		//Animator.drawAnimation(batch, player.getBody().getPosition().x, player.getBody().getPosition().y);
 		
 		//player.getAnimation().drawAnimation(batch, player.getBody().getPosition().x, player.getBody().getPosition().y);
 		
@@ -131,15 +113,9 @@ public class GameScreen implements Screen {
 			WorldHandler.player.getBody().getJointList().get(0).joint.getBodyB().setTransform(WorldHandler.player.getBody().getJointList().get(0).joint.getBodyB().getPosition(), knobDegree * MathUtils.degreesToRadians);
 			WorldHandler.player.getBody().getJointList().get(0).joint.getBodyB().setAwake(true);
 			
-<<<<<<< HEAD
 			if(timeStamp > 1) {
 				WorldHandler.player.shoot();
-=======
-			if(timeStamp > .02) {
-				player.shoot();
->>>>>>> animation
-				timeStamp = 0;
-			}
+			}	
 		} else {
 			if (moveStick.getTouchpad().getKnobPercentX() != 0 && moveStick.getTouchpad().getKnobPercentY() != 0) {
 				float knobX = moveStick.getTouchpad().getKnobPercentX();
@@ -226,13 +202,8 @@ public class GameScreen implements Screen {
 		map = new TmxMapLoader().load("img/firstwall.tmx");
 		//This line will import all the images that will be used multiple times
 		TextureHandler.createTextures();
-<<<<<<< HEAD
-
-		collide = (TiledMapTileLayer) map.getLayers().get(0);
-=======
 		
-		collide =(TiledMapTileLayer) map.getLayers().get(0);
->>>>>>> animation
+		collide = (TiledMapTileLayer) map.getLayers().get(0);
 
 		MapProperties prop = map.getProperties();
 		String MapWidth = prop.get("Width", String.class);
@@ -245,12 +216,7 @@ public class GameScreen implements Screen {
 		stage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true, batch);
 		batch = new SpriteBatch();
 		
-<<<<<<< HEAD
-		createHouse(MapWidth, MapHeight);
-=======
-		createHouse(MapWidth,MapHeight);
 		WeaponLoot loot = new WeaponLoot("Bazooka", 14, 15);
->>>>>>> weaponselection
 
 		debugRenderer = new Box2DDebugRenderer();
 		

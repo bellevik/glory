@@ -1,8 +1,8 @@
 package se.glory.zombieworld;
 
-import se.glory.utilities.Constants;
 import se.glory.zombieworld.screens.GameScreen;
 import se.glory.zombieworld.screens.Splash;
+import se.glory.zombieworld.utilities.Constants;
 
 import com.badlogic.gdx.Game;
 
