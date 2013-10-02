@@ -2,6 +2,7 @@ package se.glory.zombieworld.screens;
 
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.items.QuickSelection;
+import se.glory.zombieworld.model.entities.obstacles.CustomObstacle;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Joystick;
 import se.glory.zombieworld.utilities.TextureHandler;
@@ -10,6 +11,8 @@ import se.glory.zombieworld.view.GameView;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
@@ -122,11 +125,49 @@ public class GameScreen implements Screen {
 		
 		// ## Add humans
 		worldModel.getAIModel().addHuman(496, 272);
+		worldModel.getAIModel().addHuman(272, 272);
 		
 		// ## Add zombies
-		worldModel.getAIModel().addZombie(272, 272);
+		// worldModel.getAIModel().addZombie(272, 272);
+		
+		createStaticWalls();
 	}
 
+	private void createStaticWalls() {
+		TiledMapTileLayer collideLayer = gameView.getMapLayer(1);
+		
+		for (int x = 0; x < collideLayer.getWidth(); x++) {
+			int start = -1;
+			int end = -1;
+			
+			for (int y = 0; y < collideLayer.getHeight(); y++) {
+				Cell c = collideLayer.getCell(x, y);
+				
+				if (c != null) {
+					// Is blocked
+					
+					if (start == -1)
+						start = y;
+					end = y;
+				}
+				
+				if (c == null || y == collideLayer.getHeight() - 1) {
+					if (start != -1) {
+						System.out.println(x + ": Create block between " + start + ":" + end);
+						System.out.println("pX: " + x*32 + ", pY: " + start * 32 + ", W: " + "32" + ", H: " + (end - start + 1) * 32);
+						System.out.println();
+						
+						//break;
+						new CustomObstacle(x * 32, start * 32, 32, (end - start + 1) * 32);
+					}
+					
+					start = -1;
+					end = -1;
+				}
+			}
+		}
+	}
+	
 	@Override
 	public void hide() {
 		
