@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 
-public class ItemContainer extends Actor {
+public class ItemContainer {
 	
 	private Texture texture;
 	private Image actor;

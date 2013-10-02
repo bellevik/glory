@@ -5,12 +5,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
-public class ItemSelection {
+public class CurrentSelection {
 
 	private Texture texture;
 	private Image actor;
 	
-	public ItemSelection(Stage stage, float x, float y) {
+	public CurrentSelection(Stage stage, float x, float y) {
 		texture = new Texture(Gdx.files.internal("img/currentSelection.png"));
 		
 		actor = new Image(texture);

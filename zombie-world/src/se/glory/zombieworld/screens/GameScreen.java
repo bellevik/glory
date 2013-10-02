@@ -2,7 +2,7 @@ package se.glory.zombieworld.screens;
 
 import se.glory.entities.Player;
 import se.glory.entities.items.ItemContainer;
-import se.glory.entities.items.ItemSelection;
+import se.glory.entities.items.CurrentSelection;
 import se.glory.entities.items.WeaponLoot;
 import se.glory.entities.obstacles.House;
 import se.glory.utilities.CollisionDetection;
@@ -56,7 +56,7 @@ public class GameScreen implements Screen {
 	private float selectionX;
 	private float selectionY;
 	private ItemContainer[] itemContainers;
-	private ItemSelection itemSelection;
+	private CurrentSelection currentSelection;
 	
 	private Box2DDebugRenderer debugRenderer;
 	
@@ -134,20 +134,20 @@ public class GameScreen implements Screen {
 			if (knobDegree >= 0 && knobDegree < 180) {
 				selection = (int) (knobDegree / 36);
 				
-				itemSelection.setActorPosition(itemContainers[selection].getActorX(), itemContainers[selection].getActorY());
+				currentSelection.setActorPosition(itemContainers[selection].getActorX(), itemContainers[selection].getActorY());
 				
-				if(!itemSelection.isActorVisible()) {
-					itemSelection.show();
+				if(!currentSelection.isActorVisible()) {
+					currentSelection.show();
 				}
 			} else {
 				selection = 5;
-				if(itemSelection.isActorVisible()) {
-					itemSelection.hide();
+				if(currentSelection.isActorVisible()) {
+					currentSelection.hide();
 				}
 			}
 		} else {
-			if(itemSelection.isActorVisible()) {
-				itemSelection.hide();
+			if(currentSelection.isActorVisible()) {
+				currentSelection.hide();
 			}
 		}
 	}
@@ -296,13 +296,13 @@ public class GameScreen implements Screen {
 		selectionStick = new Joystick(stage, selectionX, selectionY, 64, 64, Constants.TouchpadType.ITEM_SELECTION);
 		
 		itemContainers = new ItemContainer[5];
-		itemContainers[4] = new ItemContainer(stage, selectionX - 16 - 64, selectionY);
-		itemContainers[3] = new ItemContainer(stage, selectionX - 16 - 64, selectionY - 16 - 64);
+		itemContainers[4] = new ItemContainer(stage, selectionX - 32 - 64, selectionY);
+		itemContainers[3] = new ItemContainer(stage, selectionX - 8 - 64, selectionY - 8 - 64);
 		itemContainers[2] = new ItemContainer(stage, selectionX, selectionY - 16 - 64);
-		itemContainers[1] = new ItemContainer(stage, selectionX + 16 + 64, selectionY - 16 - 64);
-		itemContainers[0] = new ItemContainer(stage, selectionX + 16 + 64, selectionY);
+		itemContainers[1] = new ItemContainer(stage, selectionX + 8 + 64, selectionY - 8 - 64);
+		itemContainers[0] = new ItemContainer(stage, selectionX + 32 + 64, selectionY);
 		
-		itemSelection = new ItemSelection(stage, selectionStick.getTouchpad().getX(), selectionStick.getTouchpad().getY());
+		currentSelection = new CurrentSelection(stage, selectionStick.getTouchpad().getX(), selectionStick.getTouchpad().getY());
 		
 		Gdx.input.setInputProcessor(stage);
 		attachContactListener();
