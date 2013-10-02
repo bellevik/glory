@@ -21,8 +21,12 @@ public class MoveableBody implements Creature {
 	private BodyDef bodyDef;
 	private CircleShape circleShape;
 	private PolygonShape squareShape;
+	private float width, height;
 	
 	public MoveableBody(float x, float y, float width, float height, Texture texture, Constants.MoveableBodyShape shape, Constants.MoveableBodyType type) {
+		this.width = width;
+		this.height = height;
+		
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;
 		bodyDef.position.set(new Vector2(x * Constants.WORLD_TO_BOX, y * Constants.WORLD_TO_BOX));
@@ -56,5 +60,15 @@ public class MoveableBody implements Creature {
 	@Override
 	public Body getBody() {
 		return body;
+	}
+
+	@Override
+	public float getTileX() {
+		return (getBody().getPosition().x * Constants.BOX_TO_WORLD - width)/32;
+	}
+
+	@Override
+	public float getTileY() {
+		return (getBody().getPosition().y * Constants.BOX_TO_WORLD - height)/32;
 	}
 }
