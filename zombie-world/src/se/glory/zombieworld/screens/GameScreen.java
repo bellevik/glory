@@ -1,6 +1,7 @@
 package se.glory.zombieworld.screens;
 
 import se.glory.zombieworld.model.WorldModel;
+import se.glory.zombieworld.model.entities.items.Healthbar;
 import se.glory.zombieworld.model.entities.items.QuickSelection;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Joystick;
@@ -15,6 +16,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class GameScreen implements Screen {
 	private QuickSelection quickSelection;
+	
+	private Healthbar healthBar;
 	
 	private Stage stage;
 	
@@ -117,6 +120,8 @@ public class GameScreen implements Screen {
 		fireStick = new Joystick(stage, Gdx.graphics.getWidth() - 15 - 128, 15, 128, 128, Constants.TouchpadType.FIRE);
 		
 		quickSelection = new QuickSelection(stage);
+		
+		healthBar = new Healthbar(stage, 70, 100);
 		
 		Gdx.input.setInputProcessor(stage);
 	}

@@ -14,15 +14,22 @@ public class Healthbar extends Actor{
 	private int currentHealth;
 	private int maxHealth;
 	
+	private HealthFill[] healthBarAmount = new HealthFill[100];
 	
-	public Healthbar(Stage stage, float x, float y, int currentHealth, int maxHealth){
+	
+	public Healthbar(Stage stage, int currentHealth, int maxHealth){
 		this.currentHealth = currentHealth;
 		this.maxHealth = maxHealth;
+		int x = 25;
+		int y = 525;
 		
 	//	texture = new Texture(Gdx.files.internal("img/itemBase.png"));
 		texture = new Texture(Gdx.files.internal("img/healthBase.png"));
 		
 		actor = new Image(texture);
+		for(int i=0; i<100; i++) {
+			healthBarAmount[i] = new HealthFill(stage, x+2+i*3, y);
+		}
 		
 		stage.addActor(actor);
 		actor.setPosition(x, y);
