@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="40" height="25" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="tilesetProg" tilewidth="32" tileheight="32">
+  <image source="AITestMap.png" width="64" height="32"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="40" height="25">
+  <data encoding="base64" compression="zlib">
+   eJztw0ENAAAMA6Grf9OTsQ8krJqqqqr6+gCdsgPp
+  </data>
+ </layer>
+ <layer name="collision" width="40" height="25">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzlldsOwCAIQ43//9F7XzpgLSVmI/FJLkctstb/bB+eH8VvsLrzo3rVeOTDsip81Vqd96e+R6WGEuvWu8OQ3rM1zffGx6GPjh6N/Flm5n/I6jv4onjHn6XkUnN36u90Pke9uxa7eKP+jfpD3Vf5pk2Z91NnQPfdyeeYfdn8qOismpMxZb49+U3ogeWb1Crjdzrf1+wCQDgBBw==
+  </data>
+ </layer>
+</map>

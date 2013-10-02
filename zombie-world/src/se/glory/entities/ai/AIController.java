@@ -2,6 +2,7 @@ package se.glory.entities.ai;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Random;
 
 import se.glory.entities.Creature;
 import se.glory.entities.Human;
@@ -27,6 +28,10 @@ public class AIController {
 	
 	public void removeZombie(Zombie zombie) {
 		zombies.remove(zombie);
+	}
+	
+	public void setBlockedTiles(ArrayList<Point> blockedTiles) {
+		this.blockedTiles = blockedTiles;
 	}
 	
 	public void update() {
@@ -68,12 +73,13 @@ public class AIController {
 				h.setState(Human.State.FLEEING);
 			} else {
 				if (h.getState() == Human.State.IDLE) {
-					int startX = 0; // TODO: get X in tile grid
-					int startY = 0; // TODO: get Y in tile grid
-					int goalX = 0;  // TODO: random X in tile grid
-					int goalY = 0;  // TODO: random X in tile grid
+					// TODO: Check if random tile is blocked
+					Random generator = new Random();
 					
-					ArrayList<Point> walkPath = AStarPathFinder.getShortestPath(startX, startY, goalX, goalY, blockedTiles);
+					int goalX = generator.nextInt(40);
+					int goalY = generator.nextInt(20);
+					
+					ArrayList<Point> walkPath = AStarPathFinder.getShortestPath((int) h.getTileX(), (int) h.getTileY(), goalX, goalY, blockedTiles);
 					h.setWalkPath(walkPath);
 					
 					h.setState(Human.State.WALKING);
@@ -103,12 +109,13 @@ public class AIController {
 				z.setState(Zombie.State.CHASING);
 			} else {
 				if (z.getState() == Zombie.State.IDLE) {
-					int startX = 0; // TODO: get X in tile grid
-					int startY = 0; // TODO: get Y in tile grid
-					int goalX = 0;  // TODO: random X in tile grid
-					int goalY = 0;  // TODO: random X in tile grid
+					// TODO: Check if random tile is blocked
+					Random generator = new Random();
 					
-					ArrayList<Point> walkPath = AStarPathFinder.getShortestPath(startX, startY, goalX, goalY, blockedTiles);
+					int goalX = generator.nextInt(40);
+					int goalY = generator.nextInt(20);
+					
+					ArrayList<Point> walkPath = AStarPathFinder.getShortestPath((int) z.getTileX(), (int) z.getTileY(), goalX, goalY, blockedTiles);
 					z.setWalkPath(walkPath);
 					
 					z.setState(Zombie.State.WALKING);

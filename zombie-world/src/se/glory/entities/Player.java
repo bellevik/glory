@@ -15,7 +15,6 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.badlogic.gdx.utils.Array;
@@ -78,7 +77,7 @@ public class Player implements Creature {
 		weapon.position.set(x * Constants.WORLD_TO_BOX + width * Constants.WORLD_TO_BOX, y * Constants.WORLD_TO_BOX + height * Constants.WORLD_TO_BOX);
 		weaponBody = WorldHandler.world.createBody(weapon);
 		PolygonShape weaponShape = new PolygonShape();
-		weaponShape.setAsBox(16 * Constants.WORLD_TO_BOX, 8 * Constants.WORLD_TO_BOX);
+		weaponShape.setAsBox(8 * Constants.WORLD_TO_BOX, 4 * Constants.WORLD_TO_BOX);
 		
 		FixtureDef weaponFixture = new FixtureDef();
 		weaponFixture.shape = weaponShape;
@@ -102,7 +101,7 @@ public class Player implements Creature {
         jointDef.bodyB = weaponBody;
         //16 here is equal to the weapons width!
         jointDef.localAnchorA.set(width * Constants.WORLD_TO_BOX, 0);
-        jointDef.localAnchorB.set(-16 * Constants.WORLD_TO_BOX, 0);
+        jointDef.localAnchorB.set(-8 * Constants.WORLD_TO_BOX, 0);
         jointDef.enableLimit = true;
 
         joint = (RevoluteJoint) WorldHandler.world.createJoint(jointDef);
@@ -130,6 +129,16 @@ public class Player implements Creature {
         float yAngle = MathUtils.sin(rot);
 		
 		new Bullet(weaponBody.getPosition().x + 14 * xAngle * Constants.WORLD_TO_BOX, weaponBody.getPosition().y + 14 * yAngle * Constants.WORLD_TO_BOX, xAngle, yAngle);
+	}
+	
+	@Override
+	public float getTileX() {
+		return (getBody().getPosition().x * Constants.BOX_TO_WORLD - width)/32;
+	}
+
+	@Override
+	public float getTileY() {
+		return (getBody().getPosition().y * Constants.BOX_TO_WORLD - height)/32;
 	}
 	
 	@Override
