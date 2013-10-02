@@ -55,10 +55,10 @@ public class AIModel {
 				
 				// Range 1.5
 				if (size < 1.5) {
-					double test = 1.5 - size;
+					double distance = 1.5 - size;
 					
-					tmpX /= (size/test);
-					tmpY /= (size/test);
+					tmpX /= (size/distance);
+					tmpY /= (size/distance);
 					
 					totX += tmpX;
 					totY += tmpY;
@@ -109,8 +109,8 @@ public class AIModel {
 				
 				double size = Math.sqrt(tmpX*tmpX+tmpY*tmpY);
 				
-				tmpX /= size;
-				tmpY /= size;
+				tmpX /= size * 1.2;
+				tmpY /= size * 1.2;
 				
 				z.getBody().setLinearVelocity(tmpX, tmpY);
 				z.setState(Zombie.State.CHASING);

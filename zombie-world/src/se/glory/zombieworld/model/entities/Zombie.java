@@ -30,8 +30,8 @@ public class Zombie extends MoveableBody implements Creature {
 			float tmpY = walkPath.get(0).y - getTileY();
 			
 			double size = Math.sqrt(tmpX * tmpX + tmpY * tmpY);
-			tmpX /= size;
-			tmpY /= size;
+			tmpX /= size * 1.2;
+			tmpY /= size * 1.2;
 			
 			getBody().setLinearVelocity(tmpX, tmpY);
 		} else {
