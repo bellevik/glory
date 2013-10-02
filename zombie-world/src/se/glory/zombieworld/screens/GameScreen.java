@@ -1,6 +1,7 @@
 package se.glory.zombieworld.screens;
 
 import se.glory.entities.Player;
+import se.glory.entities.items.Healthbar;
 import se.glory.entities.items.ItemContainer;
 import se.glory.entities.items.ItemSelection;
 import se.glory.entities.items.WeaponLoot;
@@ -57,6 +58,7 @@ public class GameScreen implements Screen {
 	private float selectionY;
 	private ItemContainer[] itemContainers;
 	private ItemSelection itemSelection;
+	private Healthbar healthBar;
 	
 	private Box2DDebugRenderer debugRenderer;
 	
@@ -93,6 +95,13 @@ public class GameScreen implements Screen {
 		
 		WorldHandler.world.step(1/60f, 6, 2);
 		sweepDeadBodies();
+	}
+	
+	/*
+	 * Method for updating the healthbar
+	 */
+	public void updateHealthBar() {
+		
 	}
 	
 	/*
@@ -304,6 +313,8 @@ public class GameScreen implements Screen {
 		
 		itemSelection = new ItemSelection(stage, selectionStick.getTouchpad().getX(), selectionStick.getTouchpad().getY());
 		
+		healthBar = new Healthbar(stage, 25, 525, WorldHandler.player.getHealth(), WorldHandler.player.getMaxHealth());
+				
 		Gdx.input.setInputProcessor(stage);
 		attachContactListener();
 	}

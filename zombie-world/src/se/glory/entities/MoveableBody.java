@@ -22,6 +22,9 @@ public class MoveableBody implements Creature {
 	private CircleShape circleShape;
 	private PolygonShape squareShape;
 	
+	private int health;
+	private int maxHealth;
+	
 	public MoveableBody(float x, float y, float width, float height, Texture texture, Constants.MoveableBodyShape shape, Constants.MoveableBodyType type) {
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;
@@ -51,6 +54,20 @@ public class MoveableBody implements Creature {
 		identity.setType(type);
 		
 		body.setUserData(identity);
+		
+		maxHealth = health = 100;
+	}
+	
+	public int getHealth() {
+		return health;
+	}
+	
+	public void takeDamage(int damage) {
+		health -= damage;
+	}
+	
+	public int getMaxHealth() {
+		return maxHealth;
 	}
 
 	@Override

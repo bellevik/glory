@@ -33,6 +33,9 @@ public class Player implements Creature {
 	private Array<Item> itemList = new Array<Item>();
 	
 	private RevoluteJoint joint;
+	
+	private int health;
+	private int maxHealth;
 
 	public Player (float x, float y, float width, float height) {
 		this.x = x;
@@ -69,6 +72,8 @@ public class Player implements Creature {
 		
 		createWeaponBody();
 		attachWeapon();
+		
+		maxHealth = health = 100;
 	}
 	
 	public void createWeaponBody() {
@@ -130,6 +135,18 @@ public class Player implements Creature {
         float yAngle = MathUtils.sin(rot);
 		
 		new Bullet(weaponBody.getPosition().x + 14 * xAngle * Constants.WORLD_TO_BOX, weaponBody.getPosition().y + 14 * yAngle * Constants.WORLD_TO_BOX, xAngle, yAngle);
+	}
+	
+	public int getHealth() {
+		return health;
+	}
+	
+	public void takeDamage(int damage) {
+		health -= damage;
+	}
+	
+	public int getMaxHealth() {
+		return maxHealth;
 	}
 	
 	@Override
