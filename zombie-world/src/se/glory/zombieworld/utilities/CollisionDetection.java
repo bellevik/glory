@@ -19,8 +19,12 @@ public class CollisionDetection implements ContactListener {
 		Body a = contact.getFixtureA().getBody();
 		Body b = contact.getFixtureB().getBody();
 		
-		Identity i1 = (Identity)a.getUserData();
-		Identity i2 = (Identity)b.getUserData();
+		Identity i1 = (Identity) a.getUserData();
+		Identity i2 = (Identity) b.getUserData();
+		
+		if (i1 == null || i2 == null) {
+			return;
+		}
 		
 		//Checks if the first collision body is of type Item and the other is of type Player
 		// OR the first is Player and the second is Item
