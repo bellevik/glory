@@ -47,9 +47,6 @@ public class GameScreen implements Screen {
 	private Stage stage;
 	private float timeStamp = 0;
 	
-	private Animator animation;
-	
-	
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -73,7 +70,9 @@ public class GameScreen implements Screen {
 		//-------------REFACTOR THIS METHOD!-------------
 		applyRotationToPlayer(delta);
 		
-		player.getAnimation().drawAnimation(batch, player.getBody().getPosition().x, player.getBody().getPosition().y);
+		Animator.drawAnimation(batch, player.getBody().getPosition().x, player.getBody().getPosition().y);
+		
+		//player.getAnimation().drawAnimation(batch, player.getBody().getPosition().x, player.getBody().getPosition().y);
 		
 		stage.act(delta);
 		stage.draw();

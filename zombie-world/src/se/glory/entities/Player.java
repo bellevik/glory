@@ -8,6 +8,7 @@ import se.glory.utilities.WorldHandler;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -30,7 +31,7 @@ public class Player implements Creature {
 	
 	private RevoluteJoint joint;
 	
-	private Animator animation;
+	private Animation animation;
 
 	public Player (float x, float y, float width, float height) {
 		this.x = x;
@@ -68,7 +69,8 @@ public class Player implements Creature {
 		createWeaponBody();
 		attachWeapon();
 		
-		this.animation = new Animator("dudesheet.png", this.x, this.y, 0);
+		//this.animation = new Animator("dudesheet.png", this.x, this.y, 0);
+		this.animation = Animator.createAnimation("SpriteSheetMain.png", this.x, this.y, 7);
 	}
 	
 	public void createWeaponBody() {
@@ -119,7 +121,7 @@ public class Player implements Creature {
 		return body;
 	}
 	
-	public Animator getAnimation(){
+	public Animation getAnimation(){
 		return this.animation;
 	}
 }
