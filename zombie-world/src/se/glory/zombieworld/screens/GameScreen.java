@@ -4,7 +4,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 
 import se.glory.entities.Player;
-import se.glory.entities.obstacles.House;
+import se.glory.entities.ai.AIController;
 import se.glory.utilities.CollisionDetection;
 import se.glory.utilities.Constants;
 import se.glory.utilities.Identity;
@@ -17,9 +17,9 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
@@ -29,11 +29,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class GameScreen implements Screen {
-	
-	private TiledMapTileLayer collide;
-
-	private House topWall;
-	private House sideWall;
+	private TiledMapTileLayer collideLayer;
 	
 	private OrthogonalTiledMapRenderer mapRenderer;
 	private TiledMap map;
@@ -49,6 +45,7 @@ public class GameScreen implements Screen {
 	private Stage stage;
 	private float timeStamp = 0;
 	
+	private AIController aic = new AIController();
 	
 	@Override
 	public void render(float delta) {
@@ -80,6 +77,8 @@ public class GameScreen implements Screen {
 		
 		WorldHandler.world.step(1/60f, 6, 2);
 		sweepDeadBodies();
+		
+		aic.update();
 	}
 	
 	public void applyRotationToPlayer(float delta) {
@@ -185,27 +184,21 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void show() {
-		debugRenderer = new Box2DDebugRenderer();
-
-		map = new TmxMapLoader().load("img/firstwall.tmx");
 		//This line will import all the images that will be used multiple times
 		TextureHandler.createTextures();
 
-		collide = (TiledMapTileLayer) map.getLayers().get(0);
-
-		MapProperties prop = map.getProperties();
-		String MapWidth = prop.get("Width", String.class);
-		String MapHeight = prop.get("Height", String.class);
-
+		// ###
+		map = new TmxMapLoader().load("img/tileset/AITestMap/AITestMap.tmx");
 		mapRenderer = new OrthogonalTiledMapRenderer(map);
 		
-		camera = new OrthographicCamera();
-		WorldHandler.createWorld();
-		stage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true, batch);
-		player = new Player (300, 400, 32, 32);
-		batch = new SpriteBatch();
+		collideLayer = (TiledMapTileLayer) map.getLayers().get("collision");
+		// ###
 		
-		createHouse(MapWidth, MapHeight);
+		WorldHandler.createWorld();
+		camera = new OrthographicCamera();
+		stage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true, batch);
+		player = new Player (300, 400, 16, 16);
+		batch = new SpriteBatch();
 
 		debugRenderer = new Box2DDebugRenderer();
 		
@@ -214,37 +207,27 @@ public class GameScreen implements Screen {
 		
 		Gdx.input.setInputProcessor(stage);
 		attachContactListener();
+		
+		// TODO: Refactor?
+		setupAIController();
+		
+		aic.addHuman(49, 81);
+		aic.addHuman(177, 81);
+		aic.addHuman(283, 209);
 	}
 	
-	public void createHouse(String mapWidth,String mapHeight) {
-		ArrayList<Point> blocked = new ArrayList<Point>();
+	private void setupAIController() {
+		ArrayList<Point> blockedTiles = new ArrayList<Point>();
 		
-		float width;
-		float height;
-		
-		for (int i = 0; i < Integer.parseInt(mapWidth); i++){
-			for (int j = 0; j < Integer.parseInt(mapHeight); j++){
-				if (collide.getCell(i, j).getTile().getProperties().containsKey("Blocked")) {
-					width = Integer.parseInt(collide.getCell(i,j).getTile().getProperties().get("Width").toString());
-					height = Integer.parseInt(collide.getCell(i,j).getTile().getProperties().get("Height").toString());
-					
-					topWall = new House (i*16, (j+1)*16, width*8, 8,"img/Topwall2.png");
-					sideWall = new House (i*16, (j+1)*16, 8, height*8,"img/Sidewall2.png");
-					
-					for (int k = i; k < i + width; k++) {
-						blocked.add(new Point(k, j));
-					}
-					
-					for (int k = j; k < j + height; k++) {
-						blocked.add(new Point(i, k));
-					}
-				}
+		for (int x = 0; x < collideLayer.getWidth(); x++) {
+			for (int y = 0; y < collideLayer.getHeight(); y++) {
+				Cell c = collideLayer.getCell(x, y);
+				if (c != null)
+					blockedTiles.add(new Point(x, y));
 			}
 		}
 		
-		for (Point p : blocked) {
-			System.out.println("Blocked at " + p.x + ":" + p.y + "?");
-		}
+		aic.setBlockedTiles(blockedTiles);
 	}
 
 	@Override
