@@ -3,6 +3,7 @@ package se.glory.zombieworld.screens;
 import se.glory.entities.Player;
 import se.glory.entities.items.ItemContainer;
 import se.glory.entities.items.CurrentSelection;
+import se.glory.entities.items.QuickSelection;
 import se.glory.entities.items.WeaponLoot;
 import se.glory.entities.obstacles.House;
 import se.glory.utilities.CollisionDetection;
@@ -52,11 +53,7 @@ public class GameScreen implements Screen {
 	private Joystick moveStick;
 	private Joystick fireStick;
 	
-	private Joystick selectionStick;
-	private float selectionX;
-	private float selectionY;
-	private ItemContainer[] itemContainers;
-	private CurrentSelection currentSelection;
+	private QuickSelection quickSelection;
 	
 	private Box2DDebugRenderer debugRenderer;
 	
@@ -86,70 +83,13 @@ public class GameScreen implements Screen {
 		
 		//-------------REFACTOR THIS METHOD!-------------
 		applyRotationToPlayer(delta);
-		selectWeapon();
+		quickSelection.selectItem();
 		
 		stage.act(delta);
 		stage.draw();
 		
 		WorldHandler.world.step(1/60f, 6, 2);
 		sweepDeadBodies();
-	}
-	
-	/*
-	 * This method will show or hide the quickselection as well as 
-	 * handle which selections are made.
-	 */
-	public void selectWeapon() {
-		if(selectionStick.getTouchpad().isTouched()) {
-			if(!itemContainers[0].isActorVisible()) {
-				for(int i = 0; i < itemContainers.length; i++) {
-					itemContainers[i].show();
-				}
-			}
-		} else {
-			if(itemContainers[0].isActorVisible()) {
-				for(int i = 0; i < itemContainers.length; i++) {
-					itemContainers[i].hide();
-				}
-			}
-		}
-		
-		if(selectionStick.getTouchpad().getKnobPercentX() != 0 || selectionStick.getTouchpad().getKnobPercentY() != 0) {
-			float knobX = selectionStick.getTouchpad().getKnobPercentX();
-			float knobY = selectionStick.getTouchpad().getKnobPercentY();
-			
-			float knobDegree;
-			int selection = 5;
-			
-			if (knobY >= 0) {
-				knobDegree = -(int) (Math.acos(knobX) * MathUtils.radiansToDegrees);
-			} else {
-				knobDegree = (int) (Math.acos(knobX) * MathUtils.radiansToDegrees);
-			}
-			
-			if((knobDegree <= 0 && knobDegree > -30) || (knobDegree <= -150 && knobDegree > -180)) {
-				knobDegree = Math.abs(knobDegree);
-			}
-			
-			if (knobDegree >= 0 && knobDegree < 180) {
-				selection = (int) (knobDegree / 36);
-				
-				currentSelection.setActorPosition(itemContainers[selection].getActorX(), itemContainers[selection].getActorY());
-				
-				if(!currentSelection.isActorVisible()) {
-					currentSelection.show();
-				}
-			} else {
-				selection = 5;
-				if(currentSelection.isActorVisible()) {
-					currentSelection.hide();
-				}
-			}
-		} else {
-			if(currentSelection.isActorVisible()) {
-				currentSelection.hide();
-			}
-		}
 	}
 	
 	/*
@@ -291,18 +231,7 @@ public class GameScreen implements Screen {
 		moveStick = new Joystick(stage, 15, 15, 128, 128, Constants.TouchpadType.MOVEMENT);
 		fireStick = new Joystick(stage, Gdx.graphics.getWidth() - 15 - 128, 15, 128, 128, Constants.TouchpadType.FIRE);
 		
-		selectionX = (Gdx.graphics.getWidth() - 15 - 196);
-		selectionY = (Gdx.graphics.getHeight() - 15 - 64);
-		selectionStick = new Joystick(stage, selectionX, selectionY, 64, 64, Constants.TouchpadType.ITEM_SELECTION);
-		
-		itemContainers = new ItemContainer[5];
-		itemContainers[4] = new ItemContainer(stage, selectionX - 32 - 64, selectionY);
-		itemContainers[3] = new ItemContainer(stage, selectionX - 8 - 64, selectionY - 8 - 64);
-		itemContainers[2] = new ItemContainer(stage, selectionX, selectionY - 16 - 64);
-		itemContainers[1] = new ItemContainer(stage, selectionX + 8 + 64, selectionY - 8 - 64);
-		itemContainers[0] = new ItemContainer(stage, selectionX + 32 + 64, selectionY);
-		
-		currentSelection = new CurrentSelection(stage, selectionStick.getTouchpad().getX(), selectionStick.getTouchpad().getY());
+		quickSelection = new QuickSelection(stage);
 		
 		Gdx.input.setInputProcessor(stage);
 		attachContactListener();
