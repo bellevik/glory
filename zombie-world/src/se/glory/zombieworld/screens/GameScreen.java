@@ -9,6 +9,7 @@ import se.glory.entities.items.CurrentSelection;
 import se.glory.entities.items.QuickSelection;
 import se.glory.entities.items.WeaponLoot;
 import se.glory.entities.obstacles.House;
+import se.glory.utilities.Animator;
 import se.glory.utilities.CollisionDetection;
 import se.glory.utilities.Constants;
 import se.glory.utilities.Identity;
@@ -32,10 +33,13 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.utils.Array;
 >>>>>>> weaponselection
+=======
+>>>>>>> animation
 
 public class GameScreen implements Screen {
 	
@@ -58,7 +62,6 @@ public class GameScreen implements Screen {
 	
 	private Stage stage;
 	private float timeStamp = 0;
-	
 	
 	@Override
 	public void render(float delta) {
@@ -89,6 +92,10 @@ public class GameScreen implements Screen {
 		//-------------REFACTOR THIS METHOD!-------------
 		applyRotationToPlayer(delta);
 		quickSelection.selectItem();
+		
+		Animator.drawAnimation(batch, player.getBody().getPosition().x, player.getBody().getPosition().y);
+		
+		//player.getAnimation().drawAnimation(batch, player.getBody().getPosition().x, player.getBody().getPosition().y);
 		
 		stage.act(delta);
 		stage.draw();
@@ -124,8 +131,13 @@ public class GameScreen implements Screen {
 			WorldHandler.player.getBody().getJointList().get(0).joint.getBodyB().setTransform(WorldHandler.player.getBody().getJointList().get(0).joint.getBodyB().getPosition(), knobDegree * MathUtils.degreesToRadians);
 			WorldHandler.player.getBody().getJointList().get(0).joint.getBodyB().setAwake(true);
 			
+<<<<<<< HEAD
 			if(timeStamp > 1) {
 				WorldHandler.player.shoot();
+=======
+			if(timeStamp > .02) {
+				player.shoot();
+>>>>>>> animation
 				timeStamp = 0;
 			}
 		} else {
@@ -214,8 +226,13 @@ public class GameScreen implements Screen {
 		map = new TmxMapLoader().load("img/firstwall.tmx");
 		//This line will import all the images that will be used multiple times
 		TextureHandler.createTextures();
+<<<<<<< HEAD
 
 		collide = (TiledMapTileLayer) map.getLayers().get(0);
+=======
+		
+		collide =(TiledMapTileLayer) map.getLayers().get(0);
+>>>>>>> animation
 
 		MapProperties prop = map.getProperties();
 		String MapWidth = prop.get("Width", String.class);

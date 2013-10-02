@@ -2,12 +2,14 @@ package se.glory.entities;
 
 import se.glory.entities.items.Item;
 import se.glory.entities.weapons.Bullet;
+import se.glory.utilities.Animator;
 import se.glory.utilities.Constants;
 import se.glory.utilities.Identity;
 import se.glory.utilities.WorldHandler;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -32,6 +34,8 @@ public class Player implements Creature {
 	private Array<Item> itemList = new Array<Item>();
 	
 	private RevoluteJoint joint;
+	
+	private Animation animation;
 
 	public Player (float x, float y, float width, float height) {
 		this.x = x;
@@ -68,6 +72,9 @@ public class Player implements Creature {
 		
 		createWeaponBody();
 		attachWeapon();
+		
+		//this.animation = new Animator("dudesheet.png", this.x, this.y, 0);
+		this.animation = Animator.createAnimation("SpriteSheetMain.png", this.x, this.y, 7);
 	}
 	
 	public void createWeaponBody() {
@@ -144,5 +151,9 @@ public class Player implements Creature {
 	@Override
 	public Body getBody() {
 		return body;
+	}
+	
+	public Animation getAnimation(){
+		return this.animation;
 	}
 }
