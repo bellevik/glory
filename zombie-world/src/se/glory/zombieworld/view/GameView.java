@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -38,9 +37,10 @@ public class GameView {
 		return (TiledMapTileLayer) map.getLayers().get(i);
 	}
 	
-	public void useDebugRenderer (){
+	public void useDebugRenderer() {
 		Matrix4 matrix4 = new Matrix4(camera.combined);
 		matrix4.scale(100f, 100f, 1f);
+		
 		debugRenderer.render(WorldModel.world, matrix4);
 	}
 	
@@ -70,6 +70,7 @@ public class GameView {
 		camera.update();
 		
 		batch.setProjectionMatrix(camera.combined);
+		useDebugRenderer();
 	}
 	
 	/*
@@ -84,11 +85,16 @@ public class GameView {
 		
 		for (Body body : WorldModel.drawableBodies) {
 			if (body.getUserData().getClass().equals(Identity.class)) {
-				float width = ((Identity)(body.getUserData())).getWidth();
-				float height = ((Identity)(body.getUserData())).getHeight();
-				batch.begin();
-				batch.draw(((Identity)(body.getUserData())).getTexture(), body.getPosition().x * Constants.BOX_TO_WORLD - width , body.getPosition().y * Constants.BOX_TO_WORLD - height);
-				batch.end();
+				Identity identity = (Identity) body.getUserData();
+				
+				if (identity.getTexture() != null) {
+					float width = identity.getWidth();
+					float height = identity.getHeight();
+					
+					batch.begin();
+					batch.draw(identity.getTexture(), body.getPosition().x * Constants.BOX_TO_WORLD - width, body.getPosition().y * Constants.BOX_TO_WORLD - height);
+					batch.end();
+				}
 			}
 		}
 		
