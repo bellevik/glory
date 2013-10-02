@@ -9,6 +9,9 @@ import se.glory.zombieworld.model.entities.Human;
 import se.glory.zombieworld.model.entities.Zombie;
 import se.glory.zombieworld.utilities.AStarPathFinder;
 
+// TODO: If zombie is chasing a human and lose trail, 
+// it needs a new path - now it will use the same => try to walk through walls!
+
 public class AIModel {
 	private ArrayList<Human> humans = new ArrayList<Human>();
 	private ArrayList<Zombie> zombies = new ArrayList<Zombie>();
@@ -52,10 +55,10 @@ public class AIModel {
 				
 				// Range 1.5
 				if (size < 1.5) {
-					double test = 1.5 - size;
+					double distance = 1.5 - size;
 					
-					tmpX /= (size/test);
-					tmpY /= (size/test);
+					tmpX /= (size/distance);
+					tmpY /= (size/distance);
 					
 					totX += tmpX;
 					totY += tmpY;
@@ -73,11 +76,15 @@ public class AIModel {
 				h.setState(Human.State.FLEEING);
 			} else {
 				if (h.getState() == Human.State.IDLE) {
-					// TODO: Check if random tile is blocked
 					Random generator = new Random();
 					
 					int goalX = generator.nextInt(40);
 					int goalY = generator.nextInt(20);
+					
+					while (blockedTiles.contains(new Point(goalX, goalY))) {
+						goalX = generator.nextInt(40);
+						goalY = generator.nextInt(20);
+					}
 					
 					ArrayList<Point> walkPath = AStarPathFinder.getShortestPath((int) h.getTileX(), (int) h.getTileY(), goalX, goalY, blockedTiles);
 					h.setWalkPath(walkPath);
@@ -102,18 +109,22 @@ public class AIModel {
 				
 				double size = Math.sqrt(tmpX*tmpX+tmpY*tmpY);
 				
-				tmpX /= size;
-				tmpY /= size;
+				tmpX /= size * 1.2;
+				tmpY /= size * 1.2;
 				
 				z.getBody().setLinearVelocity(tmpX, tmpY);
 				z.setState(Zombie.State.CHASING);
 			} else {
 				if (z.getState() == Zombie.State.IDLE) {
-					// TODO: Check if random tile is blocked
 					Random generator = new Random();
 					
 					int goalX = generator.nextInt(40);
 					int goalY = generator.nextInt(20);
+					
+					while (blockedTiles.contains(new Point(goalX, goalY))) {
+						goalX = generator.nextInt(40);
+						goalY = generator.nextInt(20);
+					}
 					
 					ArrayList<Point> walkPath = AStarPathFinder.getShortestPath((int) z.getTileX(), (int) z.getTileY(), goalX, goalY, blockedTiles);
 					z.setWalkPath(walkPath);
@@ -138,7 +149,7 @@ public class AIModel {
 			double size = Math.sqrt(tmpX * tmpX + tmpY * tmpY);
 			
 			// Range and closest
-			if (size < 3.5 && size < distance) {
+			if (size < 1.5 && size < distance) {
 				closestTarget = h;
 				distance = size;
 			}
@@ -151,7 +162,7 @@ public class AIModel {
 		double size = Math.sqrt(tmpX * tmpX + tmpY * tmpY);
 		
 		// Range and closest
-		if (size < 3.5 && size < distance) {
+		if (size < 1.5 && size < distance) {
 			closestTarget = WorldModel.player;
 		}
 		

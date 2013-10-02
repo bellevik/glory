@@ -19,8 +19,12 @@ public class CollisionDetection implements ContactListener {
 		Body a = contact.getFixtureA().getBody();
 		Body b = contact.getFixtureB().getBody();
 		
-		Identity i1 = (Identity)a.getUserData();
-		Identity i2 = (Identity)b.getUserData();
+		Identity i1 = (Identity) a.getUserData();
+		Identity i2 = (Identity) b.getUserData();
+		
+		if (i1 == null || i2 == null) {
+			return;
+		}
 		
 		//Checks if the first collision body is of type Item and the other is of type Player
 		// OR the first is Player and the second is Item
@@ -29,10 +33,10 @@ public class CollisionDetection implements ContactListener {
 			//In the if we set the items dead boolean to true, for later removal of the item
 			if (i1.getType() == Constants.MoveableBodyType.ITEM){
 				i1.setDead(true);
-				WorldModel.player.addToItemList((Item)i1.getObj());
+				WorldModel.player.addItemToQuickSwap((Item)i1.getObj());
 			} else if (i2.getType() == Constants.MoveableBodyType.ITEM) {
 				i2.setDead(true);
-				WorldModel.player.addToItemList((Item)i2.getObj());
+				WorldModel.player.addItemToQuickSwap((Item)i2.getObj());
 			}
 			
 		}

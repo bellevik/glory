@@ -21,6 +21,13 @@ import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.badlogic.gdx.utils.Array;
 
+/*
+ * This class will represent the moveable Player in the world.
+ * Our player will be moveable by the two Joysticks on the screen.
+ * Rotation will be applied to the player through the joysticks aswell.
+ * The player will be a Box2D body and added to the Box2d world for simulation with
+ * other bodies. The player will be moved and rotated from the GameScreen class.
+ */
 public class Player implements Creature {
 	
 	private float x, y, width, height;
@@ -31,7 +38,8 @@ public class Player implements Creature {
 	
 	private Body weaponBody;
 	
-	private Array<Item> itemList = new Array<Item>();
+	//This array will contain the items in the Quick-Swap. Usually Weapons or Potions.
+	private Array<Item> quickSwapList = new Array<Item>();
 	
 	private RevoluteJoint joint;
 	private Animation animation;
@@ -80,6 +88,9 @@ public class Player implements Creature {
 		maxHealth = health = 100;
 	}
 	
+	/*
+	 * This method will create a weapon as a Box2d body.
+	 */
 	public void createWeaponBody() {
 		//Creating the weapon
 		BodyDef weapon = new BodyDef();
@@ -104,6 +115,10 @@ public class Player implements Creature {
 		weaponBody.setUserData(weaponIdentity);
 	}
 	
+	/*
+	 * This method will attach the weapon body to the player body.
+	 * It will use a Joint. Joints are given to us by the library.
+	 */
 	public void attachWeapon() {
 		//The joint between weapon and player
 		RevoluteJointDef jointDef = new RevoluteJointDef();
@@ -112,6 +127,7 @@ public class Player implements Creature {
         //16 here is equal to the weapons width!
         jointDef.localAnchorA.set(width * Constants.WORLD_TO_BOX, 0);
         jointDef.localAnchorB.set(-8 * Constants.WORLD_TO_BOX, 0);
+        //This row will enable a limit for the weapon. I.e the weapon is fixed to the PlayerBody.
         jointDef.enableLimit = true;
 
         joint = (RevoluteJoint) WorldModel.world.createJoint(jointDef);
@@ -119,11 +135,12 @@ public class Player implements Creature {
 	
 	/*
 	 * This method will add an Item to the item list. If it fails it
-	 * will return false. If it succeeds it will return true
+	 * will return false. If it succeeds it will return true. The size of this
+	 * inventory will be set to 5 slots
 	 */
-	public boolean addToItemList(Item item) {
-		if(itemList.size < 5) {
-			itemList.add(item);
+	public boolean addItemToQuickSwap(Item item) {
+		if(quickSwapList.size < 5) {
+			quickSwapList.add(item);
 			return true;
 		}
 		return false;
@@ -139,6 +156,42 @@ public class Player implements Creature {
         float yAngle = MathUtils.sin(rot);
 		
 		new Bullet(weaponBody.getPosition().x + 14 * xAngle * Constants.WORLD_TO_BOX, weaponBody.getPosition().y + 14 * yAngle * Constants.WORLD_TO_BOX, xAngle, yAngle);
+	}
+	
+	/*
+	 * This method will choose weather to rotate the player according to the Fire-Joystick
+	 * or the Movement-Joystick. The three cases in order are: if only the movement joystick
+	 * is touched. Secondly if both joysticks are touched (use the direction of the Fire-Joystick).
+	 * Thirdly if only the Fire-Joystick is touched.
+	 */
+	public void applyRotationToPlayer(float moveKnobX, float moveKnobY, float fireKnobX, float fireKnobY) {
+		if (moveKnobX != 0 && moveKnobY != 0 && fireKnobX == 0 && fireKnobY == 0) {
+			rotatePlayer(moveKnobX, moveKnobY);
+		} else if (moveKnobX != 0 && moveKnobY != 0 && fireKnobX != 0 && fireKnobY != 0) {
+			rotatePlayer(fireKnobX, fireKnobY);
+		} else if (moveKnobX == 0 && moveKnobY == 0 && fireKnobX != 0 && fireKnobY != 0) {
+			rotatePlayer(fireKnobX, fireKnobY);
+		}
+	}
+	
+	/*
+	 * This method will actually rotate the player according to the angle received
+	 * from the joysticks. The float knobDegree will be the angle of the Joystick.
+	 * The player body AND the joint (the weapon) will be rotated to the same angle
+	 * as the joystick.
+	 */
+	public void rotatePlayer (float knobX, float knobY) {
+		float knobDegree;
+		
+		if (knobY >= 0) {
+			knobDegree = (int) (Math.acos(knobX) * MathUtils.radiansToDegrees);
+		} else {
+			knobDegree = -(int) (Math.acos(knobX) * MathUtils.radiansToDegrees);
+		}
+		
+		WorldModel.player.getBody().setTransform(WorldModel.player.getBody().getPosition(), knobDegree * MathUtils.degreesToRadians);
+		WorldModel.player.getBody().getJointList().get(0).joint.getBodyB().setTransform(WorldModel.player.getBody().getJointList().get(0).joint.getBodyB().getPosition(), knobDegree * MathUtils.degreesToRadians);
+		WorldModel.player.getBody().getJointList().get(0).joint.getBodyB().setAwake(true);
 	}
 	
 	public int getHealth() {
