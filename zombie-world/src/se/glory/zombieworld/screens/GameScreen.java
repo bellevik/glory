@@ -73,7 +73,7 @@ public class GameScreen implements Screen {
 		//-------------REFACTOR THIS METHOD!-------------
 		applyRotationToPlayer(delta);
 		
-		animation.drawAnimation(batch);
+		player.getAnimation().drawAnimation(batch, player.getBody().getPosition().x, player.getBody().getPosition().y);
 		
 		stage.act(delta);
 		stage.draw();
@@ -106,7 +106,7 @@ public class GameScreen implements Screen {
 			player.getBody().getJointList().get(0).joint.getBodyB().setTransform(player.getBody().getJointList().get(0).joint.getBodyB().getPosition(), knobDegree * MathUtils.degreesToRadians);
 			player.getBody().getJointList().get(0).joint.getBodyB().setAwake(true);
 			
-			if(timeStamp > 1) {
+			if(timeStamp > .02) {
 				player.shoot();
 				timeStamp = 0;
 			}
@@ -191,8 +191,6 @@ public class GameScreen implements Screen {
 		//This line will import all the images that will be used multiple times
 		TextureHandler.createTextures();
 		
-		animation = new Animator();
-
 		collide =(TiledMapTileLayer) map.getLayers().get(0);
 
 		MapProperties prop = map.getProperties();

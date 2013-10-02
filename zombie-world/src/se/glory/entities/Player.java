@@ -1,6 +1,7 @@
 package se.glory.entities;
 
 import se.glory.entities.weapons.Bullet;
+import se.glory.utilities.Animator;
 import se.glory.utilities.Constants;
 import se.glory.utilities.Identity;
 import se.glory.utilities.WorldHandler;
@@ -14,7 +15,6 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 
@@ -29,6 +29,8 @@ public class Player implements Creature {
 	private Body weaponBody;
 	
 	private RevoluteJoint joint;
+	
+	private Animator animation;
 
 	public Player (float x, float y, float width, float height) {
 		this.x = x;
@@ -65,6 +67,8 @@ public class Player implements Creature {
 		
 		createWeaponBody();
 		attachWeapon();
+		
+		this.animation = new Animator("dudesheet.png", this.x, this.y, 0);
 	}
 	
 	public void createWeaponBody() {
@@ -113,5 +117,9 @@ public class Player implements Creature {
 	@Override
 	public Body getBody() {
 		return body;
+	}
+	
+	public Animator getAnimation(){
+		return this.animation;
 	}
 }
