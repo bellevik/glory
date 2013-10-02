@@ -1,5 +1,6 @@
 package se.glory.zombieworld.utilities;
 
+import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.items.Item;
 
 import com.badlogic.gdx.physics.box2d.Body;
@@ -28,10 +29,10 @@ public class CollisionDetection implements ContactListener {
 			//In the if we set the items dead boolean to true, for later removal of the item
 			if (i1.getType() == Constants.MoveableBodyType.ITEM){
 				i1.setDead(true);
-				WorldHandler.player.addToItemList((Item)i1.getObj());
+				WorldModel.player.addToItemList((Item)i1.getObj());
 			} else if (i2.getType() == Constants.MoveableBodyType.ITEM) {
 				i2.setDead(true);
-				WorldHandler.player.addToItemList((Item)i2.getObj());
+				WorldModel.player.addToItemList((Item)i2.getObj());
 			}
 			
 		}

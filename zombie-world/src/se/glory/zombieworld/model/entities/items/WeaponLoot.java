@@ -1,9 +1,9 @@
 package se.glory.zombieworld.model.entities.items;
 
+import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.utilities.Constants;
-import se.glory.zombieworld.utilities.Identity;
-import se.glory.zombieworld.utilities.WorldHandler;
 import se.glory.zombieworld.utilities.Constants.ItemType;
+import se.glory.zombieworld.utilities.Identity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -38,7 +38,7 @@ public class WeaponLoot implements Item {
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyType.StaticBody;
 		bodyDef.position.set(new Vector2(x * Constants.WORLD_TO_BOX, y * Constants.WORLD_TO_BOX));
-		body = WorldHandler.world.createBody(bodyDef);
+		body = WorldModel.world.createBody(bodyDef);
 		
 		PolygonShape shape = new PolygonShape();
 		shape.setAsBox(width * Constants.WORLD_TO_BOX, height * Constants.WORLD_TO_BOX);

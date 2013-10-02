@@ -1,9 +1,9 @@
 package se.glory.zombieworld.model.entities.weapons;
 
+import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Identity;
 import se.glory.zombieworld.utilities.TextureHandler;
-import se.glory.zombieworld.utilities.WorldHandler;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -30,7 +30,7 @@ public class Bullet {
 		BodyDef bulletDef = new BodyDef();
 		bulletDef.type = BodyType.DynamicBody;
 		bulletDef.position.set(x, y);
-		final Body bulletBody = WorldHandler.world.createBody(bulletDef);
+		final Body bulletBody = WorldModel.world.createBody(bulletDef);
 		
 		CircleShape bulletShape = new CircleShape();
 		bulletShape.setRadius(6 * Constants.WORLD_TO_BOX);

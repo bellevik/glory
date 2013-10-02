@@ -8,7 +8,6 @@ import se.glory.zombieworld.model.entities.Creature;
 import se.glory.zombieworld.model.entities.Human;
 import se.glory.zombieworld.model.entities.Zombie;
 import se.glory.zombieworld.utilities.AStarPathFinder;
-import se.glory.zombieworld.utilities.WorldHandler;
 
 public class AIModel {
 	private ArrayList<Human> humans = new ArrayList<Human>();
@@ -146,14 +145,14 @@ public class AIModel {
 		}
 		
 		// Check if player is closer
-		float tmpX = WorldHandler.player.getBody().getPosition().x - z.getBody().getPosition().x;
-		float tmpY = WorldHandler.player.getBody().getPosition().y - z.getBody().getPosition().y;
+		float tmpX = WorldModel.player.getBody().getPosition().x - z.getBody().getPosition().x;
+		float tmpY = WorldModel.player.getBody().getPosition().y - z.getBody().getPosition().y;
 		
 		double size = Math.sqrt(tmpX * tmpX + tmpY * tmpY);
 		
 		// Range and closest
 		if (size < 3.5 && size < distance) {
-			closestTarget = WorldHandler.player;
+			closestTarget = WorldModel.player;
 		}
 		
 		return closestTarget;

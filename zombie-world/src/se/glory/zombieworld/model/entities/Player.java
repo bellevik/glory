@@ -1,11 +1,11 @@
 package se.glory.zombieworld.model.entities;
 
+import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.items.Item;
 import se.glory.zombieworld.model.entities.weapons.Bullet;
 import se.glory.zombieworld.utilities.Animator;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Identity;
-import se.glory.zombieworld.utilities.WorldHandler;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -47,7 +47,7 @@ public class Player implements Creature {
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;
 		bodyDef.position.set(new Vector2(x * Constants.WORLD_TO_BOX, y * Constants.WORLD_TO_BOX));
-		body = WorldHandler.world.createBody(bodyDef);
+		body = WorldModel.world.createBody(bodyDef);
 
 		PolygonShape playerShape = new PolygonShape();
 		playerShape.setAsBox(width * Constants.WORLD_TO_BOX, height * Constants.WORLD_TO_BOX);
@@ -85,7 +85,7 @@ public class Player implements Creature {
 		BodyDef weapon = new BodyDef();
 		weapon.type = BodyType.DynamicBody;
 		weapon.position.set(x * Constants.WORLD_TO_BOX + width * Constants.WORLD_TO_BOX, y * Constants.WORLD_TO_BOX + height * Constants.WORLD_TO_BOX);
-		weaponBody = WorldHandler.world.createBody(weapon);
+		weaponBody = WorldModel.world.createBody(weapon);
 		PolygonShape weaponShape = new PolygonShape();
 		weaponShape.setAsBox(8 * Constants.WORLD_TO_BOX, 4 * Constants.WORLD_TO_BOX);
 		
@@ -114,7 +114,7 @@ public class Player implements Creature {
         jointDef.localAnchorB.set(-8 * Constants.WORLD_TO_BOX, 0);
         jointDef.enableLimit = true;
 
-        joint = (RevoluteJoint) WorldHandler.world.createJoint(jointDef);
+        joint = (RevoluteJoint) WorldModel.world.createJoint(jointDef);
 	}
 	
 	/*

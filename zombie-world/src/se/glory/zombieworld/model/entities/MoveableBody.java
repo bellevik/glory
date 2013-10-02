@@ -1,19 +1,17 @@
 package se.glory.zombieworld.model.entities;
 
+import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Identity;
-import se.glory.zombieworld.utilities.WorldHandler;
-import se.glory.zombieworld.utilities.Constants.MoveableBodyShape;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 public class MoveableBody implements Creature {
 	
@@ -33,7 +31,7 @@ public class MoveableBody implements Creature {
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;
 		bodyDef.position.set(new Vector2(x * Constants.WORLD_TO_BOX, y * Constants.WORLD_TO_BOX));
-		body = WorldHandler.world.createBody(bodyDef);
+		body = WorldModel.world.createBody(bodyDef);
 		
 		if (shape == Constants.MoveableBodyShape.CIRCLE) {
 			circleShape = new CircleShape();
