@@ -122,6 +122,9 @@ public class GameScreen implements Screen {
 		
 		// ## Add humans
 		worldModel.getAIModel().addHuman(64, 64);
+		
+		// ## Add zombies
+		// worldModel.getAIModel().addZombie(160, 64);
 	}
 
 	@Override
