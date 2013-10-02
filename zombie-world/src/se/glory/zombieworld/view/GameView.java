@@ -9,7 +9,9 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Matrix4;
@@ -30,6 +32,10 @@ public class GameView {
 		
 		map = new TmxMapLoader().load("img/tilemap/map.tmx");
 		mapRenderer = new OrthogonalTiledMapRenderer(map);
+	}
+	
+	public TiledMapTileLayer getMapLayer(int i) {
+		return (TiledMapTileLayer) map.getLayers().get(i);
 	}
 	
 	public void useDebugRenderer (){

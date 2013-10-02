@@ -1,9 +1,14 @@
 package se.glory.zombieworld.model;
 
+import java.awt.Point;
+import java.util.ArrayList;
+
 import se.glory.zombieworld.model.entities.Player;
 import se.glory.zombieworld.utilities.CollisionDetection;
 import se.glory.zombieworld.utilities.Identity;
 
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
@@ -27,8 +32,27 @@ public class WorldModel {
 		world.setContactListener(new CollisionDetection());
 	}
 	
+	public AIModel getAIModel() {
+		return aiModel;
+	}
+	
+	public void setupAIModel(TiledMapTileLayer collideLayer) {
+		ArrayList<Point> blockedTiles = new ArrayList<Point>();
+
+		for (int x = 0; x < collideLayer.getWidth(); x++) {
+			for (int y = 0; y < collideLayer.getHeight(); y++) {
+				Cell c = collideLayer.getCell(x, y);
+				if (c != null)
+					blockedTiles.add(new Point(x, y));
+			}
+		}
+
+		aiModel.setBlockedTiles(blockedTiles);
+	}
+	
 	public void update() {
 		// sweepDeadBodies();
+		aiModel.update();
 	}
 	
 	/*
