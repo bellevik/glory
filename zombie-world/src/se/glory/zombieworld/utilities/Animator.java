@@ -10,8 +10,7 @@ public class Animator {
 
 	private static final int FRAME_COLS = 4;
 	private static final int FRAME_ROWS = 8;
-	
-	private int isRunning;
+	private static final float walkSpeed = 0.125f;
 	
 	private static Animation animation;
 	private static Texture spriteSheet;
@@ -38,7 +37,7 @@ public class Animator {
 				for (int j = 0; j < FRAME_COLS; j++) {
 					frames[index++] = tmp[i][j];
 				}
-				animation = new Animation(0.125f, frames);
+				animation = new Animation(walkSpeed, frames);
 			};
 			return animation;
 		//NORTHEAST
@@ -47,7 +46,7 @@ public class Animator {
 				for (int j = 0; j < FRAME_COLS; j++) {
 					frames[index++] = tmp[i][j];
 				}
-				animation = new Animation(0.125f, frames);
+				animation = new Animation(walkSpeed, frames);
 			};
 			return animation;
 		//NORTH
@@ -56,7 +55,7 @@ public class Animator {
 				for (int j = 0; j < FRAME_COLS; j++) {
 					frames[index++] = tmp[i][j];
 				}
-				animation = new Animation(0.125f, frames);
+				animation = new Animation(walkSpeed, frames);
 			};
 			return animation;
 		//NORTHWEST
@@ -65,7 +64,7 @@ public class Animator {
 				for (int j = 0; j < FRAME_COLS; j++) {
 					frames[index++] = tmp[i][j];
 				}
-				animation = new Animation(0.125f, frames);
+				animation = new Animation(walkSpeed, frames);
 			};
 			return animation;
 		//WEST
@@ -74,7 +73,7 @@ public class Animator {
 				for (int j = 0; j < FRAME_COLS; j++) {
 					frames[index++] = tmp[i][j];
 				}
-				animation = new Animation(0.125f, frames);
+				animation = new Animation(walkSpeed, frames);
 			};
 			return animation;
 		//SOUTHWEST
@@ -83,7 +82,7 @@ public class Animator {
 				for (int j = 0; j < FRAME_COLS; j++) {
 					frames[index++] = tmp[i][j];
 				}
-				animation = new Animation(0.125f, frames);
+				animation = new Animation(walkSpeed, frames);
 			};
 			return animation;
 		//SOUTH
@@ -92,7 +91,7 @@ public class Animator {
 				for (int j = 0; j < FRAME_COLS; j++) {
 					frames[index++] = tmp[i][j];
 				}
-				animation = new Animation(0.125f, frames);
+				animation = new Animation(walkSpeed, frames);
 			};
 			return animation;
 		//SOUTHEAST
@@ -101,7 +100,7 @@ public class Animator {
 				for (int j = 0; j < FRAME_COLS; j++) {
 					frames[index++] = tmp[i][j];
 				}
-				animation = new Animation(0.125f, frames);
+				animation = new Animation(walkSpeed, frames);
 			};
 			return animation;
 		default:
