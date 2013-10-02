@@ -59,7 +59,7 @@ public class Player implements Creature {
 		fixtureDef.restitution = 0.6f;
 
 		body.createFixture(fixtureDef);
-		texture = new Texture(Gdx.files.internal("img/player.gif"));
+		texture = new Texture(Gdx.files.internal("img/player.png"));
 
 		Identity identity = new Identity();
 		identity.setTexture(texture);
@@ -75,7 +75,7 @@ public class Player implements Creature {
 		attachWeapon();
 		
 		//this.animation = new Animator("dudesheet.png", this.x, this.y, 0);
-		this.animation = Animator.createAnimation("SpriteSheetMain.png", this.x, this.y, 7);
+		this.animation = Animator.createAnimation("spriteSheetMain.png", this.x, this.y, 7);
 
 		maxHealth = health = 100;
 	}

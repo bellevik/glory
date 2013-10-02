@@ -28,7 +28,7 @@ public class GameView {
 		debugRenderer = new Box2DDebugRenderer();
 		camera = new OrthographicCamera();
 		
-		map = new TmxMapLoader().load("img/firstwall.tmx");
+		map = new TmxMapLoader().load("img/tilemap/map.tmx");
 		mapRenderer = new OrthogonalTiledMapRenderer(map);
 	}
 	
@@ -49,6 +49,7 @@ public class GameView {
 	
 	public void render() {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glClearColor(0.5f, 1, 1, 1);
 		
 		mapRenderer.setView(camera);
 		mapRenderer.render();
