@@ -22,7 +22,7 @@ public class WorldModel {
 		world = new World(new Vector2(0, 0), true);
 		aiModel = new AIModel();
 		
-		player = new Player (300, 400, 32, 32);
+		player = new Player (300, 400, 16, 16);
 		
 		world.setContactListener(new CollisionDetection());
 	}
