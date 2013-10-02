@@ -119,6 +119,9 @@ public class GameScreen implements Screen {
 		quickSelection = new QuickSelection(stage);
 		
 		Gdx.input.setInputProcessor(stage);
+		
+		// ## Add humans
+		worldModel.getAIModel().addHuman(64, 64);
 	}
 
 	@Override
