@@ -145,8 +145,6 @@ public class GameScreen implements Screen {
 					itemSelection.hide();
 				}
 			}
-			
-			System.out.println(selection);
 		} else {
 			if(itemSelection.isActorVisible()) {
 				itemSelection.hide();
