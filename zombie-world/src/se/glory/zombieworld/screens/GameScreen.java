@@ -34,8 +34,14 @@ public class GameScreen implements Screen {
 		// Update player movement
 		WorldModel.player.getBody().setLinearVelocity(moveStick.getTouchpad().getKnobPercentX() * 2, moveStick.getTouchpad().getKnobPercentY() * 2);
 		
-		// -------------REFACTOR THIS METHOD!-------------
-		applyRotationToPlayer(delta);
+		//The four floats below will represent the percentage in X and Y direction of the Joysticks
+		float moveKnobX = moveStick.getTouchpad().getKnobPercentX();
+		float moveKnobY = moveStick.getTouchpad().getKnobPercentY();
+		float fireKnobX = fireStick.getTouchpad().getKnobPercentX();
+		float fireKnobY = fireStick.getTouchpad().getKnobPercentY();
+		//This method will rotate the player
+		WorldModel.player.applyRotationToPlayer(moveKnobX, moveKnobY, fireKnobX, fireKnobY);
+		
 		quickSelection.selectItem();
 		
 		// Animator.drawAnimation(batch, player.getBody().getPosition().x, player.getBody().getPosition().y);
@@ -46,53 +52,6 @@ public class GameScreen implements Screen {
 		
 		WorldModel.world.step(1/60f, 6, 2);
 		worldModel.update();
-	}
-	
-	/*
-	 * This method will rotate the player according to what angle the touchpads got
-	 */
-	public void applyRotationToPlayer(float delta) {
-		//-------RECHECK THIS CONDITION. IT WILL STOP AT x=0 and y=0. i.e MOVE
-		//-------STRAIGHT TO THE RIGHT
-		if (fireStick.getTouchpad().getKnobPercentX() != 0 && fireStick.getTouchpad().getKnobPercentY() != 0) {
-			
-			float knobX = fireStick.getTouchpad().getKnobPercentX();
-			float knobY = fireStick.getTouchpad().getKnobPercentY();
-			
-			float playerDegree = (int) (WorldModel.player.getBody().getTransform().getRotation() * MathUtils.radiansToDegrees);
-			float knobDegree, totalRotation;
-			
-			if (knobY >= 0) {
-				knobDegree = (int) (Math.acos(knobX) * MathUtils.radiansToDegrees);
-			} else {
-				knobDegree = -(int) (Math.acos(knobX) * MathUtils.radiansToDegrees);
-			}
-			totalRotation = knobDegree - playerDegree;
-			
-			WorldModel.player.getBody().setTransform(WorldModel.player.getBody().getPosition(), knobDegree * MathUtils.degreesToRadians);
-			WorldModel.player.getBody().getJointList().get(0).joint.getBodyB().setTransform(WorldModel.player.getBody().getJointList().get(0).joint.getBodyB().getPosition(), knobDegree * MathUtils.degreesToRadians);
-			WorldModel.player.getBody().getJointList().get(0).joint.getBodyB().setAwake(true);
-		} else {
-			if (moveStick.getTouchpad().getKnobPercentX() != 0 && moveStick.getTouchpad().getKnobPercentY() != 0) {
-				float knobX = moveStick.getTouchpad().getKnobPercentX();
-				float knobY = moveStick.getTouchpad().getKnobPercentY();
-				
-				float playerDegree = (int) (WorldModel.player.getBody().getTransform().getRotation() * MathUtils.radiansToDegrees);
-				float knobDegree, totalRotation;
-				
-				if (knobY >= 0) {
-					knobDegree = (int) (Math.acos(knobX) * MathUtils.radiansToDegrees);
-				} else {
-					knobDegree = -(int) (Math.acos(knobX) * MathUtils.radiansToDegrees);
-				}
-				
-				totalRotation = knobDegree - playerDegree;
-				
-				WorldModel.player.getBody().setTransform(WorldModel.player.getBody().getPosition(), knobDegree * MathUtils.degreesToRadians);
-				WorldModel.player.getBody().getJointList().get(0).joint.getBodyB().setTransform(WorldModel.player.getBody().getJointList().get(0).joint.getBodyB().getPosition(), knobDegree * MathUtils.degreesToRadians);
-				WorldModel.player.getBody().getJointList().get(0).joint.getBodyB().setAwake(true);
-			}
-		}
 	}
 
 	@Override
@@ -189,5 +148,4 @@ public class GameScreen implements Screen {
 		gameView.dispose();
 		stage.dispose();
 	}
-	
 }
