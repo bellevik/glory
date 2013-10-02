@@ -114,12 +114,12 @@ public class GameScreen implements Screen {
 			}
 		}
 		
-		if(selectionStick.getTouchpad().getKnobPercentX() != 0 && selectionStick.getTouchpad().getKnobPercentY() != 0) {
+		if(selectionStick.getTouchpad().getKnobPercentX() != 0 || selectionStick.getTouchpad().getKnobPercentY() != 0) {
 			float knobX = selectionStick.getTouchpad().getKnobPercentX();
 			float knobY = selectionStick.getTouchpad().getKnobPercentY();
 			
 			float knobDegree;
-			int selection = 6;
+			int selection = 5;
 			
 			if (knobY >= 0) {
 				knobDegree = -(int) (Math.acos(knobX) * MathUtils.radiansToDegrees);
@@ -127,7 +127,11 @@ public class GameScreen implements Screen {
 				knobDegree = (int) (Math.acos(knobX) * MathUtils.radiansToDegrees);
 			}
 			
-			if (knobDegree > 0 && knobDegree < 180) {
+			if((knobDegree <= 0 && knobDegree > -30) || (knobDegree <= -150 && knobDegree > -180)) {
+				knobDegree = Math.abs(knobDegree);
+			}
+			
+			if (knobDegree >= 0 && knobDegree < 180) {
 				selection = (int) (knobDegree / 36);
 				
 				itemSelection.setActorPosition(itemContainers[selection].getActorX(), itemContainers[selection].getActorY());
@@ -136,11 +140,13 @@ public class GameScreen implements Screen {
 					itemSelection.show();
 				}
 			} else {
-				selection = 6;
+				selection = 5;
 				if(itemSelection.isActorVisible()) {
 					itemSelection.hide();
 				}
-			}	
+			}
+			
+			System.out.println(selection);
 		} else {
 			if(itemSelection.isActorVisible()) {
 				itemSelection.hide();
