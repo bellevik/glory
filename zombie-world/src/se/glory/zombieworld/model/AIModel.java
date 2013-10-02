@@ -9,6 +9,9 @@ import se.glory.zombieworld.model.entities.Human;
 import se.glory.zombieworld.model.entities.Zombie;
 import se.glory.zombieworld.utilities.AStarPathFinder;
 
+// TODO: If zombie is chasing a human and lose trail, 
+// it needs a new path - now it will use the same => try to walk through walls!
+
 public class AIModel {
 	private ArrayList<Human> humans = new ArrayList<Human>();
 	private ArrayList<Zombie> zombies = new ArrayList<Zombie>();
@@ -146,7 +149,7 @@ public class AIModel {
 			double size = Math.sqrt(tmpX * tmpX + tmpY * tmpY);
 			
 			// Range and closest
-			if (size < 3.5 && size < distance) {
+			if (size < 1.5 && size < distance) {
 				closestTarget = h;
 				distance = size;
 			}
@@ -159,7 +162,7 @@ public class AIModel {
 		double size = Math.sqrt(tmpX * tmpX + tmpY * tmpY);
 		
 		// Range and closest
-		if (size < 3.5 && size < distance) {
+		if (size < 1.5 && size < distance) {
 			closestTarget = WorldModel.player;
 		}
 		
