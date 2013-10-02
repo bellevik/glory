@@ -70,6 +70,9 @@ public class GameView {
 		} else {
 			drawEntites();
 		}
+		
+		// Debug: Always draw textures
+		drawEntites();
 	}
 	
 	/*
