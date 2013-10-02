@@ -1,5 +1,8 @@
 package se.glory.zombieworld.screens;
 
+import java.awt.Point;
+import java.util.ArrayList;
+
 import se.glory.entities.Player;
 import se.glory.entities.obstacles.House;
 import se.glory.utilities.CollisionDetection;
@@ -13,7 +16,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -22,16 +24,9 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.ContactListener;
-import com.badlogic.gdx.physics.box2d.Manifold;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Array;
 
 public class GameScreen implements Screen {
 	
@@ -62,11 +57,13 @@ public class GameScreen implements Screen {
 		mapRenderer.setView(camera);
 		mapRenderer.render();
 		
-		if(Constants.DEBUG_MODE){
+		if (Constants.DEBUG_MODE){
 			useDebugRenderer();
 		} else {
 			drawEntites();
 		}
+		
+		
 		
 		camera.position.set(player.getBody().getPosition().x * Constants.BOX_TO_WORLD, player.getBody().getPosition().y * Constants.BOX_TO_WORLD, 0);
 		camera.update();
@@ -194,7 +191,7 @@ public class GameScreen implements Screen {
 		//This line will import all the images that will be used multiple times
 		TextureHandler.createTextures();
 
-		collide =(TiledMapTileLayer) map.getLayers().get(0);
+		collide = (TiledMapTileLayer) map.getLayers().get(0);
 
 		MapProperties prop = map.getProperties();
 		String MapWidth = prop.get("Width", String.class);
@@ -208,7 +205,7 @@ public class GameScreen implements Screen {
 		player = new Player (300, 400, 32, 32);
 		batch = new SpriteBatch();
 		
-		createHouse(MapWidth,MapHeight);
+		createHouse(MapWidth, MapHeight);
 
 		debugRenderer = new Box2DDebugRenderer();
 		
@@ -219,19 +216,34 @@ public class GameScreen implements Screen {
 		attachContactListener();
 	}
 	
-	public void createHouse(String MapWidth,String MapHeight){
-		float Width;
-		float Height;
-		for (int i=0;i<Integer.parseInt(MapWidth);i++){
-			for (int j=0;j<Integer.parseInt(MapHeight);j++){
-				if (collide.getCell(i, j).getTile().getProperties().containsKey("Blocked")){
-					Width = Integer.parseInt(collide.getCell(i,j).getTile().getProperties().get("Width").toString());
-					Height = Integer.parseInt(collide.getCell(i,j).getTile().getProperties().get("Height").toString());
-					topWall = new House (i*16,(j+1)*16,Width*8,8,"img/Topwall2.png");
-					sideWall = new House (i*16,(j+1)*16,8,Height*8,"img/Sidewall2.png");
-
+	public void createHouse(String mapWidth,String mapHeight) {
+		ArrayList<Point> blocked = new ArrayList<Point>();
+		
+		float width;
+		float height;
+		
+		for (int i = 0; i < Integer.parseInt(mapWidth); i++){
+			for (int j = 0; j < Integer.parseInt(mapHeight); j++){
+				if (collide.getCell(i, j).getTile().getProperties().containsKey("Blocked")) {
+					width = Integer.parseInt(collide.getCell(i,j).getTile().getProperties().get("Width").toString());
+					height = Integer.parseInt(collide.getCell(i,j).getTile().getProperties().get("Height").toString());
+					
+					topWall = new House (i*16, (j+1)*16, width*8, 8,"img/Topwall2.png");
+					sideWall = new House (i*16, (j+1)*16, 8, height*8,"img/Sidewall2.png");
+					
+					for (int k = i; k < i + width; k++) {
+						blocked.add(new Point(k, j));
+					}
+					
+					for (int k = j; k < j + height; k++) {
+						blocked.add(new Point(i, k));
+					}
 				}
 			}
+		}
+		
+		for (Point p : blocked) {
+			System.out.println("Blocked at " + p.x + ":" + p.y + "?");
 		}
 	}
 

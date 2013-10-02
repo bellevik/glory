@@ -1,100 +1,153 @@
 package se.glory.entities.ai;
 
+import java.awt.Point;
 import java.util.ArrayList;
 
+import se.glory.entities.Creature;
 import se.glory.entities.Human;
 import se.glory.entities.Zombie;
-
-import com.badlogic.gdx.physics.box2d.World;
+import se.glory.utilities.WorldHandler;
 
 public class AIController {
 	private ArrayList<Human> humans = new ArrayList<Human>();
 	private ArrayList<Zombie> zombies = new ArrayList<Zombie>();
+	private ArrayList<Point> blockedTiles = new ArrayList<Point>();
 	
-	private World world;
-	
-	public void addHuman(int x, int y) {
+	public void addHuman(float x, float y) {
 		humans.add(new Human(x, y));
 	}
 	
-	public void addZombie(int x, int y) {
+	public void removeHuman(Human human) {
+		humans.remove(human);
+	}
+	
+	public void addZombie(float x, float y) {
 		zombies.add(new Zombie(x, y));
 	}
 	
+	public void removeZombie(Zombie zombie) {
+		zombies.remove(zombie);
+	}
+	
 	public void update() {
-		/*
-			public void autoUpdateMovement(ArrayList<Zombie> zombies) {
+		updateHumans();
+		updateZombies();
+	}
+	
+	private void updateHumans() {
+		for (Human h : humans) {
 			float totX = 0;
 			float totY = 0;
 			
 			for (Zombie z : zombies) {
-				float tmpX = body.getPosition().x - z.getPosition().x;
-				float tmpY = body.getPosition().y - z.getPosition().y;
+				float tmpX = h.getBody().getPosition().x - z.getBody().getPosition().x;
+				float tmpY = h.getBody().getPosition().y - z.getBody().getPosition().y;
 				
-				double size = Math.sqrt(tmpX*tmpX+tmpY*tmpY);
+				double size = Math.sqrt(tmpX * tmpX + tmpY * tmpY);
 				
+				// Range 1.5
 				if (size < 1.5) {
 					double test = 1.5 - size;
 					
-					tmpX = (float) (tmpX/(size/test));
-					tmpY = (float) (tmpY/(size/test));
+					tmpX /= (size/test);
+					tmpY /= (size/test);
 					
 					totX += tmpX;
 					totY += tmpY;
 				}
 			}
 			
-			double size = Math.sqrt(totX*totX+totY*totY);
-			
-			if (size > 0) {
-				totX = (float) (totX/(size*2));
-				totY = (float) (totY/(size*2));
+			// If any zombie are nearby, flee
+			if (totX + totY != 0) {
+				double size = Math.sqrt(totX * totX + totY * totY);
 				
-				body.setLinearVelocity(totX, totY);
+				totX /= size;
+				totY /= size;
+				
+				h.getBody().setLinearVelocity(totX, totY);
+				h.setState(Human.State.FLEEING);
 			} else {
-				body.setLinearVelocity(0, 0);
-			}
-		*/
-		
-		/*
-			private Creature getClosestHuman(ArrayList<Creature> humans) {
-				double distance = Double.MAX_VALUE;
-				Creature closestHuman = null;
-				
-				for (Creature h : humans) {
-					float tmpX = h.getPosition().x - body.getPosition().x;
-					float tmpY = h.getPosition().y - body.getPosition().y;
+				if (h.getState() == Human.State.IDLE) {
+					int startX = 0; // TODO: get X in tile grid
+					int startY = 0; // TODO: get Y in tile grid
+					int goalX = 0;  // TODO: random X in tile grid
+					int goalY = 0;  // TODO: random X in tile grid
 					
-					double size = Math.sqrt(tmpX*tmpX+tmpY*tmpY);
+					ArrayList<Point> walkPath = AStarPathFinder.getShortestPath(startX, startY, goalX, goalY, blockedTiles);
+					h.setWalkPath(walkPath);
 					
-					if (size < 3.5 && size < distance) {
-						closestHuman = h;
-						distance = size;
-					}
+					h.setState(Human.State.WALKING);
 				}
 				
-				return closestHuman;
+				// WALK
+				h.walk();
 			}
+		}
+	}
+	
+	private void updateZombies() {
+		for (Zombie z : zombies) {
+			Creature closestTarget = getClosestTarget(z);
 			
-			public void autoUpdateMovement(ArrayList<Creature> creatures2, Player player) {
-				ArrayList<Creature> creatures = (ArrayList<Creature>) creatures2.clone();
-				creatures.add((Creature) player);
+			// If any humans are nearby, chase
+			if (closestTarget != null) {
+				float tmpX = closestTarget.getBody().getPosition().x - z.getBody().getPosition().x;
+				float tmpY = closestTarget.getBody().getPosition().y - z.getBody().getPosition().y;
 				
-				Creature h = getClosestHuman(creatures);
+				double size = Math.sqrt(tmpX*tmpX+tmpY*tmpY);
 				
-				if (h != null) {
-					float tmpX = h.getPosition().x - body.getPosition().x;
-					float tmpY = h.getPosition().y - body.getPosition().y;
+				tmpX /= size;
+				tmpY /= size;
+				
+				z.getBody().setLinearVelocity(tmpX, tmpY);
+				z.setState(Zombie.State.CHASING);
+			} else {
+				if (z.getState() == Zombie.State.IDLE) {
+					int startX = 0; // TODO: get X in tile grid
+					int startY = 0; // TODO: get Y in tile grid
+					int goalX = 0;  // TODO: random X in tile grid
+					int goalY = 0;  // TODO: random X in tile grid
 					
-					double size = Math.sqrt(tmpX*tmpX+tmpY*tmpY);
-					tmpX = (float) (tmpX/(size*2));
-					tmpY = (float) (tmpY/(size*2));
+					ArrayList<Point> walkPath = AStarPathFinder.getShortestPath(startX, startY, goalX, goalY, blockedTiles);
+					z.setWalkPath(walkPath);
 					
-					body.setLinearVelocity(tmpX, tmpY);
-				} else {
-					body.setLinearVelocity(0, 0);
+					z.setState(Zombie.State.WALKING);
 				}
+				
+				// WALK
+				z.walk();
 			}
-		*/
+		}
+	}
+	
+	private Creature getClosestTarget(Zombie z) {
+		double distance = Double.MAX_VALUE;
+		Creature closestTarget = null;
+		
+		for (Human h : humans) {
+			float tmpX = h.getBody().getPosition().x - z.getBody().getPosition().x;
+			float tmpY = h.getBody().getPosition().y - z.getBody().getPosition().y;
+			
+			double size = Math.sqrt(tmpX * tmpX + tmpY * tmpY);
+			
+			// Range and closest
+			if (size < 3.5 && size < distance) {
+				closestTarget = h;
+				distance = size;
+			}
+		}
+		
+		// Check if player is closer
+		float tmpX = WorldHandler.player.getBody().getPosition().x - z.getBody().getPosition().x;
+		float tmpY = WorldHandler.player.getBody().getPosition().y - z.getBody().getPosition().y;
+		
+		double size = Math.sqrt(tmpX * tmpX + tmpY * tmpY);
+		
+		// Range and closest
+		if (size < 3.5 && size < distance) {
+			closestTarget = WorldHandler.player;
+		}
+		
+		return closestTarget;
 	}
 }
