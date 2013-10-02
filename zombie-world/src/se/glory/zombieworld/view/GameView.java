@@ -60,16 +60,16 @@ public class GameView {
 		mapRenderer.setView(camera);
 		mapRenderer.render();
 		
+		camera.position.set(WorldModel.player.getBody().getPosition().x * Constants.BOX_TO_WORLD, WorldModel.player.getBody().getPosition().y * Constants.BOX_TO_WORLD, 0);
+		camera.update();
+		
+		batch.setProjectionMatrix(camera.combined);
+		
 		if (Constants.DEBUG_MODE){
 			useDebugRenderer();
 		} else {
 			drawEntites();
 		}
-		
-		camera.position.set(WorldModel.player.getBody().getPosition().x * Constants.BOX_TO_WORLD, WorldModel.player.getBody().getPosition().y * Constants.BOX_TO_WORLD, 0);
-		camera.update();
-		
-		batch.setProjectionMatrix(camera.combined);
 	}
 	
 	/*
