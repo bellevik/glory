@@ -20,14 +20,14 @@ public class Human extends MoveableBody implements Creature {
 	
 	public void walk() {
 		if (walkPath.size() > 0) {
-			if (Math.abs(walkPath.get(0).x - getBody().getPosition().x) < 0.02 && Math.abs(walkPath.get(0).y - getBody().getPosition().y) < 0.02) {
+			if (Math.abs(walkPath.get(0).x - getTileX()) < 0.052 && Math.abs(walkPath.get(0).y - getTileY()) < 0.052) {
 				walkPath.remove(0);
 			}
 		}
 		
 		if (walkPath.size() > 0) {
-			float tmpX = walkPath.get(0).x - getBody().getPosition().x;
-			float tmpY = walkPath.get(0).y - getBody().getPosition().y;
+			float tmpX = walkPath.get(0).x - getTileX();
+			float tmpY = walkPath.get(0).y - getTileY();
 			
 			double size = Math.sqrt(tmpX * tmpX + tmpY * tmpY);
 			tmpX /= size;
