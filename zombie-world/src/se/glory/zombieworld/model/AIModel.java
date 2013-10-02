@@ -73,11 +73,15 @@ public class AIModel {
 				h.setState(Human.State.FLEEING);
 			} else {
 				if (h.getState() == Human.State.IDLE) {
-					// TODO: Check if random tile is blocked
 					Random generator = new Random();
 					
 					int goalX = generator.nextInt(40);
 					int goalY = generator.nextInt(20);
+					
+					while (blockedTiles.contains(new Point(goalX, goalY))) {
+						goalX = generator.nextInt(40);
+						goalY = generator.nextInt(20);
+					}
 					
 					ArrayList<Point> walkPath = AStarPathFinder.getShortestPath((int) h.getTileX(), (int) h.getTileY(), goalX, goalY, blockedTiles);
 					h.setWalkPath(walkPath);
@@ -109,11 +113,15 @@ public class AIModel {
 				z.setState(Zombie.State.CHASING);
 			} else {
 				if (z.getState() == Zombie.State.IDLE) {
-					// TODO: Check if random tile is blocked
 					Random generator = new Random();
 					
 					int goalX = generator.nextInt(40);
 					int goalY = generator.nextInt(20);
+					
+					while (blockedTiles.contains(new Point(goalX, goalY))) {
+						goalX = generator.nextInt(40);
+						goalY = generator.nextInt(20);
+					}
 					
 					ArrayList<Point> walkPath = AStarPathFinder.getShortestPath((int) z.getTileX(), (int) z.getTileY(), goalX, goalY, blockedTiles);
 					z.setWalkPath(walkPath);
