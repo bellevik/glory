@@ -86,7 +86,7 @@ public class GameView {
 		WorldModel.world.getBodies(WorldModel.drawableBodies);
 		
 		for (Body body : WorldModel.drawableBodies) {
-			if (body.getUserData().getClass().equals(Identity.class)) {
+			if (body.getUserData() != null && body.getUserData().getClass().equals(Identity.class)) {
 				Identity identity = (Identity) body.getUserData();
 				
 				if (identity.getTexture() != null) {
