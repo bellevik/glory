@@ -35,7 +35,12 @@ public class Player implements Creature {
 	
 	private RevoluteJoint joint;
 	
+<<<<<<< HEAD
 	private Animation animation;
+=======
+	private int health;
+	private int maxHealth;
+>>>>>>> f412ad82ce4ce8b9849c84c355fadf67587cfc3c
 
 	public Player (float x, float y, float width, float height) {
 		this.x = x;
@@ -73,8 +78,12 @@ public class Player implements Creature {
 		createWeaponBody();
 		attachWeapon();
 		
+<<<<<<< HEAD
 		//this.animation = new Animator("dudesheet.png", this.x, this.y, 0);
 		this.animation = Animator.createAnimation("SpriteSheetMain.png", this.x, this.y, 7);
+=======
+		maxHealth = health = 100;
+>>>>>>> f412ad82ce4ce8b9849c84c355fadf67587cfc3c
 	}
 	
 	public void createWeaponBody() {
@@ -136,6 +145,18 @@ public class Player implements Creature {
         float yAngle = MathUtils.sin(rot);
 		
 		new Bullet(weaponBody.getPosition().x + 14 * xAngle * Constants.WORLD_TO_BOX, weaponBody.getPosition().y + 14 * yAngle * Constants.WORLD_TO_BOX, xAngle, yAngle);
+	}
+	
+	public int getHealth() {
+		return health;
+	}
+	
+	public void takeDamage(int damage) {
+		health -= damage;
+	}
+	
+	public int getMaxHealth() {
+		return maxHealth;
 	}
 	
 	@Override
