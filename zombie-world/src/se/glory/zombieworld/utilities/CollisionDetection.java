@@ -2,6 +2,7 @@ package se.glory.zombieworld.utilities;
 
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.items.Item;
+import se.glory.zombieworld.model.entities.Human;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
@@ -25,6 +26,14 @@ public class CollisionDetection implements ContactListener {
 		if (i1 == null || i2 == null) {
 			return;
 		}
+		
+		// If two humans collide, fix this. TODO: Make smarter!
+		if (i1.getType() == Constants.MoveableBodyType.HUMAN && i2.getType() == Constants.MoveableBodyType.HUMAN) {
+			((Human) i1.getObj()).getBody().setLinearVelocity(-2.71f, 2.3f); // NW
+			((Human) i2.getObj()).getBody().setLinearVelocity(1.71f, -2f); // SE
+		}
+		
+		
 		
 		//Checks if the first collision body is of type Item and the other is of type Player
 		// OR the first is Player and the second is Item
