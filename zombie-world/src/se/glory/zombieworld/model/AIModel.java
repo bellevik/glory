@@ -1,6 +1,5 @@
 package se.glory.zombieworld.model;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -8,6 +7,7 @@ import se.glory.zombieworld.model.entities.Creature;
 import se.glory.zombieworld.model.entities.Human;
 import se.glory.zombieworld.model.entities.Zombie;
 import se.glory.zombieworld.utilities.AStarPathFinder;
+import se.glory.zombieworld.utilities.Point;
 
 // TODO: If zombie is chasing a human and lose trail, 
 // it needs a new path - now it will use the same => try to walk through walls!

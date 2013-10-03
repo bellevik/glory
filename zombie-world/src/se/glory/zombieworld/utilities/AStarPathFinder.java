@@ -1,6 +1,5 @@
 package se.glory.zombieworld.utilities;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -120,7 +119,7 @@ public class AStarPathFinder {
 	// Check if the position [x, y] is on the list of blocked positions.
 	private static boolean isBlocked(int x, int y, ArrayList<Point> blocked) {
 		for (Point p : blocked) {
-			if (p.x == x && p.y == y)
+			if (p.getX() == x && p.getY() == y)
 				return true;
 		}
 		

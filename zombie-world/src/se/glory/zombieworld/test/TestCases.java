@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import java.awt.Point;
 import java.util.ArrayList;
 
 import org.junit.Test;
@@ -15,6 +14,7 @@ import se.glory.zombieworld.model.entities.Creature;
 import se.glory.zombieworld.model.entities.Human;
 import se.glory.zombieworld.model.entities.Zombie;
 import se.glory.zombieworld.utilities.AStarPathFinder;
+import se.glory.zombieworld.utilities.Point;
 
 import com.badlogic.gdx.physics.box2d.World;
 

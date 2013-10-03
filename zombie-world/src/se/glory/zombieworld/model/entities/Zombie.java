@@ -1,9 +1,9 @@
 package se.glory.zombieworld.model.entities;
 
-import java.awt.Point;
 import java.util.ArrayList;
 
 import se.glory.zombieworld.utilities.Constants;
+import se.glory.zombieworld.utilities.Point;
 import se.glory.zombieworld.utilities.TextureHandler;
 
 public class Zombie extends MoveableBody implements Creature {
@@ -20,14 +20,14 @@ public class Zombie extends MoveableBody implements Creature {
 	
 	public void walk() {
 		if (walkPath.size() > 0) {
-			if (Math.abs(walkPath.get(0).x - getTileX()) < 0.052 && Math.abs(walkPath.get(0).y - getTileY()) < 0.052) {
+			if (Math.abs(walkPath.get(0).getX() - getTileX()) < 0.052 && Math.abs(walkPath.get(0).getY() - getTileY()) < 0.052) {
 				walkPath.remove(0);
 			}
 		}
 		
 		if (walkPath.size() > 0) {
-			float tmpX = walkPath.get(0).x - getTileX();
-			float tmpY = walkPath.get(0).y - getTileY();
+			float tmpX = walkPath.get(0).getX() - getTileX();
+			float tmpY = walkPath.get(0).getY() - getTileY();
 			
 			double size = Math.sqrt(tmpX * tmpX + tmpY * tmpY);
 			tmpX /= size * 1.2;

@@ -1,11 +1,11 @@
 package se.glory.zombieworld.model;
 
-import java.awt.Point;
 import java.util.ArrayList;
 
 import se.glory.zombieworld.model.entities.Player;
 import se.glory.zombieworld.utilities.CollisionDetection;
 import se.glory.zombieworld.utilities.Identity;
+import se.glory.zombieworld.utilities.Point;
 
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
