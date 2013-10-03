@@ -21,12 +21,11 @@ public class QuickSelection {
 		selectionStick = new Joystick(stage, selectionX, selectionY, 64, 64, Constants.TouchpadType.ITEM_SELECTION);
 		
 		itemContainers = new ItemContainer[5];
-		itemContainers[4] = new ItemContainer(stage, selectionX - 32 - 64, selectionY);
-		itemContainers[3] = new ItemContainer(stage, selectionX - 8 - 64, selectionY - 8 - 64);
-		itemContainers[2] = new ItemContainer(stage, selectionX, selectionY - 16 - 64);
-		itemContainers[1] = new ItemContainer(stage, selectionX + 8 + 64, selectionY - 8 - 64);
-		itemContainers[0] = new ItemContainer(stage, selectionX + 32 + 64, selectionY);
-		
+		for(int i = 0; i < itemContainers.length; i++) {
+			Double radians = Math.toRadians(360 - i * 45);
+			itemContainers[i] = new ItemContainer(stage, (float)(selectionX + Math.cos(radians) * 96), (float)(selectionY + Math.sin(radians) * 96));
+		}
+
 		currentSelection = new CurrentSelection(stage, selectionStick.getTouchpad().getX(), selectionStick.getTouchpad().getY());
 	}
 	
