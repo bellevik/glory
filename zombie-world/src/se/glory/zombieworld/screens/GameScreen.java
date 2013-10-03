@@ -13,7 +13,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class GameScreen implements Screen {
@@ -93,6 +92,7 @@ public class GameScreen implements Screen {
 	}
 
 	private void createStaticWalls() {
+		boolean[][] lonelyWalls = new boolean[40][25];
 		TiledMapTileLayer collideLayer = gameView.getMapLayer(1);
 		
 		for (int x = 0; x < collideLayer.getWidth(); x++) {
@@ -112,12 +112,45 @@ public class GameScreen implements Screen {
 				
 				if (c == null || y == collideLayer.getHeight() - 1) {
 					if (start != -1) {
-						System.out.println(x + ": Create block between " + start + ":" + end);
-						System.out.println("pX: " + x*32 + ", pY: " + start * 32 + ", W: " + "32" + ", H: " + (end - start + 1) * 32);
-						System.out.println();
-						
-						//break;
-						new CustomObstacle(x * 32, start * 32, 32, (end - start + 1) * 32);
+						if (start != end) {
+							new CustomObstacle(x * 32, start * 32, 32, (end - start + 1) * 32);
+						} else {
+							// TODO: Why do we need this fix?
+							if (y == collideLayer.getHeight() - 1)
+								lonelyWalls[x][y] = true;
+							else
+								lonelyWalls[x][y-1] = true;
+						}
+					}
+					
+					start = -1;
+					end = -1;
+				}
+			}
+		}
+		
+		createStaticWallsHorizontal(lonelyWalls);
+	}
+	
+	private void createStaticWallsHorizontal(boolean[][] lonelyWalls) {
+		for (int y = 0; y < lonelyWalls[0].length; y++) {
+			int start = -1;
+			int end = -1;
+			
+			for (int x = 0; x < lonelyWalls.length; x++) {
+				boolean c = lonelyWalls[x][y];
+				
+				if (c == true) {
+					// Is blocked
+					
+					if (start == -1)
+						start = x;
+					end = x;
+				}
+				
+				if (c == false || x == lonelyWalls.length - 1) {
+					if (start != -1) {
+						new CustomObstacle(start * 32, y * 32, (end - start + 1) * 32, 32);
 					}
 					
 					start = -1;
