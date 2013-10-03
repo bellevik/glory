@@ -54,6 +54,7 @@ public class MoveableBody implements Creature {
 		identity.setWidth(width);
 		identity.setHeight(height);
 		identity.setType(type);
+		identity.setObj(this);
 		
 		body.setUserData(identity);
 		
