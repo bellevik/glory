@@ -82,8 +82,12 @@ public class GameScreen implements Screen {
 		Gdx.input.setInputProcessor(stage);
 		
 		// ## Add humans
-		worldModel.getAIModel().addHuman(496, 272);
-		worldModel.getAIModel().addHuman(272, 272);
+		worldModel.getAIModel().addHuman(16+10*32, 16+3*32);
+		worldModel.getAIModel().addHuman(16+15*32, 16+15*32);
+		worldModel.getAIModel().addHuman(16+16*32, 16+20*32);
+		worldModel.getAIModel().addHuman(16+8*32, 16+20*32);
+		worldModel.getAIModel().addHuman(16+30*32, 16+15*32);
+		worldModel.getAIModel().addHuman(16+30*32, 16+23*32);
 		
 		// ## Add zombies
 		// worldModel.getAIModel().addZombie(272, 272);
