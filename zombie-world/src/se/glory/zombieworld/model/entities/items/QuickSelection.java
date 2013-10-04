@@ -14,30 +14,59 @@ public class QuickSelection {
 	private float selectionY;
 	private ItemContainer[] itemContainers;
 	private CurrentSelection currentSelection;
+	private double distance = 0;
 	
 	public QuickSelection(Stage stage) {
-		selectionX = (Gdx.graphics.getWidth() - 15 - 196);
-		selectionY = (Gdx.graphics.getHeight() - 15 - 64);
-		selectionStick = new Joystick(stage, selectionX, selectionY, 64, 64, Constants.TouchpadType.ITEM_SELECTION);
-		
 		itemContainers = new ItemContainer[5];
 		for(int i = 0; i < itemContainers.length; i++) {
 			Double radians = Math.toRadians(360 - i * 45);
-			itemContainers[i] = new ItemContainer(stage, (float)(selectionX + Math.cos(radians) * 96), (float)(selectionY + Math.sin(radians) * 96));
+			//itemContainers[i] = new ItemContainer(stage, (float)(selectionX + Math.cos(radians) * 96), (float)(selectionY + Math.sin(radians) * 96));
+			itemContainers[i] = new ItemContainer(stage, (float)(selectionX + Math.cos(radians)), (float)(selectionY + Math.sin(radians)));
 		}
+		
+		selectionX = (Gdx.graphics.getWidth() - 15 - 196);
+		selectionY = (Gdx.graphics.getHeight() - 15 - 64);
+		selectionStick = new Joystick(stage, selectionX, selectionY, 64, 64, Constants.TouchpadType.ITEM_SELECTION);
 
 		currentSelection = new CurrentSelection(stage, selectionStick.getTouchpad().getX(), selectionStick.getTouchpad().getY());
 	}
 	
 	public void selectItem() {
+		double vertical = Math.pow((selectionStick.getTouchpad().getX() - itemContainers[0].getActorX()), 2);
+		double horizontal = Math.pow((selectionStick.getTouchpad().getY() - itemContainers[0].getActorY()), 2);
+		
 		if(selectionStick.getTouchpad().isTouched()) {
 			if(!itemContainers[0].isActorVisible()) {
 				for(int i = 0; i < itemContainers.length; i++) {
 					itemContainers[i].show();
 				}
 			}
+			
+			if(Math.abs(Math.sqrt(vertical + horizontal)) < 95) {
+				distance += 16;
+			}
+
+			for(int i = 0; i < itemContainers.length; i++) {
+				Double radians = Math.toRadians(360 - i * 45);
+				itemContainers[i].setActorX((float)(selectionX + Math.cos(radians) * distance));
+				itemContainers[i].setActorY((float)(selectionY + Math.sin(radians) * distance));
+			}
+			
 		} else {
-			if(itemContainers[0].isActorVisible()) {
+			
+			if(Math.abs(Math.sqrt(vertical + horizontal)) > 16) {
+				distance -= 16;
+			} else {
+				distance = 0;
+			}
+			
+			for(int i = 0; i < itemContainers.length; i++) {
+				Double radians = Math.toRadians(360 - i * 45);
+				itemContainers[i].setActorX((float)(selectionX + Math.cos(radians) * distance));
+				itemContainers[i].setActorY((float)(selectionY + Math.sin(radians) * distance));
+			}
+			
+			if(itemContainers[0].isActorVisible() && distance < 16) {
 				for(int i = 0; i < itemContainers.length; i++) {
 					itemContainers[i].hide();
 				}
