@@ -6,6 +6,11 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+/*
+ * This class creates animations from sprite sheets. This will make it look like the 
+ * player is walking around on the screen. This class will also draw the animations on
+ * the screen.
+ */
 public class Animator {
 
 	private static final int FRAME_COLS = 4;
