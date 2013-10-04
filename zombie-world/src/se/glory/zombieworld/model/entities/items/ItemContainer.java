@@ -17,9 +17,14 @@ public class ItemContainer {
 	private Image actor;
 	private Image currentItem;
 	
-	public ItemContainer(Stage stage, float x, float y) {
+	public ItemContainer(Stage stage, float x, float y, boolean quick) {
 		this.stage = stage;
-		texture = new Texture(Gdx.files.internal("img/itemBase.png"));
+		
+		if(quick) {
+			texture = new Texture(Gdx.files.internal("img/itemBase.png"));
+		} else {
+			texture = new Texture(Gdx.files.internal("img/itemBaseRSquare.png"));
+		}
 		
 		actor = new Image(texture);
 		

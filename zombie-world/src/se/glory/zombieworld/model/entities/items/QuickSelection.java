@@ -25,16 +25,14 @@ public class QuickSelection {
 		itemContainers = new ItemContainer[5];
 		for(int i = 0; i < itemContainers.length; i++) {
 			Double radians = Math.toRadians(360 - i * 45);
-			itemContainers[i] = new ItemContainer(stage, (float)(selectionX + Math.cos(radians)), (float)(selectionY + Math.sin(radians)));
+			itemContainers[i] = new ItemContainer(stage, (float)(selectionX + Math.cos(radians)), (float)(selectionY + Math.sin(radians)), true);
 		}
 		
 		// Till Ekman: har ser du hur man lagger in nya bilder
 		Texture testTexture = new Texture(Gdx.files.internal("img/player.png"));
 		Texture testTexture2 = new Texture(Gdx.files.internal("img/zombie.png"));
-		Texture testTexture3 = new Texture(Gdx.files.internal("img/human.png"));
 		Image testImage = new Image(testTexture);
 		Image testImage2 = new Image(testTexture2);
-		Image testImage3 = new Image(testTexture3);
 		
 		// Lagger till en helt ny bild bara
 		itemContainers[0].newItem(testImage);
