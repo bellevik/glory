@@ -21,6 +21,10 @@ public class ItemContainer {
 		hide();
 	}
 	
+	public Image getActor() {
+		return actor;
+	}
+	
 	public boolean isActorVisible() {
 		return actor.isVisible();
 	}

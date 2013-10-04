@@ -55,14 +55,25 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		double scale = 1000 / (double) width;
+		double scale = Constants.VIEWPORT_WIDTH / (double) width;
+		Constants.VIEWPORT_HEIGHT = (int) (height * scale);
 		
-		gameView.getCamera().viewportWidth = 1000;
-		gameView.getCamera().viewportHeight = (int) (height * scale);
+		gameView.getCamera().viewportWidth = Constants.VIEWPORT_WIDTH;
+		gameView.getCamera().viewportHeight = Constants.VIEWPORT_HEIGHT;
+		
+	    stage.setViewport(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT, false);
+	    quickSelection.updatePosition();
+	}
+	
+	private void adjustViewportScale() {
+		double scale = Constants.VIEWPORT_WIDTH / (double) Gdx.graphics.getWidth();
+		Constants.VIEWPORT_HEIGHT = (int) (Gdx.graphics.getHeight() * scale);
 	}
 
 	@Override
 	public void show() {
+		adjustViewportScale();
+		
 		worldModel = new WorldModel();
 		worldModel.createWorld();
 		
@@ -77,7 +88,7 @@ public class GameScreen implements Screen {
 		stage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true, batch);
 		
 		moveStick = new Joystick(stage, 15, 15, 128, 128, Constants.TouchpadType.MOVEMENT);
-		fireStick = new Joystick(stage, Gdx.graphics.getWidth() - 15 - 128, 15, 128, 128, Constants.TouchpadType.FIRE);
+		fireStick = new Joystick(stage, Constants.VIEWPORT_WIDTH - 15 - 128, 15, 128, 128, Constants.TouchpadType.FIRE);
 		
 		quickSelection = new QuickSelection(stage);
 		

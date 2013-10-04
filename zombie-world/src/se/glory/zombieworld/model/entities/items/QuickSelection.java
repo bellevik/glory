@@ -16,8 +16,9 @@ public class QuickSelection {
 	private CurrentSelection currentSelection;
 	
 	public QuickSelection(Stage stage) {
-		selectionX = (Gdx.graphics.getWidth() - 15 - 196);
-		selectionY = (Gdx.graphics.getHeight() - 15 - 64);
+		selectionX = (Constants.VIEWPORT_WIDTH - 15 - 196);
+		selectionY = (Constants.VIEWPORT_HEIGHT - 15 - 64);
+		
 		selectionStick = new Joystick(stage, selectionX, selectionY, 64, 64, Constants.TouchpadType.ITEM_SELECTION);
 		
 		itemContainers = new ItemContainer[5];
@@ -28,6 +29,18 @@ public class QuickSelection {
 		itemContainers[0] = new ItemContainer(stage, selectionX + 32 + 64, selectionY);
 		
 		currentSelection = new CurrentSelection(stage, selectionStick.getTouchpad().getX(), selectionStick.getTouchpad().getY());
+	}
+	
+	public void updatePosition() {
+		selectionY = (Constants.VIEWPORT_HEIGHT - 15 - 64);
+		
+		selectionStick.getTouchpad().setY(selectionY);
+		
+		itemContainers[4].getActor().setY(selectionY);
+		itemContainers[3].getActor().setY(selectionY - 8 - 64);
+		itemContainers[2].getActor().setY(selectionY - 16 - 64);
+		itemContainers[1].getActor().setY(selectionY - 8 - 64);
+		itemContainers[0].getActor().setY(selectionY);
 	}
 	
 	public void selectItem() {
