@@ -34,8 +34,7 @@ public class QuickSelection {
 	
 	public void updatePosition() {
 		selectionY = (Constants.VIEWPORT_HEIGHT - 15 - 64);
-		
-		//selectionStick.getTouchpad().setY(selectionY);
+		selectionStick.getTouchpad().setY(selectionY);
 	}
 	
 	public void selectItem() {
