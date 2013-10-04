@@ -46,9 +46,6 @@ public class GameScreen implements Screen {
 		
 		WorldModel.world.step(1/60f, 6, 2);
 		worldModel.update();
-		
-		//Testing to be removed later
-		testHealthBar();
 	}
 	
 	/*
@@ -97,19 +94,6 @@ public class GameScreen implements Screen {
 			}
 		}
 	}
-	
-	/*
-	 * Testing the healthbar. Will be removed later
-	 */
-	private int healthVar = 0;
-	private int varNeg = 1;
-	private void testHealthBar() {
-		healthVar += varNeg;
-		healthBar.updateHealth(healthVar);
-		if(healthVar == 99 || healthVar == 0) {
-			varNeg *= -1;
-		}
-	}
 
 	@Override
 	public void resize(int width, int height) {
@@ -137,7 +121,7 @@ public class GameScreen implements Screen {
 		
 		quickSelection = new QuickSelection(stage);
 		
-		healthBar = new Healthbar(stage, 70, 100);
+		healthBar = new Healthbar(stage);
 		
 		Gdx.input.setInputProcessor(stage);
 	}

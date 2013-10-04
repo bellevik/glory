@@ -11,35 +11,43 @@ public class Healthbar extends Actor{
 	private Texture texture;
 	private Image actor;
 	
-	private int currentHealth;
-	private int maxHealth;
+	private int lastHealthPercent;
+	private int maxHealthPercent = 100;
 	
 	//Positioning for the healthbar
 	private int x = 25;
-	private int y = 525;
+	private int y = 545;
+	
+	private int xMargin = 5;
+	private int yMargin = 4;
+	private int fillLength = 3;
 	
 	private HealthFill[] healthBarAmount;
 	
 	
-	public Healthbar(Stage stage, int currentHealth, int maxHealth){
-		this.currentHealth = currentHealth;
-		this.maxHealth = maxHealth;
+	public Healthbar(Stage stage){
+		lastHealthPercent = maxHealthPercent;
+		healthBarAmount = new HealthFill[maxHealthPercent];
 		
-		healthBarAmount = new HealthFill[maxHealth];
-		
-		texture = new Texture(Gdx.files.internal("img/healthBase.png"));
-		
+		texture = new Texture(Gdx.files.internal("img/health/healthBarBottom.png"));
 		actor = new Image(texture);
 		
 		stage.addActor(actor);
 		actor.setPosition(x, y);
 		
 		//Creating all the HealthFills and places them in the array
-		for(int i=0; i<maxHealth; i++) {
-			int newX = i*3+x+2;
-			healthBarAmount[i] = new HealthFill(stage, newX, y);
+		for(int i=0; i<maxHealthPercent; i++) {
+			int newX = i*fillLength+x+xMargin;
+			healthBarAmount[i] = new HealthFill(stage, newX, y+yMargin);
 		}
-		updateHealth(currentHealth);
+		
+		texture = new Texture(Gdx.files.internal("img/health/healthBarTop.png"));
+		actor = new Image(texture);
+		
+		stage.addActor(actor);
+		actor.setPosition(x, y);
+		
+		resetHealthBar();
 		
 	}
 	
@@ -51,26 +59,51 @@ public class Healthbar extends Actor{
 		return actor.getY();
 	}
 	
-	public int getHealth() {
-		return currentHealth;
+	public int getLastKnownHealthPercent() {
+		return lastHealthPercent;
 	}
 	
-	public int getMaxHealth() {
-		return maxHealth;
+	public int getMaxHealthPercent() {
+		return maxHealthPercent;
 	}
 	
 	public void resetHealthBar() {
-		currentHealth = maxHealth;
+		lastHealthPercent = maxHealthPercent;
+		updateHealth(lastHealthPercent);
 	}
 	
 	public void updateHealth(int healthToUpdate) {
-		currentHealth = healthToUpdate;
-		for(int i=0; i<currentHealth; i++) {
-			healthBarAmount[i].show();
+		if(lastHealthPercent < healthToUpdate) {
+			for(int i=lastHealthPercent; i<healthToUpdate; i++) {
+				healthBarAmount[i].show();
+			}
+		}else{
+			for(int i=lastHealthPercent; i>healthToUpdate; i--) {
+				healthBarAmount[i-1].hide();
+			}
 		}
-		for(int j=currentHealth; j<maxHealth; j++) {
-			healthBarAmount[j].hide();
+		lastHealthPercent = healthToUpdate;
+	}
+	
+	private class HealthFill {
+		private Texture texture;
+		private Image actor;
+		
+		public HealthFill(Stage stage, float x, float y) {
+			texture = new Texture(Gdx.files.internal("img/health/healthBar.png"));
+			
+			actor = new Image(texture);
+			
+			stage.addActor(actor);
+			actor.setPosition(x, y);
+		}
+		
+		private void show() {
+			actor.setVisible(true);
+		}
+		
+		private void hide() {
+			actor.setVisible(false);
 		}
 	}
-
 }
