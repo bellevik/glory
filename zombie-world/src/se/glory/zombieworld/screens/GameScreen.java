@@ -132,10 +132,10 @@ public class GameScreen implements Screen {
 						if (start != end) {
 							new CustomObstacle(x * 32, start * 32, 32, (end - start + 1) * 32);
 						} else {
-							// TODO: Why do we need this fix?
 							if (y == collideLayer.getHeight() - 1)
 								lonelyWalls[x][y] = true;
 							else
+								// TODO: Why do we need this fix?
 								lonelyWalls[x][y-1] = true;
 						}
 					}
