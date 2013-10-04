@@ -10,6 +10,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -27,7 +28,9 @@ public class GameView {
 	private Box2DDebugRenderer debugRenderer;
 	private TiledMap map;
 	
-	private float angle, prevAngle;
+	private Animator animator;
+	
+	private float angle;
 	
 	public GameView(SpriteBatch batch) {
 		this.batch = batch;
@@ -36,6 +39,8 @@ public class GameView {
 		
 		map = new TmxMapLoader().load("img/tilemap/map.tmx");
 		mapRenderer = new OrthogonalTiledMapRenderer(map);
+		
+		animator = new Animator();
 	}
 	
 	public TiledMapTileLayer getMapLayer(int i) {
@@ -98,40 +103,49 @@ public class GameView {
 					float width = identity.getWidth();
 					float height = identity.getHeight();
 					
-
 					//Check if the body is a creature
 					if(identity.getObj() instanceof Creature){
-						angle = body.getAngle()*MathUtils.radiansToDegrees;
+						angle = (float) (body.getAngle() * (double)(180/3.14));
 
 						/*
 						* Check to see in what direction the body is facing, and create an animation if 
 						* it's different from the previous direction. 
 						*/
 						
-						if(angle > -22  && angle <= 22 && (prevAngle <-22 || prevAngle > 22)){
-							Animator.createAnimation("SpriteSheetMain.png", 2);
-						}else if(angle > 22 && angle <= 67 && (prevAngle < 22 || prevAngle > 67)){
-							Animator.createAnimation("SpriteSheetMain.png", 3);
-						}else if(angle > 67 && angle <= 112 && (prevAngle < 67 || prevAngle > 112)){
-							Animator.createAnimation("SpriteSheetMain.png", 4);
-						}else if(angle > 112 && angle <= 157 && (prevAngle < 112 || prevAngle > 157)){
-							Animator.createAnimation("SpriteSheetMain.png", 5);
-						}else if(angle > 157 && angle <= -157 && (prevAngle < 157 || prevAngle > -157)){
-							Animator.createAnimation("SpriteSheetMain.png", 6);
-						}else if(angle > -157 && angle <= -112 && (prevAngle < -157 || prevAngle > -112)){
-							Animator.createAnimation("SpriteSheetMain.png", 7);
-						}else if(angle > -112 && angle <= -67 && (prevAngle < -112 || prevAngle > -67)){
-							Animator.createAnimation("SpriteSheetMain.png", 0);
-						}else if(angle > -67 && angle <= -22 && (prevAngle < -67 || prevAngle > -22)){
-							Animator.createAnimation("SpriteSheetMain.png", 1);
+						float T = body.getAngle();
+						
+						if (T > Math.PI)
+							T = (float) (-2 * Math.PI + T);
+						if (T < -Math.PI)
+							T = (float) (2 * Math.PI + T);
+						
+						angle = T * MathUtils.radiansToDegrees;
+						
+						Animation ani = null;
+						
+						if(angle > -22  && angle <= 22){
+							ani = animator.getAnimation(2);
+						}else if(angle > 22 && angle <= 67){
+							ani = animator.getAnimation(3);
+						}else if(angle > 67 && angle <= 112){
+							ani = animator.getAnimation(4);
+						}else if(angle > 112 && angle <= 157){
+							ani = animator.getAnimation(5);
+						}else if(angle > 157 || angle <= -157){
+							ani = animator.getAnimation(6);
+						}else if(angle > -157 && angle <= -112){
+							ani = animator.getAnimation(7);
+						}else if(angle > -112 && angle <= -67){
+							ani = animator.getAnimation(0);
+						}else if(angle > -67 && angle <= -22){
+							ani = animator.getAnimation(1);
+						} else {
+							//System.out.println("ERROR, ANGLE: " + body.getAngle());
 						}
 						
-						//Draw the animation if it exists
-						if(Animator.getAnimation() != null)
-							Animator.drawAnimation(batch, body.getPosition().x, body.getPosition().y);
-						
-						//Save the previous angle
-						prevAngle = angle;
+						if (ani != null) {
+							animator.drawAnimation(batch, body.getPosition().x, body.getPosition().y, ani);
+						}
 					}
 					
 					batch.begin();

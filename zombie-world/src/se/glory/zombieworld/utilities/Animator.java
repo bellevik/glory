@@ -12,22 +12,37 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  * the screen.
  */
 public class Animator {
-
-	private static final int FRAME_COLS = 4;
-	private static final int FRAME_ROWS = 8;
-	private static final float walkSpeed = 0.125f;
+	private final int FRAME_COLS = 4;
+	private final int FRAME_ROWS = 8;
+	private final float walkSpeed = 0.525f;
 	
-	private static Animation animation;
-	private static Texture spriteSheet;
-	private static TextureRegion currentFrame;
-	private static TextureRegion[] frames;
+	private Texture spriteSheet;
+	private TextureRegion currentFrame;
+	private TextureRegion[] frames;
 	
-	static float stateTimer;
+	private float stateTimer;
 	
-	float x, y, width, height;
+	private Animation[] humanAnimations = new Animation[8];
+	
+	public Animator() {
+		humanAnimations[0] = createAnimation("SpriteSheetMain.png", 0);
+		humanAnimations[1] = createAnimation("SpriteSheetMain.png", 1);
+		humanAnimations[2] = createAnimation("SpriteSheetMain.png", 2);
+		humanAnimations[3] = createAnimation("SpriteSheetMain.png", 3);
+		humanAnimations[4] = createAnimation("SpriteSheetMain.png", 4);
+		humanAnimations[5] = createAnimation("SpriteSheetMain.png", 5);
+		humanAnimations[6] = createAnimation("SpriteSheetMain.png", 6);
+		humanAnimations[7] = createAnimation("SpriteSheetMain.png", 7);
+	}
+	
+	public Animation getAnimation(int i) {
+		return humanAnimations[i];
+	}
 	
 	//Creates and returns an animation
-	public static Animation createAnimation(String fileName, int direction){
+	private Animation createAnimation(String fileName, int direction) {
+		Animation animation = null;
+		
 		//Loading the spritesheet
 		spriteSheet = new Texture(Gdx.files.internal("img/" + fileName));
 		//Dividing the spritesheet into regions with an image in each frame
@@ -125,17 +140,13 @@ public class Animator {
 		}
 	}
 	
-	public static void drawAnimation(SpriteBatch batch, float x, float y){
+	public void drawAnimation(SpriteBatch batch, float x, float y, Animation ani){
 		//stateTime = the time spent in the state represented by this animation
         stateTimer += Gdx.graphics.getDeltaTime();
         //Get the current frame
-        currentFrame = animation.getKeyFrame(stateTimer, true);
+        currentFrame = ani.getKeyFrame(stateTimer, true);
         batch.begin();
         batch.draw(currentFrame, x*Constants.BOX_TO_WORLD - currentFrame.getRegionWidth() / 2, y*Constants.BOX_TO_WORLD - currentFrame.getRegionHeight() / 2);
         batch.end();
-	}
-	
-	public static Animation getAnimation(){
-		return animation;
 	}
 }
