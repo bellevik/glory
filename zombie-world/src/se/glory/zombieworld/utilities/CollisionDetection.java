@@ -1,8 +1,10 @@
 package se.glory.zombieworld.utilities;
 
+import java.util.Random;
+
 import se.glory.zombieworld.model.WorldModel;
-import se.glory.zombieworld.model.entities.items.Item;
 import se.glory.zombieworld.model.entities.Human;
+import se.glory.zombieworld.model.entities.items.Item;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
@@ -28,9 +30,14 @@ public class CollisionDetection implements ContactListener {
 		}
 		
 		// If two humans collide, fix this. TODO: Make smarter!
+		
+		// TODO, NOTE: Collision may cause body to get behind a wall, this will cause the 
+		// body to get stuck trying to go to the next keypoint at the other side of the wall
 		if (i1.getType() == Constants.MoveableBodyType.HUMAN && i2.getType() == Constants.MoveableBodyType.HUMAN) {
-			((Human) i1.getObj()).getBody().setLinearVelocity(-2.71f, 2.3f); // NW
-			((Human) i2.getObj()).getBody().setLinearVelocity(1.71f, -2f); // SE
+			
+			// Solve by some random movement, not good, make better!
+			((Human) i1.getObj()).getBody().setLinearVelocity(3 * new Random().nextFloat() + 1, 3 * new Random().nextFloat());
+			((Human) i2.getObj()).getBody().setLinearVelocity(3 * new Random().nextFloat(), 3 * new Random().nextFloat() - 1);
 		}
 		
 		
