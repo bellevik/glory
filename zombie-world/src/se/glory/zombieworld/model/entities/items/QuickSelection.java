@@ -14,44 +14,66 @@ public class QuickSelection {
 	private float selectionY;
 	private ItemContainer[] itemContainers;
 	private CurrentSelection currentSelection;
+	private double distance = 0;
 	
 	public QuickSelection(Stage stage) {
 		selectionX = (Constants.VIEWPORT_WIDTH - 15 - 196);
 		selectionY = (Constants.VIEWPORT_HEIGHT - 15 - 64);
 		
-		selectionStick = new Joystick(stage, selectionX, selectionY, 64, 64, Constants.TouchpadType.ITEM_SELECTION);
-		
 		itemContainers = new ItemContainer[5];
-		itemContainers[4] = new ItemContainer(stage, selectionX - 32 - 64, selectionY);
-		itemContainers[3] = new ItemContainer(stage, selectionX - 8 - 64, selectionY - 8 - 64);
-		itemContainers[2] = new ItemContainer(stage, selectionX, selectionY - 16 - 64);
-		itemContainers[1] = new ItemContainer(stage, selectionX + 8 + 64, selectionY - 8 - 64);
-		itemContainers[0] = new ItemContainer(stage, selectionX + 32 + 64, selectionY);
+		for(int i = 0; i < itemContainers.length; i++) {
+			Double radians = Math.toRadians(360 - i * 45);
+			//itemContainers[i] = new ItemContainer(stage, (float)(selectionX + Math.cos(radians) * 96), (float)(selectionY + Math.sin(radians) * 96));
+			itemContainers[i] = new ItemContainer(stage, (float)(selectionX + Math.cos(radians)), (float)(selectionY + Math.sin(radians)));
+		}
 		
+		selectionStick = new Joystick(stage, selectionX, selectionY, 64, 64, Constants.TouchpadType.ITEM_SELECTION);
+
 		currentSelection = new CurrentSelection(stage, selectionStick.getTouchpad().getX(), selectionStick.getTouchpad().getY());
 	}
 	
 	public void updatePosition() {
 		selectionY = (Constants.VIEWPORT_HEIGHT - 15 - 64);
 		
-		selectionStick.getTouchpad().setY(selectionY);
-		
-		itemContainers[4].getActor().setY(selectionY);
-		itemContainers[3].getActor().setY(selectionY - 8 - 64);
-		itemContainers[2].getActor().setY(selectionY - 16 - 64);
-		itemContainers[1].getActor().setY(selectionY - 8 - 64);
-		itemContainers[0].getActor().setY(selectionY);
+		//selectionStick.getTouchpad().setY(selectionY);
 	}
 	
 	public void selectItem() {
+		double vertical = Math.pow((selectionStick.getTouchpad().getX() - itemContainers[0].getActorX()), 2);
+		double horizontal = Math.pow((selectionStick.getTouchpad().getY() - itemContainers[0].getActorY()), 2);
+		
 		if(selectionStick.getTouchpad().isTouched()) {
 			if(!itemContainers[0].isActorVisible()) {
 				for(int i = 0; i < itemContainers.length; i++) {
 					itemContainers[i].show();
 				}
 			}
+			
+			if(Math.abs(Math.sqrt(vertical + horizontal)) < 95) {
+				distance += 16;
+			}
+
+			for(int i = 0; i < itemContainers.length; i++) {
+				Double radians = Math.toRadians(360 - i * 45);
+				itemContainers[i].setActorX((float)(selectionX + Math.cos(radians) * distance));
+				itemContainers[i].setActorY((float)(selectionY + Math.sin(radians) * distance));
+			}
+			
 		} else {
-			if(itemContainers[0].isActorVisible()) {
+			
+			if(Math.abs(Math.sqrt(vertical + horizontal)) > 16) {
+				distance -= 16;
+			} else {
+				distance = 0;
+			}
+			
+			for(int i = 0; i < itemContainers.length; i++) {
+				Double radians = Math.toRadians(360 - i * 45);
+				itemContainers[i].setActorX((float)(selectionX + Math.cos(radians) * distance));
+				itemContainers[i].setActorY((float)(selectionY + Math.sin(radians) * distance));
+			}
+			
+			if(itemContainers[0].isActorVisible() && distance < 16) {
 				for(int i = 0; i < itemContainers.length; i++) {
 					itemContainers[i].hide();
 				}

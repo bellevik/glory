@@ -37,6 +37,14 @@ public class ItemContainer {
 		return actor.getY();
 	}
 	
+	public void setActorX(float x) {
+		actor.setX(x);
+	}
+	
+	public void setActorY(float y) {
+		actor.setY(y);
+	}
+	
 	public void show() {
 		actor.setVisible(true);
 	}
