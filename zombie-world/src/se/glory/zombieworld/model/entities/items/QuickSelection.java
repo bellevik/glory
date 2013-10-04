@@ -3,8 +3,11 @@ package se.glory.zombieworld.model.entities.items;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Joystick;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class QuickSelection {
 
@@ -24,6 +27,24 @@ public class QuickSelection {
 			Double radians = Math.toRadians(360 - i * 45);
 			itemContainers[i] = new ItemContainer(stage, (float)(selectionX + Math.cos(radians)), (float)(selectionY + Math.sin(radians)));
 		}
+		
+		// Till Ekman: har ser du hur man lagger in nya bilder
+		Texture testTexture = new Texture(Gdx.files.internal("img/player.png"));
+		Texture testTexture2 = new Texture(Gdx.files.internal("img/zombie.png"));
+		Texture testTexture3 = new Texture(Gdx.files.internal("img/human.png"));
+		Image testImage = new Image(testTexture);
+		Image testImage2 = new Image(testTexture2);
+		Image testImage3 = new Image(testTexture3);
+		
+		// Lagger till en helt ny bild bara
+		itemContainers[0].newItem(testImage);
+		// Samma har
+		itemContainers[1].newItem(testImage2);
+		// Lagger bild2 pa plats 2 istallet
+		itemContainers[2].newItem(testImage2);
+		// Tar bort den forsta bilden
+		itemContainers[0].removeItem();
+		// Kor du appen nu ser du att det bara ar tredje som har en bild
 		
 		selectionStick = new Joystick(stage, selectionX, selectionY, 64, 64, Constants.TouchpadType.ITEM_SELECTION);
 
