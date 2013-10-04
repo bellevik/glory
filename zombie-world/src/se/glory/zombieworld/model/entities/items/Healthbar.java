@@ -13,7 +13,7 @@ public class Healthbar extends Actor{
 	private Texture texture;
 	private Image actor;
 	
-	private int lastHealthPercent;
+	private int lastHealthPercent, healthGoal;
 	private int maxHealthPercent = 100;
 	
 	//Positioning for the healthbar
@@ -80,6 +80,10 @@ public class Healthbar extends Actor{
 	
 	public int getLastKnownHealthPercent() {
 		return lastHealthPercent;
+	}
+	
+	public int getHealthPercentGoal() {
+		return healthGoal;
 	}
 	
 	public int getMaxHealthPercent() {
