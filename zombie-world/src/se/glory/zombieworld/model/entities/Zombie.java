@@ -33,7 +33,13 @@ public class Zombie extends MoveableBody implements Creature {
 			tmpX /= size * 1.2;
 			tmpY /= size * 1.2;
 			
+			float angle = (float) Math.atan(tmpY/tmpX);
+			
+			if (tmpX < 0)
+				angle = angle - (float)Math.PI;
+			
 			getBody().setLinearVelocity(tmpX, tmpY);
+			getBody().setTransform(getBody().getPosition(), angle);
 		} else {
 			setState(State.IDLE);
 		}
