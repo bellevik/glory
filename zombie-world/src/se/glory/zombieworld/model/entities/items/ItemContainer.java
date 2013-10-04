@@ -5,7 +5,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
-
+/*
+ * Class that will contain an item available for QuickSelection
+ */
 public class ItemContainer {
 	
 	private Texture texture;

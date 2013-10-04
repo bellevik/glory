@@ -5,6 +5,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
+/*
+ * Class used to show the current highlighted selection in QuickSelect
+ */
 public class CurrentSelection {
 
 	private Texture texture;

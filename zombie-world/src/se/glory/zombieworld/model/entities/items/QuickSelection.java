@@ -3,7 +3,6 @@ package se.glory.zombieworld.model.entities.items;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Joystick;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
@@ -23,7 +22,6 @@ public class QuickSelection {
 		itemContainers = new ItemContainer[5];
 		for(int i = 0; i < itemContainers.length; i++) {
 			Double radians = Math.toRadians(360 - i * 45);
-			//itemContainers[i] = new ItemContainer(stage, (float)(selectionX + Math.cos(radians) * 96), (float)(selectionY + Math.sin(radians) * 96));
 			itemContainers[i] = new ItemContainer(stage, (float)(selectionX + Math.cos(radians)), (float)(selectionY + Math.sin(radians)));
 		}
 		
@@ -37,21 +35,25 @@ public class QuickSelection {
 		selectionStick.getTouchpad().setY(selectionY);
 	}
 	
+	// Method gets called every render from GameScreen
+	// This is used to show the current available items and also select them
 	public void selectItem() {
 		double vertical = Math.pow((selectionStick.getTouchpad().getX() - itemContainers[0].getActorX()), 2);
 		double horizontal = Math.pow((selectionStick.getTouchpad().getY() - itemContainers[0].getActorY()), 2);
 		
+		// Shows and quickly moves the ItemContainers to the correct position
 		if(selectionStick.getTouchpad().isTouched()) {
+			// Only shows the ItemContainers that are hidden
 			if(!itemContainers[0].isActorVisible()) {
 				for(int i = 0; i < itemContainers.length; i++) {
 					itemContainers[i].show();
 				}
 			}
 			
+			// Increases the distance between the selection-stick and the ItemContainers
 			if(Math.abs(Math.sqrt(vertical + horizontal)) < 95) {
 				distance += 16;
 			}
-
 			for(int i = 0; i < itemContainers.length; i++) {
 				Double radians = Math.toRadians(360 - i * 45);
 				itemContainers[i].setActorX((float)(selectionX + Math.cos(radians) * distance));
@@ -71,7 +73,7 @@ public class QuickSelection {
 				itemContainers[i].setActorX((float)(selectionX + Math.cos(radians) * distance));
 				itemContainers[i].setActorY((float)(selectionY + Math.sin(radians) * distance));
 			}
-			
+			// Only hides the ItemContainers that are visible
 			if(itemContainers[0].isActorVisible() && distance < 16) {
 				for(int i = 0; i < itemContainers.length; i++) {
 					itemContainers[i].hide();
@@ -79,6 +81,7 @@ public class QuickSelection {
 			}
 		}
 		
+		// Used to determine the fingers position relative to the selection-stick
 		if(selectionStick.getTouchpad().getKnobPercentX() != 0 || selectionStick.getTouchpad().getKnobPercentY() != 0) {
 			float knobX = selectionStick.getTouchpad().getKnobPercentX();
 			float knobY = selectionStick.getTouchpad().getKnobPercentY();
