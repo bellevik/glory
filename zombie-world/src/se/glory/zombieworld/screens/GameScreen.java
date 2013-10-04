@@ -1,134 +1,202 @@
 package se.glory.zombieworld.screens;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
-import se.glory.entities.Creature;
-import se.glory.entities.Human;
-import se.glory.entities.Player;
-import se.glory.entities.Zombie;
-import se.glory.utilities.Constants;
-import se.glory.utilities.Identity;
-import se.glory.utilities.Joystick;
+import se.glory.zombieworld.model.WorldModel;
+import se.glory.zombieworld.model.entities.items.Healthbar;
+import se.glory.zombieworld.model.entities.items.QuickSelection;
+import se.glory.zombieworld.model.entities.obstacles.CustomObstacle;
+import se.glory.zombieworld.utilities.Constants;
+import se.glory.zombieworld.utilities.Joystick;
+import se.glory.zombieworld.utilities.TextureHandler;
+import se.glory.zombieworld.view.GameView;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Array;
 
 public class GameScreen implements Screen {
+	private QuickSelection quickSelection;
 	
-	private OrthographicCamera camera;
-	private World world;
-	private Player player;
-	private SpriteBatch batch;
-	private Texture bkg;
-	private Joystick moveStick;
-	private Joystick fireStick;
-	
-	private Array<Body> drawableBodies = new Array<Body>();
-	
-	private ArrayList<Zombie> zombies = new ArrayList<Zombie>();
-	private ArrayList<Creature> humans = new ArrayList<Creature>();
+	private Healthbar healthBar;
 	
 	private Stage stage;
 	
+	// moveStick controls player movement, fireStick controls item use
+	private Joystick moveStick, fireStick;
+	
+	private WorldModel worldModel;
+	private GameView gameView;
 	
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		gameView.render();
 		
-		camera.position.set(player.getPlayerBody().getPosition().x * Constants.BOX_TO_WORLD, player.getPlayerBody().getPosition().y * Constants.BOX_TO_WORLD, 0);
-		camera.update();
+		// Update player movement
+		WorldModel.player.getBody().setLinearVelocity(moveStick.getTouchpad().getKnobPercentX() * 2, moveStick.getTouchpad().getKnobPercentY() * 2);
 		
-		batch.setProjectionMatrix(camera.combined);
-		batch.begin();
-		batch.draw(bkg, 0, 0);
-		batch.end();
+		//The four floats below will represent the percentage in X and Y direction of the Joysticks
+		float moveKnobX = moveStick.getTouchpad().getKnobPercentX();
+		float moveKnobY = moveStick.getTouchpad().getKnobPercentY();
+		float fireKnobX = fireStick.getTouchpad().getKnobPercentX();
+		float fireKnobY = fireStick.getTouchpad().getKnobPercentY();
+		//This method will rotate the player
+		WorldModel.player.applyRotationToPlayer(moveKnobX, moveKnobY, fireKnobX, fireKnobY);
 		
-		drawEntites();
+		quickSelection.selectItem();
 		
-		for (Zombie z: zombies) {
-			z.autoUpdateMovement(humans, player);
-		}
-		
-		for (Creature h: humans) {
-			((Human) h).autoUpdateMovement(zombies);
-		}
-		
-		player.getPlayerBody().setLinearVelocity(moveStick.getTouchpad().getKnobPercentX() * 2, moveStick.getTouchpad().getKnobPercentY() * 2);
+		// Animator.drawAnimation(batch, player.getBody().getPosition().x, player.getBody().getPosition().y);
+		// player.getAnimation().drawAnimation(batch, player.getBody().getPosition().x, player.getBody().getPosition().y);
 		
 		stage.act(delta);
 		stage.draw();
 		
-		world.step(1/60f, 6, 2);
+		WorldModel.world.step(1/60f, 6, 2);
+		worldModel.update();
+		
+	//	healthBar.updateHealth(70);
+		testHealthBar();
 	}
 	
-	/*
-	 * This method will get all the Box2d bodies from the world and iterate
-	 * through all of them. The method will grab the texture form every one
-	 * and draw them to the screen.
-	 * We figured this is easier than letting all of the Classes have
-	 * its own draw method.
-	 */
-	public void drawEntites() {
-		world.getBodies(drawableBodies);
-		
-		for (Body body : drawableBodies) {
-			//The != null test is for test purposes at the moment.
-			if (((Identity)(body.getUserData())).getTexture() != null) {
-				float width = ((Identity)(body.getUserData())).getWidth();
-				float height = ((Identity)(body.getUserData())).getHeight();
-				batch.begin();
-				batch.draw(((Identity)(body.getUserData())).getTexture(), body.getPosition().x * Constants.BOX_TO_WORLD - width , body.getPosition().y * Constants.BOX_TO_WORLD - height);
-				batch.end();
-			}
+	
+	private int healthVar = 0;
+	private int negVar = 1;
+	private void testHealthBar() {
+		healthVar += negVar;
+		healthBar.updateHealth(healthVar);
+		if(healthVar == 100 || healthVar == 0) {
+			negVar *= -1;
 		}
-		drawableBodies.clear();
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		camera.viewportWidth = width;
-        camera.viewportHeight = height;
+		double scale = Constants.VIEWPORT_WIDTH / (double) width;
+		Constants.VIEWPORT_HEIGHT = (int) (height * scale);
+		
+		gameView.getCamera().viewportWidth = Constants.VIEWPORT_WIDTH;
+		gameView.getCamera().viewportHeight = Constants.VIEWPORT_HEIGHT;
+		
+	    stage.setViewport(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT, false);
+	    quickSelection.updatePosition();
+	    healthBar.updatePosition();
+	}
+	
+	private void adjustViewportScale() {
+		double scale = Constants.VIEWPORT_WIDTH / (double) Gdx.graphics.getWidth();
+		Constants.VIEWPORT_HEIGHT = (int) (Gdx.graphics.getHeight() * scale);
 	}
 
 	@Override
 	public void show() {
-		camera = new OrthographicCamera();
-		world = new World(new Vector2(0, 0), true);
+		adjustViewportScale();
+		
+		worldModel = new WorldModel();
+		worldModel.createWorld();
+		
+		// This line will import all the images that will be used multiple times
+		TextureHandler.createTextures();
+		
+		SpriteBatch batch = new SpriteBatch();
+		
+		gameView = new GameView(batch);
+		worldModel.setupAIModel(gameView.getMapLayer(1));
+		
 		stage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true, batch);
-		player = new Player (world, 300, 400, 32, 32);
-		batch = new SpriteBatch();
-		bkg = new Texture(Gdx.files.internal("img/bkg.png"));
 		
-		moveStick = new Joystick(stage, 15, 15);
-		fireStick = new Joystick(stage, Gdx.graphics.getWidth() - 15 - 128, 15);
+		moveStick = new Joystick(stage, 15, 15, 128, 128, Constants.TouchpadType.MOVEMENT);
+		fireStick = new Joystick(stage, Constants.VIEWPORT_WIDTH - 15 - 128, 15, 128, 128, Constants.TouchpadType.FIRE);
 		
-		for (int i = 1; i < 6; i++) {
-			for (int j = 1; j < 4; j++) {
-				zombies.add(new Zombie(world, i*200, j*200));
-				System.out.println(i*200 + ":" + j*200);
-			}
-		}
+		quickSelection = new QuickSelection(stage);
 		
-		for (int i = 1; i < 6; i+=2) {
-			for (int j = 1; j < 6; j+=2) {
-				humans.add(new Human(world, i*150, j*150));
-			}
-		}
+		healthBar = new Healthbar(stage);
 		
 		Gdx.input.setInputProcessor(stage);
+		
+		// ## Add humans
+		worldModel.getAIModel().addHuman(16+10*32, 16+3*32);
+		worldModel.getAIModel().addHuman(16+15*32, 16+15*32);
+		worldModel.getAIModel().addHuman(16+16*32, 16+20*32);
+		worldModel.getAIModel().addHuman(16+8*32, 16+20*32);
+		worldModel.getAIModel().addHuman(16+30*32, 16+15*32);
+		worldModel.getAIModel().addHuman(16+30*32, 16+23*32);
+		
+		// ## Add zombies
+		// worldModel.getAIModel().addZombie(272, 272);
+		
+		createStaticWalls();
 	}
 
+	private void createStaticWalls() {
+		TiledMapTileLayer collideLayer = gameView.getMapLayer(1);
+		boolean[][] lonelyWalls = new boolean[collideLayer.getWidth()][collideLayer.getHeight()];
+		
+		for (int x = 0; x < collideLayer.getWidth(); x++) {
+			int start = -1;
+			int end = -1;
+			
+			for (int y = 0; y < collideLayer.getHeight(); y++) {
+				Cell c = collideLayer.getCell(x, y);
+				
+				if (c != null) {
+					// Is blocked
+					
+					if (start == -1)
+						start = y;
+					end = y;
+				}
+				
+				if (c == null || y == collideLayer.getHeight() - 1) {
+					if (start != -1) {
+						if (start != end) {
+							new CustomObstacle(x * 32, start * 32, 32, (end - start + 1) * 32);
+						} else {
+							if (y == collideLayer.getHeight() - 1)
+								lonelyWalls[x][y] = true;
+							else
+								// TODO: Why do we need this fix?
+								lonelyWalls[x][y-1] = true;
+						}
+					}
+					
+					start = -1;
+					end = -1;
+				}
+			}
+		}
+		
+		createStaticWallsHorizontal(lonelyWalls);
+	}
+	
+	private void createStaticWallsHorizontal(boolean[][] lonelyWalls) {
+		for (int y = 0; y < lonelyWalls[0].length; y++) {
+			int start = -1;
+			int end = -1;
+			
+			for (int x = 0; x < lonelyWalls.length; x++) {
+				boolean c = lonelyWalls[x][y];
+				
+				if (c == true) {
+					// Is blocked
+					
+					if (start == -1)
+						start = x;
+					end = x;
+				}
+				
+				if (c == false || x == lonelyWalls.length - 1) {
+					if (start != -1) {
+						new CustomObstacle(start * 32, y * 32, (end - start + 1) * 32, 32);
+					}
+					
+					start = -1;
+					end = -1;
+				}
+			}
+		}
+	}
+	
 	@Override
 	public void hide() {
 		
@@ -146,7 +214,8 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void dispose() {
-		
+		WorldModel.world.dispose();
+		gameView.dispose();
+		stage.dispose();
 	}
-
 }
