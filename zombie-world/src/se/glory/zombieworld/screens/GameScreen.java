@@ -54,6 +54,8 @@ public class GameScreen implements Screen {
 		
 		WorldModel.world.step(1/60f, 6, 2);
 		worldModel.update();
+		
+	//	healthBar.updateHealth(70);
 	}
 
 	@Override
@@ -66,6 +68,7 @@ public class GameScreen implements Screen {
 		
 	    stage.setViewport(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT, false);
 	    quickSelection.updatePosition();
+	    healthBar.updatePosition();
 	}
 	
 	private void adjustViewportScale() {

@@ -1,5 +1,7 @@
 package se.glory.zombieworld.model.entities.items;
 
+import se.glory.zombieworld.utilities.Constants;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -23,31 +25,48 @@ public class Healthbar extends Actor{
 	private int fillLength = 3;
 	
 	private HealthFill[] healthBarAmount;
+	private Image[] healthBarActors;
+	
+	private Image bgActor, fgActor;
 	
 	
 	public Healthbar(Stage stage){
+		x = (Constants.VIEWPORT_WIDTH - 15 - 780);
+		y = (Constants.VIEWPORT_HEIGHT - 32 - 15);
 		lastHealthPercent = maxHealthPercent;
 		healthBarAmount = new HealthFill[maxHealthPercent];
 		
 		texture = new Texture(Gdx.files.internal("img/health/healthBarBottom.png"));
-		actor = new Image(texture);
+		bgActor = new Image(texture);
 		
-		stage.addActor(actor);
-		actor.setPosition(x, y);
+		stage.addActor(bgActor);
+		bgActor.setPosition(x, y);
 		
 		//Creating all the HealthFills and places them in the array
 		for(int i=0; i<maxHealthPercent; i++) {
 			int newX = i*fillLength+x+xMargin;
-			healthBarAmount[i] = new HealthFill(stage, newX, y+yMargin);
+			healthBarAmount[i] = new HealthFill(stage, newX, y+yMargin, i);
 		}
 		
 		texture = new Texture(Gdx.files.internal("img/health/healthBarTop.png"));
-		actor = new Image(texture);
+		fgActor = new Image(texture);
 		
-		stage.addActor(actor);
-		actor.setPosition(x, y);
+		stage.addActor(fgActor);
+		fgActor.setPosition(x, y);
 		
 		resetHealthBar();
+		
+	}
+	
+	public void updatePosition() {
+		y = (Constants.VIEWPORT_HEIGHT - 15 - 32);
+		x = (Constants.VIEWPORT_WIDTH - 15 - 780);
+		bgActor.setPosition(x, y);
+		for(int i=0; i<maxHealthPercent; i++) {
+			healthBarAmount[i].updatePosition();
+		}
+		fgActor.setPosition(x, y);
+		
 		
 	}
 	
@@ -88,13 +107,23 @@ public class Healthbar extends Actor{
 	private class HealthFill {
 		private Texture texture;
 		private Image actor;
+		private float x, y;
+		private int index;
 		
-		public HealthFill(Stage stage, float x, float y) {
+		public HealthFill(Stage stage, float x, float y, int index) {
 			texture = new Texture(Gdx.files.internal("img/health/healthBar.png"));
-			
+			this.x = x;
+			this.y = y;
+			this.index = index;
 			actor = new Image(texture);
 			
 			stage.addActor(actor);
+			actor.setPosition(x, y);
+		}
+		
+		private void updatePosition() {
+			y = (Constants.VIEWPORT_HEIGHT - 15 - 32 + yMargin);
+			x = (Constants.VIEWPORT_WIDTH - 15 - 780 + index*fillLength+xMargin);
 			actor.setPosition(x, y);
 		}
 		
