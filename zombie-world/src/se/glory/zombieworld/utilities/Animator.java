@@ -27,7 +27,7 @@ public class Animator {
 	float x, y, width, height;
 	
 	//Creates and returns an animation
-	public static Animation createAnimation(String fileName, float x, float y, int direction){
+	public static Animation createAnimation(String fileName, int direction){
 		//Loading the spritesheet
 		spriteSheet = new Texture(Gdx.files.internal("img/" + fileName));
 		//Dividing the spritesheet into regions with an image in each frame
@@ -133,5 +133,9 @@ public class Animator {
         batch.begin();
         batch.draw(currentFrame, x*Constants.BOX_TO_WORLD - currentFrame.getRegionWidth() / 2, y*Constants.BOX_TO_WORLD - currentFrame.getRegionHeight() / 2);
         batch.end();
+	}
+	
+	public static Animation getAnimation(){
+		return animation;
 	}
 }

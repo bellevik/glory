@@ -83,7 +83,7 @@ public class Player implements Creature {
 		attachWeapon();
 		
 		//this.animation = new Animator("dudesheet.png", this.x, this.y, 0);
-		this.animation = Animator.createAnimation("spriteSheetMain.png", this.x, this.y, 7);
+		//this.animation = Animator.createAnimation("spriteSheetMain.png", this.x, this.y, 7);
 
 		maxHealth = health = 100;
 	}
