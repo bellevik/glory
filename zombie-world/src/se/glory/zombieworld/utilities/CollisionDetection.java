@@ -1,11 +1,11 @@
 package se.glory.zombieworld.utilities;
 
-import java.util.Random;
-
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.Human;
+import se.glory.zombieworld.model.entities.Zombie;
 import se.glory.zombieworld.model.entities.items.Item;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
@@ -29,16 +29,41 @@ public class CollisionDetection implements ContactListener {
 			return;
 		}
 		
-		// If two humans collide, fix this. TODO: Make smarter!
-		
-		// TODO, NOTE: Collision may cause body to get behind a wall, this will cause the 
-		// body to get stuck trying to go to the next keypoint at the other side of the wall
+		// If two humans collide, fix this. TODO: Refactor, use same code for zombies.
 		if (i1.getType() == Constants.MoveableBodyType.HUMAN && i2.getType() == Constants.MoveableBodyType.HUMAN) {
+			// Make the first human turn to his right for 15 updates
+			Human h1 = (Human) i1.getObj();
+			Vector2 h1v = h1.getBody().getLinearVelocity().cpy().rotate(90);	
 			
-			// Solve by some random movement, not good, make better!
-			((Human) i1.getObj()).getBody().setLinearVelocity(3 * new Random().nextFloat() + 1, 3 * new Random().nextFloat());
-			((Human) i2.getObj()).getBody().setLinearVelocity(3 * new Random().nextFloat(), 3 * new Random().nextFloat() - 1);
+			h1.setState(Human.State.COLLIDING);
+			h1.setCollidingInfo(h1v, 15);
+			
+			// Make the second human turn to his right for 15 updates
+			Human h2 = (Human) i2.getObj();
+			Vector2 h2v = h2.getBody().getLinearVelocity().cpy().rotate(90);
+			
+			h2.setState(Human.State.COLLIDING);
+			h2.setCollidingInfo(h2v, 15);
 		}
+		
+		// If two zombies collide, fix this. TODO: Refactor, use same code as for humans.
+		if (i1.getType() == Constants.MoveableBodyType.ZOMBIE && i2.getType() == Constants.MoveableBodyType.ZOMBIE) {
+			// Make the first human turn to his right for 15 updates
+			Zombie z1 = (Zombie) i1.getObj();
+			Vector2 z1v = z1.getBody().getLinearVelocity().cpy().rotate(90);	
+			
+			z1.setState(Zombie.State.COLLIDING);
+			z1.setCollidingInfo(z1v, 15);
+			
+			// Make the second human turn to his right for 15 updates
+			Zombie z2 = (Zombie) i2.getObj();
+			Vector2 z2v = z2.getBody().getLinearVelocity().cpy().rotate(90);
+			
+			z2.setState(Zombie.State.COLLIDING);
+			z2.setCollidingInfo(z2v, 15);
+		}
+		
+		
 		
 		
 		
