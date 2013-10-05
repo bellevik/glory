@@ -152,7 +152,12 @@ public class Player implements Creature {
 		return false;
 	}
 	
-	
+	/*
+	 * This method will fire a shot everytime the boolean readyToFire is set to true. Right after
+	 * the player fired a bullet the boolean will be set to false for a specific amount of time.
+	 * This time will be different depending on what weapon is equipped. The reloadTime is the
+	 * short amount of time when the player is unable to fire a shot. 
+	 */
 	public void shoot() {
 		if (readyTofire) {
 			fireBullet();
