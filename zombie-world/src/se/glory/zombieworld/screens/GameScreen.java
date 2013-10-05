@@ -29,6 +29,9 @@ public class GameScreen implements Screen {
 	private WorldModel worldModel;
 	private GameView gameView;
 	
+	/*
+	 * This method will be called all the time throughout the game. Libgdx method!
+	 */
 	@Override
 	public void render(float delta) {
 		gameView.render();
@@ -73,11 +76,18 @@ public class GameScreen implements Screen {
 	    quickSelection.updatePosition();
 	}
 	
+	/*
+	 * This method will set a constant for scaling the window. Really good when Android
+	 * got so many different screen siezes.
+	 */
 	private void adjustViewportScale() {
 		double scale = Constants.VIEWPORT_WIDTH / (double) Gdx.graphics.getWidth();
 		Constants.VIEWPORT_HEIGHT = (int) (Gdx.graphics.getHeight() * scale);
 	}
-
+	
+	/*
+	 * This method will be called upon screen load. Libgdx method!
+	 */
 	@Override
 	public void show() {
 		adjustViewportScale();
