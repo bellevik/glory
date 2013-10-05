@@ -49,8 +49,8 @@ public class Player implements Creature {
 	private int maxHealth;
 	
 	//These variables will handle the shooting method
-	private boolean readyTofire;
-	private float reloadTime;
+	private boolean readyToFire = true;
+	private float reloadTime = 1;
 
 	public Player (float x, float y, float width, float height) {
 		this.x = x;
@@ -159,14 +159,14 @@ public class Player implements Creature {
 	 * short amount of time when the player is unable to fire a shot. 
 	 */
 	public void shoot() {
-		if (readyTofire) {
+		if (readyToFire) {
 			fireBullet();
-			readyTofire = false;
-		} else {
+			readyToFire = false;
+			//It will take realoadTime seconds to set the boolean to true again
 			Timer.schedule(new Task(){
 			    @Override
 			    public void run() {
-			    	readyTofire = true; 
+			    	readyToFire = true;
 			    }
 			}, reloadTime);
 		}	
