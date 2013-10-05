@@ -44,6 +44,11 @@ public class GameScreen implements Screen {
 		//This method will rotate the player
 		WorldModel.player.applyRotationToPlayer(moveKnobX, moveKnobY, fireKnobX, fireKnobY);
 		
+		//If someone is touching the right joystick then we need the player to be ready to shoot
+		if (fireKnobX != 0 && fireKnobY != 0) {
+			WorldModel.player.shoot();
+		}
+		
 		quickSelection.selectItem();
 		
 		// Animator.drawAnimation(batch, player.getBody().getPosition().x, player.getBody().getPosition().y);
