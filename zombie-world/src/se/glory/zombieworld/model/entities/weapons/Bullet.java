@@ -26,6 +26,10 @@ public class Bullet {
 	private float range;
 	private Texture[] textures;
 	
+	// TODO The lifetime of the bullet will need to get info from the range in weapons arsenal
+	//This variable will set the lifetime for the bullet in seconds.
+	float bulletLifetime = 1;
+	
 	public Bullet (float x, float y, float xAngle, float yAngle) {
 		BodyDef bulletDef = new BodyDef();
 		bulletDef.type = BodyType.DynamicBody;
@@ -54,16 +58,16 @@ public class Bullet {
 		bulletBody.setUserData(i);
 		
 		bulletBody.setLinearVelocity(2 * xAngle, 2 * yAngle);
-		
-		float delay = 1; // seconds
 
 		Timer.schedule(new Task(){
 		    @Override
 		    public void run() {
-		    	Identity tmp = (Identity) bulletBody.getUserData();
-		    	tmp.setDead(true);
+		    	if (this != null && bulletBody.getUserData() != null) {
+		    		Identity tmp = (Identity) bulletBody.getUserData();
+			    	tmp.setDead(true);
+		    	}
 		    }
-		}, delay);
+		}, bulletLifetime);
 	}
 
 	public Bullet(String name, float damage, float range, World world) {
