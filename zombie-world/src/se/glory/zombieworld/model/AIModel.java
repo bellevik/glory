@@ -72,6 +72,12 @@ public class AIModel {
 				totX /= size;
 				totY /= size;
 				
+				float angle = (float) Math.atan(totY/totX);
+				
+				if (totX < 0)
+					angle = angle - (float)Math.PI;
+				
+				h.getBody().setTransform(h.getBody().getPosition(), angle);		
 				h.getBody().setLinearVelocity(totX, totY);
 				h.setState(Human.State.FLEEING);
 			} else {
@@ -112,6 +118,12 @@ public class AIModel {
 				tmpX /= size * 1.2;
 				tmpY /= size * 1.2;
 				
+				float angle = (float) Math.atan(tmpY/tmpX);
+				
+				if (tmpX < 0)
+					angle = angle - (float)Math.PI;
+				
+				z.getBody().setTransform(z.getBody().getPosition(), angle);	
 				z.getBody().setLinearVelocity(tmpX, tmpY);
 				z.setState(Zombie.State.CHASING);
 			} else {
