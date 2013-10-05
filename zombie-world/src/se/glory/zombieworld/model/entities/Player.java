@@ -48,6 +48,7 @@ public class Player implements Creature {
 	private int health;
 	private int maxHealth;
 	
+	// TODO Set the variable depending on the weapons arsenal class. What weapon is equipped
 	//These variables will handle the shooting method
 	private boolean readyToFire = true;
 	private float reloadTime = 1;
