@@ -20,6 +20,8 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 
 /*
  * This class will represent the moveable Player in the world.
@@ -45,6 +47,10 @@ public class Player implements Creature {
 	private Animation animation;
 	private int health;
 	private int maxHealth;
+	
+	//These variables will handle the shooting method
+	private boolean readyTofire;
+	private float reloadTime;
 
 	public Player (float x, float y, float width, float height) {
 		this.x = x;
@@ -146,15 +152,31 @@ public class Player implements Creature {
 		return false;
 	}
 	
+	
+	public void shoot() {
+		if (readyTofire) {
+			fireBullet();
+			readyTofire = false;
+		} else {
+			Timer.schedule(new Task(){
+			    @Override
+			    public void run() {
+			    	readyTofire = true; 
+			    }
+			}, reloadTime);
+		}	
+	}
+	
 	/*
 	 * First we calculate the angle. Then we create a bullet with a constant velocity
 	 * to be fired at the angle we calculated
 	 */
-	public void shoot() {
+	public void fireBullet() {
 		float rot = (float) (weaponBody.getTransform().getRotation());
         float xAngle = MathUtils.cos(rot);
         float yAngle = MathUtils.sin(rot);
 		
+        //14 here is to create the bullet a fix distance from the weapon
 		new Bullet(weaponBody.getPosition().x + 14 * xAngle * Constants.WORLD_TO_BOX, weaponBody.getPosition().y + 14 * yAngle * Constants.WORLD_TO_BOX, xAngle, yAngle);
 	}
 	
