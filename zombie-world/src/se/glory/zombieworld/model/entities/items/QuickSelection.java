@@ -1,5 +1,6 @@
 package se.glory.zombieworld.model.entities.items;
 
+import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Joystick;
 
@@ -17,6 +18,7 @@ public class QuickSelection {
 	private ItemContainer[] itemContainers;
 	private CurrentSelection currentSelection;
 	private double distance = 0;
+	private int selection;
 	
 	public QuickSelection(Stage stage) {
 		selectionX = (Constants.VIEWPORT_WIDTH - 15 - 196);
@@ -106,7 +108,7 @@ public class QuickSelection {
 			float knobY = selectionStick.getTouchpad().getKnobPercentY();
 			
 			float knobDegree;
-			int selection = 5;
+			selection = 5;
 			
 			if (knobY >= 0) {
 				knobDegree = -(int) (Math.acos(knobX) * MathUtils.radiansToDegrees);
@@ -120,6 +122,9 @@ public class QuickSelection {
 			
 			if (knobDegree >= 0 && knobDegree < 180) {
 				selection = (int) (knobDegree / 36);
+				
+				//Changes the equiped item of the player according to the position in the quickselection menu
+				WorldModel.player.changeEquippedItem(selection);
 				
 				currentSelection.setActorPosition(itemContainers[selection].getActorX(), itemContainers[selection].getActorY());
 				
