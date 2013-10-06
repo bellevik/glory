@@ -146,11 +146,20 @@ public class Player implements Creature {
 	 * inventory will be set to 5 slots
 	 */
 	public boolean addItemToQuickSwap(Item item) {
+		updateQuickSelectionImages();
 		if(quickSwapList.size < 5) {
 			quickSwapList.add(item);
 			return true;
 		}
 		return false;
+	}
+	
+	public void updateQuickSelectionImages () {
+		
+	}
+	
+	public void changeEquippedItem (int pos) {
+		System.out.println(pos);
 	}
 	
 	/*
