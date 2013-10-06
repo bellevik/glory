@@ -121,24 +121,35 @@ public class GameView {
 						
 						angle = T * MathUtils.radiansToDegrees;
 						
+						/*
+						 * Get the objects name by splitting a string and create the 
+						 * approperiate animation for that object.
+						 */
+						String name = identity.getObj().getClass().getName();
+						String[] parts = new String[6];
+						parts = name.split("\\.");
+						name = parts[5];
+						
+						//System.out.println(identity.getType());
+						
 						Animation ani = null;
 						
 						if(angle > -22  && angle <= 22){
-							ani = animator.getAnimation(2);
+							ani = animator.getAnimation(name, 2);
 						}else if(angle > 22 && angle <= 67){
-							ani = animator.getAnimation(3);
+							ani = animator.getAnimation(name, 3);
 						}else if(angle > 67 && angle <= 112){
-							ani = animator.getAnimation(4);
+							ani = animator.getAnimation(name, 4);
 						}else if(angle > 112 && angle <= 157){
-							ani = animator.getAnimation(5);
+							ani = animator.getAnimation(name, 5);
 						}else if(angle > 157 || angle <= -157){
-							ani = animator.getAnimation(6);
+							ani = animator.getAnimation(name, 6);
 						}else if(angle > -157 && angle <= -112){
-							ani = animator.getAnimation(7);
+							ani = animator.getAnimation(name, 7);
 						}else if(angle > -112 && angle <= -67){
-							ani = animator.getAnimation(0);
+							ani = animator.getAnimation(name, 0);
 						}else if(angle > -67 && angle <= -22){
-							ani = animator.getAnimation(1);
+							ani = animator.getAnimation(name, 1);
 						} else {
 							//System.out.println("ERROR, ANGLE: " + body.getAngle());
 						}

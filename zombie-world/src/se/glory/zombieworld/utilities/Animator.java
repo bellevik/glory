@@ -23,20 +23,41 @@ public class Animator {
 	private float stateTimer;
 	
 	private Animation[] humanAnimations = new Animation[8];
+	private Animation[] playerAnimations = new Animation[8];
+	private Animation[] zombieAnimations = new Animation[8];
 	
+	/*
+	 * Creates all animations for all types of creatures. This will speed up the game
+	 * since they are not created on-the-fly.
+	 */
 	public Animator() {
-		humanAnimations[0] = createAnimation("SpriteSheetMain.png", 0);
-		humanAnimations[1] = createAnimation("SpriteSheetMain.png", 1);
-		humanAnimations[2] = createAnimation("SpriteSheetMain.png", 2);
-		humanAnimations[3] = createAnimation("SpriteSheetMain.png", 3);
-		humanAnimations[4] = createAnimation("SpriteSheetMain.png", 4);
-		humanAnimations[5] = createAnimation("SpriteSheetMain.png", 5);
-		humanAnimations[6] = createAnimation("SpriteSheetMain.png", 6);
-		humanAnimations[7] = createAnimation("SpriteSheetMain.png", 7);
+		//Creating human animation
+		for (int i = 0; i<8;i++){
+			humanAnimations[i] = createAnimation("humanSheet.png", i);
+		}
+		//Creating player animation
+		for (int i = 0; i<8;i++){
+			playerAnimations[i] = createAnimation("playerSheet.png", i);
+		}
+		//Creating zombie animation
+		for (int i = 0; i<8;i++){
+			zombieAnimations[i] = createAnimation("zombieSheet.png", i);
+		}
 	}
 	
-	public Animation getAnimation(int i) {
-		return humanAnimations[i];
+	/*
+	 * Returns different animations depending on the type and index passed along.
+	 */
+	public Animation getAnimation(String type, int i) {
+		if(type.equals("Human")){
+			return humanAnimations[i];
+		}else if(type.equals("Player")){
+			return playerAnimations[i];
+		}else if (type.equals("Zombie")){
+			return zombieAnimations[i];
+		}else{
+			return null;
+		}
 	}
 	
 	//Creates and returns an animation
