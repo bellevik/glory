@@ -123,7 +123,7 @@ public class GameScreen implements Screen {
 		worldModel.getAIModel().addHuman(16+30*32, 16+23*32);
 		
 		// ## Add zombies
-		// worldModel.getAIModel().addZombie(272, 272);
+		worldModel.getAIModel().addZombie(272, 272);
 		
 		createStaticWalls();
 	}

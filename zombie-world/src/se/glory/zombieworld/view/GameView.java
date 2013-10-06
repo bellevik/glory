@@ -105,13 +105,11 @@ public class GameView {
 					
 					//Check if the body is a creature
 					if(identity.getObj() instanceof Creature){
-						angle = (float) (body.getAngle() * (double)(180/3.14));
 
 						/*
-						* Check to see in what direction the body is facing, and create an animation if 
-						* it's different from the previous direction. 
-						*/
-						
+						 * Calculates the angle each body is facing to display the
+						 * correct animation.
+						 */
 						float T = body.getAngle();
 						
 						if (T > Math.PI)
@@ -130,42 +128,45 @@ public class GameView {
 						parts = name.split("\\.");
 						name = parts[5];
 						
-						//System.out.println(identity.getType());
-						
 						Animation ani = null;
 						
+						/*
+						* Check to see in what direction the body is facing, and gets the 
+						* approperiate animation.
+						*/
 						if(angle > -22  && angle <= 22){
+							//Facing east
 							ani = animator.getAnimation(name, 2);
 						}else if(angle > 22 && angle <= 67){
+							//Facing northeast
 							ani = animator.getAnimation(name, 3);
 						}else if(angle > 67 && angle <= 112){
+							//Facing north
 							ani = animator.getAnimation(name, 4);
 						}else if(angle > 112 && angle <= 157){
+							//Facing northwest
 							ani = animator.getAnimation(name, 5);
 						}else if(angle > 157 || angle <= -157){
+							//Facing west
 							ani = animator.getAnimation(name, 6);
 						}else if(angle > -157 && angle <= -112){
+							//Facing southwest
 							ani = animator.getAnimation(name, 7);
 						}else if(angle > -112 && angle <= -67){
+							//Facing south
 							ani = animator.getAnimation(name, 0);
 						}else if(angle > -67 && angle <= -22){
+							//Facing southeast
 							ani = animator.getAnimation(name, 1);
-						} else {
-							//System.out.println("ERROR, ANGLE: " + body.getAngle());
 						}
 						
 						if (ani != null) {
 							animator.drawAnimation(batch, body.getPosition().x, body.getPosition().y, ani);
 						}
 					}
-					
-					batch.begin();
-					//batch.draw(identity.getTexture(), body.getPosition().x * Constants.BOX_TO_WORLD - width, body.getPosition().y * Constants.BOX_TO_WORLD - height);
-					batch.end();
 				}
 			}
 		}
-		
 		WorldModel.drawableBodies.clear();
 	}
 }

@@ -18,7 +18,7 @@ public class Human extends MoveableBody implements Creature {
 	private Vector2 collidingDirection = null;
 
 	public Human(float x, float y) {
-		super(x, y, 15, 15, TextureHandler.humanTexture, Constants.MoveableBodyShape.CIRCLE , Constants.MoveableBodyType.HUMAN);
+		super(x, y, 25, 25, TextureHandler.humanTexture, Constants.MoveableBodyShape.CIRCLE , Constants.MoveableBodyType.HUMAN);
 	}
 	
 	public void setCollidingInfo(Vector2 direction, int collidingNumber) {

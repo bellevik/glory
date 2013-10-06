@@ -74,6 +74,8 @@ public class Player implements Creature {
 		identity.setWidth(width);
 		identity.setHeight(height);
 		identity.setType(Constants.MoveableBodyType.PLAYER);
+		//setObj needed for drawing the animation of the player in GameView
+		identity.setObj(this);
 
 		body.setUserData(identity);
 		
@@ -82,9 +84,6 @@ public class Player implements Creature {
 		createWeaponBody();
 		attachWeapon();
 		
-		//this.animation = new Animator("dudesheet.png", this.x, this.y, 0);
-		//this.animation = Animator.createAnimation("spriteSheetMain.png", this.x, this.y, 7);
-
 		maxHealth = health = 100;
 	}
 	

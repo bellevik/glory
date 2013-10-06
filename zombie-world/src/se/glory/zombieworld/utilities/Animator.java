@@ -60,7 +60,10 @@ public class Animator {
 		}
 	}
 	
-	//Creates and returns an animation
+	/*
+	 * Creates an animation depending on the filename and direction passed along.
+	 * Returns the created animation.
+	 */
 	private Animation createAnimation(String fileName, int direction) {
 		Animation animation = null;
 		
@@ -161,6 +164,9 @@ public class Animator {
 		}
 	}
 	
+	/*
+	 * Gets the current frame in the animation and draws to the screen.
+	 */
 	public void drawAnimation(SpriteBatch batch, float x, float y, Animation ani){
 		//stateTime = the time spent in the state represented by this animation
         stateTimer += Gdx.graphics.getDeltaTime();
