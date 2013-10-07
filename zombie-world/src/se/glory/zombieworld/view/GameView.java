@@ -4,6 +4,7 @@ import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.Creature;
 import se.glory.zombieworld.utilities.Animator;
 import se.glory.zombieworld.utilities.Constants;
+import se.glory.zombieworld.utilities.Constants.MoveableBodyType;
 import se.glory.zombieworld.utilities.Identity;
 
 import com.badlogic.gdx.Gdx;
@@ -105,13 +106,11 @@ public class GameView {
 					
 					//Check if the body is a creature
 					if(identity.getObj() instanceof Creature){
-						angle = (float) (body.getAngle() * (double)(180/3.14));
 
 						/*
-						* Check to see in what direction the body is facing, and create an animation if 
-						* it's different from the previous direction. 
-						*/
-						
+						 * Calculates the angle each body is facing to display the
+						 * correct animation.
+						 */
 						float T = body.getAngle();
 						
 						if (T > Math.PI)
@@ -121,40 +120,51 @@ public class GameView {
 						
 						angle = T * MathUtils.radiansToDegrees;
 						
+						/*
+						 * Get the objects name by splitting a string and create the 
+						 * approperiate animation for that object.
+						 */
+						MoveableBodyType name = identity.getType();
+						
 						Animation ani = null;
 						
+						/*
+						* Check to see in what direction the body is facing, and gets the 
+						* approperiate animation.
+						*/
 						if(angle > -22  && angle <= 22){
-							ani = animator.getAnimation(2);
+							//Facing east
+							ani = animator.getAnimation(name, 2);
 						}else if(angle > 22 && angle <= 67){
-							ani = animator.getAnimation(3);
+							//Facing northeast
+							ani = animator.getAnimation(name, 3);
 						}else if(angle > 67 && angle <= 112){
-							ani = animator.getAnimation(4);
+							//Facing north
+							ani = animator.getAnimation(name, 4);
 						}else if(angle > 112 && angle <= 157){
-							ani = animator.getAnimation(5);
+							//Facing northwest
+							ani = animator.getAnimation(name, 5);
 						}else if(angle > 157 || angle <= -157){
-							ani = animator.getAnimation(6);
+							//Facing west
+							ani = animator.getAnimation(name, 6);
 						}else if(angle > -157 && angle <= -112){
-							ani = animator.getAnimation(7);
+							//Facing southwest
+							ani = animator.getAnimation(name, 7);
 						}else if(angle > -112 && angle <= -67){
-							ani = animator.getAnimation(0);
+							//Facing south
+							ani = animator.getAnimation(name, 0);
 						}else if(angle > -67 && angle <= -22){
-							ani = animator.getAnimation(1);
-						} else {
-							//System.out.println("ERROR, ANGLE: " + body.getAngle());
+							//Facing southeast
+							ani = animator.getAnimation(name, 1);
 						}
 						
-						if (ani != null) {
-							animator.drawAnimation(batch, body.getPosition().x, body.getPosition().y, ani);
+						if (ani != null ) {
+							animator.drawAnimation(batch, body.getPosition().x, body.getPosition().y, ani, ((Creature)identity.getObj()).isMoving());
 						}
 					}
-					
-					batch.begin();
-					//batch.draw(identity.getTexture(), body.getPosition().x * Constants.BOX_TO_WORLD - width, body.getPosition().y * Constants.BOX_TO_WORLD - height);
-					batch.end();
 				}
 			}
 		}
-		
 		WorldModel.drawableBodies.clear();
 	}
 }

@@ -6,4 +6,5 @@ public interface Creature {
 	public Body getBody();
 	public float getTileX();
 	public float getTileY();
+	public boolean isMoving();
 }
