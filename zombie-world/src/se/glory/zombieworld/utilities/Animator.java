@@ -1,5 +1,8 @@
 package se.glory.zombieworld.utilities;
 
+import se.glory.zombieworld.model.entities.MoveableBody;
+import se.glory.zombieworld.utilities.Constants.MoveableBodyType;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -48,12 +51,12 @@ public class Animator {
 	/*
 	 * Returns different animations depending on the type and index passed along.
 	 */
-	public Animation getAnimation(String type, int i) {
-		if(type.equals("Human")){
+	public Animation getAnimation(MoveableBodyType type, int i) {
+		if(type == MoveableBodyType.HUMAN){
 			return humanAnimations[i];
-		}else if(type.equals("Player")){
+		}else if(type == MoveableBodyType.PLAYER){
 			return playerAnimations[i];
-		}else if (type.equals("Zombie")){
+		}else if (type == MoveableBodyType.ZOMBIE){
 			return zombieAnimations[i];
 		}else{
 			return null;

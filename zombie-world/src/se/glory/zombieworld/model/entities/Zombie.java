@@ -17,7 +17,7 @@ public class Zombie extends MoveableBody implements Creature {
 	private Vector2 collidingDirection = null;
 	
 	public Zombie(float x, float y) {
-		super(x, y, 25, 25, TextureHandler.zombieTexture, Constants.MoveableBodyShape.CIRCLE , Constants.MoveableBodyType.ZOMBIE);
+		super(x, y, 15, 15, TextureHandler.zombieTexture, Constants.MoveableBodyShape.CIRCLE , Constants.MoveableBodyType.ZOMBIE);
 	}
 	
 	public void setCollidingInfo(Vector2 direction, int collidingNumber) {

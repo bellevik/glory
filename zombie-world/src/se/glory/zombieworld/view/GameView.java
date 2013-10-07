@@ -4,6 +4,7 @@ import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.Creature;
 import se.glory.zombieworld.utilities.Animator;
 import se.glory.zombieworld.utilities.Constants;
+import se.glory.zombieworld.utilities.Constants.MoveableBodyType;
 import se.glory.zombieworld.utilities.Identity;
 
 import com.badlogic.gdx.Gdx;
@@ -123,10 +124,7 @@ public class GameView {
 						 * Get the objects name by splitting a string and create the 
 						 * approperiate animation for that object.
 						 */
-						String name = identity.getObj().getClass().getName();
-						String[] parts = new String[6];
-						parts = name.split("\\.");
-						name = parts[5];
+						MoveableBodyType name = identity.getType();
 						
 						Animation ani = null;
 						
