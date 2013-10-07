@@ -223,4 +223,9 @@ public class Player implements Creature {
 	public Animation getAnimation(){
 		return this.animation;
 	}
+	
+	@Override
+	public boolean isMoving() {
+		return getBody().getLinearVelocity().len() != 0;
+	}
 }

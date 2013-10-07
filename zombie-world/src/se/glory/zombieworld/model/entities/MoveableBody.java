@@ -87,4 +87,9 @@ public class MoveableBody implements Creature {
 	public float getTileY() {
 		return (getBody().getPosition().y * Constants.BOX_TO_WORLD - height)/32;
 	}
+
+	@Override
+	public boolean isMoving() {
+		return getBody().getLinearVelocity().len() != 0;
+	}
 }
