@@ -1,6 +1,7 @@
 package se.glory.zombieworld.model.entities.weapons;
 
 import java.util.HashMap;
+import java.util.Random;
 
 import se.glory.zombieworld.utilities.Constants;
 
@@ -35,6 +36,16 @@ public class WeaponArsenal {
 	// Get a specific weapon
 	public EMeleeWeapon getWeapon(String weapon) {
 		return weapons.get(weapon);
+	}
+	
+	/*
+	 * Returns a random weapon form the weapon arsenal. This method
+	 * will be used to randomize out weapons on the map.
+	 */
+	public String getRandomWeaponName() {
+		String[] tmp = getWeaponList();
+		Random r = new Random();
+		return tmp[r.nextInt(tmp.length)];
 	}
 	
 	// Returns an array containing the names of all available weapons
