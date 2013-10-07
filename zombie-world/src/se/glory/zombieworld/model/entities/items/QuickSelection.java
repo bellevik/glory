@@ -2,6 +2,7 @@ package se.glory.zombieworld.model.entities.items;
 
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Joystick;
+import se.glory.zombieworld.utilities.ScreenCoordinates;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -17,6 +18,7 @@ public class QuickSelection {
 	private ItemContainer[] itemContainers;
 	private CurrentSelection currentSelection;
 	private double distance = 0;
+	int selection = 5;
 	
 	public QuickSelection(Stage stage) {
 		selectionX = (Constants.VIEWPORT_WIDTH - 15 - 196);
@@ -106,7 +108,6 @@ public class QuickSelection {
 			float knobY = selectionStick.getTouchpad().getKnobPercentY();
 			
 			float knobDegree;
-			int selection = 5;
 			
 			if (knobY >= 0) {
 				knobDegree = -(int) (Math.acos(knobX) * MathUtils.radiansToDegrees);
@@ -137,5 +138,20 @@ public class QuickSelection {
 				currentSelection.hide();
 			}
 		}
+	}
+	
+	public void manageItems() {
+		double vertical = Math.pow((selectionStick.getTouchpad().getX() - itemContainers[0].getActorX()), 2);
+		double horizontal = Math.pow((selectionStick.getTouchpad().getY() - itemContainers[0].getActorY()), 2);
+		
+		if(Math.abs(Math.sqrt(vertical + horizontal)) < 95) {
+			for(int i = 0; i < itemContainers.length; i++) {
+				Double radians = Math.toRadians(360 - i * 45);
+				itemContainers[i].setActorX((float)(selectionX + Math.cos(radians) * 96));
+				itemContainers[i].setActorY((float)(selectionY + Math.sin(radians) * 96));
+				itemContainers[i].show();
+			}
+		}
+		
 	}
 }

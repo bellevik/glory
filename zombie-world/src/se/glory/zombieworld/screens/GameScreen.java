@@ -19,7 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 public class GameScreen implements Screen {
 	private QuickSelection quickSelection;
 	private ItemView itemView;
-	
+	private boolean isRunning = false;
 	
 	private Stage stage;
 	
@@ -52,7 +52,13 @@ public class GameScreen implements Screen {
 			WorldModel.player.shoot();
 		}
 		
-		quickSelection.selectItem();
+		if(isRunning) {
+			quickSelection.selectItem();
+		} else {
+			itemView.manageItems();
+			quickSelection.manageItems();
+		}
+		
 		
 		// Animator.drawAnimation(batch, player.getBody().getPosition().x, player.getBody().getPosition().y);
 		// player.getAnimation().drawAnimation(batch, player.getBody().getPosition().x, player.getBody().getPosition().y);
