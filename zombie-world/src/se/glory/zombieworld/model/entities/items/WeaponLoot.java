@@ -30,6 +30,17 @@ public class WeaponLoot implements Item {
 	private Body body;
 	private BodyDef bodyDef;
 	
+	/*
+	 * This constructor will place a random weapon at the location (x, y)
+	 */
+	public WeaponLoot(float x, float y) {
+		//Call this(); with x and y and a random weapon
+		// TODO Finnish this constructor
+	}
+	
+	/*
+	 * This constructor will place a weapon on the type weaponName at (x, y)
+	 */
 	public WeaponLoot(String weaponName, float x, float y) {
 		this.weaponName = weaponName;
 		this.x = x;
