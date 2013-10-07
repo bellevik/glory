@@ -2,6 +2,7 @@ package se.glory.zombieworld.screens;
 
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.items.Healthbar;
+import se.glory.zombieworld.model.entities.items.ItemView;
 import se.glory.zombieworld.model.entities.items.QuickSelection;
 import se.glory.zombieworld.model.entities.obstacles.CustomObstacle;
 import se.glory.zombieworld.utilities.Constants;
@@ -18,6 +19,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class GameScreen implements Screen {
 	private QuickSelection quickSelection;
+	private ItemView itemView;
+	private boolean isRunning = true;
 	
 	private Healthbar healthBar;
 	
@@ -29,6 +32,9 @@ public class GameScreen implements Screen {
 	private WorldModel worldModel;
 	private GameView gameView;
 	
+	/*
+	 * This method will be called all the time throughout the game. Libgdx method!
+	 */
 	@Override
 	public void render(float delta) {
 		gameView.render();
@@ -44,7 +50,18 @@ public class GameScreen implements Screen {
 		//This method will rotate the player
 		WorldModel.player.applyRotationToPlayer(moveKnobX, moveKnobY, fireKnobX, fireKnobY);
 		
-		quickSelection.selectItem();
+		//If someone is touching the right joystick then we need the player to be ready to shoot
+		if (fireKnobX != 0 && fireKnobY != 0) {
+			WorldModel.player.shoot();
+		}
+		
+		if(isRunning) {
+			quickSelection.selectItem();
+		} else {
+			itemView.manageItems();
+			quickSelection.manageItems();
+		}
+		
 		
 		// Animator.drawAnimation(batch, player.getBody().getPosition().x, player.getBody().getPosition().y);
 		// player.getAnimation().drawAnimation(batch, player.getBody().getPosition().x, player.getBody().getPosition().y);
@@ -83,11 +100,18 @@ public class GameScreen implements Screen {
 	    healthBar.updatePosition();
 	}
 	
+	/*
+	 * This method will set a constant for scaling the window. Really good when Android
+	 * got so many different screen siezes.
+	 */
 	private void adjustViewportScale() {
 		double scale = Constants.VIEWPORT_WIDTH / (double) Gdx.graphics.getWidth();
 		Constants.VIEWPORT_HEIGHT = (int) (Gdx.graphics.getHeight() * scale);
 	}
-
+	
+	/*
+	 * This method will be called upon screen load. Libgdx method!
+	 */
 	@Override
 	public void show() {
 		adjustViewportScale();
@@ -109,6 +133,7 @@ public class GameScreen implements Screen {
 		fireStick = new Joystick(stage, Constants.VIEWPORT_WIDTH - 15 - 128, 15, 128, 128, Constants.TouchpadType.FIRE);
 		
 		quickSelection = new QuickSelection(stage);
+		//itemView = new ItemView(stage);
 		
 		healthBar = new Healthbar(stage);
 		

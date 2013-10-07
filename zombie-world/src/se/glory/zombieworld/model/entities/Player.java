@@ -20,6 +20,8 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 
 /*
  * This class will represent the moveable Player in the world.
@@ -45,6 +47,11 @@ public class Player implements Creature {
 	private Animation animation;
 	private int health;
 	private int maxHealth;
+	
+	// TODO Set the variable depending on the weapons arsenal class. What weapon is equipped
+	//These variables will handle the shooting method
+	private boolean readyToFire = true;
+	private float reloadTime = 1;
 
 	public Player (float x, float y, float width, float height) {
 		this.x = x;
@@ -138,6 +145,7 @@ public class Player implements Creature {
 	 * inventory will be set to 5 slots
 	 */
 	public boolean addItemToQuickSwap(Item item) {
+		updateQuickSelectionImages();
 		if(quickSwapList.size < 5) {
 			quickSwapList.add(item);
 			return true;
@@ -146,14 +154,53 @@ public class Player implements Creature {
 	}
 	
 	/*
+	 * This method will change the images shown on the UI. This will be done every time
+	 * the user picks up new loot (retreives new items). 
+	 */
+	public void updateQuickSelectionImages () {
+		//Reach the quickselection from a new StageHandler
+	}
+	
+	/*
+	 * This method is called every render update from the quickSelection class.
+	 * The int pos is the position of the quickSelection UI that is selected.
+	 * Every time this method gets called we will check if its a new position and if so
+	 * we will change the item of the player.
+	 */
+	public void changeEquippedItem (int pos) {
+		
+	}
+	
+	/*
+	 * This method will fire a shot everytime the boolean readyToFire is set to true. Right after
+	 * the player fired a bullet the boolean will be set to false for a specific amount of time.
+	 * This time will be different depending on what weapon is equipped. The reloadTime is the
+	 * short amount of time when the player is unable to fire a shot. 
+	 */
+	public void shoot() {
+		if (readyToFire) {
+			fireBullet();
+			readyToFire = false;
+			//It will take realoadTime seconds to set the boolean to true again
+			Timer.schedule(new Task(){
+			    @Override
+			    public void run() {
+			    	readyToFire = true;
+			    }
+			}, reloadTime);
+		}	
+	}
+	
+	/*
 	 * First we calculate the angle. Then we create a bullet with a constant velocity
 	 * to be fired at the angle we calculated
 	 */
-	public void shoot() {
+	public void fireBullet() {
 		float rot = (float) (weaponBody.getTransform().getRotation());
         float xAngle = MathUtils.cos(rot);
         float yAngle = MathUtils.sin(rot);
 		
+        //14 here is to create the bullet a fix distance from the weapon
 		new Bullet(weaponBody.getPosition().x + 14 * xAngle * Constants.WORLD_TO_BOX, weaponBody.getPosition().y + 14 * yAngle * Constants.WORLD_TO_BOX, xAngle, yAngle);
 	}
 	

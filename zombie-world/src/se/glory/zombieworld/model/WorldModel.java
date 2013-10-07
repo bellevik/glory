@@ -51,7 +51,7 @@ public class WorldModel {
 	}
 	
 	public void update() {
-		// sweepDeadBodies();
+		sweepDeadBodies();
 		aiModel.update();
 	}
 	
@@ -65,11 +65,13 @@ public class WorldModel {
 		WorldModel.world.getBodies(WorldModel.removeableBodies);
 		
 		for (Body body : WorldModel.removeableBodies) {
-			if ( body.getUserData().getClass().equals(Identity.class) ) {
-				if(body!=null) {
-					if (((Identity)(body.getUserData())).isDead()) {
-						if (!WorldModel.world.isLocked()) {
-							WorldModel.world.destroyBody(body);
+			if(body.getUserData() != null){
+				if ( body.getUserData().getClass().equals(Identity.class) ) {
+					if(body!=null) {
+						if (((Identity)(body.getUserData())).isDead()) {
+							if (!WorldModel.world.isLocked()) {
+								WorldModel.world.destroyBody(body);
+							}
 						}
 					}
 				}

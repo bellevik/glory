@@ -17,6 +17,7 @@ import com.badlogic.gdx.physics.box2d.Manifold;
  */
 public class CollisionDetection implements ContactListener {
 	
+	// TODO Refactor all these if statements into class methods!
 	@Override
 	public void beginContact(Contact contact) {
 		Body a = contact.getFixtureA().getBody();
@@ -81,6 +82,22 @@ public class CollisionDetection implements ContactListener {
 			}
 			
 		}
+		
+		// TODO Test theese two ifs on a Windows computer / Android phone
+		/*
+		//This statement checks if a bullet collides with a zombie or a zombie with a bullet
+		//then removes both of them from the world
+		if (i1.getType() == Constants.MoveableBodyType.BULLET && i2.getType() == Constants.MoveableBodyType.ZOMBIE || i1.getType() == Constants.MoveableBodyType.ZOMBIE && i2.getType() == Constants.MoveableBodyType.BULLET) {
+			i1.setDead(true);
+			i2.setDead(true);
+		}
+		
+		//This statement checks if a bullet collides with a human or a human with a bullet
+		//then removes both of them from the world
+		if (i1.getType() == Constants.MoveableBodyType.BULLET && i2.getType() == Constants.MoveableBodyType.HUMAN || i1.getType() == Constants.MoveableBodyType.HUMAN && i2.getType() == Constants.MoveableBodyType.BULLET) {
+			i1.setDead(true);
+			i2.setDead(true);
+		}*/
 	}
 
 	@Override
