@@ -34,7 +34,15 @@ public class AIModel {
 	}
 	
 	public void setBlockedTiles(ArrayList<Point> blockedTiles) {
-		this.blockedTiles = blockedTiles;
+		this.blockedTiles.clear();
+		
+		for (Point p : blockedTiles) {
+			this.blockedTiles.add(new Point(p.getX(), p.getY()));
+			
+			// Add "extra blocks" to compensate for AI bodies being 2x2 tiles big.
+			this.blockedTiles.add(new Point(p.getX() + 1, p.getY()));
+			this.blockedTiles.add(new Point(p.getX(), p.getY() + 1));
+		}
 	}
 	
 	public void update() {
