@@ -19,7 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 public class GameScreen implements Screen {
 	private QuickSelection quickSelection;
 	private ItemView itemView;
-	private boolean isRunning = false;
+	private boolean isRunning = true;
 	
 	private Stage stage;
 	
@@ -115,7 +115,7 @@ public class GameScreen implements Screen {
 		fireStick = new Joystick(stage, Constants.VIEWPORT_WIDTH - 15 - 128, 15, 128, 128, Constants.TouchpadType.FIRE);
 		
 		quickSelection = new QuickSelection(stage);
-		itemView = new ItemView(stage);
+		//itemView = new ItemView(stage);
 		
 		Gdx.input.setInputProcessor(stage);
 		
