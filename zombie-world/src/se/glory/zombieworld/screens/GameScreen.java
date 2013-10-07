@@ -1,5 +1,6 @@
 package se.glory.zombieworld.screens;
 
+import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.items.Healthbar;
 import se.glory.zombieworld.model.entities.items.ItemView;
@@ -18,16 +19,16 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class GameScreen implements Screen {
-	private QuickSelection quickSelection;
-	private ItemView itemView;
+	//private QuickSelection quickSelection;
+	//private ItemView itemView;
 	private boolean isRunning = true;
 	
-	private Healthbar healthBar;
+	//private Healthbar healthBar;
 	
-	private Stage stage;
+	//private Stage stage;
 	
 	// moveStick controls player movement, fireStick controls item use
-	private Joystick moveStick, fireStick;
+	//private Joystick moveStick, fireStick;
 	
 	private WorldModel worldModel;
 	private GameView gameView;
@@ -40,13 +41,13 @@ public class GameScreen implements Screen {
 		gameView.render();
 		
 		// Update player movement
-		WorldModel.player.getBody().setLinearVelocity(moveStick.getTouchpad().getKnobPercentX() * 2, moveStick.getTouchpad().getKnobPercentY() * 2);
+		WorldModel.player.getBody().setLinearVelocity(StageModel.moveStick.getTouchpad().getKnobPercentX() * 2, StageModel.moveStick.getTouchpad().getKnobPercentY() * 2);
 		
 		//The four floats below will represent the percentage in X and Y direction of the Joysticks
-		float moveKnobX = moveStick.getTouchpad().getKnobPercentX();
-		float moveKnobY = moveStick.getTouchpad().getKnobPercentY();
-		float fireKnobX = fireStick.getTouchpad().getKnobPercentX();
-		float fireKnobY = fireStick.getTouchpad().getKnobPercentY();
+		float moveKnobX = StageModel.moveStick.getTouchpad().getKnobPercentX();
+		float moveKnobY = StageModel.moveStick.getTouchpad().getKnobPercentY();
+		float fireKnobX = StageModel.fireStick.getTouchpad().getKnobPercentX();
+		float fireKnobY = StageModel.fireStick.getTouchpad().getKnobPercentY();
 		//This method will rotate the player
 		WorldModel.player.applyRotationToPlayer(moveKnobX, moveKnobY, fireKnobX, fireKnobY);
 		
@@ -56,18 +57,18 @@ public class GameScreen implements Screen {
 		}
 		
 		if(isRunning) {
-			quickSelection.selectItem();
+			StageModel.quickSelection.selectItem();
 		} else {
-			itemView.manageItems();
-			quickSelection.manageItems();
+			StageModel.itemView.manageItems();
+			StageModel.quickSelection.manageItems();
 		}
 		
 		
 		// Animator.drawAnimation(batch, player.getBody().getPosition().x, player.getBody().getPosition().y);
 		// player.getAnimation().drawAnimation(batch, player.getBody().getPosition().x, player.getBody().getPosition().y);
 		
-		stage.act(delta);
-		stage.draw();
+		StageModel.stage.act(delta);
+		StageModel.stage.draw();
 		
 		WorldModel.world.step(1/60f, 6, 2);
 		worldModel.update();
@@ -81,7 +82,7 @@ public class GameScreen implements Screen {
 	private int negVar = 1;
 	private void testHealthBar() {
 		healthVar += negVar;
-		healthBar.updateHealth(healthVar);
+		StageModel.healthBar.updateHealth(healthVar);
 		if(healthVar == 100 || healthVar == 0) {
 			negVar *= -1;
 		}
@@ -95,9 +96,9 @@ public class GameScreen implements Screen {
 		gameView.getCamera().viewportWidth = Constants.VIEWPORT_WIDTH;
 		gameView.getCamera().viewportHeight = Constants.VIEWPORT_HEIGHT;
 		
-	    stage.setViewport(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT, false);
-	    quickSelection.updatePosition();
-	    healthBar.updatePosition();
+	    StageModel.stage.setViewport(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT, false);
+	    StageModel.quickSelection.updatePosition();
+	    StageModel.healthBar.updatePosition();
 	}
 	
 	/*
@@ -127,17 +128,7 @@ public class GameScreen implements Screen {
 		gameView = new GameView(batch);
 		worldModel.setupAIModel(gameView.getMapLayer(1));
 		
-		stage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true, batch);
-		
-		moveStick = new Joystick(stage, 15, 15, 128, 128, Constants.TouchpadType.MOVEMENT);
-		fireStick = new Joystick(stage, Constants.VIEWPORT_WIDTH - 15 - 128, 15, 128, 128, Constants.TouchpadType.FIRE);
-		
-		quickSelection = new QuickSelection(stage);
-		//itemView = new ItemView(stage);
-		
-		healthBar = new Healthbar(stage);
-		
-		Gdx.input.setInputProcessor(stage);
+		StageModel.createUI(batch);
 		
 		// ## Add humans
 		worldModel.getAIModel().addHuman(16+10*32, 16+3*32);
@@ -241,6 +232,6 @@ public class GameScreen implements Screen {
 	public void dispose() {
 		WorldModel.world.dispose();
 		gameView.dispose();
-		stage.dispose();
+		StageModel.stage.dispose();
 	}
 }
