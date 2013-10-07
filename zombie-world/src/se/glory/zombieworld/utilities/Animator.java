@@ -170,11 +170,11 @@ public class Animator {
 	/*
 	 * Gets the current frame in the animation and draws to the screen.
 	 */
-	public void drawAnimation(SpriteBatch batch, float x, float y, Animation ani){
+	public void drawAnimation(SpriteBatch batch, float x, float y, Animation ani, boolean isMoving){
 		//stateTime = the time spent in the state represented by this animation
         stateTimer += Gdx.graphics.getDeltaTime();
-        //Get the current frame
-        currentFrame = ani.getKeyFrame(stateTimer, true);
+        //Get the current frame and loops if the creature is moving
+        currentFrame = ani.getKeyFrame(stateTimer, isMoving);
         batch.begin();
         batch.draw(currentFrame, x*Constants.BOX_TO_WORLD - currentFrame.getRegionWidth() / 2, y*Constants.BOX_TO_WORLD - currentFrame.getRegionHeight() / 2);
         batch.end();

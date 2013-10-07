@@ -158,8 +158,8 @@ public class GameView {
 							ani = animator.getAnimation(name, 1);
 						}
 						
-						if (ani != null) {
-							animator.drawAnimation(batch, body.getPosition().x, body.getPosition().y, ani);
+						if (ani != null ) {
+							animator.drawAnimation(batch, body.getPosition().x, body.getPosition().y, ani, ((Creature)identity.getObj()).isMoving());
 						}
 					}
 				}
