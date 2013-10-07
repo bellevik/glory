@@ -146,11 +146,30 @@ public class Player implements Creature {
 	 * inventory will be set to 5 slots
 	 */
 	public boolean addItemToQuickSwap(Item item) {
+		updateQuickSelectionImages();
 		if(quickSwapList.size < 5) {
 			quickSwapList.add(item);
 			return true;
 		}
 		return false;
+	}
+	
+	/*
+	 * This method will change the images shown on the UI. This will be done every time
+	 * the user picks up new loot (retreives new items). 
+	 */
+	public void updateQuickSelectionImages () {
+		//Reach the quickselection from a new StageHandler
+	}
+	
+	/*
+	 * This method is called every render update from the quickSelection class.
+	 * The int pos is the position of the quickSelection UI that is selected.
+	 * Every time this method gets called we will check if its a new position and if so
+	 * we will change the item of the player.
+	 */
+	public void changeEquippedItem (int pos) {
+		
 	}
 	
 	/*

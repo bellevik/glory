@@ -1,8 +1,8 @@
 package se.glory.zombieworld.utilities;
 
 import se.glory.zombieworld.model.WorldModel;
-import se.glory.zombieworld.model.entities.items.Item;
 import se.glory.zombieworld.model.entities.Human;
+import se.glory.zombieworld.model.entities.items.Item;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
