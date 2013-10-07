@@ -1,6 +1,7 @@
 package se.glory.zombieworld.model.entities.items;
 
 import se.glory.zombieworld.model.WorldModel;
+import se.glory.zombieworld.model.entities.weapons.WeaponArsenal;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Constants.ItemType;
 import se.glory.zombieworld.utilities.Identity;
@@ -34,8 +35,7 @@ public class WeaponLoot implements Item {
 	 * This constructor will place a random weapon at the location (x, y)
 	 */
 	public WeaponLoot(float x, float y) {
-		//Call this(); with x and y and a random weapon
-		// TODO Finnish this constructor
+		this(WorldModel.weaponArsenal.getRandomWeaponName(), x, y);
 	}
 	
 	/*

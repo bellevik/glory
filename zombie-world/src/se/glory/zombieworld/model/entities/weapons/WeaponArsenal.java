@@ -12,7 +12,7 @@ import com.badlogic.gdx.physics.box2d.World;
 public class WeaponArsenal {
 	private HashMap<String, EMeleeWeapon> weapons = new HashMap<String, EMeleeWeapon>();
 	
-	public WeaponArsenal(World world) {
+	public WeaponArsenal() {
 		FileHandle weaponList = Gdx.files.internal("data/weapons/weapons.txt");
 		String text = weaponList.readString();
 		String[] weaponNames = text.split(System.getProperty("line.separator"));
