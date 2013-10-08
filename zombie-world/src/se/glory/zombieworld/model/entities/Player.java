@@ -88,8 +88,6 @@ public class Player implements Creature {
 		
 		createWeaponBody();
 		attachWeapon();
-		
-		maxHealth = health = 100;
 	}
 	
 	/*
