@@ -95,6 +95,29 @@ public class Healthbar extends Actor{
 		updateHealth(lastHealthPercent);
 	}
 	
+	public void setHealthPercentGoal(int healthToUpdate) {
+		healthGoal = healthToUpdate;
+	}
+	
+	public void updateHealthMovementSlowly() {
+		if(healthGoal != lastHealthPercent) {
+			if(healthGoal > lastHealthPercent) {
+				incHealthBar();
+			}else{
+				decHealthBar();
+			}
+		}
+	}
+	
+	private void incHealthBar() {
+		healthBarAmount[lastHealthPercent++].show();
+	}
+	
+	private void decHealthBar() {
+		healthBarAmount[--lastHealthPercent].hide();
+	}
+	
+	//Not in use right now. May be removed later
 	public void updateHealth(int healthToUpdate) {
 		if(lastHealthPercent < healthToUpdate) {
 			for(int i=lastHealthPercent; i<healthToUpdate; i++) {

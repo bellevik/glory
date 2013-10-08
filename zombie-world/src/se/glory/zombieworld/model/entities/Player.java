@@ -6,6 +6,7 @@ import se.glory.zombieworld.model.entities.weapons.Bullet;
 import se.glory.zombieworld.utilities.Animator;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Identity;
+import se.glory.zombieworld.utilities.UtilityTimer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -50,6 +51,10 @@ public class Player implements Creature {
 	//These variables will handle the shooting method
 	private boolean readyToFire = true;
 	private float reloadTime = 1;
+	
+	private int health;
+	private int maxHealth;
+	private UtilityTimer infectedHealth = null;
 
 	public Player (float x, float y, float width, float height) {
 		this.x = x;
@@ -88,6 +93,8 @@ public class Player implements Creature {
 		
 		createWeaponBody();
 		attachWeapon();
+		
+		maxHealth = health = 100;
 	}
 	
 	/*
@@ -234,6 +241,49 @@ public class Player implements Creature {
 		WorldModel.player.getBody().setTransform(WorldModel.player.getBody().getPosition(), knobDegree * MathUtils.degreesToRadians);
 		WorldModel.player.getBody().getJointList().get(0).joint.getBodyB().setTransform(WorldModel.player.getBody().getJointList().get(0).joint.getBodyB().getPosition(), knobDegree * MathUtils.degreesToRadians);
 		WorldModel.player.getBody().getJointList().get(0).joint.getBodyB().setAwake(true);
+	}
+	
+	public int getHealth() {
+		return health;
+	}
+	
+	public int getHealthPercentage() {
+		return ((health*100)/maxHealth);
+	}
+	
+	public void changeHealth(int healthChange) {
+		
+		//Remove infected status if getting healed
+		if(healthChange >= 0) {
+			infectedHealth = null;
+		}
+		
+		//Add or remove health depending on the change
+		health += healthChange;
+		
+		//Set health to 0 if it is less than 0 and to maxHealth if going above it
+		if(health<0) {
+			health = 0;
+		}else if(health > maxHealth) {
+			health = maxHealth;
+		}
+	}
+	
+	public int getMaxHealth() {
+		return maxHealth;
+	}
+	
+	public UtilityTimer getInfectedHealthTimer() {
+		return infectedHealth;
+	}
+	
+	public void infect() {
+		infectedHealth = new UtilityTimer(Constants.INFECTED_INTERVAL);
+	}
+	
+	public void kill() {
+	//	(Identity)player.getBody().getUserData();
+		((Identity)this.getBody().getUserData()).setDead(true);
 	}
 	
 	@Override

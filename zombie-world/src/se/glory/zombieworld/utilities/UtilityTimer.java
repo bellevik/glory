@@ -1,12 +1,12 @@
 package se.glory.zombieworld.utilities;
 
-public class Timer {
+public class UtilityTimer {
 
 	private int interval = 1000;
 	private long startTime = 0;
 	private long elapsedTime = 0;
 	
-	public Timer(int interval){
+	public UtilityTimer(int interval){
 		
 		this.interval = interval;
 		resetTimer();

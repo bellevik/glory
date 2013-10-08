@@ -3,6 +3,7 @@ package se.glory.zombieworld.model.entities;
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Identity;
+import se.glory.zombieworld.utilities.UtilityTimer;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
@@ -23,8 +24,7 @@ public class MoveableBody implements Creature {
 	
 	private int health;
 	private int maxHealth;
-	private boolean infected = false;
-	private boolean zombie = false;
+	private UtilityTimer infectedHealth = null;
 	
 	public MoveableBody(float x, float y, float width, float height, Texture texture, Constants.MoveableBodyShape shape, Constants.MoveableBodyType type) {
 		this.width = width;
@@ -76,15 +76,7 @@ public class MoveableBody implements Creature {
 	}
 	
 	public boolean isInfected() {
-		return infected;
-	}
-	
-	public boolean isZombie() {
-		return zombie;
-	}
-	
-	public void turnIntoZombie() {
-		zombie = true;
+		return (infectedHealth != null);
 	}
 
 	@Override

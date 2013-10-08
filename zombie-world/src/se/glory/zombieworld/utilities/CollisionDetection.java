@@ -2,6 +2,7 @@ package se.glory.zombieworld.utilities;
 
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.Human;
+import se.glory.zombieworld.model.entities.Player;
 import se.glory.zombieworld.model.entities.Zombie;
 import se.glory.zombieworld.model.entities.items.Item;
 
@@ -65,6 +66,28 @@ public class CollisionDetection implements ContactListener {
 		}
 		
 		
+		if (i1.getType() == Constants.MoveableBodyType.PLAYER && i2.getType() == Constants.MoveableBodyType.ZOMBIE) {
+			
+			//Making a local object of the current object player depending on which object in the collision it is
+		//	Player player = i1.getType() == Constants.MoveableBodyType.PLAYER ? (Player)i1.getObj() : (Player)i2.getObj();
+			Player player = (Player)i1.getObj();
+			
+			/*Player player = null;
+			if(i1.getType() == Constants.MoveableBodyType.PLAYER) {
+				player = (Player)i1.getObj();
+			}else if(i2.getType() == Constants.MoveableBodyType.PLAYER) {
+				player = (Player)i2.getObj();
+			}*/
+			
+			//infecting the player
+			if(player != null) {
+				if (player.getInfectedHealthTimer() == null) {
+					player.infect();
+				}
+				
+				player.changeHealth(-Constants.ZOMBIE_DAMAGE);
+			}
+		}
 		
 		
 		

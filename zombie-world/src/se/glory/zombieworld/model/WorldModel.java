@@ -4,8 +4,10 @@ import java.util.ArrayList;
 
 import se.glory.zombieworld.model.entities.Player;
 import se.glory.zombieworld.utilities.CollisionDetection;
+import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Identity;
 import se.glory.zombieworld.utilities.Point;
+import se.glory.zombieworld.utilities.UtilityTimer;
 
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
@@ -28,6 +30,9 @@ public class WorldModel {
 		aiModel = new AIModel();
 		
 		player = new Player (300, 400, 16, 16);
+		
+		//Testing effect of infected player
+		//player.infect();
 		
 		world.setContactListener(new CollisionDetection());
 	}
@@ -53,6 +58,7 @@ public class WorldModel {
 	public void update() {
 		sweepDeadBodies();
 		aiModel.update();
+		healthUpdate();
 	}
 	
 	/*
@@ -79,5 +85,19 @@ public class WorldModel {
 		}
 		
 		WorldModel.removeableBodies.clear();
+	}
+	
+	public void healthUpdate() {
+		UtilityTimer infectedHealthTimer = player.getInfectedHealthTimer();
+		if(infectedHealthTimer != null && infectedHealthTimer.isDone()) {
+			player.changeHealth(-Constants.INFECTED_DAMAGE);
+			infectedHealthTimer.resetTimer();
+		}
+		
+		if(StageModel.healthBar.getHealthPercentGoal() != player.getHealthPercentage()) {
+			StageModel.healthBar.setHealthPercentGoal(player.getHealthPercentage());
+			//.updateHealth(player.getHealthPercentage());
+		}
+		StageModel.healthBar.updateHealthMovementSlowly();
 	}
 }
