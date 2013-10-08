@@ -5,7 +5,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -22,17 +24,24 @@ public class MainMenu implements Screen {
 	private TextureAtlas atlas;
 	private Skin skin;
 	private Table table;
-	private TextButton buttonPlay, buttonExit;
+	private TextButton buttonPlay, buttonSettings, buttonExit;
 	private BitmapFont font;
-	private Label heading;
+	
+	private SpriteBatch batch;
+	private Texture backgroundTexture;
     
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(255, 255, 255, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+		batch.begin();
+		batch.draw(backgroundTexture, 0, 0);
+		batch.end();
 		
 		stage.act(delta);
 		stage.draw();
+		
 	}
 
 	@Override
@@ -43,6 +52,10 @@ public class MainMenu implements Screen {
 	@Override
 	public void show() {
 		stage = new Stage();
+		
+		batch = new SpriteBatch();
+		
+		backgroundTexture = new Texture(Gdx.files.internal("ui/mainMenuBackground.png"));
 		
 		Gdx.input.setInputProcessor(stage);
 		
@@ -66,11 +79,9 @@ public class MainMenu implements Screen {
 		
 		LabelStyle headingStyle = new LabelStyle(font, Color.BLACK);
 		
-		heading = new Label("Main menu", headingStyle);
-		heading.setFontScale(2);
-		
 		//Create buttons
 		buttonExit = new TextButton("EXIT", textButtonStyle);
+		buttonSettings = new TextButton("SETTINGS", textButtonStyle);
 		buttonPlay = new TextButton("PLAY", textButtonStyle);
 		
 		//Adding listeners to buttons
@@ -91,9 +102,9 @@ public class MainMenu implements Screen {
 		buttonExit.pad(3);
 		buttonPlay.pad(3);
 		
-		table.add(heading);
-		table.row();
 		table.add(buttonPlay);
+		table.row();
+		table.add(buttonSettings);
 		table.row();
 		table.add(buttonExit);
 		stage.addActor(table);
