@@ -48,6 +48,7 @@ public class WorldModel {
 		}
 
 		aiModel.setBlockedTiles(blockedTiles);
+		aiModel.setMapSize(collideLayer.getWidth(), collideLayer.getHeight());
 	}
 	
 	public void update() {

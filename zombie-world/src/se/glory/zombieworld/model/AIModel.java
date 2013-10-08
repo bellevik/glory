@@ -15,7 +15,10 @@ import se.glory.zombieworld.utilities.Point;
 public class AIModel {
 	private ArrayList<Human> humans = new ArrayList<Human>();
 	private ArrayList<Zombie> zombies = new ArrayList<Zombie>();
+	
 	private ArrayList<Point> blockedTiles = new ArrayList<Point>();
+	private int mapWidth = 0;
+	private int mapHeight = 0;
 	
 	public void addHuman(float x, float y) {
 		humans.add(new Human(x, y));
@@ -31,6 +34,11 @@ public class AIModel {
 	
 	public void removeZombie(Zombie zombie) {
 		zombies.remove(zombie);
+	}
+	
+	public void setMapSize(int mapWidth, int mapHeight) {
+		this.mapWidth = mapWidth;
+		this.mapHeight = mapHeight;
 	}
 	
 	public void setBlockedTiles(ArrayList<Point> blockedTiles) {
@@ -83,7 +91,7 @@ public class AIModel {
 				float angle = (float) Math.atan(totY/totX);
 				
 				if (totX < 0)
-					angle = angle - (float)Math.PI;
+					angle = angle - (float) Math.PI;
 				
 				h.getBody().setTransform(h.getBody().getPosition(), angle);		
 				h.getBody().setLinearVelocity(totX, totY);
@@ -96,12 +104,12 @@ public class AIModel {
 				if (h.getState() == Human.State.IDLE) {
 					Random generator = new Random();
 					
-					int goalX = generator.nextInt(40);
-					int goalY = generator.nextInt(20);
+					int goalX = generator.nextInt(mapWidth);
+					int goalY = generator.nextInt(mapHeight);
 					
 					while (blockedTiles.contains(new Point(goalX, goalY))) {
-						goalX = generator.nextInt(40);
-						goalY = generator.nextInt(20);
+						goalX = generator.nextInt(mapWidth);
+						goalY = generator.nextInt(mapHeight);
 					}
 					
 					ArrayList<Point> walkPath = AStarPathFinder.getShortestPath((int) h.getTileX(), (int) h.getTileY(), goalX, goalY, blockedTiles);
@@ -142,12 +150,12 @@ public class AIModel {
 				if (z.getState() == Zombie.State.IDLE) {
 					Random generator = new Random();
 					
-					int goalX = generator.nextInt(40);
-					int goalY = generator.nextInt(20);
+					int goalX = generator.nextInt(mapWidth);
+					int goalY = generator.nextInt(mapHeight);
 					
 					while (blockedTiles.contains(new Point(goalX, goalY))) {
-						goalX = generator.nextInt(40);
-						goalY = generator.nextInt(20);
+						goalX = generator.nextInt(mapWidth);
+						goalY = generator.nextInt(mapHeight);
 					}
 					
 					ArrayList<Point> walkPath = AStarPathFinder.getShortestPath((int) z.getTileX(), (int) z.getTileY(), goalX, goalY, blockedTiles);
