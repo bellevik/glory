@@ -40,38 +40,43 @@ public class GameScreen implements Screen {
 	public void render(float delta) {
 		gameView.render();
 		
-		// Update player movement
-		WorldModel.player.getBody().setLinearVelocity(StageModel.moveStick.getTouchpad().getKnobPercentX() * 2, StageModel.moveStick.getTouchpad().getKnobPercentY() * 2);
-		
-		//The four floats below will represent the percentage in X and Y direction of the Joysticks
-		float moveKnobX = StageModel.moveStick.getTouchpad().getKnobPercentX();
-		float moveKnobY = StageModel.moveStick.getTouchpad().getKnobPercentY();
-		float fireKnobX = StageModel.fireStick.getTouchpad().getKnobPercentX();
-		float fireKnobY = StageModel.fireStick.getTouchpad().getKnobPercentY();
-		//This method will rotate the player
-		WorldModel.player.applyRotationToPlayer(moveKnobX, moveKnobY, fireKnobX, fireKnobY);
-		
-		//If someone is touching the right joystick then we need the player to be ready to shoot
-		if (fireKnobX != 0 && fireKnobY != 0) {
-			WorldModel.player.shoot();
-		}
-		
 		if(isRunning) {
+			// Update player movement
+			WorldModel.player.getBody().setLinearVelocity(StageModel.moveStick.getTouchpad().getKnobPercentX() * 2, StageModel.moveStick.getTouchpad().getKnobPercentY() * 2);
+			
+			//The four floats below will represent the percentage in X and Y direction of the Joysticks
+			float moveKnobX = StageModel.moveStick.getTouchpad().getKnobPercentX();
+			float moveKnobY = StageModel.moveStick.getTouchpad().getKnobPercentY();
+			float fireKnobX = StageModel.fireStick.getTouchpad().getKnobPercentX();
+			float fireKnobY = StageModel.fireStick.getTouchpad().getKnobPercentY();
+			//This method will rotate the player
+			WorldModel.player.applyRotationToPlayer(moveKnobX, moveKnobY, fireKnobX, fireKnobY);
+			
+			//If someone is touching the right joystick then we need the player to be ready to shoot
+			if (fireKnobX != 0 && fireKnobY != 0) {
+				WorldModel.player.shoot();
+			}
+			
+			WorldModel.world.step(1/60f, 6, 2);
+			worldModel.update();
+			
 			StageModel.quickSelection.selectItem();
+			if(StageModel.pauseButton.isTouched()) {
+				isRunning = false;
+			}
 		} else {
+			if(StageModel.pauseButton.isTouched()) {
+				isRunning = true;
+			}
 			StageModel.itemView.manageItems();
 			StageModel.quickSelection.manageItems();
 		}
-		
 		
 		// Animator.drawAnimation(batch, player.getBody().getPosition().x, player.getBody().getPosition().y);
 		// player.getAnimation().drawAnimation(batch, player.getBody().getPosition().x, player.getBody().getPosition().y);
 		
 		StageModel.stage.act(delta);
 		StageModel.stage.draw();
-		
-		WorldModel.world.step(1/60f, 6, 2);
-		worldModel.update();
 		
 	//	healthBar.updateHealth(70);
 		testHealthBar();
