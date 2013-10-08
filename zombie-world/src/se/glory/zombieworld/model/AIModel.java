@@ -40,8 +40,8 @@ public class AIModel {
 			this.blockedTiles.add(new Point(p.getX(), p.getY()));
 			
 			// Add "extra blocks" to compensate for AI bodies being 2x2 tiles big.
-			this.blockedTiles.add(new Point(p.getX() + 1, p.getY()));
-			this.blockedTiles.add(new Point(p.getX(), p.getY() + 1));
+			this.blockedTiles.add(new Point(p.getX() - 1, p.getY()));
+			this.blockedTiles.add(new Point(p.getX(), p.getY() - 1));
 		}
 	}
 	
