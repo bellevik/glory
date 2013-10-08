@@ -1,5 +1,7 @@
 package se.glory.zombieworld.screens;
 
+import se.glory.zombieworld.utilities.Constants;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -61,9 +63,17 @@ public class MainMenu implements Screen {
 		Gdx.input.setInputProcessor(stage);
 		
 		//Create buttons
-		buttonExit = new Image(buttonExitTexture);
-		buttonSettings = new Image(buttonSettingsTexture);
 		buttonPlay = new Image(buttonPlayTexture);
+		buttonPlay.setX(Constants.VIEWPORT_WIDTH/2 - 142/2);
+		buttonPlay.setY(250);
+		
+		buttonSettings = new Image(buttonSettingsTexture);
+		buttonSettings.setX(Constants.VIEWPORT_WIDTH/2 - 226/2);
+		buttonSettings.setY(175);
+		
+		buttonExit = new Image(buttonExitTexture);
+		buttonExit.setX(Constants.VIEWPORT_WIDTH/2 - 144/2);
+		buttonExit.setY(100);
 
 		//Adding listeners to buttons
 		buttonExit.addListener(new ClickListener(){
