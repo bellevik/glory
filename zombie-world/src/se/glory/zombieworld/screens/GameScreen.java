@@ -21,7 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 public class GameScreen implements Screen {
 	//private QuickSelection quickSelection;
 	//private ItemView itemView;
-	private boolean isRunning = true;
+	//private boolean isRunning = true;
 	
 	//private Healthbar healthBar;
 	
@@ -40,7 +40,7 @@ public class GameScreen implements Screen {
 	public void render(float delta) {
 		gameView.render();
 		
-		if(isRunning) {
+		if(Constants.isRunning) {
 			// Update player movement
 			WorldModel.player.getBody().setLinearVelocity(StageModel.moveStick.getTouchpad().getKnobPercentX() * 2, StageModel.moveStick.getTouchpad().getKnobPercentY() * 2);
 			
@@ -61,12 +61,13 @@ public class GameScreen implements Screen {
 			worldModel.update();
 			
 			StageModel.quickSelection.selectItem();
+			StageModel.itemView.hideContainers();
 			if(StageModel.pauseButton.isTouched()) {
-				isRunning = false;
+				Constants.isRunning = false;
 			}
 		} else {
 			if(StageModel.pauseButton.isTouched()) {
-				isRunning = true;
+				Constants.isRunning = true;
 			}
 			StageModel.itemView.manageItems();
 			StageModel.quickSelection.manageItems();

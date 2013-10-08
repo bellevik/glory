@@ -8,6 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 public class PauseButton {
 	private Texture texture;
 	private Image image;
+	private int delay = 0;
+	private int delayMax = 15;
 	
 	public PauseButton(Stage stage, float x, float y) {
 		texture = new Texture(Gdx.files.internal("img/pauseButton.png"));
@@ -18,13 +20,21 @@ public class PauseButton {
 	}
 	
 	public boolean isTouched() {
+		if(delay < delayMax) {
+			delay += 1;
+		}
 		int currentX = ScreenCoordinates.getRealX(Gdx.input.getX());
 		int currentY = ScreenCoordinates.getRealY(Gdx.input.getY());
+		boolean isTouched = Gdx.input.justTouched();
 		
-		if(currentX > image.getX() && currentX < image.getX() + 32 && currentY > image.getY() && currentY < image.getY() + 32) {
-			System.out.println("Du trycker");
+		// Checks if you touch the screen and is on the pausebutton
+		if(currentX > image.getX() && currentX < image.getX() + 32 && currentY > image.getY() && 
+				currentY < image.getY() + 32 && delay >= delayMax && isTouched) {
+			delay = 0;
+			return true;
+		} else {
+			return false;
 		}
-		
-		return false;
+
 	}
 }

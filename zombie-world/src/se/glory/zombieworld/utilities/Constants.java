@@ -15,6 +15,8 @@ public class Constants {
 	public static final int VIEWPORT_WIDTH = 800;
 	public static int VIEWPORT_HEIGHT;
 	
+	public static boolean isRunning = true;
+	
 	public static enum MoveableBodyShape {
 		CIRCLE, SQUARE;
 	}

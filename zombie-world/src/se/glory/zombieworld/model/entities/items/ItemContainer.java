@@ -1,5 +1,7 @@
 package se.glory.zombieworld.model.entities.items;
 
+import se.glory.zombieworld.utilities.ScreenCoordinates;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -16,6 +18,9 @@ public class ItemContainer {
 	private Texture texture;
 	private Image actor;
 	private Image currentItem;
+	
+	private int delay = 0;
+	private int delayMax = 30;
 	
 	public ItemContainer(Stage stage, float x, float y, boolean quick) {
 		this.stage = stage;
@@ -49,6 +54,10 @@ public class ItemContainer {
 		return actor.getY();
 	}
 	
+	public Image getItemImage() {
+		return currentItem;
+	}
+	
 	public void setActorX(float x) {
 		actor.setX(x);
 		if(currentItem != null) {
@@ -66,6 +75,7 @@ public class ItemContainer {
 	public void show() {
 		actor.setVisible(true);
 		if(currentItem != null) {
+			currentItem.setPosition(actor.getX() + 16, actor.getY() + 16);
 			currentItem.setVisible(true);
 		}
 	}
@@ -88,6 +98,23 @@ public class ItemContainer {
 		Array<Actor> tempArray = stage.getActors();
 		if(tempArray.contains(currentItem, true)) {
 			stage.getRoot().removeActor(currentItem);
+		}
+	}
+	
+	public boolean isTouched() {
+		if(delay < delayMax) {
+			delay += 1;
+		}
+		int currentX = ScreenCoordinates.getRealX(Gdx.input.getX());
+		int currentY = ScreenCoordinates.getRealY(Gdx.input.getY());
+		boolean isTouched = Gdx.input.justTouched();
+		
+		if(currentX > actor.getX() && currentX < actor.getX() + 32 && currentY > actor.getY() && 
+				currentY < actor.getY() + 32 && isTouched) {
+			delay = 0;
+			return true;
+		} else {
+			return false;
 		}
 	}
 }

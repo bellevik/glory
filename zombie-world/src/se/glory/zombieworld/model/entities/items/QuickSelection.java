@@ -32,6 +32,12 @@ public class QuickSelection {
 			itemContainers[i] = new ItemContainer(stage, (float)(selectionX + Math.cos(radians)), (float)(selectionY + Math.sin(radians)), true);
 		}
 		
+		
+		Texture testTexture = new Texture(Gdx.files.internal("img/player.png"));
+		Image testImage = new Image(testTexture);
+		itemContainers[0].newItem(testImage);
+		
+		/*
 		// Till Ekman: har ser du hur man lagger in nya bilder
 		Texture testTexture = new Texture(Gdx.files.internal("img/player.png"));
 		Texture testTexture2 = new Texture(Gdx.files.internal("img/zombie.png"));
@@ -47,10 +53,11 @@ public class QuickSelection {
 		// Tar bort den forsta bilden
 		itemContainers[0].removeItem();
 		// Kor du appen nu ser du att det bara ar tredje som har en bild
+		*/
 		
 		selectionStick = new Joystick(stage, selectionX, selectionY, 64, 64, Constants.TouchpadType.ITEM_SELECTION);
 
-		currentSelection = new CurrentSelection(stage, selectionStick.getTouchpad().getX(), selectionStick.getTouchpad().getY());
+		currentSelection = new CurrentSelection(stage, selectionStick.getTouchpad().getX(), selectionStick.getTouchpad().getY(), true);
 	}
 	
 	public void updatePosition() {
