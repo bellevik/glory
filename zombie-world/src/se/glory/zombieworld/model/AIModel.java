@@ -104,13 +104,8 @@ public class AIModel {
 				if (h.getState() == Human.State.IDLE) {
 					Random generator = new Random();
 					
-<<<<<<< HEAD
-					int goalX = generator.nextInt(500);
-					int goalY = generator.nextInt(500);
-=======
 					int goalX = generator.nextInt(mapWidth);
 					int goalY = generator.nextInt(mapHeight);
->>>>>>> develop
 					
 					while (blockedTiles.contains(new Point(goalX, goalY))) {
 						goalX = generator.nextInt(mapWidth);

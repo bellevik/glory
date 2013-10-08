@@ -48,14 +48,12 @@ public class Player implements Creature {
 	private int health;
 	private int maxHealth;
 	
-<<<<<<< HEAD
 	private boolean isIndoors;
-=======
+	
 	// TODO Set the variable depending on the weapons arsenal class. What weapon is equipped
 	//These variables will handle the shooting method
 	private boolean readyToFire = true;
 	private float reloadTime = 1;
->>>>>>> develop
 
 	public Player (float x, float y, float width, float height) {
 		this.x = x;
@@ -271,20 +269,19 @@ public class Player implements Creature {
 		return body;
 	}
 	
-	public Animation getAnimation(){
+	public Animation getAnimation() {
 		return this.animation;
 	}
-<<<<<<< HEAD
-	public void setIsIndoors(boolean isIndoors){
+	
+	public void setIsIndoors(boolean isIndoors) {
 		this.isIndoors=isIndoors;
 	}
-	public boolean getIsIndoors(){
+	public boolean getIsIndoors() {
 		return this.isIndoors;
-=======
-	
+	}
+		
 	@Override
 	public boolean isMoving() {
 		return getBody().getLinearVelocity().len() != 0;
->>>>>>> develop
 	}
 }
