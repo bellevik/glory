@@ -23,6 +23,8 @@ public class MoveableBody implements Creature {
 	
 	private int health;
 	private int maxHealth;
+	private boolean infected = false;
+	private boolean zombie = false;
 	
 	public MoveableBody(float x, float y, float width, float height, Texture texture, Constants.MoveableBodyShape shape, Constants.MoveableBodyType type) {
 		this.width = width;
@@ -71,6 +73,18 @@ public class MoveableBody implements Creature {
 	
 	public int getMaxHealth() {
 		return maxHealth;
+	}
+	
+	public boolean isInfected() {
+		return infected;
+	}
+	
+	public boolean isZombie() {
+		return zombie;
+	}
+	
+	public void turnIntoZombie() {
+		zombie = true;
 	}
 
 	@Override

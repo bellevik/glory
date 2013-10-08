@@ -47,6 +47,7 @@ public class Player implements Creature {
 	private Animation animation;
 	private int health;
 	private int maxHealth;
+	private Timer infectedTimer;
 	
 	// TODO Set the variable depending on the weapons arsenal class. What weapon is equipped
 	//These variables will handle the shooting method
@@ -250,6 +251,10 @@ public class Player implements Creature {
 	
 	public int getMaxHealth() {
 		return maxHealth;
+	}
+	
+	public boolean isInfected() {
+		return (infectedTimer != null);
 	}
 	
 	@Override

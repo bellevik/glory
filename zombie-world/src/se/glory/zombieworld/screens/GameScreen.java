@@ -74,11 +74,11 @@ public class GameScreen implements Screen {
 		worldModel.update();
 		
 	//	healthBar.updateHealth(70);
-		testHealthBar();
+	//	testHealthBar();
 	}
 	
 	
-	private int healthVar = 0;
+/*	private int healthVar = 0;
 	private int negVar = 1;
 	private void testHealthBar() {
 		healthVar += negVar;
@@ -86,7 +86,7 @@ public class GameScreen implements Screen {
 		if(healthVar == 100 || healthVar == 0) {
 			negVar *= -1;
 		}
-	}
+	}*/
 
 	@Override
 	public void resize(int width, int height) {
