@@ -1,7 +1,9 @@
 package se.glory.zombieworld.screens;
 
+import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.items.Healthbar;
+import se.glory.zombieworld.model.entities.items.ItemView;
 import se.glory.zombieworld.model.entities.items.QuickSelection;
 import se.glory.zombieworld.model.entities.obstacles.CustomObstacle;
 import se.glory.zombieworld.utilities.Constants;
@@ -17,40 +19,56 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class GameScreen implements Screen {
-	private QuickSelection quickSelection;
+	//private QuickSelection quickSelection;
+	//private ItemView itemView;
+	private boolean isRunning = true;
 	
-	private Healthbar healthBar;
+	//private Healthbar healthBar;
 	
-	private Stage stage;
+	//private Stage stage;
 	
 	// moveStick controls player movement, fireStick controls item use
-	private Joystick moveStick, fireStick;
+	//private Joystick moveStick, fireStick;
 	
 	private WorldModel worldModel;
 	private GameView gameView;
 	
+	/*
+	 * This method will be called all the time throughout the game. Libgdx method!
+	 */
 	@Override
 	public void render(float delta) {
 		gameView.render();
 		
 		// Update player movement
-		WorldModel.player.getBody().setLinearVelocity(moveStick.getTouchpad().getKnobPercentX() * 2, moveStick.getTouchpad().getKnobPercentY() * 2);
+		WorldModel.player.getBody().setLinearVelocity(StageModel.moveStick.getTouchpad().getKnobPercentX() * 2, StageModel.moveStick.getTouchpad().getKnobPercentY() * 2);
 		
 		//The four floats below will represent the percentage in X and Y direction of the Joysticks
-		float moveKnobX = moveStick.getTouchpad().getKnobPercentX();
-		float moveKnobY = moveStick.getTouchpad().getKnobPercentY();
-		float fireKnobX = fireStick.getTouchpad().getKnobPercentX();
-		float fireKnobY = fireStick.getTouchpad().getKnobPercentY();
+		float moveKnobX = StageModel.moveStick.getTouchpad().getKnobPercentX();
+		float moveKnobY = StageModel.moveStick.getTouchpad().getKnobPercentY();
+		float fireKnobX = StageModel.fireStick.getTouchpad().getKnobPercentX();
+		float fireKnobY = StageModel.fireStick.getTouchpad().getKnobPercentY();
 		//This method will rotate the player
 		WorldModel.player.applyRotationToPlayer(moveKnobX, moveKnobY, fireKnobX, fireKnobY);
 		
-		quickSelection.selectItem();
+		//If someone is touching the right joystick then we need the player to be ready to shoot
+		if (fireKnobX != 0 && fireKnobY != 0) {
+			WorldModel.player.shoot();
+		}
+		
+		if(isRunning) {
+			StageModel.quickSelection.selectItem();
+		} else {
+			StageModel.itemView.manageItems();
+			StageModel.quickSelection.manageItems();
+		}
+		
 		
 		// Animator.drawAnimation(batch, player.getBody().getPosition().x, player.getBody().getPosition().y);
 		// player.getAnimation().drawAnimation(batch, player.getBody().getPosition().x, player.getBody().getPosition().y);
 		
-		stage.act(delta);
-		stage.draw();
+		StageModel.stage.act(delta);
+		StageModel.stage.draw();
 		
 		WorldModel.world.step(1/60f, 6, 2);
 		worldModel.update();
@@ -64,7 +82,7 @@ public class GameScreen implements Screen {
 	private int negVar = 1;
 	private void testHealthBar() {
 		healthVar += negVar;
-		healthBar.updateHealth(healthVar);
+		StageModel.healthBar.updateHealth(healthVar);
 		if(healthVar == 100 || healthVar == 0) {
 			negVar *= -1;
 		}
@@ -78,16 +96,23 @@ public class GameScreen implements Screen {
 		gameView.getCamera().viewportWidth = Constants.VIEWPORT_WIDTH;
 		gameView.getCamera().viewportHeight = Constants.VIEWPORT_HEIGHT;
 		
-	    stage.setViewport(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT, false);
-	    quickSelection.updatePosition();
-	    healthBar.updatePosition();
+	    StageModel.stage.setViewport(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT, false);
+	    StageModel.quickSelection.updatePosition();
+	    StageModel.healthBar.updatePosition();
 	}
 	
+	/*
+	 * This method will set a constant for scaling the window. Really good when Android
+	 * got so many different screen siezes.
+	 */
 	private void adjustViewportScale() {
 		double scale = Constants.VIEWPORT_WIDTH / (double) Gdx.graphics.getWidth();
 		Constants.VIEWPORT_HEIGHT = (int) (Gdx.graphics.getHeight() * scale);
 	}
-
+	
+	/*
+	 * This method will be called upon screen load. Libgdx method!
+	 */
 	@Override
 	public void show() {
 		adjustViewportScale();
@@ -103,24 +128,11 @@ public class GameScreen implements Screen {
 		gameView = new GameView(batch);
 		worldModel.setupAIModel(gameView.getMapLayer(1));
 		
-		stage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true, batch);
-		
-		moveStick = new Joystick(stage, 15, 15, 128, 128, Constants.TouchpadType.MOVEMENT);
-		fireStick = new Joystick(stage, Constants.VIEWPORT_WIDTH - 15 - 128, 15, 128, 128, Constants.TouchpadType.FIRE);
-		
-		quickSelection = new QuickSelection(stage);
-		
-		healthBar = new Healthbar(stage);
-		
-		Gdx.input.setInputProcessor(stage);
+		StageModel.createUI(batch);
 		
 		// ## Add humans
-		worldModel.getAIModel().addHuman(16+10*32, 16+3*32);
-		worldModel.getAIModel().addHuman(16+15*32, 16+15*32);
-		worldModel.getAIModel().addHuman(16+16*32, 16+20*32);
-		worldModel.getAIModel().addHuman(16+8*32, 16+20*32);
-		worldModel.getAIModel().addHuman(16+30*32, 16+15*32);
-		worldModel.getAIModel().addHuman(16+30*32, 16+23*32);
+		worldModel.getAIModel().addHuman(16+22*16, 16+8*16);
+		worldModel.getAIModel().addHuman(16+22*16, 16+15*16);
 		
 		// ## Add zombies
 		// worldModel.getAIModel().addZombie(272, 272);
@@ -150,7 +162,7 @@ public class GameScreen implements Screen {
 				if (c == null || y == collideLayer.getHeight() - 1) {
 					if (start != -1) {
 						if (start != end) {
-							new CustomObstacle(x * 32, start * 32, 32, (end - start + 1) * 32);
+							new CustomObstacle(x * 16, start * 16, 16, (end - start + 1) * 16);
 						} else {
 							if (y == collideLayer.getHeight() - 1)
 								lonelyWalls[x][y] = true;
@@ -187,7 +199,7 @@ public class GameScreen implements Screen {
 				
 				if (c == false || x == lonelyWalls.length - 1) {
 					if (start != -1) {
-						new CustomObstacle(start * 32, y * 32, (end - start + 1) * 32, 32);
+						new CustomObstacle(start * 16, y * 16, (end - start + 1) * 16, 16);
 					}
 					
 					start = -1;
@@ -216,6 +228,6 @@ public class GameScreen implements Screen {
 	public void dispose() {
 		WorldModel.world.dispose();
 		gameView.dispose();
-		stage.dispose();
+		StageModel.stage.dispose();
 	}
 }

@@ -1,5 +1,8 @@
 package se.glory.zombieworld.utilities;
 
+import se.glory.zombieworld.model.entities.MoveableBody;
+import se.glory.zombieworld.utilities.Constants.MoveableBodyType;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -23,23 +26,47 @@ public class Animator {
 	private float stateTimer;
 	
 	private Animation[] humanAnimations = new Animation[8];
+	private Animation[] playerAnimations = new Animation[8];
+	private Animation[] zombieAnimations = new Animation[8];
 	
+	/*
+	 * Creates all animations for all types of creatures. This will speed up the game
+	 * since they are not created on-the-fly.
+	 */
 	public Animator() {
-		humanAnimations[0] = createAnimation("SpriteSheetMain.png", 0);
-		humanAnimations[1] = createAnimation("SpriteSheetMain.png", 1);
-		humanAnimations[2] = createAnimation("SpriteSheetMain.png", 2);
-		humanAnimations[3] = createAnimation("SpriteSheetMain.png", 3);
-		humanAnimations[4] = createAnimation("SpriteSheetMain.png", 4);
-		humanAnimations[5] = createAnimation("SpriteSheetMain.png", 5);
-		humanAnimations[6] = createAnimation("SpriteSheetMain.png", 6);
-		humanAnimations[7] = createAnimation("SpriteSheetMain.png", 7);
+		//Creating human animation
+		for (int i = 0; i<8;i++){
+			humanAnimations[i] = createAnimation("humanSheet.png", i);
+		}
+		//Creating player animation
+		for (int i = 0; i<8;i++){
+			playerAnimations[i] = createAnimation("playerSheet.png", i);
+		}
+		//Creating zombie animation
+		for (int i = 0; i<8;i++){
+			zombieAnimations[i] = createAnimation("zombieSheet.png", i);
+		}
 	}
 	
-	public Animation getAnimation(int i) {
-		return humanAnimations[i];
+	/*
+	 * Returns different animations depending on the type and index passed along.
+	 */
+	public Animation getAnimation(MoveableBodyType type, int i) {
+		if(type == MoveableBodyType.HUMAN){
+			return humanAnimations[i];
+		}else if(type == MoveableBodyType.PLAYER){
+			return playerAnimations[i];
+		}else if (type == MoveableBodyType.ZOMBIE){
+			return zombieAnimations[i];
+		}else{
+			return null;
+		}
 	}
 	
-	//Creates and returns an animation
+	/*
+	 * Creates an animation depending on the filename and direction passed along.
+	 * Returns the created animation.
+	 */
 	private Animation createAnimation(String fileName, int direction) {
 		Animation animation = null;
 		
@@ -140,11 +167,14 @@ public class Animator {
 		}
 	}
 	
-	public void drawAnimation(SpriteBatch batch, float x, float y, Animation ani){
+	/*
+	 * Gets the current frame in the animation and draws to the screen.
+	 */
+	public void drawAnimation(SpriteBatch batch, float x, float y, Animation ani, boolean isMoving){
 		//stateTime = the time spent in the state represented by this animation
         stateTimer += Gdx.graphics.getDeltaTime();
-        //Get the current frame
-        currentFrame = ani.getKeyFrame(stateTimer, true);
+        //Get the current frame and loops if the creature is moving
+        currentFrame = ani.getKeyFrame(stateTimer, isMoving);
         batch.begin();
         batch.draw(currentFrame, x*Constants.BOX_TO_WORLD - currentFrame.getRegionWidth() / 2, y*Constants.BOX_TO_WORLD - currentFrame.getRegionHeight() / 2);
         batch.end();

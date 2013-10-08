@@ -27,7 +27,7 @@ public class WorldModel {
 		world = new World(new Vector2(0, 0), true);
 		aiModel = new AIModel();
 		
-		player = new Player (300, 400, 16, 16);
+		player = new Player (300, 300, 16, 16);
 		
 		world.setContactListener(new CollisionDetection());
 	}
@@ -48,10 +48,11 @@ public class WorldModel {
 		}
 
 		aiModel.setBlockedTiles(blockedTiles);
+		aiModel.setMapSize(collideLayer.getWidth(), collideLayer.getHeight());
 	}
 	
 	public void update() {
-		// sweepDeadBodies();
+		sweepDeadBodies();
 		aiModel.update();
 	}
 	
@@ -65,11 +66,13 @@ public class WorldModel {
 		WorldModel.world.getBodies(WorldModel.removeableBodies);
 		
 		for (Body body : WorldModel.removeableBodies) {
-			if ( body.getUserData().getClass().equals(Identity.class) ) {
-				if(body!=null) {
-					if (((Identity)(body.getUserData())).isDead()) {
-						if (!WorldModel.world.isLocked()) {
-							WorldModel.world.destroyBody(body);
+			if(body.getUserData() != null){
+				if ( body.getUserData().getClass().equals(Identity.class) ) {
+					if(body!=null) {
+						if (((Identity)(body.getUserData())).isDead()) {
+							if (!WorldModel.world.isLocked()) {
+								WorldModel.world.destroyBody(body);
+							}
 						}
 					}
 				}

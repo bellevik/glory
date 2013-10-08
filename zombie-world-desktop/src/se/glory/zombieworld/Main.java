@@ -11,7 +11,7 @@ public class Main {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 		cfg.title = TITLE + " v" + VERSION;
 		cfg.useGL20 = true;
-		cfg.width = 1000;
+		cfg.width = 800;
 		cfg.height = 600;
 		
 		new LwjglApplication(new ZombieWorld(), cfg);
