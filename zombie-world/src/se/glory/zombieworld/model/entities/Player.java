@@ -45,9 +45,6 @@ public class Player implements Creature {
 	
 	private RevoluteJoint joint;
 	private Animation animation;
-	private int health;
-	private int maxHealth;
-	private Timer infectedTimer;
 	
 	// TODO Set the variable depending on the weapons arsenal class. What weapon is equipped
 	//These variables will handle the shooting method
@@ -239,22 +236,6 @@ public class Player implements Creature {
 		WorldModel.player.getBody().setTransform(WorldModel.player.getBody().getPosition(), knobDegree * MathUtils.degreesToRadians);
 		WorldModel.player.getBody().getJointList().get(0).joint.getBodyB().setTransform(WorldModel.player.getBody().getJointList().get(0).joint.getBodyB().getPosition(), knobDegree * MathUtils.degreesToRadians);
 		WorldModel.player.getBody().getJointList().get(0).joint.getBodyB().setAwake(true);
-	}
-	
-	public int getHealth() {
-		return health;
-	}
-	
-	public void takeDamage(int damage) {
-		health -= damage;
-	}
-	
-	public int getMaxHealth() {
-		return maxHealth;
-	}
-	
-	public boolean isInfected() {
-		return (infectedTimer != null);
 	}
 	
 	@Override
