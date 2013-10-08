@@ -17,6 +17,7 @@ import com.badlogic.gdx.physics.box2d.Manifold;
  * This class will handle all of the Collisions in our Box2D world.
  */
 public class CollisionDetection implements ContactListener {
+	UtilityTimer zombieCollisionTimer = null;
 	
 	// TODO Refactor all these if statements into class methods!
 	@Override
@@ -66,12 +67,13 @@ public class CollisionDetection implements ContactListener {
 		}
 		
 		
-		if (i1.getType() == Constants.MoveableBodyType.PLAYER && i2.getType() == Constants.MoveableBodyType.ZOMBIE) {
+		//Only activated if zombie walks into player. not if player walks into human
+		if ((i1.getType() == Constants.MoveableBodyType.PLAYER && i2.getType() == Constants.MoveableBodyType.ZOMBIE)
+				|| (i1.getType() == Constants.MoveableBodyType.ZOMBIE && i2.getType() == Constants.MoveableBodyType.PLAYER)) {
 			
 			//Making a local object of the current object player depending on which object in the collision it is
-		//	Player player = i1.getType() == Constants.MoveableBodyType.PLAYER ? (Player)i1.getObj() : (Player)i2.getObj();
-			Player player = (Player)i1.getObj();
-			
+			Player player = i1.getType() == Constants.MoveableBodyType.PLAYER ? (Player)i1.getObj() : (Player)i2.getObj();
+				
 			/*Player player = null;
 			if(i1.getType() == Constants.MoveableBodyType.PLAYER) {
 				player = (Player)i1.getObj();
@@ -86,6 +88,7 @@ public class CollisionDetection implements ContactListener {
 				}
 				
 				player.changeHealth(-Constants.ZOMBIE_DAMAGE);
+				zombieCollisionTimer = new UtilityTimer(1000);
 			}
 		}
 		
@@ -125,7 +128,7 @@ public class CollisionDetection implements ContactListener {
 
 	@Override
 	public void endContact(Contact contact) {
-		
+		zombieCollisionTimer = null;
 	}
 
 	@Override

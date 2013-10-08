@@ -1,5 +1,6 @@
 package se.glory.zombieworld.model.entities;
 
+import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.items.Item;
 import se.glory.zombieworld.model.entities.weapons.Bullet;
@@ -279,6 +280,7 @@ public class Player implements Creature {
 	
 	public void infect() {
 		infectedHealth = new UtilityTimer(Constants.INFECTED_INTERVAL);
+		StageModel.healthBar.setInfectedState(true);
 	}
 	
 	public void kill() {

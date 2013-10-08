@@ -1,5 +1,6 @@
 package se.glory.zombieworld.model.entities.items;
 
+import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.utilities.Constants;
 
 import com.badlogic.gdx.Gdx;
@@ -12,6 +13,7 @@ public class Healthbar extends Actor{
 	
 	private Texture texture;
 	private Image actor;
+	private Stage stage;
 	
 	private int lastHealthPercent, healthGoal;
 	private int maxHealthPercent = 100;
@@ -24,17 +26,17 @@ public class Healthbar extends Actor{
 	private int yMargin = 4;
 	private int fillLength = 3;
 	
-	private HealthFill[] healthBarAmount;
-	private Image[] healthBarActors;
+	private HealthFill[] healthBarAmount = null;
 	
 	private Image bgActor, fgActor;
 	
 	
 	public Healthbar(Stage stage){
+		this.stage = stage;
+		
 		x = (Constants.VIEWPORT_WIDTH - 15 - 780);
 		y = (Constants.VIEWPORT_HEIGHT - 32 - 15);
 		lastHealthPercent = maxHealthPercent;
-		healthBarAmount = new HealthFill[maxHealthPercent];
 		
 		texture = new Texture(Gdx.files.internal("img/health/healthBarBottom.png"));
 		bgActor = new Image(texture);
@@ -42,10 +44,25 @@ public class Healthbar extends Actor{
 		stage.addActor(bgActor);
 		bgActor.setPosition(x, y);
 		
+		createHealthBar(false);
+		
+		resetHealthBar();
+		
+	}
+	
+	private void createHealthBar(boolean infected) {
+		if(healthBarAmount != null) {
+			stage.getRoot().removeActor(fgActor);
+			for(int i=0; i<maxHealthPercent; i++) {
+				stage.getRoot().removeActor(healthBarAmount[i].getActor());
+			}
+		}
+		
+		healthBarAmount = new HealthFill[maxHealthPercent];
 		//Creating all the HealthFills and places them in the array
 		for(int i=0; i<maxHealthPercent; i++) {
 			int newX = i*fillLength+x+xMargin;
-			healthBarAmount[i] = new HealthFill(stage, newX, y+yMargin, i);
+			healthBarAmount[i] = new HealthFill(stage, newX, y+yMargin, i, infected);
 		}
 		
 		texture = new Texture(Gdx.files.internal("img/health/healthBarTop.png"));
@@ -54,8 +71,8 @@ public class Healthbar extends Actor{
 		stage.addActor(fgActor);
 		fgActor.setPosition(x, y);
 		
-		resetHealthBar();
-		
+		//Updating health to become the percent it was before changing to infected or none infected state
+		updateHealth(lastHealthPercent);
 	}
 	
 	public void updatePosition() {
@@ -99,6 +116,7 @@ public class Healthbar extends Actor{
 		healthGoal = healthToUpdate;
 	}
 	
+	//Uses inc and dec to slowly change the healthbar towards the set goal making it looks smooth when changing
 	public void updateHealthMovementSlowly() {
 		if(healthGoal != lastHealthPercent) {
 			if(healthGoal > lastHealthPercent) {
@@ -109,6 +127,7 @@ public class Healthbar extends Actor{
 		}
 	}
 	
+	//Inc and dec are used to slowly change the healthbar
 	private void incHealthBar() {
 		healthBarAmount[lastHealthPercent++].show();
 	}
@@ -131,14 +150,18 @@ public class Healthbar extends Actor{
 		lastHealthPercent = healthToUpdate;
 	}
 	
+	public void setInfectedState(boolean state) {
+		createHealthBar(state);
+	}
+	
 	private class HealthFill {
 		private Texture texture;
 		private Image actor;
 		private float x, y;
 		private int index;
 		
-		public HealthFill(Stage stage, float x, float y, int index) {
-			texture = new Texture(Gdx.files.internal("img/health/healthBar.png"));
+		public HealthFill(Stage stage, float x, float y, int index, boolean infected) {
+			texture = infected ? new Texture(Gdx.files.internal("img/health/infectedHealthBar.png")) : new Texture(Gdx.files.internal("img/health/healthBar.png"));
 			this.x = x;
 			this.y = y;
 			this.index = index;
@@ -154,12 +177,23 @@ public class Healthbar extends Actor{
 			actor.setPosition(x, y);
 		}
 		
+/*		private void infectBar(boolean hide) {
+			texture = new Texture(Gdx.files.internal("img/health/infectedHealthBar.png"));
+			actor = new Image(texture);
+			if(hide){
+				actor.setVisible(false);
+			}
+		}*/
+		
 		private void show() {
 			actor.setVisible(true);
 		}
 		
 		private void hide() {
 			actor.setVisible(false);
+		}
+		private Image getActor() {
+			return actor;
 		}
 	}
 }
