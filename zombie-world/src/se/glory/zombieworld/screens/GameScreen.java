@@ -131,15 +131,11 @@ public class GameScreen implements Screen {
 		StageModel.createUI(batch);
 		
 		// ## Add humans
-		worldModel.getAIModel().addHuman(16+10*32, 16+3*32);
-		worldModel.getAIModel().addHuman(16+15*32, 16+15*32);
-		worldModel.getAIModel().addHuman(16+16*32, 16+20*32);
-		worldModel.getAIModel().addHuman(16+8*32, 16+20*32);
-		worldModel.getAIModel().addHuman(16+30*32, 16+15*32);
-		worldModel.getAIModel().addHuman(16+30*32, 16+23*32);
+		worldModel.getAIModel().addHuman(16+22*16, 16+8*16);
+		worldModel.getAIModel().addHuman(16+22*16, 16+15*16);
 		
 		// ## Add zombies
-		worldModel.getAIModel().addZombie(272, 272);
+		// worldModel.getAIModel().addZombie(272, 272);
 		
 		createStaticWalls();
 	}
@@ -166,7 +162,7 @@ public class GameScreen implements Screen {
 				if (c == null || y == collideLayer.getHeight() - 1) {
 					if (start != -1) {
 						if (start != end) {
-							new CustomObstacle(x * 32, start * 32, 32, (end - start + 1) * 32);
+							new CustomObstacle(x * 16, start * 16, 16, (end - start + 1) * 16);
 						} else {
 							if (y == collideLayer.getHeight() - 1)
 								lonelyWalls[x][y] = true;
@@ -203,7 +199,7 @@ public class GameScreen implements Screen {
 				
 				if (c == false || x == lonelyWalls.length - 1) {
 					if (start != -1) {
-						new CustomObstacle(start * 32, y * 32, (end - start + 1) * 32, 32);
+						new CustomObstacle(start * 16, y * 16, (end - start + 1) * 16, 16);
 					}
 					
 					start = -1;
