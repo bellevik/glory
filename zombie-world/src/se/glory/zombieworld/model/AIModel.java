@@ -84,8 +84,8 @@ public class AIModel {
 				if (h.getState() == Human.State.IDLE) {
 					Random generator = new Random();
 					
-					int goalX = generator.nextInt(40);
-					int goalY = generator.nextInt(20);
+					int goalX = generator.nextInt(500);
+					int goalY = generator.nextInt(500);
 					
 					while (blockedTiles.contains(new Point(goalX, goalY))) {
 						goalX = generator.nextInt(40);

@@ -129,7 +129,7 @@ public class GameScreen implements Screen {
 	}
 
 	private void createStaticWalls() {
-		TiledMapTileLayer collideLayer = gameView.getMapLayer(1);
+		TiledMapTileLayer collideLayer = gameView.getMapLayer(0);
 		boolean[][] lonelyWalls = new boolean[collideLayer.getWidth()][collideLayer.getHeight()];
 		
 		for (int x = 0; x < collideLayer.getWidth(); x++) {

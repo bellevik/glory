@@ -37,7 +37,7 @@ public class GameView {
 		debugRenderer = new Box2DDebugRenderer();
 		camera = new OrthographicCamera();
 		
-		map = new TmxMapLoader().load("img/tilemap/map.tmx");
+		map = new TmxMapLoader().load("img/tilemap/theWorld.tmx");
 		mapRenderer = new OrthogonalTiledMapRenderer(map);
 		
 		animator = new Animator();

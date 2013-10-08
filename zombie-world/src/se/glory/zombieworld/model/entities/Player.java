@@ -45,6 +45,8 @@ public class Player implements Creature {
 	private Animation animation;
 	private int health;
 	private int maxHealth;
+	
+	private boolean isIndoors;
 
 	public Player (float x, float y, float width, float height) {
 		this.x = x;
@@ -223,5 +225,11 @@ public class Player implements Creature {
 	
 	public Animation getAnimation(){
 		return this.animation;
+	}
+	public void setIsIndoors(boolean isIndoors){
+		this.isIndoors=isIndoors;
+	}
+	public boolean getIsIndoors(){
+		return this.isIndoors;
 	}
 }
