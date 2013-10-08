@@ -31,6 +31,8 @@ public class GameScreen implements Screen {
 	private WorldModel worldModel;
 	private GameView gameView;
 	
+	private SoundPlayer soundPlayer;
+	
 	/*
 	 * This method will be called all the time throughout the game. Libgdx method!
 	 */
@@ -74,8 +76,8 @@ public class GameScreen implements Screen {
 	//	healthBar.updateHealth(70);
 		testHealthBar();
 		
-		if (new Random().nextFloat() * 1300 < 5)
-			SoundPlayer.playSoundEffect();
+		if (new Random().nextFloat() * 1500 < 5)
+			soundPlayer.playSoundEffect();
 	}
 	
 	
@@ -140,7 +142,8 @@ public class GameScreen implements Screen {
 		
 		createStaticWalls();
 		
-		SoundPlayer.playBackgroudMusic();
+		soundPlayer = new SoundPlayer();
+		soundPlayer.playBackgroudMusic();
 	}
 
 	private void createStaticWalls() {
