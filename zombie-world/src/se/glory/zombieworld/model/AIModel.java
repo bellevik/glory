@@ -89,6 +89,10 @@ public class AIModel {
 				h.getBody().setLinearVelocity(totX, totY);
 				h.setState(Human.State.FLEEING);
 			} else {
+				// If the human just got away form a zombie, set its state to idle.
+				if (h.getState() == Human.State.FLEEING)
+					h.setState(Human.State.IDLE);
+				
 				if (h.getState() == Human.State.IDLE) {
 					Random generator = new Random();
 					
