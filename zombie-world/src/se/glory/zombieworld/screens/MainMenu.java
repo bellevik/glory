@@ -29,6 +29,8 @@ public class MainMenu implements Screen {
 	
 	private SpriteBatch batch;
 	private Texture backgroundTexture, buttonExitTexture, buttonPlayTexture, buttonSettingsTexture;
+	private boolean pressedPlay = false, pressedSettings = false, pressedExit = false;
+	private int count = 0;
     
 	@Override
 	public void render(float delta) {
@@ -42,6 +44,7 @@ public class MainMenu implements Screen {
 		stage.act(delta);
 		stage.draw();
 		
+		drawMenu(batch);
 	}
 
 	@Override
@@ -79,18 +82,23 @@ public class MainMenu implements Screen {
 		buttonExit.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				count = 0;
+				pressedExit = true;
 				Gdx.app.exit();
 			}
 		});
 		buttonSettings.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				showSettings();
+				count = 0;
+				pressedSettings = true;
 			}
 		});
 		buttonPlay.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				count = 0;
+				pressedPlay = true;
 				((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen());
 			}
 		});
@@ -100,8 +108,38 @@ public class MainMenu implements Screen {
 		stage.addActor(buttonExit);
 	}
 
-	public void showSettings(){
-		
+	public void drawMenu(SpriteBatch batch){
+		if(pressedPlay){
+			buttonPlayTexture = new Texture(Gdx.files.internal("ui/buttonPlayHover.png"));
+			count++;
+			if(count == 50){
+				pressedPlay = false;
+				count = 0;
+			}
+		}else if(pressedSettings){
+			buttonSettingsTexture = new Texture(Gdx.files.internal("ui/buttonSettingsHover.png"));
+			count++;
+			if(count == 50){
+				pressedSettings = false;
+				count = 0;
+			}
+		}else if(pressedExit){
+			buttonExitTexture = new Texture(Gdx.files.internal("ui/buttonExitHover.png"));
+			count++;
+			if(count == 50){
+				pressedExit = false;
+				count = 0;
+			}
+		}else{
+			buttonPlayTexture = new Texture(Gdx.files.internal("ui/buttonPlay.png"));
+			buttonSettingsTexture = new Texture(Gdx.files.internal("ui/buttonSettings.png"));
+			buttonExitTexture = new Texture(Gdx.files.internal("ui/buttonExit.png"));
+		}
+		batch.begin();
+		batch.draw(buttonPlayTexture, Constants.VIEWPORT_WIDTH/2 - 142/2, 250);
+		batch.draw(buttonSettingsTexture, Constants.VIEWPORT_WIDTH/2 - 226/2, 175);
+		batch.draw(buttonExitTexture, Constants.VIEWPORT_WIDTH/2 - 144/2, 100);
+		batch.end();
 	}
 	
 	@Override
