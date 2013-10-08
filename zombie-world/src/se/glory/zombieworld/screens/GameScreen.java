@@ -1,13 +1,12 @@
 package se.glory.zombieworld.screens;
 
+import java.util.Random;
+
 import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.model.WorldModel;
-import se.glory.zombieworld.model.entities.items.Healthbar;
-import se.glory.zombieworld.model.entities.items.ItemView;
-import se.glory.zombieworld.model.entities.items.QuickSelection;
 import se.glory.zombieworld.model.entities.obstacles.CustomObstacle;
 import se.glory.zombieworld.utilities.Constants;
-import se.glory.zombieworld.utilities.Joystick;
+import se.glory.zombieworld.utilities.SoundPlayer;
 import se.glory.zombieworld.utilities.TextureHandler;
 import se.glory.zombieworld.view.GameView;
 
@@ -16,7 +15,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class GameScreen implements Screen {
 	//private QuickSelection quickSelection;
@@ -75,6 +73,9 @@ public class GameScreen implements Screen {
 		
 	//	healthBar.updateHealth(70);
 		testHealthBar();
+		
+		if (new Random().nextFloat() * 1300 < 5)
+			SoundPlayer.playSoundEffect();
 	}
 	
 	
@@ -138,6 +139,8 @@ public class GameScreen implements Screen {
 		// worldModel.getAIModel().addZombie(272, 272);
 		
 		createStaticWalls();
+		
+		SoundPlayer.playBackgroudMusic();
 	}
 
 	private void createStaticWalls() {
