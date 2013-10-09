@@ -27,6 +27,8 @@ public class Healthbar extends Actor{
 	private int fillLength = 3;
 	
 	private HealthFill[] healthBarAmount = null;
+	private HealthFill[] infectedHealthBarAmount = null;
+	private HealthFill[] activeHealthBar;
 	
 	private Image bgActor, fgActor;
 	
@@ -44,25 +46,15 @@ public class Healthbar extends Actor{
 		stage.addActor(bgActor);
 		bgActor.setPosition(x, y);
 		
-		createHealthBar(false);
-		
-		resetHealthBar();
-		
-	}
-	
-	private void createHealthBar(boolean infected) {
-		if(healthBarAmount != null) {
-			stage.getRoot().removeActor(fgActor);
-			for(int i=0; i<maxHealthPercent; i++) {
-				stage.getRoot().removeActor(healthBarAmount[i].getActor());
-			}
-		}
-		
+		//Creating both the infected healthbar and the regular one
 		healthBarAmount = new HealthFill[maxHealthPercent];
+		infectedHealthBarAmount = new HealthFill[maxHealthPercent];
+		
 		//Creating all the HealthFills and places them in the array
 		for(int i=0; i<maxHealthPercent; i++) {
 			int newX = i*fillLength+x+xMargin;
-			healthBarAmount[i] = new HealthFill(stage, newX, y+yMargin, i, infected);
+			healthBarAmount[i] = new HealthFill(stage, newX, y+yMargin, i, false);
+			infectedHealthBarAmount[i] = new HealthFill(stage, newX, y+yMargin, i, true);
 		}
 		
 		texture = new Texture(Gdx.files.internal("img/health/healthBarTop.png"));
@@ -71,8 +63,7 @@ public class Healthbar extends Actor{
 		stage.addActor(fgActor);
 		fgActor.setPosition(x, y);
 		
-		//Updating health to become the percent it was before changing to infected or none infected state
-		updateHealth(lastHealthPercent);
+		resetHealthBar();
 	}
 	
 	public void updatePosition() {
@@ -81,6 +72,7 @@ public class Healthbar extends Actor{
 		bgActor.setPosition(x, y);
 		for(int i=0; i<maxHealthPercent; i++) {
 			healthBarAmount[i].updatePosition();
+			infectedHealthBarAmount[i].updatePosition();
 		}
 		fgActor.setPosition(x, y);
 		
@@ -108,15 +100,16 @@ public class Healthbar extends Actor{
 	}
 	
 	public void resetHealthBar() {
+		activeHealthBar = infectedHealthBarAmount;
 		lastHealthPercent = maxHealthPercent;
-		updateHealth(lastHealthPercent);
+		setInfectedState(false);
 	}
 	
 	public void setHealthPercentGoal(int healthToUpdate) {
 		healthGoal = healthToUpdate;
 	}
 	
-	//Uses inc and dec to slowly change the healthbar towards the set goal making it looks smooth when changing
+	//Uses inc and dec to slowly change the healthbar towards the set goal making it look smooth when changing
 	public void updateHealthMovementSlowly() {
 		if(healthGoal != lastHealthPercent) {
 			if(healthGoal > lastHealthPercent) {
@@ -129,29 +122,49 @@ public class Healthbar extends Actor{
 	
 	//Inc and dec are used to slowly change the healthbar
 	private void incHealthBar() {
-		healthBarAmount[lastHealthPercent++].show();
+		activeHealthBar[lastHealthPercent++].show();
 	}
 	
 	private void decHealthBar() {
-		healthBarAmount[--lastHealthPercent].hide();
+		activeHealthBar[--lastHealthPercent].hide();
+	}
+	
+	//Forcing the entire health to update to the chosen percentage. Useful when changing between infected and normal healthBar
+	private void forceHealthUpdate(int newHealth) {
+		for(int i=0; i<newHealth; i++) {
+			activeHealthBar[i].show();
+		}
+		
+		for(int j=newHealth; j<maxHealthPercent; j++) {
+			activeHealthBar[j].hide();
+		}
 	}
 	
 	//Not in use right now. May be removed later
 	public void updateHealth(int healthToUpdate) {
 		if(lastHealthPercent < healthToUpdate) {
 			for(int i=lastHealthPercent; i<healthToUpdate; i++) {
-				healthBarAmount[i].show();
+				activeHealthBar[i].show();
 			}
 		}else{
 			for(int i=lastHealthPercent; i>healthToUpdate; i--) {
-				healthBarAmount[i-1].hide();
+				activeHealthBar[i-1].hide();
 			}
 		}
 		lastHealthPercent = healthToUpdate;
 	}
 	
+	/**
+	 * Changes the color of the healthbar to give visual feedback of infected state
+	 * @param state changes the bar to the colors depending on if it is true or false. It shows if the bar should be in infected
+	 * state or not
+	 */
 	public void setInfectedState(boolean state) {
-		createHealthBar(state);
+		//Hiding last active healthBar
+		forceHealthUpdate(0);
+		
+		activeHealthBar = state ? infectedHealthBarAmount : healthBarAmount;
+		forceHealthUpdate(lastHealthPercent);
 	}
 	
 	private class HealthFill {
@@ -176,14 +189,6 @@ public class Healthbar extends Actor{
 			x = (Constants.VIEWPORT_WIDTH - 15 - 780 + index*fillLength+xMargin);
 			actor.setPosition(x, y);
 		}
-		
-/*		private void infectBar(boolean hide) {
-			texture = new Texture(Gdx.files.internal("img/health/infectedHealthBar.png"));
-			actor = new Image(texture);
-			if(hide){
-				actor.setVisible(false);
-			}
-		}*/
 		
 		private void show() {
 			actor.setVisible(true);

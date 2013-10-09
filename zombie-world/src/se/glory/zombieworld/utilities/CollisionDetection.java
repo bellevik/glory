@@ -92,6 +92,19 @@ public class CollisionDetection implements ContactListener {
 			}
 		}
 		
+		//Only activated if zombie walks into player. not if player walks into human
+		if ((i1.getType() == Constants.MoveableBodyType.PLAYER && i2.getType() == Constants.MoveableBodyType.HUMAN)
+				|| (i1.getType() == Constants.MoveableBodyType.HUMAN && i2.getType() == Constants.MoveableBodyType.PLAYER)) {
+			
+			//Making a local object of the current object player depending on which object in the collision it is
+			Player player = i1.getType() == Constants.MoveableBodyType.PLAYER ? (Player)i1.getObj() : (Player)i2.getObj();
+			
+			//infecting the player
+			if(player != null) {
+				player.changeHealth(1);
+			}
+		}
+		
 		
 		
 		//Checks if the first collision body is of type Item and the other is of type Player

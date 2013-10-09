@@ -255,7 +255,8 @@ public class Player implements Creature {
 	public void changeHealth(int healthChange) {
 		
 		//Remove infected status if getting healed
-		if(healthChange >= 0) {
+		if(healthChange >= 0 && infectedHealth != null) {
+			StageModel.healthBar.setInfectedState(false);
 			infectedHealth = null;
 		}
 		
