@@ -42,10 +42,10 @@ public class WeaponArsenal {
 	 * Returns a random weapon form the weapon arsenal. This method
 	 * will be used to randomize out weapons on the map.
 	 */
-	public String getRandomWeaponName() {
+	public EMeleeWeapon getRandomWeapon() {
 		String[] tmp = getWeaponList();
 		Random r = new Random();
-		return tmp[r.nextInt(tmp.length)];
+		return getWeapon(tmp[r.nextInt(tmp.length)]);
 	}
 	
 	// Returns an array containing the names of all available weapons

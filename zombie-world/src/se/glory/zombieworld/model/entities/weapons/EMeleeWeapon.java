@@ -1,9 +1,12 @@
 package se.glory.zombieworld.model.entities.weapons;
 
+import se.glory.zombieworld.model.entities.items.Item;
+import se.glory.zombieworld.utilities.Constants.ItemType;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
-public class EMeleeWeapon {
+public class EMeleeWeapon implements Item {
 
 	protected String name;
 	protected float damage;
@@ -19,9 +22,9 @@ public class EMeleeWeapon {
 		this.range = range;
 		
 		textures = new Texture[8];
-		for(int i = 0; i < textures.length; i++) {
-			textures[i] = new Texture(Gdx.files.internal("data/weapons/" + name + "/" + name + i + ".png"));
-		}
+		
+		textures[0] = new Texture(Gdx.files.internal("data/weapons/" + name + "/" + name + ".png"));
+		
 	}
 	
 	public int getLevel() {
@@ -60,6 +63,18 @@ public class EMeleeWeapon {
 		for(int i = 0; i < texture.length; i++) {
 			this.textures[i] = texture[i];
 		}
+	}
+
+	@Override
+	public ItemType getItemType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getItemName() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
