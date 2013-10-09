@@ -34,12 +34,7 @@ public class WorldModel {
 		
 		player = new Player (300, 300, 16, 16);
 		
-<<<<<<< HEAD
-		//Testing effect of infected player
-		//player.infect();
-=======
 		weaponArsenal = new WeaponArsenal();
->>>>>>> images
 		
 		world.setContactListener(new CollisionDetection());
 	}

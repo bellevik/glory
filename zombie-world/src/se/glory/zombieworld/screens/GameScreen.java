@@ -69,8 +69,6 @@ public class GameScreen implements Screen {
 		worldModel.update();
 		WorldModel.world.step(1/60f, 6, 2);
 		
-<<<<<<< HEAD
-=======
 		testHealthBar();
 		
 		
@@ -99,7 +97,6 @@ public class GameScreen implements Screen {
 		if(healthVar == 100 || healthVar == 0) {
 			negVar *= -1;
 		}
->>>>>>> images
 	}
 
 	@Override
