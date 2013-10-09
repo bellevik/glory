@@ -10,7 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 
 /*
- * Class that will contain an item available for QuickSelection
+ * Class that will contain an Item.
+ * This is used for visually representing an Item in the GUI.
  */
 public class ItemContainer {
 	
@@ -87,10 +88,15 @@ public class ItemContainer {
 		}
 	}
 	
+	/*
+	 * Adds a new Item to the ItemContainer.
+	 * If there already is an Item there that one is removed
+	 */
 	public void newItem(Image image) {
 		currentItem = image;
 		removeItem();
 		stage.addActor(currentItem);
+		currentItem.setPosition(actor.getX() + 16, actor.getY() + 16);
 		currentItem.setVisible(false);
 	}
 	
@@ -101,6 +107,17 @@ public class ItemContainer {
 		}
 	}
 	
+	/*
+	 * Just deletes the reference this ItemContainer has
+	 * to it's former Image.
+	 */
+	public void deleteItemReference() {
+		currentItem = null;
+	}
+	
+	/*
+	 * Checks if the ItemContainer is touched.
+	 */
 	public boolean isTouched() {
 		if(delay < delayMax) {
 			delay += 1;

@@ -105,6 +105,8 @@ public class GameScreen implements Screen {
 	    StageModel.stage.setViewport(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT, false);
 	    StageModel.quickSelection.updatePosition();
 	    StageModel.healthBar.updatePosition();
+	    StageModel.itemView.updatePosition();
+	    StageModel.pauseButton.updatePosition();
 	}
 	
 	/*
