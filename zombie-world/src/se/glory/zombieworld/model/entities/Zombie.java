@@ -64,8 +64,10 @@ public class Zombie extends MoveableBody implements Creature {
 			float tmpY = walkPath.get(0).getY() - getTileY();
 			
 			double size = Math.sqrt(tmpX * tmpX + tmpY * tmpY);
-			tmpX /= size * 1.2;
-			tmpY /= size * 1.2;
+		//	tmpX /= size * 1.2;
+			//	tmpY /= size * 1.2;
+			tmpX /= size * 0.8;
+			tmpY /= size * 0.8;
 			
 			float angle = (float) Math.atan(tmpY/tmpX);
 			

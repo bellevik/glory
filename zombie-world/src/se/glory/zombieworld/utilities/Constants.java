@@ -15,6 +15,10 @@ public class Constants {
 	public static final int VIEWPORT_WIDTH = 600;
 	public static int VIEWPORT_HEIGHT;
 	
+	public static final int INFECTED_INTERVAL = 1500;
+	public static final int INFECTED_DAMAGE = 20;
+	public static final int ZOMBIE_DAMAGE = 10;
+	
 	public static enum MoveableBodyShape {
 		CIRCLE, SQUARE;
 	}

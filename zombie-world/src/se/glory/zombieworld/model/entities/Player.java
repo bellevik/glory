@@ -1,11 +1,13 @@
 package se.glory.zombieworld.model.entities;
 
+import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.items.Item;
 import se.glory.zombieworld.model.entities.weapons.Bullet;
 import se.glory.zombieworld.utilities.Animator;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Identity;
+import se.glory.zombieworld.utilities.UtilityTimer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -45,13 +47,15 @@ public class Player implements Creature {
 	
 	private RevoluteJoint joint;
 	private Animation animation;
-	private int health;
-	private int maxHealth;
 	
 	// TODO Set the variable depending on the weapons arsenal class. What weapon is equipped
 	//These variables will handle the shooting method
 	private boolean readyToFire = true;
 	private float reloadTime = 1;
+	
+	private int health;
+	private int maxHealth;
+	private UtilityTimer infectedHealth = null;
 
 	public Player (float x, float y, float width, float height) {
 		this.x = x;
@@ -244,12 +248,45 @@ public class Player implements Creature {
 		return health;
 	}
 	
-	public void takeDamage(int damage) {
-		health -= damage;
+	public int getHealthPercentage() {
+		return ((health*100)/maxHealth);
+	}
+	
+	public void changeHealth(int healthChange) {
+		
+		//Remove infected status if getting healed
+		if(healthChange >= 0 && infectedHealth != null) {
+			StageModel.healthBar.setInfectedState(false);
+			infectedHealth = null;
+		}
+		
+		//Add or remove health depending on the change
+		health += healthChange;
+		
+		//Set health to 0 if it is less than 0 and to maxHealth if going above it
+		if(health<0) {
+			health = 0;
+		}else if(health > maxHealth) {
+			health = maxHealth;
+		}
 	}
 	
 	public int getMaxHealth() {
 		return maxHealth;
+	}
+	
+	public UtilityTimer getInfectedHealthTimer() {
+		return infectedHealth;
+	}
+	
+	public void infect() {
+		infectedHealth = new UtilityTimer(Constants.INFECTED_INTERVAL);
+		StageModel.healthBar.setInfectedState(true);
+	}
+	
+	public void kill() {
+	//	(Identity)player.getBody().getUserData();
+		((Identity)this.getBody().getUserData()).setDead(true);
 	}
 	
 	@Override
