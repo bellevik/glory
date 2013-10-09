@@ -10,11 +10,11 @@ import se.glory.zombieworld.utilities.Point;
 import se.glory.zombieworld.utilities.TextureHandler;
 
 public class Zombie extends MoveableBody implements Creature {
-	private State state = State.COLLIDING;
+	private State state = State.IDLE;
 	private ArrayList<Point> walkPath = new ArrayList<Point>();
 	
 	private int collidingNumber = 0;
-	private Vector2 collidingDirection = new Vector2(0,0);
+	private Vector2 collidingDirection = null;
 	
 	public Zombie(float x, float y) {
 		super(x, y, 15, 15, TextureHandler.zombieTexture, Constants.MoveableBodyShape.CIRCLE , Constants.MoveableBodyType.ZOMBIE);
