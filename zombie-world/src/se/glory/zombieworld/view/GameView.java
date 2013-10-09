@@ -85,7 +85,7 @@ public class GameView {
 		}
 		
 		// Debug: Always draw textures
-		// drawEntites();
+		 drawEntites();
 	}
 	
 	/*
@@ -163,6 +163,7 @@ public class GameView {
 						if (ani != null ) {
 							animator.drawAnimation(batch, body.getPosition().x, body.getPosition().y, ani, ((Creature)identity.getObj()).isMoving());
 						}
+						
 					}
 				}
 			}
