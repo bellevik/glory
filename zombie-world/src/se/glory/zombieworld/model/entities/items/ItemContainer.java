@@ -52,14 +52,14 @@ public class ItemContainer {
 	public void setActorX(float x) {
 		actor.setX(x);
 		if(currentItem != null) {
-			currentItem.setX(x+16);
+			currentItem.setX(x + 2);
 		}
 	}
 	
 	public void setActorY(float y) {
 		actor.setY(y);
 		if(currentItem != null) {
-			currentItem.setY(y+16);
+			currentItem.setY(y + 2);
 		}
 	}
 	
