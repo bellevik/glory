@@ -40,6 +40,7 @@ public class Healthbar extends Actor{
 		y = (Constants.VIEWPORT_HEIGHT - 32 - 15);
 		lastHealthPercent = maxHealthPercent;
 		
+		//Creating the background layer
 		texture = new Texture(Gdx.files.internal("img/health/healthBarBottom.png"));
 		bgActor = new Image(texture);
 		
@@ -57,12 +58,14 @@ public class Healthbar extends Actor{
 			infectedHealthBarAmount[i] = new HealthFill(stage, newX, y+yMargin, i, true);
 		}
 		
+		//Creating a visual layer above the healthbar to work as container.
 		texture = new Texture(Gdx.files.internal("img/health/healthBarTop.png"));
 		fgActor = new Image(texture);
 		
 		stage.addActor(fgActor);
 		fgActor.setPosition(x, y);
 		
+		//Resets healthbar
 		resetHealthBar();
 	}
 	
@@ -196,9 +199,6 @@ public class Healthbar extends Actor{
 		
 		private void hide() {
 			actor.setVisible(false);
-		}
-		private Image getActor() {
-			return actor;
 		}
 	}
 }

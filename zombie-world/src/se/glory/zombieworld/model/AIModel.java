@@ -7,13 +7,16 @@ import se.glory.zombieworld.model.entities.Creature;
 import se.glory.zombieworld.model.entities.Human;
 import se.glory.zombieworld.model.entities.Zombie;
 import se.glory.zombieworld.utilities.AStarPathFinder;
+import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Point;
+import se.glory.zombieworld.utilities.UtilityTimer;
 
 // TODO: If zombie is chasing a human and lose trail, 
 // it needs a new path - now it will use the same => try to walk through walls!
 
 public class AIModel {
 	private ArrayList<Human> humans = new ArrayList<Human>();
+	private ArrayList<Human> zombieTurns = new ArrayList<Human>();
 	private ArrayList<Zombie> zombies = new ArrayList<Zombie>();
 	private ArrayList<Point> blockedTiles = new ArrayList<Point>();
 	
@@ -48,6 +51,7 @@ public class AIModel {
 	public void update() {
 		updateHumans();
 		updateZombies();
+		turnHumansToZombie();
 	}
 	
 	private void updateHumans() {
@@ -109,6 +113,32 @@ public class AIModel {
 				// WALK
 				h.walk();
 			}
+			updateHumanHealth(h);
+		}
+	}
+	
+	private void updateHumanHealth(Human h) {
+		UtilityTimer infectedHealthTimer = h.getInfectedHealthTimer();
+		if(infectedHealthTimer != null && infectedHealthTimer.isDone()) {
+			h.changeHealth(-Constants.INFECTED_DAMAGE);
+			infectedHealthTimer.resetTimer();
+			System.out.println(h.getHealth());
+		}
+		if(h.getHealth() == 0) {
+			zombieTurns.add(h);
+		}
+	}
+	
+	private void turnHumansToZombie() {
+		if(!zombieTurns.isEmpty()) {
+			for (Human h : zombieTurns) {
+				float xPos = h.getBody().getPosition().x;
+				float yPos = h.getBody().getPosition().y;
+				removeHuman(h);
+				WorldModel.world.destroyBody(h.getBody());
+			//	addZombie(xPos, yPos);
+			}
+			zombieTurns = new ArrayList<Human>();
 		}
 	}
 	

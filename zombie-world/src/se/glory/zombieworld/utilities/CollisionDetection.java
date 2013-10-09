@@ -88,11 +88,13 @@ public class CollisionDetection implements ContactListener {
 				}
 				
 				player.changeHealth(-Constants.ZOMBIE_DAMAGE);
+				
+				//Implemented for later use when needing a control of zombie attacking
 				zombieCollisionTimer = new UtilityTimer(1000);
 			}
 		}
 		
-		//Only activated if zombie walks into player. not if player walks into human
+		//Only activated if human walks into player. not if player walks into human
 		if ((i1.getType() == Constants.MoveableBodyType.PLAYER && i2.getType() == Constants.MoveableBodyType.HUMAN)
 				|| (i1.getType() == Constants.MoveableBodyType.HUMAN && i2.getType() == Constants.MoveableBodyType.PLAYER)) {
 			
@@ -102,6 +104,30 @@ public class CollisionDetection implements ContactListener {
 			//infecting the player
 			if(player != null) {
 				player.changeHealth(1);
+			}
+		}
+		
+		//Only activated if zombie walks into player. not if player walks into human
+		if ((i1.getType() == Constants.MoveableBodyType.HUMAN && i2.getType() == Constants.MoveableBodyType.ZOMBIE)
+				|| (i1.getType() == Constants.MoveableBodyType.ZOMBIE && i2.getType() == Constants.MoveableBodyType.HUMAN)) {
+			
+			//Making a local object of the current object player depending on which object in the collision it is
+			Human h = i1.getType() == Constants.MoveableBodyType.HUMAN ? (Human)i1.getObj() : (Human)i2.getObj();
+				
+			/*Player player = null;
+			if(i1.getType() == Constants.MoveableBodyType.PLAYER) {
+				player = (Player)i1.getObj();
+			}else if(i2.getType() == Constants.MoveableBodyType.PLAYER) {
+				player = (Player)i2.getObj();
+			}*/
+			
+			//infecting the player
+			if(h != null) {
+				if (h.getInfectedHealthTimer() == null) {
+					h.infect();
+				}
+				
+				h.changeHealth(-Constants.ZOMBIE_DAMAGE);
 			}
 		}
 		
