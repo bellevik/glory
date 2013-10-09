@@ -207,12 +207,12 @@ public class Player implements Creature {
 	
 	@Override
 	public float getTileX() {
-		return (getBody().getPosition().x * Constants.BOX_TO_WORLD - width)/32;
+		return (getBody().getPosition().x * Constants.BOX_TO_WORLD - width)/16;
 	}
 
 	@Override
 	public float getTileY() {
-		return (getBody().getPosition().y * Constants.BOX_TO_WORLD - height)/32;
+		return (getBody().getPosition().y * Constants.BOX_TO_WORLD - height)/16;
 	}
 	
 	@Override
