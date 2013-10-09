@@ -144,9 +144,7 @@ public class AIModel {
 			float xPos = h.getBody().getPosition().x/Constants.WORLD_TO_BOX;
 			float yPos = h.getBody().getPosition().y/Constants.WORLD_TO_BOX;
 			removeHuman(h);
-			Zombie z = new Zombie(xPos, yPos);
-			zombies.add(z);
-		//	addZombie(xPos, yPos);
+			addZombie(xPos, yPos);
 		}
 		
 		zombieTurns.clear();
