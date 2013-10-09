@@ -46,8 +46,12 @@ public class GameView {
 		animator = new Animator();
 	}
 	
-	public TiledMapTileLayer getMapLayer(int i) {
+	/*public TiledMapTileLayer getMapLayer(int i) {
 		return (TiledMapTileLayer) map.getLayers().get(i);
+	}*/
+	
+	public TiledMapTileLayer getMapLayer(String name) {
+		return (TiledMapTileLayer) map.getLayers().get(name);
 	}
 	
 	public void useDebugRenderer() {
@@ -84,8 +88,22 @@ public class GameView {
 			drawEntites();
 		}
 		
+		camera.position.set(WorldModel.player.getBody().getPosition().x * Constants.BOX_TO_WORLD, WorldModel.player.getBody().getPosition().y * Constants.BOX_TO_WORLD, 0);
+		camera.update();
+		
+		batch.setProjectionMatrix(camera.combined);
+		
 		// Debug: Always draw textures
-		 drawEntites();
+		drawEntites();
+		
+		// Draw certain map layers on top of player
+		mapRenderer.getSpriteBatch().begin();
+		if (!getMapLayer("roof").isVisible()) {
+			mapRenderer.renderTileLayer(getMapLayer("overlay"));
+		} else {
+			mapRenderer.renderTileLayer(getMapLayer("roof"));
+		}
+		mapRenderer.getSpriteBatch().end();
 	}
 	
 	/*

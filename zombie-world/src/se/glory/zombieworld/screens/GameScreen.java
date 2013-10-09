@@ -2,13 +2,9 @@ package se.glory.zombieworld.screens;
 
 import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.model.WorldModel;
-import se.glory.zombieworld.model.entities.items.Healthbar;
-import se.glory.zombieworld.model.entities.items.ItemView;
-import se.glory.zombieworld.model.entities.items.QuickSelection;
 import se.glory.zombieworld.model.entities.items.WeaponLoot;
 import se.glory.zombieworld.model.entities.obstacles.CustomObstacle;
 import se.glory.zombieworld.utilities.Constants;
-import se.glory.zombieworld.utilities.Joystick;
 import se.glory.zombieworld.utilities.TextureHandler;
 import se.glory.zombieworld.view.GameView;
 
@@ -17,7 +13,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class GameScreen implements Screen {
 	//private QuickSelection quickSelection;
@@ -78,10 +73,18 @@ public class GameScreen implements Screen {
 		
 		
 		// ###############
-		Cell c = gameView.getMapLayer(1).getCell((int)WorldModel.player.getTileX(), (int)WorldModel.player.getTileY());
+		Cell c = gameView.getMapLayer("events").getCell((int)WorldModel.player.getTileX(), (int)WorldModel.player.getTileY());
 		
 		if (c != null) {
-			System.out.println("On Event Layer");
+			 if (c.getTile().getProperties().get("indoors") != null) {
+				 if (c.getTile().getProperties().get("indoors").toString().equals("1")) {
+					 if (gameView.getMapLayer("roof").isVisible())
+						 gameView.getMapLayer("roof").setVisible(false);
+				 } else if (c.getTile().getProperties().get("indoors").toString().equals("0")) {
+					 if (!gameView.getMapLayer("roof").isVisible())
+						 gameView.getMapLayer("roof").setVisible(true);
+				 }
+			 }
 		}
 	}
 	
@@ -134,7 +137,7 @@ public class GameScreen implements Screen {
 		SpriteBatch batch = new SpriteBatch();
 		
 		gameView = new GameView(batch);
-		worldModel.setupAIModel(gameView.getMapLayer(1));
+		worldModel.setupAIModel(gameView.getMapLayer("blocked"));
 		
 		StageModel.createUI(batch);
 		
@@ -154,7 +157,7 @@ public class GameScreen implements Screen {
 	}
 
 	private void createStaticWalls() {
-		TiledMapTileLayer collideLayer = gameView.getMapLayer(0);
+		TiledMapTileLayer collideLayer = gameView.getMapLayer("blocked");
 		boolean[][] lonelyWalls = new boolean[collideLayer.getWidth()][collideLayer.getHeight()];
 		
 		for (int x = 0; x < collideLayer.getWidth(); x++) {
@@ -242,9 +245,5 @@ public class GameScreen implements Screen {
 		WorldModel.world.dispose();
 		gameView.dispose();
 		StageModel.stage.dispose();
-	}
-	
-	public void setIndoorView(){
-		
 	}
 }
