@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
  * our Box2d World.
  */
 public class Identity {
-	private Texture texture;
+	private Texture texture = null;
 	private boolean isDead = false;
 	private Constants.MoveableBodyType type;
 	private float width, height;
