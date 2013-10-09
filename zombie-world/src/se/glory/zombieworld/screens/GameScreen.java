@@ -74,8 +74,15 @@ public class GameScreen implements Screen {
 		WorldModel.world.step(1/60f, 6, 2);
 		worldModel.update();
 		
-	//	healthBar.updateHealth(70);
 		testHealthBar();
+		
+		
+		// ###############
+		Cell c = gameView.getMapLayer(1).getCell((int)WorldModel.player.getTileX(), (int)WorldModel.player.getTileY());
+		
+		if (c != null) {
+			System.out.println("On Event Layer");
+		}
 	}
 	
 	
