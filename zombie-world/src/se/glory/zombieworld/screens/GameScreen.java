@@ -4,6 +4,7 @@ import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.items.WeaponLoot;
 import se.glory.zombieworld.model.entities.obstacles.CustomObstacle;
+import se.glory.zombieworld.model.entities.obstacles.StreetObject;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.TextureHandler;
 import se.glory.zombieworld.view.GameView;
@@ -71,6 +72,7 @@ public class GameScreen implements Screen {
 		
 		testHealthBar();
 		
+		//System.out.println("player at : "+ worldModel.player.getBody().getPosition().x+ ", "+worldModel.player.getBody().getPosition().y);
 		
 		// ###############
 		Cell c = gameView.getMapLayer("events").getCell((int)WorldModel.player.getTileX(), (int)WorldModel.player.getTileY());
@@ -154,6 +156,8 @@ public class GameScreen implements Screen {
 		// worldModel.getAIModel().addZombie(272, 272);
 		
 		createStaticWalls();
+		createObjects();
+		
 	}
 
 	private void createStaticWalls() {
@@ -195,6 +199,22 @@ public class GameScreen implements Screen {
 		}
 		
 		createStaticWallsHorizontal(lonelyWalls);
+	}
+	private void createObjects(){
+		TiledMapTileLayer objectLayer = gameView.getMapLayer("objects");
+		
+		for (int x = 0; x < objectLayer.getWidth(); x++) {
+			for (int y = 0; y < objectLayer.getHeight(); y++) {
+				Cell c = objectLayer.getCell(x, y);
+				
+				if (c != null) {
+					new StreetObject(c.getTile().getProperties().get("object").toString(),x*16+8,y*16+8);
+					System.out.println("created at : "+ x+ ", "+y);
+				}
+				
+			}		
+		}
+		
 	}
 	
 	private void createStaticWallsHorizontal(boolean[][] lonelyWalls) {
