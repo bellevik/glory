@@ -10,11 +10,11 @@ import se.glory.zombieworld.utilities.Point;
 import se.glory.zombieworld.utilities.TextureHandler;
 
 public class Zombie extends MoveableBody implements Creature {
-	private State state = State.IDLE;
+	private State state = State.COLLIDING;
 	private ArrayList<Point> walkPath = new ArrayList<Point>();
 	
 	private int collidingNumber = 0;
-	private Vector2 collidingDirection = null;
+	private Vector2 collidingDirection = new Vector2(0,0);
 	
 	public Zombie(float x, float y) {
 		super(x, y, 15, 15, TextureHandler.zombieTexture, Constants.MoveableBodyShape.CIRCLE , Constants.MoveableBodyType.ZOMBIE);
@@ -64,8 +64,10 @@ public class Zombie extends MoveableBody implements Creature {
 			float tmpY = walkPath.get(0).getY() - getTileY();
 			
 			double size = Math.sqrt(tmpX * tmpX + tmpY * tmpY);
-			tmpX /= size * 1.2;
-			tmpY /= size * 1.2;
+		//	tmpX /= size * 1.2;
+			//	tmpY /= size * 1.2;
+			tmpX /= size * 0.8;
+			tmpY /= size * 0.8;
 			
 			float angle = (float) Math.atan(tmpY/tmpX);
 			

@@ -51,19 +51,25 @@ public class CollisionDetection implements ContactListener {
 		
 		// If two zombies collide, fix this. TODO: Refactor, use same code as for humans.
 		if (i1.getType() == Constants.MoveableBodyType.ZOMBIE && i2.getType() == Constants.MoveableBodyType.ZOMBIE) {
-			// Make the first human turn to his right for 15 updates
+			// Make the first zombie turn to his right for 15 updates
+			System.out.println("Bajs");
 			Zombie z1 = (Zombie) i1.getObj();
 			Vector2 z1v = z1.getBody().getLinearVelocity().cpy().rotate(90);	
 			
-			z1.setState(Zombie.State.COLLIDING);
-			z1.setCollidingInfo(z1v, 15);
+			if (z1.getState() != Zombie.State.COLLIDING) {
+				z1.setState(Zombie.State.COLLIDING);
+				z1.setCollidingInfo(z1v, 15);
+			}
 			
 			// Make the second human turn to his right for 15 updates
 			Zombie z2 = (Zombie) i2.getObj();
 			Vector2 z2v = z2.getBody().getLinearVelocity().cpy().rotate(90);
 			
-			z2.setState(Zombie.State.COLLIDING);
-			z2.setCollidingInfo(z2v, 15);
+			if (z2.getState() != Zombie.State.COLLIDING) {
+				z2.setState(Zombie.State.COLLIDING);
+				z2.setCollidingInfo(z2v, 15);
+			}
+			System.out.println("Charlie");
 		}
 		
 		

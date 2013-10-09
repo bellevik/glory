@@ -25,6 +25,7 @@ public class AIModel {
 	}
 	
 	public void removeHuman(Human human) {
+		WorldModel.world.destroyBody(human.getBody());
 		humans.remove(human);
 	}
 	
@@ -132,10 +133,11 @@ public class AIModel {
 	private void turnHumansToZombie() {
 		if(!zombieTurns.isEmpty()) {
 			for (Human h : zombieTurns) {
-				float xPos = h.getBody().getPosition().x;
-				float yPos = h.getBody().getPosition().y;
+				float xPos = h.getBody().getPosition().x/Constants.WORLD_TO_BOX;
+				float yPos = h.getBody().getPosition().y/Constants.WORLD_TO_BOX;
 				removeHuman(h);
-				WorldModel.world.destroyBody(h.getBody());
+				Zombie z = new Zombie(xPos, yPos);
+				zombies.add(z);
 			//	addZombie(xPos, yPos);
 			}
 			zombieTurns = new ArrayList<Human>();

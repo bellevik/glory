@@ -153,7 +153,7 @@ public class AStarPathFinder {
         private ArrayList<Node> list = new ArrayList<Node>();
 
         public Node getFirst() {
-                return list.get(0);
+                return list.isEmpty() ? null : list.get(0);
         }
 
         public void add(Node node) {

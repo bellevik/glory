@@ -56,7 +56,7 @@ public class WorldModel {
 	}
 	
 	public void update() {
-		sweepDeadBodies();
+	//	sweepDeadBodies();
 		aiModel.update();
 		healthUpdate();
 	}

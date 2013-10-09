@@ -70,8 +70,9 @@ public class GameScreen implements Screen {
 		StageModel.stage.act(delta);
 		StageModel.stage.draw();
 		
-		WorldModel.world.step(1/60f, 6, 2);
 		worldModel.update();
+		WorldModel.world.step(1/60f, 6, 2);
+		
 	}
 
 	@Override
