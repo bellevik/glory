@@ -13,9 +13,14 @@ public class ItemView {
 	private int cornerY = 232;
 	private int currentSelection;
 	private CurrentSelection selection;
+	private Image background;
 	
 	public ItemView(Stage stage) {
 		itemContainers = new ItemContainer[10];
+		
+		background = new Image(new Texture(Gdx.files.internal("img/pausMenu.png")));
+		stage.addActor(background);
+		background.setVisible(false);
 		
 		for(int i = 0; i < 5; i++) {
 			for(int j = 0; j < 2; j++) {
@@ -38,6 +43,7 @@ public class ItemView {
 	public void manageItems() {
 		
 		if(!itemContainers[0].isActorVisible()) {
+			background.setVisible(true);
 			for(int i = 0; i < itemContainers.length; i++) {
 				itemContainers[i].show();
 			}
@@ -72,6 +78,7 @@ public class ItemView {
 	}
 	
 	public void hideContainers() {
+		background.setVisible(false);
 		if(itemContainers[0].isActorVisible()) {
 			for(int i = 0; i < itemContainers.length; i++) {
 				itemContainers[i].hide();

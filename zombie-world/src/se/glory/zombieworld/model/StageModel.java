@@ -25,8 +25,9 @@ public class StageModel {
 		moveStick = new Joystick(stage, 15, 15, 128, 128, Constants.TouchpadType.MOVEMENT);
 		fireStick = new Joystick(stage, Constants.VIEWPORT_WIDTH - 15 - 128, 15, 128, 128, Constants.TouchpadType.FIRE);
 		
-		quickSelection = new QuickSelection(stage);
 		itemView = new ItemView(stage);
+		quickSelection = new QuickSelection(stage);
+		
 		
 		pauseButton = new PauseButton(stage, 15, Constants.VIEWPORT_HEIGHT - 32 - 15);
 		
