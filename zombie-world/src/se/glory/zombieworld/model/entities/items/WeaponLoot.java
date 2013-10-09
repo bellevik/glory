@@ -1,6 +1,8 @@
 package se.glory.zombieworld.model.entities.items;
 
 import se.glory.zombieworld.model.WorldModel;
+import se.glory.zombieworld.model.entities.weapons.EMeleeWeapon;
+import se.glory.zombieworld.model.entities.weapons.WeaponArsenal;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Constants.ItemType;
 import se.glory.zombieworld.utilities.Identity;
@@ -21,17 +23,27 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
  * inventory. 
  */
 public class WeaponLoot implements Item {
-	private String weaponName;
+	private EMeleeWeapon weapon;
 	private Constants.ItemType type;
 	private float x, y;
-	private final float width = 32;
-	private final float height = 32;
+	private final float width = 16;
+	private final float height = 16;
 	
 	private Body body;
 	private BodyDef bodyDef;
 	
-	public WeaponLoot(String weaponName, float x, float y) {
-		this.weaponName = weaponName;
+	/*
+	 * This constructor will place a random weapon at the location (x, y)
+	 */
+	public WeaponLoot(float x, float y) {
+		this(WorldModel.weaponArsenal.getRandomWeapon(), x, y);
+	}
+	
+	/*
+	 * This constructor will place a weapon on the type weaponName at (x, y)
+	 */
+	public WeaponLoot(EMeleeWeapon weapon, float x, float y) {
+		this.weapon = weapon;
 		this.x = x;
 		this.y = y;
 		
@@ -47,12 +59,12 @@ public class WeaponLoot implements Item {
 		fixtureDef.shape = shape;
 		body.createFixture(fixtureDef);
 		
-		Texture texture = new Texture(Gdx.files.internal("img/loot.png"));
+		//Texture texture = new Texture(Gdx.files.internal("img/loot.png"));
 		
 		Identity identity = new Identity();
 		identity.setWidth(width);
 		identity.setHeight(height);
-		identity.setTexture(texture);
+		identity.setTexture(weapon.getTexture(0));
 		identity.setType(Constants.MoveableBodyType.ITEM);
 		identity.setObj(this);
 		
@@ -66,7 +78,10 @@ public class WeaponLoot implements Item {
 
 	@Override
 	public String getItemName() {
-		return weaponName;
+		return "";
 	}
 
+	public EMeleeWeapon getWeapon() {
+		return weapon;
+	}
 }

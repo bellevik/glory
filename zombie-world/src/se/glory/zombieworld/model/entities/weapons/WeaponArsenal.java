@@ -1,6 +1,7 @@
 package se.glory.zombieworld.model.entities.weapons;
 
 import java.util.HashMap;
+import java.util.Random;
 
 import se.glory.zombieworld.utilities.Constants;
 
@@ -11,7 +12,7 @@ import com.badlogic.gdx.physics.box2d.World;
 public class WeaponArsenal {
 	private HashMap<String, EMeleeWeapon> weapons = new HashMap<String, EMeleeWeapon>();
 	
-	public WeaponArsenal(World world) {
+	public WeaponArsenal() {
 		FileHandle weaponList = Gdx.files.internal("data/weapons/weapons.txt");
 		String text = weaponList.readString();
 		String[] weaponNames = text.split(System.getProperty("line.separator"));
@@ -35,6 +36,16 @@ public class WeaponArsenal {
 	// Get a specific weapon
 	public EMeleeWeapon getWeapon(String weapon) {
 		return weapons.get(weapon);
+	}
+	
+	/*
+	 * Returns a random weapon form the weapon arsenal. This method
+	 * will be used to randomize out weapons on the map.
+	 */
+	public EMeleeWeapon getRandomWeapon() {
+		String[] tmp = getWeaponList();
+		Random r = new Random();
+		return getWeapon(tmp[r.nextInt(tmp.length)]);
 	}
 	
 	// Returns an array containing the names of all available weapons

@@ -3,6 +3,7 @@ package se.glory.zombieworld.model;
 import java.util.ArrayList;
 
 import se.glory.zombieworld.model.entities.Player;
+import se.glory.zombieworld.model.entities.weapons.WeaponArsenal;
 import se.glory.zombieworld.utilities.CollisionDetection;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Identity;
@@ -22,6 +23,8 @@ public class WorldModel {
 	
 	public static Player player;
 	
+	public static WeaponArsenal weaponArsenal;
+	
 	public static Array<Body> drawableBodies = new Array<Body>();
 	public static Array<Body> removeableBodies = new Array<Body>();
 	
@@ -31,8 +34,12 @@ public class WorldModel {
 		
 		player = new Player (300, 300, 16, 16);
 		
+<<<<<<< HEAD
 		//Testing effect of infected player
 		//player.infect();
+=======
+		weaponArsenal = new WeaponArsenal();
+>>>>>>> images
 		
 		world.setContactListener(new CollisionDetection());
 	}
