@@ -15,7 +15,7 @@ public class Human extends MoveableBody implements Creature {
 	private ArrayList<Point> walkPath = new ArrayList<Point>();
 	
 	private int collidingNumber = 0;
-	private Vector2 collidingDirection = null;
+	private Vector2 collidingDirection = new Vector2(1,1);
 
 	public Human(float x, float y) {
 		super(x, y, 15, 15, TextureHandler.humanTexture, Constants.MoveableBodyShape.CIRCLE , Constants.MoveableBodyType.HUMAN);

@@ -72,13 +72,13 @@ public class GameScreen implements Screen {
 		
 		worldModel.update();
 		
-		float t = 120;
+		/*float t = 120;
 		float fps = Gdx.graphics.getFramesPerSecond();
 		if (fps != 0) {
 			t = (60 / fps) * 120;
-		}
+		}*/
 		
-		WorldModel.world.step(1/t, 6, 2);
+		WorldModel.world.step(1/120f, 6, 2);
 		
 		
 		// ############### EVENTS
@@ -145,10 +145,10 @@ public class GameScreen implements Screen {
 		new WeaponLoot(200, 200);
 		
 		// ## Add humans
-		addRandomHumans(100);
+		addRandomHumans(20);
 		
 		// ## Add zombies
-		worldModel.getAIModel().addZombie(16+50*16, 16+50*16);
+		//worldModel.getAIModel().addZombie(16+50*16, 16+50*16);
 		
 		createStaticWalls();
 	}

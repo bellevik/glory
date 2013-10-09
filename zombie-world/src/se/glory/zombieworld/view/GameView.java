@@ -88,12 +88,6 @@ public class GameView {
 		// Debug: Always draw textures
 		drawEntites();
 		
-		batch.begin();
-		BitmapFont font = new BitmapFont();
-		font.setScale(10);
-		font.draw(batch, "fps: " + Gdx.graphics.getFramesPerSecond(), WorldModel.player.getBody().getPosition().x * Constants.BOX_TO_WORLD - 100, WorldModel.player.getBody().getPosition().y * Constants.BOX_TO_WORLD);    
-		batch.end();
-		
 		// Draw certain map layers on top of player
 		mapRenderer.getSpriteBatch().begin();
 		if (!getMapLayer("roof").isVisible()) {

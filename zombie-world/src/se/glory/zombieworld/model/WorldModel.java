@@ -28,6 +28,8 @@ public class WorldModel {
 	public static Array<Body> drawableBodies = new Array<Body>();
 	public static Array<Body> removeableBodies = new Array<Body>();
 	
+	private boolean threadStarted = false;
+	
 	public void createWorld() {
 		world = new World(new Vector2(0, 0), true);
 		aiModel = new AIModel();
@@ -61,12 +63,26 @@ public class WorldModel {
 	public void update() {
 		//sweepDeadBodies();
 		
-		long startTime = System.currentTimeMillis();
-		aiModel.update();
-		long resultTime = System.currentTimeMillis() - startTime;
+		if (!threadStarted) {
+			threadStarted = true;
+			
+			new Thread(new Runnable() {
+				@Override
+		    	public void run() {
+					while(true) {
+						aiModel.update();
+						try {
+						   Thread.sleep(200);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+			}).start();
+		}
 		
-		if (resultTime > 10)
-			System.out.println("AI-time: " + resultTime);
+		aiModel.updateHumansWalk();
 		
 		//healthUpdate();
 	}

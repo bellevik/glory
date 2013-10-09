@@ -64,10 +64,19 @@ public class AIModel {
 	}
 	
 	public void update() {
-		turnHumansToZombie();
+		//turnHumansToZombie();
 		
+		//##
+		long startTime = System.currentTimeMillis();
 		updateHumans();
-		updateZombies();
+		long resultTime = System.currentTimeMillis() - startTime;
+		
+		if (resultTime > 30)
+			System.out.println("AI-humans: " + resultTime);
+			
+		//##
+		
+		//updateZombies();
 	}
 	
 	private void updateHumans() {
@@ -105,8 +114,8 @@ public class AIModel {
 				if (totX < 0)
 					angle = angle - (float) Math.PI;
 				
-				h.getBody().setTransform(h.getBody().getPosition(), angle);		
-				h.getBody().setLinearVelocity(totX, totY);
+				//h.getBody().setTransform(h.getBody().getPosition(), angle);		
+				//h.getBody().setLinearVelocity(totX, totY);
 				h.setState(Human.State.FLEEING);
 			} else {
 				// If the human just got away form a zombie, set its state to idle.
@@ -118,16 +127,16 @@ public class AIModel {
 					int startX = (int) h.getTileX();
 					int startY = (int) h.getTileY();
 					
-					int goalMinX = startX - 40;
+					int goalMinX = startX - 20;
 					goalMinX = goalMinX < 1 ? 1 : goalMinX;
 					
-					int goalMaxX = startX + 40;
+					int goalMaxX = startX + 20;
 					goalMaxX = goalMaxX > mapWidth - 1 ? mapWidth - 1 : goalMaxX;
 					
-					int goalMinY = startY - 40;
+					int goalMinY = startY - 20;
 					goalMinY = goalMinY < 1 ? 1 : goalMinY;
 					
-					int goalMaxY = startY + 40;
+					int goalMaxY = startY + 20;
 					goalMaxY = goalMaxY > mapHeight - 1 ? mapHeight - 1 : goalMaxY;
 					
 					//System.out.println("Generate between: " + goalMinX + " and " + goalMaxX);
@@ -141,15 +150,51 @@ public class AIModel {
 						goalY = goalMinY + generator.nextInt(goalMaxY - goalMinY + 1);
 					}
 					
+					// TODO: DEBUG
+					long startTime = System.currentTimeMillis();
+					
 					ArrayList<Point> walkPath = AStarPathFinder.getShortestPath(startX, startY, goalX, goalY, blockedTiles);
 					h.setWalkPath(walkPath);
 					h.setState(Human.State.WALKING);
+					
+					// TODO: DEBUG
+					long resultTime = System.currentTimeMillis() - startTime;
+					
+					if (resultTime > 50) {
+						System.out.println("Time for A*: " + resultTime + ". Walkpath size: " + walkPath.size());
+						//System.out.println();
+					}
+					
+					/*if (walkPath.size() > 70) {
+						System.out.println();
+						System.out.println("######## FROM " + startX + ":" + startY + " TO " + goalX + ":" + goalY);
+						
+						for (Point p : walkPath) {
+							System.out.println(p.getX() + ":" + p.getY());
+						}
+						
+						System.out.println();
+						System.out.println("########");
+						System.out.println();
+						
+						//System.exit(0);
+					}*/
 				}
 				
+				//h.setState(Human.State.WALKING);
+				
 				// WALK
-				h.walk();
+				//h.walk();
 			}
+			
 			updateHumanHealth(h);
+		}
+	}
+	
+	public void updateHumansWalk() {
+		for (Human h: humans) {
+			if (h.getState() == Human.State.WALKING || h.getState() == Human.State.COLLIDING)
+				h.walk();
 		}
 	}
 	

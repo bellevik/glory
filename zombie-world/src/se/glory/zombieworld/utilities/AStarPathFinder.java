@@ -34,7 +34,7 @@ public class AStarPathFinder {
 			current = open.getFirst();
 			
 			if (current == null) {
-				System.err.println("AStarPathFinder, ERROR, current == null");
+				System.out.println("AStarPathFinder, ERROR, current == null");
 				break;
 			}
 			
@@ -56,9 +56,12 @@ public class AStarPathFinder {
 		 * Trace the path backwards through the use of every nodes parent 
 		 * and add the position to the list of key positions.
 		 */
-		while (current.getParent() != null) {
-			shortestPath.add(new Point(current.getX(), current.getY()));
-			current = current.getParent();
+		
+		if (current != null) {
+			while (current.getParent() != null) {
+				shortestPath.add(new Point(current.getX(), current.getY()));
+				current = current.getParent();
+			}
 		}
 		
 		// Reverse the list of key positions and return the list.
@@ -123,12 +126,7 @@ public class AStarPathFinder {
 	
 	// Check if the position [x, y] is on the list of blocked positions.
 	private static boolean isBlocked(int x, int y, ArrayList<Point> blocked) {
-		for (Point p : blocked) {
-			if (p.getX() == x && p.getY() == y)
-				return true;
-		}
-		
-		return false;
+		return blocked.contains(new Point(x, y));
 	}
 	
 	// Check if the position [x, y] is on the list of closed positions.
@@ -171,12 +169,13 @@ public class AStarPathFinder {
         }
         
         public Node get(Node needle) {
-        	for (Node n : list) {
-            	if (n.getX() == needle.getX() && n.getY() == needle.getY())
-            		return n;
+        	int index = list.indexOf(needle);
+        	
+            if (index > -1) {
+            	return list.get(index);
+            } else {
+            	return null;
             }
-            
-            return null;
         }
         
         public void sort() {
@@ -184,12 +183,7 @@ public class AStarPathFinder {
         }
 
         public boolean contains(Node needle) {
-            for (Node n : list) {
-            	if (n.getX() == needle.getX() && n.getY() == needle.getY())
-            		return true;
-            }
-            
-            return false;
+            return list.contains(needle);
         }
 	}
 	
@@ -259,12 +253,26 @@ public class AStarPathFinder {
 		public int compareTo(Node other) {
 			return Double.compare(getF(), other.getF());
 		}
-		
-		public boolean equals(Node n) {
-			if (getX() == n.getX() && getY() == n.getY())
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + x;
+			result = prime * result + y;
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
 				return true;
-			else
-				return false;
+			
+			Node other = (Node) obj;
+			if (getX() == other.getX() && getY() == other.getY())
+				return true;
+			
+			return false;
 		}
 	}
 }
