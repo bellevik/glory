@@ -23,6 +23,8 @@ public class AIModel {
 	private int mapWidth = 0;
 	private int mapHeight = 0;
 	
+	private Random generator = new Random();
+	
 	public void addHuman(float x, float y) {
 		humans.add(new Human(x, y));
 	}
@@ -55,6 +57,10 @@ public class AIModel {
 			this.blockedTiles.add(new Point(p.getX() - 1, p.getY()));
 			this.blockedTiles.add(new Point(p.getX(), p.getY() - 1));
 		}
+	}
+	
+	public ArrayList<Point> getBlockedTiles() {
+		return blockedTiles;
 	}
 	
 	public void update() {
@@ -108,26 +114,36 @@ public class AIModel {
 					h.setState(Human.State.IDLE);
 				
 				if (h.getState() == Human.State.IDLE) {
-					Random generator = new Random();
+					// ###############
+					int startX = (int) h.getTileX();
+					int startY = (int) h.getTileY();
 					
-					int goalX = generator.nextInt(mapWidth);
-					int goalY = generator.nextInt(mapHeight);
+					int goalMinX = startX - 40;
+					goalMinX = goalMinX < 1 ? 1 : goalMinX;
+					
+					int goalMaxX = startX + 40;
+					goalMaxX = goalMaxX > mapWidth - 1 ? mapWidth - 1 : goalMaxX;
+					
+					int goalMinY = startY - 40;
+					goalMinY = goalMinY < 1 ? 1 : goalMinY;
+					
+					int goalMaxY = startY + 40;
+					goalMaxY = goalMaxY > mapHeight - 1 ? mapHeight - 1 : goalMaxY;
+					
+					//System.out.println("Generate between: " + goalMinX + " and " + goalMaxX);
+					// ###############
+					
+					int goalX = goalMinX + generator.nextInt(goalMaxX - goalMinX + 1);
+					int goalY = goalMinY + generator.nextInt(goalMaxY - goalMinY + 1);
 					
 					while (blockedTiles.contains(new Point(goalX, goalY))) {
-						goalX = generator.nextInt(mapWidth);
-						goalY = generator.nextInt(mapHeight);
+						goalX = goalMinX + generator.nextInt(goalMaxX - goalMinX + 1);
+						goalY = goalMinY + generator.nextInt(goalMaxY - goalMinY + 1);
 					}
 					
-					int x = (int) h.getTileX();
-					int y = (int) h.getTileY();
-					
-					if (x != 0 || y != 0) {
-						ArrayList<Point> walkPath = AStarPathFinder.getShortestPath(x, y, goalX, goalY, blockedTiles);
-						h.setWalkPath(walkPath);
-						h.setState(Human.State.WALKING);
-					} else {
-						System.out.println("### calculate zombie new path: error: human");
-					}
+					ArrayList<Point> walkPath = AStarPathFinder.getShortestPath(startX, startY, goalX, goalY, blockedTiles);
+					h.setWalkPath(walkPath);
+					h.setState(Human.State.WALKING);
 				}
 				
 				// WALK
@@ -143,7 +159,7 @@ public class AIModel {
 		if(infectedHealthTimer != null && infectedHealthTimer.isDone()) {
 			h.changeHealth(-Constants.INFECTED_DAMAGE);
 			infectedHealthTimer.resetTimer();
-			System.out.println(h.getHealth());
+			//System.out.println(h.getHealth());
 		}
 		
 		if(h.getHealth() == 0) {
@@ -173,8 +189,8 @@ public class AIModel {
 				
 				double size = Math.sqrt(tmpX*tmpX+tmpY*tmpY);
 				
-				tmpX /= size * 1.2;
-				tmpY /= size * 1.2;
+				tmpX /= size * 0.8;
+				tmpY /= size * 0.8;
 				
 				float angle = (float) Math.atan(tmpY/tmpX);
 				
@@ -186,26 +202,36 @@ public class AIModel {
 				z.setState(Zombie.State.CHASING);
 			} else {
 				if (z.getState() == Zombie.State.IDLE) {
-					Random generator = new Random();
+					// ###############
+					int startX = (int) z.getTileX();
+					int startY = (int) z.getTileY();
 					
-					int goalX = generator.nextInt(mapWidth);
-					int goalY = generator.nextInt(mapHeight);
+					int goalMinX = startX - 40;
+					goalMinX = goalMinX < 1 ? 1 : goalMinX;
+					
+					int goalMaxX = startX + 40;
+					goalMaxX = goalMaxX > mapWidth - 1 ? mapWidth - 1 : goalMaxX;
+					
+					int goalMinY = startY - 40;
+					goalMinY = goalMinY < 1 ? 1 : goalMinY;
+					
+					int goalMaxY = startY + 40;
+					goalMaxY = goalMaxY > mapHeight - 1 ? mapHeight - 1 : goalMaxY;
+					
+					//System.out.println("Generate between: " + goalMinX + " and " + goalMaxX);
+					// ###############
+					
+					int goalX = goalMinX + generator.nextInt(goalMaxX - goalMinX + 1);
+					int goalY = goalMinY + generator.nextInt(goalMaxY - goalMinY + 1);
 					
 					while (blockedTiles.contains(new Point(goalX, goalY))) {
-						goalX = generator.nextInt(mapWidth);
-						goalY = generator.nextInt(mapHeight);
+						goalX = goalMinX + generator.nextInt(goalMaxX - goalMinX + 1);
+						goalY = goalMinY + generator.nextInt(goalMaxY - goalMinY + 1);
 					}
 					
-					int x = (int) z.getTileX();
-					int y = (int) z.getTileY();
-					
-					if (x != 0 || y != 0) {
-						ArrayList<Point> walkPath = AStarPathFinder.getShortestPath(x, y, goalX, goalY, blockedTiles);
-						z.setWalkPath(walkPath);
-						z.setState(Zombie.State.WALKING);
-					} else {
-						System.out.println("### calculate zombie new path: error: zombie");
-					}
+					ArrayList<Point> walkPath = AStarPathFinder.getShortestPath(startX, startY, goalX, goalY, blockedTiles);
+					z.setWalkPath(walkPath);
+					z.setState(Zombie.State.WALKING);
 				}
 				
 				// WALK

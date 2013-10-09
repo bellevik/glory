@@ -37,20 +37,18 @@ public class CollisionDetection implements ContactListener {
 		if (i1.getType() == Constants.MoveableBodyType.HUMAN && i2.getType() == Constants.MoveableBodyType.HUMAN) {
 			// Make the first human turn to his right for 15 updates
 			Human h1 = (Human) i1.getObj();
-			Vector2 h1v = h1.getBody().getLinearVelocity().cpy().rotate(90);	
-			
 			if (h1.getState() != Human.State.COLLIDING) {
+				Vector2 h1v = h1.getBody().getLinearVelocity().cpy().rotate(90);	
 				h1.setState(Human.State.COLLIDING);
-				h1.setCollidingInfo(h1v, 15);
+				h1.setCollidingInfo(h1v, 30);
 			}
 			
 			// Make the second human turn to his right for 15 updates
 			Human h2 = (Human) i2.getObj();
-			Vector2 h2v = h2.getBody().getLinearVelocity().cpy().rotate(90);
-			
 			if (h1.getState() != Human.State.COLLIDING) {
+				Vector2 h2v = h2.getBody().getLinearVelocity().cpy().rotate(90);
 				h2.setState(Human.State.COLLIDING);
-				h2.setCollidingInfo(h2v, 15);
+				h2.setCollidingInfo(h2v, 30);
 			}
 		}
 		
@@ -58,20 +56,18 @@ public class CollisionDetection implements ContactListener {
 		if (i1.getType() == Constants.MoveableBodyType.ZOMBIE && i2.getType() == Constants.MoveableBodyType.ZOMBIE) {
 			// Make the first zombie turn to his right for 15 updates
 			Zombie z1 = (Zombie) i1.getObj();
-			Vector2 z1v = z1.getBody().getLinearVelocity().cpy().rotate(90);	
-			
 			if (z1.getState() != Zombie.State.COLLIDING) {
+				Vector2 z1v = z1.getBody().getLinearVelocity().cpy().rotate(90);	
 				z1.setState(Zombie.State.COLLIDING);
-				z1.setCollidingInfo(z1v, 15);
+				z1.setCollidingInfo(z1v, 30);
 			}
 			
 			// Make the second human turn to his right for 15 updates
 			Zombie z2 = (Zombie) i2.getObj();
-			Vector2 z2v = z2.getBody().getLinearVelocity().cpy().rotate(90);
-			
 			if (z2.getState() != Zombie.State.COLLIDING) {
+				Vector2 z2v = z2.getBody().getLinearVelocity().cpy().rotate(90);
 				z2.setState(Zombie.State.COLLIDING);
-				z2.setCollidingInfo(z2v, 15);
+				z2.setCollidingInfo(z2v, 30);
 			}
 		}
 		

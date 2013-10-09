@@ -1,10 +1,14 @@
 package se.glory.zombieworld.screens;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.items.WeaponLoot;
 import se.glory.zombieworld.model.entities.obstacles.CustomObstacle;
 import se.glory.zombieworld.utilities.Constants;
+import se.glory.zombieworld.utilities.Point;
 import se.glory.zombieworld.utilities.TextureHandler;
 import se.glory.zombieworld.view.GameView;
 
@@ -37,7 +41,7 @@ public class GameScreen implements Screen {
 		gameView.render();
 		
 		// Update player movement
-		WorldModel.player.getBody().setLinearVelocity(StageModel.moveStick.getTouchpad().getKnobPercentX() * 2, StageModel.moveStick.getTouchpad().getKnobPercentY() * 2);
+		WorldModel.player.getBody().setLinearVelocity(StageModel.moveStick.getTouchpad().getKnobPercentX() * 10, StageModel.moveStick.getTouchpad().getKnobPercentY() * 10);
 		
 		//The four floats below will represent the percentage in X and Y direction of the Joysticks
 		float moveKnobX = StageModel.moveStick.getTouchpad().getKnobPercentX();
@@ -67,12 +71,17 @@ public class GameScreen implements Screen {
 		StageModel.stage.draw();
 		
 		worldModel.update();
-		WorldModel.world.step(1/60f, 6, 2);
 		
-		testHealthBar();
+		float t = 120;
+		float fps = Gdx.graphics.getFramesPerSecond();
+		if (fps != 0) {
+			t = (60 / fps) * 120;
+		}
+		
+		WorldModel.world.step(1/t, 6, 2);
 		
 		
-		// ###############
+		// ############### EVENTS
 		Cell c = gameView.getMapLayer("events").getCell((int)WorldModel.player.getTileX(), (int)WorldModel.player.getTileY());
 		
 		if (c != null) {
@@ -85,17 +94,6 @@ public class GameScreen implements Screen {
 						 gameView.getMapLayer("roof").setVisible(true);
 				 }
 			 }
-		}
-	}
-	
-	
-	private int healthVar = 0;
-	private int negVar = 1;
-	private void testHealthBar() {
-		healthVar += negVar;
-		StageModel.healthBar.updateHealth(healthVar);
-		if(healthVar == 100 || healthVar == 0) {
-			negVar *= -1;
 		}
 	}
 
@@ -114,7 +112,7 @@ public class GameScreen implements Screen {
 	
 	/*
 	 * This method will set a constant for scaling the window. Really good when Android
-	 * got so many different screen siezes.
+	 * got so many different screen sizes.
 	 */
 	private void adjustViewportScale() {
 		double scale = Constants.VIEWPORT_WIDTH / (double) Gdx.graphics.getWidth();
@@ -147,13 +145,32 @@ public class GameScreen implements Screen {
 		new WeaponLoot(200, 200);
 		
 		// ## Add humans
-		worldModel.getAIModel().addHuman(16+22*16, 16+8*16);
-		worldModel.getAIModel().addHuman(16+22*16, 16+15*16);
+		addRandomHumans(100);
 		
 		// ## Add zombies
-		// worldModel.getAIModel().addZombie(272, 272);
+		worldModel.getAIModel().addZombie(16+50*16, 16+50*16);
 		
 		createStaticWalls();
+	}
+	
+	private void addRandomHumans(int num) {
+		int mapWidth = gameView.getMapLayer("blocked").getWidth();
+		int mapHeight = gameView.getMapLayer("blocked").getHeight();
+		ArrayList<Point> blockedTiles = worldModel.getAIModel().getBlockedTiles();
+		
+		Random generator = new Random();
+		
+		for (int i = 0; i < num; i++) {
+			int goalX = generator.nextInt(mapWidth);
+			int goalY = generator.nextInt(mapHeight);
+			
+			while (blockedTiles.contains(new Point(goalX, goalY))) {
+				goalX = generator.nextInt(mapWidth);
+				goalY = generator.nextInt(mapHeight);
+			}
+			
+			worldModel.getAIModel().addHuman(16+goalX*16, 16+goalY*16);
+		}
 	}
 
 	private void createStaticWalls() {

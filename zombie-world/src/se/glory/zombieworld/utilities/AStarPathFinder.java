@@ -33,6 +33,11 @@ public class AStarPathFinder {
 			// Get the node from the open list with the lowest F value.
 			current = open.getFirst();
 			
+			if (current == null) {
+				System.err.println("AStarPathFinder, ERROR, current == null");
+				break;
+			}
+			
 			// If the current node we are checking is located at the goal, we are done.
 			if (current.equals(goal))
 				break;

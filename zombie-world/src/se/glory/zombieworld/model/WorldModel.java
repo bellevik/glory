@@ -59,9 +59,16 @@ public class WorldModel {
 	}
 	
 	public void update() {
-	//	sweepDeadBodies();
+		//sweepDeadBodies();
+		
+		long startTime = System.currentTimeMillis();
 		aiModel.update();
-		healthUpdate();
+		long resultTime = System.currentTimeMillis() - startTime;
+		
+		if (resultTime > 10)
+			System.out.println("AI-time: " + resultTime);
+		
+		//healthUpdate();
 	}
 	
 	/*

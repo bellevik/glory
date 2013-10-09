@@ -12,7 +12,7 @@ public class Constants {
 	public static final int WEAPON_CLIPS = 4;
 	public static final int WEAPON_CURRENT_CLIP = 5;
 	
-	public static final int VIEWPORT_WIDTH = 800;
+	public static final int VIEWPORT_WIDTH = 1000;
 	public static int VIEWPORT_HEIGHT;
 	
 	public static final int INFECTED_INTERVAL = 1500;

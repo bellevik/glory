@@ -175,8 +175,8 @@ public class Animator {
         stateTimer += Gdx.graphics.getDeltaTime();
         //Get the current frame and loops if the creature is moving
         currentFrame = ani.getKeyFrame(stateTimer, isMoving);
-        batch.begin();
+        //batch.begin();
         batch.draw(currentFrame, x*Constants.BOX_TO_WORLD - currentFrame.getRegionWidth() / 2, y*Constants.BOX_TO_WORLD - currentFrame.getRegionHeight() / 2);
-        batch.end();
+        //batch.end();
 	}
 }

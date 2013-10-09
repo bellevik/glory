@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -46,10 +47,6 @@ public class GameView {
 		animator = new Animator();
 	}
 	
-	/*public TiledMapTileLayer getMapLayer(int i) {
-		return (TiledMapTileLayer) map.getLayers().get(i);
-	}*/
-	
 	public TiledMapTileLayer getMapLayer(String name) {
 		return (TiledMapTileLayer) map.getLayers().get(name);
 	}
@@ -74,11 +71,11 @@ public class GameView {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		Gdx.gl.glClearColor(0.5f, 1, 1, 1);
 		
-		mapRenderer.setView(camera);
-		mapRenderer.render();
-		
 		camera.position.set(WorldModel.player.getBody().getPosition().x * Constants.BOX_TO_WORLD, WorldModel.player.getBody().getPosition().y * Constants.BOX_TO_WORLD, 0);
 		camera.update();
+		
+		mapRenderer.setView(camera);
+		mapRenderer.render();
 		
 		batch.setProjectionMatrix(camera.combined);
 		
@@ -88,13 +85,14 @@ public class GameView {
 			drawEntites();
 		}
 		
-		camera.position.set(WorldModel.player.getBody().getPosition().x * Constants.BOX_TO_WORLD, WorldModel.player.getBody().getPosition().y * Constants.BOX_TO_WORLD, 0);
-		camera.update();
-		
-		batch.setProjectionMatrix(camera.combined);
-		
 		// Debug: Always draw textures
 		drawEntites();
+		
+		batch.begin();
+		BitmapFont font = new BitmapFont();
+		font.setScale(10);
+		font.draw(batch, "fps: " + Gdx.graphics.getFramesPerSecond(), WorldModel.player.getBody().getPosition().x * Constants.BOX_TO_WORLD - 100, WorldModel.player.getBody().getPosition().y * Constants.BOX_TO_WORLD);    
+		batch.end();
 		
 		// Draw certain map layers on top of player
 		mapRenderer.getSpriteBatch().begin();
@@ -114,6 +112,8 @@ public class GameView {
 	 * its own draw method.
 	 */
 	public void drawEntites() {
+		batch.begin();
+		
 		WorldModel.world.getBodies(WorldModel.drawableBodies);
 		
 		for (Body body : WorldModel.drawableBodies) {
@@ -121,11 +121,8 @@ public class GameView {
 				Identity identity = (Identity) body.getUserData();
 				
 				if (identity.getTexture() != null) {
-					float width = identity.getWidth();
-					float height = identity.getHeight();
-					
 					//Check if the body is a creature
-					if(identity.getObj() instanceof Creature){
+					if(identity.getObj() instanceof Creature) {
 
 						/*
 						 * Calculates the angle each body is facing to display the
@@ -149,8 +146,8 @@ public class GameView {
 						Animation ani = null;
 						
 						/*
-						* Check to see in what direction the body is facing, and gets the 
-						* approperiate animation.
+						* Check to see in what direction the body is facing, 
+						* and gets the appropriate animation.
 						*/
 						if(angle > -22  && angle <= 22){
 							//Facing east
@@ -187,5 +184,6 @@ public class GameView {
 			}
 		}
 		WorldModel.drawableBodies.clear();
+		batch.end();
 	}
 }
