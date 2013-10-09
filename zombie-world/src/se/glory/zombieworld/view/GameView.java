@@ -2,6 +2,7 @@ package se.glory.zombieworld.view;
 
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.Creature;
+import se.glory.zombieworld.model.entities.items.WeaponLoot;
 import se.glory.zombieworld.utilities.Animator;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Constants.MoveableBodyType;
@@ -161,6 +162,8 @@ public class GameView {
 						if (ani != null ) {
 							animator.drawAnimation(batch, body.getPosition().x, body.getPosition().y, ani, ((Creature)identity.getObj()).isMoving());
 						}
+					} else if (identity.getObj() instanceof WeaponLoot) {
+						animator.drawAnimation(batch, body.getPosition().x, body.getPosition().y, animator.getLootAnimation(), true);
 					}
 				}
 			}
