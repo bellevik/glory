@@ -26,11 +26,10 @@ public class Bullet {
 	private float range;
 	private Texture[] textures;
 	
-	// TODO The lifetime of the bullet will need to get info from the range in weapons arsenal
-	//This variable will set the lifetime for the bullet in seconds.
-	float bulletLifetime = 1;
-	
-	public Bullet (float x, float y, float xAngle, float yAngle) {
+	public Bullet (float x, float y, float xAngle, float yAngle, float damage, float range) {
+		this.damage = damage;
+		this.range = range;
+		
 		BodyDef bulletDef = new BodyDef();
 		bulletDef.type = BodyType.DynamicBody;
 		bulletDef.position.set(x, y);
@@ -67,7 +66,7 @@ public class Bullet {
 			    	tmp.setDead(true);
 		    	}
 		    }
-		}, bulletLifetime);
+		}, range);
 	}
 
 	public Bullet(String name, float damage, float range, World world) {
