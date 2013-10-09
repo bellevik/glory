@@ -69,8 +69,6 @@ public class GameScreen implements Screen {
 		worldModel.update();
 		WorldModel.world.step(1/60f, 6, 2);
 		
-		testHealthBar();
-		
 		
 		// ###############
 		Cell c = gameView.getMapLayer("events").getCell((int)WorldModel.player.getTileX(), (int)WorldModel.player.getTileY());
@@ -88,17 +86,6 @@ public class GameScreen implements Screen {
 		}
 	}
 	
-	
-	private int healthVar = 0;
-	private int negVar = 1;
-	private void testHealthBar() {
-		healthVar += negVar;
-		StageModel.healthBar.updateHealth(healthVar);
-		if(healthVar == 100 || healthVar == 0) {
-			negVar *= -1;
-		}
-	}
-
 	@Override
 	public void resize(int width, int height) {
 		double scale = Constants.VIEWPORT_WIDTH / (double) width;
