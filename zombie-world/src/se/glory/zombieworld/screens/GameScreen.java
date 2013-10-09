@@ -5,6 +5,7 @@ import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.items.Healthbar;
 import se.glory.zombieworld.model.entities.items.ItemView;
 import se.glory.zombieworld.model.entities.items.QuickSelection;
+import se.glory.zombieworld.model.entities.items.WeaponLoot;
 import se.glory.zombieworld.model.entities.obstacles.CustomObstacle;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Joystick;
@@ -129,6 +130,11 @@ public class GameScreen implements Screen {
 		worldModel.setupAIModel(gameView.getMapLayer(1));
 		
 		StageModel.createUI(batch);
+		
+		new WeaponLoot(100, 100);
+		new WeaponLoot(100, 200);
+		new WeaponLoot(300, 100);
+		new WeaponLoot(200, 200);
 		
 		// ## Add humans
 		worldModel.getAIModel().addHuman(16+10*32, 16+3*32);
