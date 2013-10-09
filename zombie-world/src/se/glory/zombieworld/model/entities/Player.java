@@ -5,6 +5,7 @@ import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.items.Item;
 import se.glory.zombieworld.model.entities.weapons.Bullet;
 import se.glory.zombieworld.model.entities.weapons.EMeleeWeapon;
+import se.glory.zombieworld.model.entities.weapons.ERangedWeapon;
 import se.glory.zombieworld.utilities.Animator;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Identity;
@@ -36,7 +37,7 @@ import com.badlogic.gdx.utils.Timer.Task;
 public class Player implements Creature {
 	
 	private float x, y, width, height;
-	
+
 	private Body body;
 	private BodyDef bodyDef;
 	
@@ -50,8 +51,11 @@ public class Player implements Creature {
 	// TODO Set the variable depending on the weapons arsenal class. What weapon is equipped
 	//These variables will handle the shooting method
 	private boolean readyToFire = true;
-	private float reloadTime = 1;
+	//private float reloadTime = (float).1;
+	private ERangedWeapon equippedWeapon = null;
 
+	public static boolean emptyClip;
+	
 	public Player (float x, float y, float width, float height) {
 		this.x = x;
 		this.y = y;
@@ -95,10 +99,17 @@ public class Player implements Creature {
 	 * inventory will be set to 5 slots
 	 */
 	public boolean addItemToQuickSwap(Item item) {
-		if(quickSwapList.size < 5) {
-			quickSwapList.add(item);
-			updateQuickSelectionImages();
-			return true;
+		//Loops throught he array and checks if its room for an item. If its room it adds tot he array.
+		//otherwise return false
+		for (int i = 0; i < quickSwapList.size; i++) {
+			if (quickSwapList.get(i) == null) {
+				quickSwapList.set(i, item);
+				updateQuickSelectionImages();
+				return true;
+			} else if (((ERangedWeapon)quickSwapList.get(i)).getName() == ((ERangedWeapon)item).getName()) {
+				equippedWeapon.addClip(((ERangedWeapon)item).getClips());
+				WorldModel.player.emptyClip = false;
+			}
 		}
 		return false;
 	}
@@ -109,8 +120,10 @@ public class Player implements Creature {
 	 */
 	public void updateQuickSelectionImages () {
 		for (int i = 0; i < quickSwapList.size; i++) {
-			Texture tmp = ((EMeleeWeapon)(quickSwapList.get(i))).getTexture(0);
-			StageModel.quickSelection.changeImage(i, new Image(tmp));
+			if (quickSwapList.get(i) != null) {
+				Texture tmp = ((EMeleeWeapon)(quickSwapList.get(i))).getTexture(0);
+				StageModel.quickSelection.changeImage(i, new Image(tmp));
+			}
 		}
 	}
 	
@@ -121,7 +134,10 @@ public class Player implements Creature {
 	 * we will change the item of the player.
 	 */
 	public void changeEquippedItem (int pos) {
-		System.out.println(pos);
+		if(quickSwapList.get(pos) != null && equippedWeapon != (EMeleeWeapon)(quickSwapList.get(pos))){
+			equippedWeapon = (ERangedWeapon)(quickSwapList.get(pos));
+		}
+		// TODO Maybe add funtionality to unequip weapon?
 	}
 	
 	/*
@@ -131,8 +147,9 @@ public class Player implements Creature {
 	 * short amount of time when the player is unable to fire a shot. 
 	 */
 	public void shoot() {
-		if (readyToFire) {
+		if (readyToFire && equippedWeapon != null && !emptyClip) {
 			fireBullet();
+			equippedWeapon.removeBulletFromClip();
 			readyToFire = false;
 			//It will take realoadTime seconds to set the boolean to true again
 			Timer.schedule(new Task(){
@@ -140,7 +157,7 @@ public class Player implements Creature {
 			    public void run() {
 			    	readyToFire = true;
 			    }
-			}, reloadTime);
+			}, /*equippedWeapon.getReloadTime()*/(float)0.01);
 		}	
 	}
 	
@@ -154,7 +171,7 @@ public class Player implements Creature {
         float yAngle = MathUtils.sin(rot);
 		
         //14 here is to create the bullet a fix distance from the weapon
-		new Bullet(body.getPosition().x + 14 * xAngle * Constants.WORLD_TO_BOX, body.getPosition().y + 14 * yAngle * Constants.WORLD_TO_BOX, xAngle, yAngle);
+		new Bullet(body.getPosition().x + 14 * xAngle * Constants.WORLD_TO_BOX, body.getPosition().y + 14 * yAngle * Constants.WORLD_TO_BOX, xAngle, yAngle, equippedWeapon.getDamage(), equippedWeapon.getRange());
 	}
 	
 	/*
