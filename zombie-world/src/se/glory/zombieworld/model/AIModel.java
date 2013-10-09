@@ -50,9 +50,10 @@ public class AIModel {
 	}
 	
 	public void update() {
+		turnHumansToZombie();
+		
 		updateHumans();
 		updateZombies();
-		turnHumansToZombie();
 	}
 	
 	private void updateHumans() {
@@ -105,10 +106,16 @@ public class AIModel {
 						goalY = generator.nextInt(20);
 					}
 					
-					ArrayList<Point> walkPath = AStarPathFinder.getShortestPath((int) h.getTileX(), (int) h.getTileY(), goalX, goalY, blockedTiles);
-					h.setWalkPath(walkPath);
+					int x = (int) h.getTileX();
+					int y = (int) h.getTileY();
 					
-					h.setState(Human.State.WALKING);
+					if (x != 0 || y != 0) {
+						ArrayList<Point> walkPath = AStarPathFinder.getShortestPath(x, y, goalX, goalY, blockedTiles);
+						h.setWalkPath(walkPath);
+						h.setState(Human.State.WALKING);
+					} else {
+						System.out.println("### calculate zombie new path: error: human");
+					}
 				}
 				
 				// WALK
@@ -120,28 +127,29 @@ public class AIModel {
 	
 	private void updateHumanHealth(Human h) {
 		UtilityTimer infectedHealthTimer = h.getInfectedHealthTimer();
+		
 		if(infectedHealthTimer != null && infectedHealthTimer.isDone()) {
 			h.changeHealth(-Constants.INFECTED_DAMAGE);
 			infectedHealthTimer.resetTimer();
 			System.out.println(h.getHealth());
 		}
+		
 		if(h.getHealth() == 0) {
 			zombieTurns.add(h);
 		}
 	}
 	
 	private void turnHumansToZombie() {
-		if(!zombieTurns.isEmpty()) {
-			for (Human h : zombieTurns) {
-				float xPos = h.getBody().getPosition().x/Constants.WORLD_TO_BOX;
-				float yPos = h.getBody().getPosition().y/Constants.WORLD_TO_BOX;
-				removeHuman(h);
-				Zombie z = new Zombie(xPos, yPos);
-				zombies.add(z);
-			//	addZombie(xPos, yPos);
-			}
-			zombieTurns = new ArrayList<Human>();
+		for (Human h : zombieTurns) {
+			float xPos = h.getBody().getPosition().x/Constants.WORLD_TO_BOX;
+			float yPos = h.getBody().getPosition().y/Constants.WORLD_TO_BOX;
+			removeHuman(h);
+			Zombie z = new Zombie(xPos, yPos);
+			zombies.add(z);
+		//	addZombie(xPos, yPos);
 		}
+		
+		zombieTurns.clear();
 	}
 	
 	private void updateZombies() {
@@ -178,10 +186,16 @@ public class AIModel {
 						goalY = generator.nextInt(20);
 					}
 					
-					ArrayList<Point> walkPath = AStarPathFinder.getShortestPath((int) z.getTileX(), (int) z.getTileY(), goalX, goalY, blockedTiles);
-					z.setWalkPath(walkPath);
+					int x = (int) z.getTileX();
+					int y = (int) z.getTileY();
 					
-					z.setState(Zombie.State.WALKING);
+					if (x != 0 || y != 0) {
+						ArrayList<Point> walkPath = AStarPathFinder.getShortestPath(x, y, goalX, goalY, blockedTiles);
+						z.setWalkPath(walkPath);
+						z.setState(Zombie.State.WALKING);
+					} else {
+						System.out.println("### calculate zombie new path: error: zombie");
+					}
 				}
 				
 				// WALK
