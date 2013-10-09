@@ -230,4 +230,8 @@ public class GameScreen implements Screen {
 		gameView.dispose();
 		StageModel.stage.dispose();
 	}
+	
+	public void setIndoorView(){
+		
+	}
 }
