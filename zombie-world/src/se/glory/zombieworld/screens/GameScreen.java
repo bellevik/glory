@@ -4,6 +4,7 @@ import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.items.WeaponLoot;
 import se.glory.zombieworld.model.entities.obstacles.CustomObstacle;
+import se.glory.zombieworld.model.entities.obstacles.DoorObject;
 import se.glory.zombieworld.model.entities.obstacles.StreetObject;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.TextureHandler;
@@ -26,6 +27,8 @@ public class GameScreen implements Screen {
 	
 	// moveStick controls player movement, fireStick controls item use
 	//private Joystick moveStick, fireStick;
+	
+
 	
 	private WorldModel worldModel;
 	private GameView gameView;
@@ -83,11 +86,15 @@ public class GameScreen implements Screen {
 					 if (gameView.getMapLayer("roof").isVisible())
 						 gameView.getMapLayer("roof").setVisible(false);
 				 } else if (c.getTile().getProperties().get("indoors").toString().equals("0")) {
-					 if (!gameView.getMapLayer("roof").isVisible())
+					 if (!gameView.getMapLayer("roof").isVisible()){
 						 gameView.getMapLayer("roof").setVisible(true);
+					 }
 				 }
+				 gameView.setOpen(true);
 			 }
-		}
+		}else {
+			 gameView.setOpen(false);
+		 }
 	}
 	
 	
@@ -147,6 +154,8 @@ public class GameScreen implements Screen {
 		new WeaponLoot(100, 200);
 		new WeaponLoot(300, 100);
 		new WeaponLoot(200, 200);
+		
+		//new DoorObject(705, 560, 60, 36);
 		
 		// ## Add humans
 		worldModel.getAIModel().addHuman(16+22*16, 16+8*16);

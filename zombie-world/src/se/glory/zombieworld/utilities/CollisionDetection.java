@@ -3,7 +3,6 @@ package se.glory.zombieworld.utilities;
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.Human;
 import se.glory.zombieworld.model.entities.Zombie;
-import se.glory.zombieworld.model.entities.items.Item;
 import se.glory.zombieworld.model.entities.items.WeaponLoot;
 
 import com.badlogic.gdx.math.Vector2;
@@ -12,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
+
 
 /*
  * This class will handle all of the Collisions in our Box2D world.
@@ -84,6 +84,15 @@ public class CollisionDetection implements ContactListener {
 			
 		}
 		
+		if (i1.getType() == Constants.MoveableBodyType.DOOR && i2.getType() == Constants.MoveableBodyType.PLAYER || i1.getType() == Constants.MoveableBodyType.PLAYER && i2.getType() == Constants.MoveableBodyType.DOOR) {
+			//These 2 ifs checks wheater its the first or second body that is the door
+			//In the if we set the doors open boolean to true, for later removal of the door
+			if (i1.getType() == Constants.MoveableBodyType.DOOR){
+				i1.setOpen(true);
+			} else if (i2.getType() == Constants.MoveableBodyType.DOOR) {
+				i2.setOpen(true);
+			}
+		}
 		// TODO Test theese two ifs on a Windows computer / Android phone
 		/*
 		//This statement checks if a bullet collides with a zombie or a zombie with a bullet
@@ -103,7 +112,25 @@ public class CollisionDetection implements ContactListener {
 
 	@Override
 	public void endContact(Contact contact) {
-		
+		if(contact != null){	
+			Body a = contact.getFixtureA().getBody();
+			Body b = contact.getFixtureB().getBody();
+			
+			Identity i1 = (Identity) a.getUserData();
+			Identity i2 = (Identity) b.getUserData();
+	
+			if(i1 != null && i2 != null){
+				if (i1.getType() == Constants.MoveableBodyType.DOOR && i2.getType() == Constants.MoveableBodyType.PLAYER || i1.getType() == Constants.MoveableBodyType.PLAYER && i2.getType() == Constants.MoveableBodyType.DOOR) {
+					//These 2 ifs checks wheater its the first or second body that is the door
+					//In the if we set the doors dead boolean to true, for later removal of the door
+					if (i1.getType() == Constants.MoveableBodyType.DOOR){
+						i1.setOpen(false);
+					} else if (i2.getType() == Constants.MoveableBodyType.DOOR) {
+						i2.setOpen(false);
+					}
+				}
+			}
+		}
 	}
 
 	@Override

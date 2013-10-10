@@ -21,6 +21,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.Fixture;
 
 public class GameView {
 	private SpriteBatch batch;
@@ -30,6 +31,7 @@ public class GameView {
 	private TiledMap map;
 	
 	private Animator animator;
+	private boolean isOpen = false;
 	
 	private float angle;
 	
@@ -104,6 +106,8 @@ public class GameView {
 			mapRenderer.renderTileLayer(getMapLayer("roof"));
 		}
 		mapRenderer.getSpriteBatch().end();
+		
+		animateDoor();
 	}
 	
 	/*
@@ -120,6 +124,9 @@ public class GameView {
 			if (body.getUserData() != null && body.getUserData().getClass().equals(Identity.class)) {
 				Identity identity = (Identity) body.getUserData();
 				
+				/*if(identity.getType() == Constants.MoveableBodyType.DOOR){
+					animateDoor(identity);
+				}*/
 				if (identity.getTexture() != null) {
 					float width = identity.getWidth();
 					float height = identity.getHeight();
@@ -181,11 +188,42 @@ public class GameView {
 						if (ani != null ) {
 							animator.drawAnimation(batch, body.getPosition().x, body.getPosition().y, ani, ((Creature)identity.getObj()).isMoving());
 						}
-						
 					}
 				}
 			}
 		}
 		WorldModel.drawableBodies.clear();
+	}
+	
+	public void animateDoor(){
+		Animation animation = null;
+		Animation closedDoor = null;
+		
+		animation = animator.getDoorAnimation(0);
+		closedDoor = animator.getClosedDoor(1);
+		
+		if (animation != null){
+			if(isOpen){
+				animator.drawAnimationOnce(batch, 7.35f, 5.7799997f, animation, true);
+			}else{
+				animator.drawAnimation(batch,  7.35f, 5.7799997f, closedDoor, true);
+			}
+		}
+	}
+	
+	public Animator getAnimator(){
+		return this.animator;
+	}
+	
+	public SpriteBatch getSpriteBatch(){
+		return this.batch;
+	}
+	
+	public boolean getOpen(){
+		return this.isOpen;
+	}
+	
+	public void setOpen(boolean isOpen){
+		this.isOpen = isOpen;
 	}
 }
