@@ -171,6 +171,9 @@ public class ItemView {
 			if(!selection.isActorVisible()) {
 				selection.show();
 			}
+			if(currentQuickSelection < 5 && itemContainers[currentSelection].getItemImage() == null) {
+				currentSelection = 10;
+			}
 		} else {
 			if(selection.isActorVisible()) {
 				selection.hide();
