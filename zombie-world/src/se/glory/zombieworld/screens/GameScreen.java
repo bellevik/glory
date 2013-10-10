@@ -75,10 +75,6 @@ public class GameScreen implements Screen {
 		StageModel.stage.act(delta);
 		StageModel.stage.draw();
 		
-		worldModel.update();
-		WorldModel.world.step(1/60f, 6, 2);
-		
-		
 		// ###############
 		Cell c = gameView.getMapLayer("events").getCell((int)WorldModel.player.getTileX(), (int)WorldModel.player.getTileY());
 		
