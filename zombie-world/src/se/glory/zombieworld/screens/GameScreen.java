@@ -5,6 +5,8 @@ import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.items.WeaponLoot;
 import se.glory.zombieworld.model.entities.obstacles.CustomObstacle;
 import se.glory.zombieworld.utilities.Constants;
+import se.glory.zombieworld.utilities.Identity;
+import se.glory.zombieworld.utilities.Score;
 import se.glory.zombieworld.utilities.TextureHandler;
 import se.glory.zombieworld.view.GameView;
 
@@ -13,11 +15,14 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 
 public class GameScreen implements Screen {
 	//private QuickSelection quickSelection;
 	//private ItemView itemView;
 	private boolean isRunning = true;
+	private boolean ready = true;
 	
 	//private Healthbar healthBar;
 	
@@ -35,6 +40,18 @@ public class GameScreen implements Screen {
 	@Override
 	public void render(float delta) {
 		gameView.render();
+		
+		if (ready) {
+			ready = false;
+			Timer.schedule(new Task(){
+			    @Override
+			    public void run() {
+			    	Score.addScore(Constants.ScoreType.TIME_POINT);
+			    	ready = true;
+			    }
+			}, (float) .3);
+		}
+		
 		
 		// Update player movement
 		WorldModel.player.getBody().setLinearVelocity(StageModel.moveStick.getTouchpad().getKnobPercentX() * 2, StageModel.moveStick.getTouchpad().getKnobPercentY() * 2);

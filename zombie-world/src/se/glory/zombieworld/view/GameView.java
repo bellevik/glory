@@ -6,11 +6,13 @@ import se.glory.zombieworld.model.entities.Creature;
 import se.glory.zombieworld.model.entities.items.WeaponLoot;
 import se.glory.zombieworld.utilities.Animator;
 import se.glory.zombieworld.utilities.Constants;
+import se.glory.zombieworld.utilities.Score;
 import se.glory.zombieworld.utilities.Constants.MoveableBodyType;
 import se.glory.zombieworld.utilities.Identity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -34,7 +36,8 @@ public class GameView {
 	
 	private Animator animator;
 	
-	BitmapFont font = new BitmapFont();
+	BitmapFont font = new BitmapFont(Gdx.files.internal("font/scoreFont.fnt"),
+	         Gdx.files.internal("font/scoreFont_0.png"), false);	
 	
 	private float angle;
 	
@@ -85,12 +88,6 @@ public class GameView {
 		camera.position.set(WorldModel.player.getBody().getPosition().x * Constants.BOX_TO_WORLD, WorldModel.player.getBody().getPosition().y * Constants.BOX_TO_WORLD, 0);
 		camera.update();
 		
-		if (WorldModel.player.getEquippedWeapon() != null) {
-			batch.begin();
-			font.draw(batch, "Ammo: " + WorldModel.player.getEquippedWeapon().getClips() + " " + WorldModel.player.getEquippedWeapon().getCurrentClipSize(), 200, 100);
-			batch.end();
-		}
-		
 		batch.setProjectionMatrix(camera.combined);
 		
 		if (Constants.DEBUG_MODE){
@@ -115,6 +112,16 @@ public class GameView {
 			mapRenderer.renderTileLayer(getMapLayer("roof"));
 		}
 		mapRenderer.getSpriteBatch().end();
+		
+		if (WorldModel.player.getEquippedWeapon() != null) {
+			batch.begin();
+			font.draw(batch, "Ammo: " + WorldModel.player.getEquippedWeapon().getClips() + " " + WorldModel.player.getEquippedWeapon().getCurrentClipSize(), 200, 100);
+			batch.end();
+		}
+		
+		batch.begin();
+		font.draw(batch, "Score : " + Score.currentScore, Constants.VIEWPORT_WIDTH / 2 + 100, Constants.VIEWPORT_HEIGHT + 40);
+		batch.end();
 	}
 	
 	/*
