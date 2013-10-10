@@ -23,8 +23,7 @@ public class MoveableBody implements Creature {
 	private PolygonShape squareShape;
 	private float width, height;
 	
-	private int health;
-	private int maxHealth;
+	private float health, maxHealth;
 	private UtilityTimer infectedHealth = null;
 	
 	public MoveableBody(float x, float y, float width, float height, Texture texture, Constants.MoveableBodyShape shape, Constants.MoveableBodyType type) {
@@ -64,15 +63,15 @@ public class MoveableBody implements Creature {
 		maxHealth = health = 100;
 	}
 	
-	public int getHealth() {
+	public float getHealth() {
 		return health;
 	}
 	
 	public int getHealthPercentage() {
-		return ((health*100)/maxHealth);
+		return (int)((health*100)/maxHealth);
 	}
 	
-	public void changeHealth(int healthChange) {
+	public void changeHealth(float healthChange) {
 		
 		//Remove infected status if getting healed
 		if(healthChange >= 0 && infectedHealth != null) {
@@ -90,7 +89,7 @@ public class MoveableBody implements Creature {
 		}
 	}
 	
-	public int getMaxHealth() {
+	public float getMaxHealth() {
 		return maxHealth;
 	}
 	

@@ -53,8 +53,8 @@ public class Player implements Creature {
 	private boolean readyToFire = true;
 	private float reloadTime = 1;
 	
-	private int health;
-	private int maxHealth;
+	private float health;
+	private float maxHealth;
 	private UtilityTimer infectedHealth = null;
 
 	public Player (float x, float y, float width, float height) {
@@ -159,7 +159,7 @@ public class Player implements Creature {
         float yAngle = MathUtils.sin(rot);
 		
         //14 here is to create the bullet a fix distance from the weapon
-		new Bullet(body.getPosition().x + 14 * xAngle * Constants.WORLD_TO_BOX, body.getPosition().y + 14 * yAngle * Constants.WORLD_TO_BOX, xAngle, yAngle);
+		new Bullet(body.getPosition().x + 14 * xAngle * Constants.WORLD_TO_BOX, body.getPosition().y + 14 * yAngle * Constants.WORLD_TO_BOX, xAngle, yAngle, 30);
 	}
 	
 	/*
@@ -196,15 +196,15 @@ public class Player implements Creature {
 		WorldModel.player.getBody().setTransform(WorldModel.player.getBody().getPosition(), knobDegree * MathUtils.degreesToRadians);
 	}
 	
-	public int getHealth() {
+	public float getHealth() {
 		return health;
 	}
 	
 	public int getHealthPercentage() {
-		return ((health*100)/maxHealth);
+		return (int)((health*100)/maxHealth);
 	}
 	
-	public void changeHealth(int healthChange) {
+	public void changeHealth(float healthChange) {
 		
 		//Remove infected status if getting healed
 		if(healthChange >= 0 && infectedHealth != null) {
@@ -223,7 +223,7 @@ public class Player implements Creature {
 		}
 	}
 	
-	public int getMaxHealth() {
+	public float getMaxHealth() {
 		return maxHealth;
 	}
 	

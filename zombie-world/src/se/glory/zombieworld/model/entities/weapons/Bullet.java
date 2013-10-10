@@ -30,7 +30,8 @@ public class Bullet {
 	//This variable will set the lifetime for the bullet in seconds.
 	float bulletLifetime = 1;
 	
-	public Bullet (float x, float y, float xAngle, float yAngle) {
+	public Bullet (float x, float y, float xAngle, float yAngle, float damage) {
+		this.damage = damage;
 		BodyDef bulletDef = new BodyDef();
 		bulletDef.type = BodyType.DynamicBody;
 		bulletDef.position.set(x, y);
@@ -55,6 +56,7 @@ public class Bullet {
 		i.setType(Constants.MoveableBodyType.BULLET);
 		i.setWidth(6);
 		i.setHeight(6);
+		i.setObj(this);
 		bulletBody.setUserData(i);
 		
 		bulletBody.setLinearVelocity(2 * xAngle, 2 * yAngle);
@@ -68,16 +70,6 @@ public class Bullet {
 		    	}
 		    }
 		}, bulletLifetime);
-	}
-
-	public Bullet(String name, float damage, float range, World world) {
-		this.damage = damage;
-		this.range = range;
-
-		textures = new Texture[8];
-		for(int i = 0; i < textures.length; i++) {
-			textures[i] = new Texture(Gdx.files.internal("data/weapons/" + name + "/" + "bullet" + i + ".png"));
-		}
 	}
 
 	public float getDamage() {

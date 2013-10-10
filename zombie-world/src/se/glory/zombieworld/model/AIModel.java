@@ -8,6 +8,7 @@ import se.glory.zombieworld.model.entities.Human;
 import se.glory.zombieworld.model.entities.Zombie;
 import se.glory.zombieworld.utilities.AStarPathFinder;
 import se.glory.zombieworld.utilities.Constants;
+import se.glory.zombieworld.utilities.Identity;
 import se.glory.zombieworld.utilities.Point;
 import se.glory.zombieworld.utilities.UtilityTimer;
 
@@ -16,7 +17,7 @@ import se.glory.zombieworld.utilities.UtilityTimer;
 
 public class AIModel {
 	private ArrayList<Human> humans = new ArrayList<Human>();
-	private ArrayList<Human> zombieTurns = new ArrayList<Human>();
+	private ArrayList<Human> deadHumans = new ArrayList<Human>();
 	private ArrayList<Zombie> zombies = new ArrayList<Zombie>();
 	
 	private ArrayList<Point> blockedTiles = new ArrayList<Point>();
@@ -28,7 +29,7 @@ public class AIModel {
 	}
 	
 	public void removeHuman(Human human) {
-		WorldModel.world.destroyBody(human.getBody());
+		((Identity)human.getBody().getUserData()).setDead(true);
 		humans.remove(human);
 	}
 	
@@ -37,6 +38,7 @@ public class AIModel {
 	}
 	
 	public void removeZombie(Zombie zombie) {
+		((Identity)zombie.getBody().getUserData()).setDead(true);
 		zombies.remove(zombie);
 	}
 	
@@ -131,7 +133,7 @@ public class AIModel {
 				}
 				
 				// WALK
-				h.walk();
+			//	h.walk();
 			}
 			updateHumanHealth(h);
 		}
@@ -147,19 +149,21 @@ public class AIModel {
 		}
 		
 		if(h.getHealth() == 0) {
-			zombieTurns.add(h);
+			deadHumans.add(h);
 		}
 	}
 	
 	private void turnHumansToZombie() {
-		for (Human h : zombieTurns) {
+		for (Human h : deadHumans) {
 			float xPos = h.getBody().getPosition().x/Constants.WORLD_TO_BOX;
 			float yPos = h.getBody().getPosition().y/Constants.WORLD_TO_BOX;
 			removeHuman(h);
-			addZombie(xPos, yPos);
+			if(h.getInfectedHealthTimer() != null) {
+				addZombie(xPos, yPos);
+			}
 		}
 		
-		zombieTurns.clear();
+		deadHumans.clear();
 	}
 	
 	private void updateZombies() {
