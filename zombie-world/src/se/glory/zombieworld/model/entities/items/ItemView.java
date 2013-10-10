@@ -107,6 +107,7 @@ public class ItemView {
 			 * If both of the clicked ItemContainer's are tapped,
 			 * the Item is moved from one to the other.
 			 */
+			System.out.println("CS: " + currentSelection + " " + "CQS: " + currentQuickSelection + " " + "TS: " + tempSelection);
 			if(currentSelection < 10 && currentQuickSelection < 5) {
 				if(itemContainers[currentSelection].getItemImage() != null) {
 					if(StageModel.quickSelection.getCurrentImage(currentQuickSelection) != null) {
