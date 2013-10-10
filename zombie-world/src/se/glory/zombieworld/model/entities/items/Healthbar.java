@@ -1,6 +1,5 @@
 package se.glory.zombieworld.model.entities.items;
 
-import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.utilities.Constants;
 
 import com.badlogic.gdx.Gdx;

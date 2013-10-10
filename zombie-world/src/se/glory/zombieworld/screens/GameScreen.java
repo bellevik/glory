@@ -2,9 +2,9 @@ package se.glory.zombieworld.screens;
 
 import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.model.WorldModel;
-import se.glory.zombieworld.model.entities.items.WeaponLoot;
 import se.glory.zombieworld.model.entities.obstacles.CustomObstacle;
 import se.glory.zombieworld.utilities.Constants;
+import se.glory.zombieworld.utilities.Score;
 import se.glory.zombieworld.utilities.TextureHandler;
 import se.glory.zombieworld.view.GameView;
 
@@ -13,11 +13,15 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 
 public class GameScreen implements Screen {
 	//private QuickSelection quickSelection;
 	//private ItemView itemView;
 	//private boolean isRunning = true;
+	private boolean isRunning = true;
+	private boolean ready = true;
 	
 	//private Healthbar healthBar;
 	
@@ -56,6 +60,18 @@ public class GameScreen implements Screen {
 			WorldModel.world.step(1/60f, 6, 2);
 			worldModel.update();
 			
+		if (ready) {
+			ready = false;
+			Timer.schedule(new Task(){
+			    @Override
+			    public void run() {
+			    	Score.addScore(Constants.ScoreType.TIME_POINT);
+			    	ready = true;
+			    }
+			}, (float) .3);
+		}
+		
+		if(isRunning) {
 			StageModel.quickSelection.selectItem();
 			StageModel.itemView.hideContainers();
 			if(StageModel.pauseButton.isTouched()) {
@@ -88,6 +104,7 @@ public class GameScreen implements Screen {
 						 gameView.getMapLayer("roof").setVisible(true);
 				 }
 			 }
+		}
 		}
 	}
 	

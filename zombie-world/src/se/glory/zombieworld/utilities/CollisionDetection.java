@@ -4,7 +4,6 @@ import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.Human;
 import se.glory.zombieworld.model.entities.Player;
 import se.glory.zombieworld.model.entities.Zombie;
-import se.glory.zombieworld.model.entities.items.Item;
 import se.glory.zombieworld.model.entities.items.WeaponLoot;
 import se.glory.zombieworld.model.entities.weapons.Bullet;
 
