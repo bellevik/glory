@@ -24,6 +24,7 @@ public class ERangedWeapon extends EMeleeWeapon {
 			WorldModel.player.emptyClip = false;
 		}
 		this.clips += clips;
+		this.currentClipSize = clipSize;
 	}
 	
 	public void removeBulletFromClip() {

@@ -108,8 +108,8 @@ public class Player implements Creature {
 				updateQuickSelectionImages();
 				return true;
 			} else if (quickSwapList.get(i) != null) {
-				if (((ERangedWeapon)quickSwapList.get(i)).getName().equals(((ERangedWeapon)(item)).getName())) {
-					((ERangedWeapon)quickSwapList.get(i)).addClip(((ERangedWeapon)(item)).getClips());
+				if (((ERangedWeapon)quickSwapList.get(i)).getName().equals(((ERangedWeapon)item).getName())) {
+					((ERangedWeapon)quickSwapList.get(i)).addClip(2);
 					WorldModel.player.emptyClip = false;
 				}
 			}
