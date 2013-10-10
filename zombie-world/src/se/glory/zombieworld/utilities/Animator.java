@@ -203,8 +203,15 @@ public class Animator {
 	public void drawAnimation(SpriteBatch batch, float x, float y, Animation ani, boolean isMoving){
 		//stateTime = the time spent in the state represented by this animation
         stateTimer += Gdx.graphics.getDeltaTime();
-        //Get the current frame and loops if the creature is moving
-        currentFrame = ani.getKeyFrame(stateTimer, isMoving);
+        
+        if(Constants.isRunning) {
+        	//Get the current frame and loops if the creature is moving
+            currentFrame = ani.getKeyFrame(stateTimer, isMoving);
+        } else {
+        	//Show the stand-still-frame if the game is paused
+        	currentFrame = ani.getKeyFrame(stateTimer, false);
+        }
+        
         batch.begin();
         batch.draw(currentFrame, x*Constants.BOX_TO_WORLD - currentFrame.getRegionWidth() / 2, y*Constants.BOX_TO_WORLD - currentFrame.getRegionHeight() / 2);
         batch.end();

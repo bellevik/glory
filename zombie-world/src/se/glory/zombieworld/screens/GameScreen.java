@@ -17,7 +17,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 public class GameScreen implements Screen {
 	//private QuickSelection quickSelection;
 	//private ItemView itemView;
-	private boolean isRunning = true;
+	//private boolean isRunning = true;
 	
 	//private Healthbar healthBar;
 	
@@ -36,29 +36,38 @@ public class GameScreen implements Screen {
 	public void render(float delta) {
 		gameView.render();
 		
-		// Update player movement
-		WorldModel.player.getBody().setLinearVelocity(StageModel.moveStick.getTouchpad().getKnobPercentX() * 2, StageModel.moveStick.getTouchpad().getKnobPercentY() * 2);
-		
-		//The four floats below will represent the percentage in X and Y direction of the Joysticks
-		float moveKnobX = StageModel.moveStick.getTouchpad().getKnobPercentX();
-		float moveKnobY = StageModel.moveStick.getTouchpad().getKnobPercentY();
-		float fireKnobX = StageModel.fireStick.getTouchpad().getKnobPercentX();
-		float fireKnobY = StageModel.fireStick.getTouchpad().getKnobPercentY();
-		//This method will rotate the player
-		WorldModel.player.applyRotationToPlayer(moveKnobX, moveKnobY, fireKnobX, fireKnobY);
-		
-		//If someone is touching the right joystick then we need the player to be ready to shoot
-		if (fireKnobX != 0 && fireKnobY != 0) {
-			WorldModel.player.shoot();
-		}
-		
-		if(isRunning) {
+		if(Constants.isRunning) {
+			// Update player movement
+			WorldModel.player.getBody().setLinearVelocity(StageModel.moveStick.getTouchpad().getKnobPercentX() * 2, StageModel.moveStick.getTouchpad().getKnobPercentY() * 2);
+			
+			//The four floats below will represent the percentage in X and Y direction of the Joysticks
+			float moveKnobX = StageModel.moveStick.getTouchpad().getKnobPercentX();
+			float moveKnobY = StageModel.moveStick.getTouchpad().getKnobPercentY();
+			float fireKnobX = StageModel.fireStick.getTouchpad().getKnobPercentX();
+			float fireKnobY = StageModel.fireStick.getTouchpad().getKnobPercentY();
+			//This method will rotate the player
+			WorldModel.player.applyRotationToPlayer(moveKnobX, moveKnobY, fireKnobX, fireKnobY);
+			
+			//If someone is touching the right joystick then we need the player to be ready to shoot
+			if (fireKnobX != 0 && fireKnobY != 0) {
+				WorldModel.player.shoot();
+			}
+			
+			WorldModel.world.step(1/60f, 6, 2);
+			worldModel.update();
+			
 			StageModel.quickSelection.selectItem();
+			StageModel.itemView.hideContainers();
+			if(StageModel.pauseButton.isTouched()) {
+				Constants.isRunning = false;
+			}
 		} else {
+			if(StageModel.pauseButton.isTouched()) {
+				Constants.isRunning = true;
+			}
 			StageModel.itemView.manageItems();
 			StageModel.quickSelection.manageItems();
 		}
-		
 		
 		// Animator.drawAnimation(batch, player.getBody().getPosition().x, player.getBody().getPosition().y);
 		// player.getAnimation().drawAnimation(batch, player.getBody().getPosition().x, player.getBody().getPosition().y);
@@ -86,6 +95,18 @@ public class GameScreen implements Screen {
 		}
 	}
 	
+	
+	private int healthVar = 0;
+	private int negVar = 1;
+	private void testHealthBar() {
+		healthVar += negVar;
+		StageModel.healthBar.updateHealth(healthVar);
+		if(healthVar == 100 || healthVar == 0) {
+			negVar *= -1;
+
+		}
+	}
+	
 	@Override
 	public void resize(int width, int height) {
 		double scale = Constants.VIEWPORT_WIDTH / (double) width;
@@ -97,6 +118,8 @@ public class GameScreen implements Screen {
 	    StageModel.stage.setViewport(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT, false);
 	    StageModel.quickSelection.updatePosition();
 	    StageModel.healthBar.updatePosition();
+	    StageModel.itemView.updatePosition();
+	    StageModel.pauseButton.updatePosition();
 	}
 	
 	/*

@@ -13,9 +13,12 @@ public class CurrentSelection {
 	private Texture texture;
 	private Image actor;
 	
-	public CurrentSelection(Stage stage, float x, float y) {
-		texture = new Texture(Gdx.files.internal("img/currentSelection.png"));
-		
+	public CurrentSelection(Stage stage, float x, float y, boolean round) {
+		if(round) {
+			texture = new Texture(Gdx.files.internal("img/currentSelection.png"));
+		} else {
+			texture = new Texture(Gdx.files.internal("img/currentSelectionRSquare.png"));
+		}
 		actor = new Image(texture);
 		
 		stage.addActor(actor);

@@ -9,9 +9,19 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.physics.box2d.World;
 
+/*
+ * Class used for reading and storing all weapons
+ * available in the Game's weapons-folder.
+ */
 public class WeaponArsenal {
 	private HashMap<String, EMeleeWeapon> weapons = new HashMap<String, EMeleeWeapon>();
 	
+	/*
+	 * Public main constructor.
+	 * This is used when the game is started.
+	 * It loops through the weapons-folder to obtain all
+	 * Images and weapon-data.
+	 */
 	public WeaponArsenal() {
 		FileHandle weaponList = Gdx.files.internal("data/weapons/weapons.txt");
 		String text = weaponList.readString();
@@ -32,8 +42,7 @@ public class WeaponArsenal {
 			}
 		}
 	}
-	
-	// Get a specific weapon
+
 	public EMeleeWeapon getWeapon(String weapon) {
 		return weapons.get(weapon);
 	}
@@ -47,8 +56,8 @@ public class WeaponArsenal {
 		Random r = new Random();
 		return getWeapon(tmp[r.nextInt(tmp.length)]);
 	}
-	
-	// Returns an array containing the names of all available weapons
+
+	/* Returns an array containing the names of all available weapons */
 	public String[] getWeaponList() {
 		String[] names = new String[weapons.size()];
 		Object[] weapon = weapons.keySet().toArray();

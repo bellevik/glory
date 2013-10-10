@@ -19,8 +19,8 @@ public class Healthbar extends Actor{
 	private int maxHealthPercent = 100;
 	
 	//Positioning for the healthbar
-	private int x = 25;
-	private int y = 545;
+	private int x;
+	private int y;
 	
 	private int xMargin = 5;
 	private int yMargin = 4;
@@ -34,10 +34,10 @@ public class Healthbar extends Actor{
 	
 	
 	public Healthbar(Stage stage){
-		this.stage = stage;
-		
-		x = (Constants.VIEWPORT_WIDTH - 15 - 780);
-		y = (Constants.VIEWPORT_HEIGHT - 32 - 15);
+
+		x = ((Constants.VIEWPORT_WIDTH/2) - (310/2));
+		y = (62);
+
 		lastHealthPercent = maxHealthPercent;
 		
 		//Creating the background layer
@@ -70,8 +70,8 @@ public class Healthbar extends Actor{
 	}
 	
 	public void updatePosition() {
-		y = (Constants.VIEWPORT_HEIGHT - 15 - 32);
-		x = (Constants.VIEWPORT_WIDTH - 15 - 780);
+		x = ((Constants.VIEWPORT_WIDTH/2) - (310/2));
+		y = (62);
 		bgActor.setPosition(x, y);
 		for(int i=0; i<maxHealthPercent; i++) {
 			healthBarAmount[i].updatePosition();
@@ -188,8 +188,8 @@ public class Healthbar extends Actor{
 		}
 		
 		private void updatePosition() {
-			y = (Constants.VIEWPORT_HEIGHT - 15 - 32 + yMargin);
-			x = (Constants.VIEWPORT_WIDTH - 15 - 780 + index*fillLength+xMargin);
+			x = ((Constants.VIEWPORT_WIDTH/2) - (310/2) + index*fillLength+xMargin);
+			y = (62 + yMargin);
 			actor.setPosition(x, y);
 		}
 		
