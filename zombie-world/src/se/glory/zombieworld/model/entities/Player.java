@@ -102,13 +102,30 @@ public class Player implements Creature {
 		//Loops throught he array and checks if its room for an item. If its room it adds tot he array.
 		//otherwise return false
 		for (int i = 0; i < quickSwapList.size; i++) {
-			if (quickSwapList.get(i) == null) {
+			//If the position is empty and the item doesnt exists in the quickswaplist, add a new item to the list
+			if (quickSwapList.get(i) == null && !existsInSwapList(item)) {
 				quickSwapList.set(i, item);
 				updateQuickSelectionImages();
 				return true;
-			} else if (((ERangedWeapon)quickSwapList.get(i)).getName() == ((ERangedWeapon)item).getName()) {
-				equippedWeapon.addClip(((ERangedWeapon)item).getClips());
-				WorldModel.player.emptyClip = false;
+			} else if (quickSwapList.get(i) != null) {
+				if (((ERangedWeapon)quickSwapList.get(i)).getName().equals(((ERangedWeapon)(item)).getName())) {
+					((ERangedWeapon)quickSwapList.get(i)).addClip(((ERangedWeapon)(item)).getClips());
+					WorldModel.player.emptyClip = false;
+				}
+			}
+		}
+		return false;
+	}
+	
+	/*
+	 * This method checks if the item allready exists in the quickswaplist.
+	 */
+	public boolean existsInSwapList (Item item) {
+		for (int i = 0; i < quickSwapList.size; i++) {
+			if (quickSwapList.get(i) != null) {
+				if ( ((ERangedWeapon)(item)).getName().equals(((ERangedWeapon)(quickSwapList.get(i))).getName()) ) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -121,7 +138,7 @@ public class Player implements Creature {
 	public void updateQuickSelectionImages () {
 		for (int i = 0; i < quickSwapList.size; i++) {
 			if (quickSwapList.get(i) != null) {
-				Texture tmp = ((EMeleeWeapon)(quickSwapList.get(i))).getTexture(0);
+				Texture tmp = ((ERangedWeapon)(quickSwapList.get(i))).getTexture(0);
 				StageModel.quickSelection.changeImage(i, new Image(tmp));
 			}
 		}
@@ -134,8 +151,11 @@ public class Player implements Creature {
 	 * we will change the item of the player.
 	 */
 	public void changeEquippedItem (int pos) {
-		if(quickSwapList.get(pos) != null && equippedWeapon != (EMeleeWeapon)(quickSwapList.get(pos))){
+		if(quickSwapList.get(pos) != null && equippedWeapon != (ERangedWeapon)(quickSwapList.get(pos))){
 			equippedWeapon = (ERangedWeapon)(quickSwapList.get(pos));
+			if (((ERangedWeapon)(quickSwapList.get(pos))).getClips() != 0) {
+				emptyClip = false;
+			}
 		}
 		// TODO Maybe add funtionality to unequip weapon?
 	}
@@ -157,7 +177,7 @@ public class Player implements Creature {
 			    public void run() {
 			    	readyToFire = true;
 			    }
-			}, /*equippedWeapon.getReloadTime()*/(float)0.01);
+			}, /*equippedWeapon.getReloadTime()*/ (float).01);
 		}	
 	}
 	
@@ -242,5 +262,9 @@ public class Player implements Creature {
 	@Override
 	public boolean isMoving() {
 		return getBody().getLinearVelocity().len() != 0;
+	}
+
+	public ERangedWeapon getEquippedWeapon() {
+		return equippedWeapon;
 	}
 }
