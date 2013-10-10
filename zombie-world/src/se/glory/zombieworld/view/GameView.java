@@ -4,6 +4,7 @@ package se.glory.zombieworld.view;
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.Creature;
 import se.glory.zombieworld.model.entities.items.WeaponLoot;
+import se.glory.zombieworld.model.entities.obstacles.CustomObstacle;
 import se.glory.zombieworld.utilities.Animator;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Constants.MoveableBodyType;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -107,6 +109,8 @@ public class GameView {
 		// Debug: Always draw textures
 		drawEntites();
 		
+		//drawTextures();
+		
 		// Draw certain map layers on top of player
 		mapRenderer.getSpriteBatch().begin();
 		if (!getMapLayer("roof").isVisible()) {
@@ -132,6 +136,15 @@ public class GameView {
 				Identity identity = (Identity) body.getUserData();
 				
 				if (identity.getTexture() != null) {
+					
+					//System.out.println(identity.getType() == Constants.MoveableBodyType.STREETOBJECT);
+					if(identity.getType() == MoveableBodyType.STREETOBJECT ){
+						Texture texture = identity.getTexture();
+						//System.out.println(body.getPosition().x + " : " + body.getPosition().y);
+						batch.begin();
+						batch.draw(texture, body.getPosition().x*Constants.BOX_TO_WORLD - texture.getWidth()/2, body.getPosition().y*Constants.BOX_TO_WORLD - texture.getHeight()/15);
+						batch.end();
+					}
 					float width = identity.getWidth();
 					float height = identity.getHeight();
 					
