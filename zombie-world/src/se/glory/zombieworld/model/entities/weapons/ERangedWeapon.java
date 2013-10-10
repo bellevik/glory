@@ -27,13 +27,15 @@ public class ERangedWeapon extends EMeleeWeapon {
 	}
 	
 	public void removeBulletFromClip() {
-		if (currentClipSize != 1) {
+		if (currentClipSize > 1) {
 			currentClipSize--;
 		} else {
-			currentClipSize = clipSize;
-			if (clips != 1) {
+			if (clips > 0) {
 				clips--;
+				currentClipSize = clipSize;
 			} else {
+				clips = 0;
+				currentClipSize = 0;
 				WorldModel.player.emptyClip = true;
 			}
 		}
@@ -61,5 +63,9 @@ public class ERangedWeapon extends EMeleeWeapon {
 	
 	public void setReloadTimep(int reloadTime) {
 		this.reloadTime = reloadTime;
+	}
+
+	public int getCurrentClipSize() {
+		return currentClipSize;
 	}
 }
