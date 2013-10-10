@@ -2,12 +2,11 @@ package se.glory.zombieworld.model.entities;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.math.Vector2;
-
-import se.glory.zombieworld.model.entities.Human.State;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Point;
 import se.glory.zombieworld.utilities.TextureHandler;
+
+import com.badlogic.gdx.math.Vector2;
 
 public class Zombie extends MoveableBody implements Creature {
 	private State state = State.IDLE;

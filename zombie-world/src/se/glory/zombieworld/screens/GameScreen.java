@@ -2,10 +2,8 @@ package se.glory.zombieworld.screens;
 
 import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.model.WorldModel;
-import se.glory.zombieworld.model.entities.items.WeaponLoot;
 import se.glory.zombieworld.model.entities.obstacles.CustomObstacle;
 import se.glory.zombieworld.utilities.Constants;
-import se.glory.zombieworld.utilities.Identity;
 import se.glory.zombieworld.utilities.Score;
 import se.glory.zombieworld.utilities.TextureHandler;
 import se.glory.zombieworld.view.GameView;

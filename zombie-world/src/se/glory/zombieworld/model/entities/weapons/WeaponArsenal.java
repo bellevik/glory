@@ -7,7 +7,6 @@ import se.glory.zombieworld.utilities.Constants;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.physics.box2d.World;
 
 public class WeaponArsenal {
 	private HashMap<String, EMeleeWeapon> weapons = new HashMap<String, EMeleeWeapon>();
