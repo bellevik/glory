@@ -1,7 +1,9 @@
 package se.glory.zombieworld.view;
 
+
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.Creature;
+import se.glory.zombieworld.model.entities.items.WeaponLoot;
 import se.glory.zombieworld.utilities.Animator;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Constants.MoveableBodyType;
@@ -12,6 +14,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -30,6 +33,8 @@ public class GameView {
 	private TiledMap map;
 	
 	private Animator animator;
+	
+	BitmapFont font = new BitmapFont();
 	
 	private float angle;
 	
@@ -72,13 +77,19 @@ public class GameView {
 	
 	public void render() {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		Gdx.gl.glClearColor(0.5f, 1, 1, 1);
+		Gdx.gl.glClearColor(0, 0, 0, 1);
 		
 		mapRenderer.setView(camera);
 		mapRenderer.render();
 		
 		camera.position.set(WorldModel.player.getBody().getPosition().x * Constants.BOX_TO_WORLD, WorldModel.player.getBody().getPosition().y * Constants.BOX_TO_WORLD, 0);
 		camera.update();
+		
+		if (WorldModel.player.getEquippedWeapon() != null) {
+			batch.begin();
+			font.draw(batch, "Ammo: " + WorldModel.player.getEquippedWeapon().getClips() + " " + WorldModel.player.getEquippedWeapon().getCurrentClipSize(), 200, 100);
+			batch.end();
+		}
 		
 		batch.setProjectionMatrix(camera.combined);
 		
@@ -178,10 +189,11 @@ public class GameView {
 							ani = animator.getAnimation(name, 1);
 						}
 						
-						if (ani != null ) {
+						if (ani != null) {
 							animator.drawAnimation(batch, body.getPosition().x, body.getPosition().y, ani, ((Creature)identity.getObj()).isMoving());
 						}
-						
+					} else if (identity.getObj() instanceof WeaponLoot) {
+						animator.drawAnimation(batch, body.getPosition().x, body.getPosition().y, animator.getLootAnimation(), true);
 					}
 				}
 			}

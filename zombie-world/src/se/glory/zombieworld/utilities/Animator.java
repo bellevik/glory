@@ -29,6 +29,8 @@ public class Animator {
 	private Animation[] playerAnimations = new Animation[8];
 	private Animation[] zombieAnimations = new Animation[8];
 	
+	private Animation loot;
+	
 	/*
 	 * Creates all animations for all types of creatures. This will speed up the game
 	 * since they are not created on-the-fly.
@@ -46,6 +48,11 @@ public class Animator {
 		for (int i = 0; i<8;i++){
 			zombieAnimations[i] = createAnimation("zombieSheet.png", i);
 		}
+		loot = createWeaponLootAnimation("AKSheet66.png");
+	}
+	
+	public Animation getLootAnimation() {
+		return loot;
 	}
 	
 	/*
@@ -61,6 +68,29 @@ public class Animator {
 		}else{
 			return null;
 		}
+	}
+	
+	private Animation createWeaponLootAnimation(String fileName) {
+		Animation animation = null;
+		
+		spriteSheet = new Texture(Gdx.files.internal("img/" + fileName));
+		int col = spriteSheet.getWidth() / 64;
+		int row = spriteSheet.getHeight() / 64;
+		
+		TextureRegion[][] tmp = TextureRegion.split(spriteSheet, spriteSheet.getWidth() / col, spriteSheet.getHeight() / row);
+		
+		frames = new TextureRegion[row * col];
+		
+		int index = 0;
+		
+		for (int i = 0; i < row ; i++) {
+			for (int j = 0; j < col; j++) {
+				frames[index++] = tmp[i][j];
+			}
+			//Parameters (update speed, array of TextureRegions to make an animation
+			animation = new Animation(1f, frames);
+		}
+		return animation;
 	}
 	
 	/*
@@ -173,8 +203,15 @@ public class Animator {
 	public void drawAnimation(SpriteBatch batch, float x, float y, Animation ani, boolean isMoving){
 		//stateTime = the time spent in the state represented by this animation
         stateTimer += Gdx.graphics.getDeltaTime();
-        //Get the current frame and loops if the creature is moving
-        currentFrame = ani.getKeyFrame(stateTimer, isMoving);
+        
+        if(Constants.isRunning) {
+        	//Get the current frame and loops if the creature is moving
+            currentFrame = ani.getKeyFrame(stateTimer, isMoving);
+        } else {
+        	//Show the stand-still-frame if the game is paused
+        	currentFrame = ani.getKeyFrame(stateTimer, false);
+        }
+        
         batch.begin();
         batch.draw(currentFrame, x*Constants.BOX_TO_WORLD - currentFrame.getRegionWidth() / 2, y*Constants.BOX_TO_WORLD - currentFrame.getRegionHeight() / 2);
         batch.end();

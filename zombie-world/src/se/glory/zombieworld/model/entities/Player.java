@@ -5,9 +5,11 @@ import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.items.Item;
 import se.glory.zombieworld.model.entities.weapons.Bullet;
 import se.glory.zombieworld.model.entities.weapons.EMeleeWeapon;
+import se.glory.zombieworld.model.entities.weapons.ERangedWeapon;
 import se.glory.zombieworld.utilities.Animator;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Identity;
+import se.glory.zombieworld.utilities.UtilityTimer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -36,7 +38,7 @@ import com.badlogic.gdx.utils.Timer.Task;
 public class Player implements Creature {
 	
 	private float x, y, width, height;
-	
+
 	private Body body;
 	private BodyDef bodyDef;
 	
@@ -44,16 +46,20 @@ public class Player implements Creature {
 	private Array<Item> quickSwapList = new Array<Item>();
 	
 	private Animation animation;
-	private int health;
-	private int maxHealth;
 	
 	private boolean isIndoors;
 	
 	// TODO Set the variable depending on the weapons arsenal class. What weapon is equipped
 	//These variables will handle the shooting method
 	private boolean readyToFire = true;
-	private float reloadTime = 1;
+	
+	private float health;
+	private float maxHealth;
+	private UtilityTimer infectedHealth = null;
+	private ERangedWeapon equippedWeapon = null;
 
+	public static boolean emptyClip;
+	
 	public Player (float x, float y, float width, float height) {
 		this.x = x;
 		this.y = y;
@@ -97,10 +103,34 @@ public class Player implements Creature {
 	 * inventory will be set to 5 slots
 	 */
 	public boolean addItemToQuickSwap(Item item) {
-		if(quickSwapList.size < 5) {
-			quickSwapList.add(item);
-			updateQuickSelectionImages();
-			return true;
+		//Loops throught he array and checks if its room for an item. If its room it adds tot he array.
+		//otherwise return false
+		for (int i = 0; i < quickSwapList.size; i++) {
+			//If the position is empty and the item doesnt exists in the quickswaplist, add a new item to the list
+			if (quickSwapList.get(i) == null && !existsInSwapList(item)) {
+				quickSwapList.set(i, item);
+				updateQuickSelectionImages();
+				return true;
+			} else if (quickSwapList.get(i) != null) {
+				if (((ERangedWeapon)quickSwapList.get(i)).getName().equals(((ERangedWeapon)item).getName())) {
+					((ERangedWeapon)quickSwapList.get(i)).addClip(2);
+					WorldModel.player.emptyClip = false;
+				}
+			}
+		}
+		return false;
+	}
+	
+	/*
+	 * This method checks if the item allready exists in the quickswaplist.
+	 */
+	public boolean existsInSwapList (Item item) {
+		for (int i = 0; i < quickSwapList.size; i++) {
+			if (quickSwapList.get(i) != null) {
+				if ( ((ERangedWeapon)(item)).getName().equals(((ERangedWeapon)(quickSwapList.get(i))).getName()) ) {
+					return true;
+				}
+			}
 		}
 		return false;
 	}
@@ -111,8 +141,10 @@ public class Player implements Creature {
 	 */
 	public void updateQuickSelectionImages () {
 		for (int i = 0; i < quickSwapList.size; i++) {
-			Texture tmp = ((EMeleeWeapon)(quickSwapList.get(i))).getTexture(0);
-			StageModel.quickSelection.changeImage(i, new Image(tmp));
+			if (quickSwapList.get(i) != null) {
+				Texture tmp = ((ERangedWeapon)(quickSwapList.get(i))).getTexture(0);
+				StageModel.quickSelection.changeImage(i, new Image(tmp));
+			}
 		}
 	}
 	
@@ -123,7 +155,13 @@ public class Player implements Creature {
 	 * we will change the item of the player.
 	 */
 	public void changeEquippedItem (int pos) {
-		System.out.println(pos);
+		if(quickSwapList.get(pos) != null && equippedWeapon != (ERangedWeapon)(quickSwapList.get(pos))){
+			equippedWeapon = (ERangedWeapon)(quickSwapList.get(pos));
+			if (((ERangedWeapon)(quickSwapList.get(pos))).getClips() != 0) {
+				emptyClip = false;
+			}
+		}
+		// TODO Maybe add funtionality to unequip weapon?
 	}
 	
 	/*
@@ -133,8 +171,9 @@ public class Player implements Creature {
 	 * short amount of time when the player is unable to fire a shot. 
 	 */
 	public void shoot() {
-		if (readyToFire) {
+		if (readyToFire && equippedWeapon != null && !emptyClip) {
 			fireBullet();
+			equippedWeapon.removeBulletFromClip();
 			readyToFire = false;
 			//It will take realoadTime seconds to set the boolean to true again
 			Timer.schedule(new Task(){
@@ -142,7 +181,7 @@ public class Player implements Creature {
 			    public void run() {
 			    	readyToFire = true;
 			    }
-			}, reloadTime);
+			}, equippedWeapon.getReloadTime());
 		}	
 	}
 	
@@ -156,7 +195,8 @@ public class Player implements Creature {
         float yAngle = MathUtils.sin(rot);
 		
         //14 here is to create the bullet a fix distance from the weapon
-		new Bullet(body.getPosition().x + 14 * xAngle * Constants.WORLD_TO_BOX, body.getPosition().y + 14 * yAngle * Constants.WORLD_TO_BOX, xAngle, yAngle);
+		new Bullet(body.getPosition().x + 14 * xAngle * Constants.WORLD_TO_BOX, body.getPosition().y + 14 * yAngle * Constants.WORLD_TO_BOX, xAngle, yAngle, equippedWeapon.getDamage(), equippedWeapon.getRange());
+
 	}
 	
 	/*
@@ -193,16 +233,49 @@ public class Player implements Creature {
 		WorldModel.player.getBody().setTransform(WorldModel.player.getBody().getPosition(), knobDegree * MathUtils.degreesToRadians);
 	}
 	
-	public int getHealth() {
+	public float getHealth() {
 		return health;
 	}
 	
-	public void takeDamage(int damage) {
-		health -= damage;
+	public int getHealthPercentage() {
+		return (int)((health*100)/maxHealth);
 	}
 	
-	public int getMaxHealth() {
+	public void changeHealth(float healthChange) {
+		
+		//Remove infected status if getting healed
+		if(healthChange >= 0 && infectedHealth != null) {
+			StageModel.healthBar.setInfectedState(false);
+			infectedHealth = null;
+		}
+		
+		//Add or remove health depending on the change
+		health += healthChange;
+		
+		//Set health to 0 if it is less than 0 and to maxHealth if going above it
+		if(health<0) {
+			health = 0;
+		}else if(health > maxHealth) {
+			health = maxHealth;
+		}
+	}
+	
+	public float getMaxHealth() {
 		return maxHealth;
+	}
+	
+	public UtilityTimer getInfectedHealthTimer() {
+		return infectedHealth;
+	}
+	
+	public void infect() {
+		infectedHealth = new UtilityTimer(Constants.INFECTED_INTERVAL);
+		StageModel.healthBar.setInfectedState(true);
+	}
+	
+	public void kill() {
+	//	(Identity)player.getBody().getUserData();
+		((Identity)this.getBody().getUserData()).setDead(true);
 	}
 	
 	@Override
@@ -234,5 +307,9 @@ public class Player implements Creature {
 	@Override
 	public boolean isMoving() {
 		return getBody().getLinearVelocity().len() != 0;
+	}
+
+	public ERangedWeapon getEquippedWeapon() {
+		return equippedWeapon;
 	}
 }
