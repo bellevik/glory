@@ -128,11 +128,6 @@ public class GameScreen implements Screen {
 		
 		StageModel.createUI(batch);
 		
-		new WeaponLoot(100, 100);
-		new WeaponLoot(100, 200);
-		new WeaponLoot(300, 100);
-		new WeaponLoot(200, 200);
-		
 		// ## Add humans
 		worldModel.getAIModel().addHuman(16+22*16, 16+8*16);
 		worldModel.getAIModel().addHuman(16+22*16, 16+15*16);
