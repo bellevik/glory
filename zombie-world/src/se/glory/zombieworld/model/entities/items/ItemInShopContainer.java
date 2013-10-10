@@ -14,9 +14,9 @@ public class ItemInShopContainer {
 	private Image bg;
 	private Texture weapon;
 	private Image weaponActor;
-	private Image rangeIndicatorBar;
-	private Image fireRateIndicatorBar;
-	private Image dmgIndicatorBar;
+	private ItemBar rangeIndicatorBar;
+	private ItemBar fireRateIndicatorBar;
+	private ItemBar dmgIndicatorBar;
 	private String itemName;
 	private String itemCost;
 	
@@ -30,23 +30,18 @@ public class ItemInShopContainer {
 		bg.setPosition(x, y);
 		bg.setVisible(false);
 		
-		rangeIndicatorBar = new Image(new Texture(Gdx.files.internal("img/shop/smallBar.png")));
-		stage.addActor(rangeIndicatorBar);
-		rangeIndicatorBar.setPosition(x+80, y+10);
-		rangeIndicatorBar.setVisible(false);
+		int range = (int)((item.getRange()/100)*60);
+		int dmg = (int)((item.getDamage()/100)*60);
+		int fireRate = 36;
 		
-		dmgIndicatorBar = new Image(new Texture(Gdx.files.internal("img/shop/smallBar.png")));
-		stage.addActor(dmgIndicatorBar);
-		dmgIndicatorBar.setPosition(x+80, y+40);
-		dmgIndicatorBar.setVisible(false);
+		rangeIndicatorBar = new ItemBar(stage, (int)x+80, (int)y+10, range);
+		rangeIndicatorBar.setVisibility(false);
 		
-		fireRateIndicatorBar = new Image(new Texture(Gdx.files.internal("img/shop/smallBar.png")));
-		stage.addActor(fireRateIndicatorBar);
-		fireRateIndicatorBar.setPosition(x+80, y+70);
-		fireRateIndicatorBar.setVisible(false);
+		dmgIndicatorBar = new ItemBar(stage, (int)x+80, (int)y+40, dmg);
+		dmgIndicatorBar.setVisibility(false);
 		
-		
-		
+		fireRateIndicatorBar = new ItemBar(stage, (int)x+80, (int)y+70, fireRate);
+		fireRateIndicatorBar.setVisibility(false);
 		
 		weaponActor = new Image (weapon);
 		stage.addActor(weaponActor);
@@ -57,9 +52,9 @@ public class ItemInShopContainer {
 	}public void setContainerVisability(boolean visable){
 		bg.setVisible(visable);
 		weaponActor.setVisible(visable);
-		rangeIndicatorBar.setVisible(visable);
-		dmgIndicatorBar.setVisible(visable);
-		fireRateIndicatorBar.setVisible(visable);
+		rangeIndicatorBar.setVisibility(visable);
+		dmgIndicatorBar.setVisibility(visable);
+		fireRateIndicatorBar.setVisibility(visable);
 		
 	}public void setIndicatorRange(){
 		
