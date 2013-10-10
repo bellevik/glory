@@ -1,8 +1,10 @@
 package se.glory.zombieworld.model.entities;
 
+import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Identity;
+import se.glory.zombieworld.utilities.UtilityTimer;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
@@ -21,8 +23,8 @@ public class MoveableBody implements Creature {
 	private PolygonShape squareShape;
 	private float width, height;
 	
-	private int health;
-	private int maxHealth;
+	private float health, maxHealth;
+	private UtilityTimer infectedHealth = null;
 	
 	public MoveableBody(float x, float y, float width, float height, Texture texture, Constants.MoveableBodyShape shape, Constants.MoveableBodyType type) {
 		this.width = width;
@@ -61,16 +63,42 @@ public class MoveableBody implements Creature {
 		maxHealth = health = 100;
 	}
 	
-	public int getHealth() {
+	public float getHealth() {
 		return health;
 	}
 	
-	public void takeDamage(int damage) {
-		health -= damage;
+	public int getHealthPercentage() {
+		return (int)((health*100)/maxHealth);
 	}
 	
-	public int getMaxHealth() {
+	public void changeHealth(float healthChange) {
+		
+		//Remove infected status if getting healed
+		if(healthChange >= 0 && infectedHealth != null) {
+			infectedHealth = null;
+		}
+		
+		//Add or remove health depending on the change
+		health += healthChange;
+		
+		//Set health to 0 if it is less than 0 and to maxHealth if going above it
+		if(health<0) {
+			health = 0;
+		}else if(health > maxHealth) {
+			health = maxHealth;
+		}
+	}
+	
+	public float getMaxHealth() {
 		return maxHealth;
+	}
+	
+	public UtilityTimer getInfectedHealthTimer() {
+		return infectedHealth;
+	}
+	
+	public void infect() {
+		infectedHealth = new UtilityTimer(Constants.INFECTED_INTERVAL);
 	}
 
 	@Override

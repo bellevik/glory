@@ -10,10 +10,17 @@ public class Constants {
 	public static final int WEAPON_RANGE = 2;
 	public static final int WEAPON_CLIP_SIZE = 3;
 	public static final int WEAPON_CLIPS = 4;
-	public static final int WEAPON_CURRENT_CLIP = 5;
+	public static final int WEAPON_RELOAD_TIME = 5;
 	
 	public static final int VIEWPORT_WIDTH = 800;
 	public static int VIEWPORT_HEIGHT;
+	
+
+	public static final int INFECTED_INTERVAL = 1500;
+	public static final int INFECTED_DAMAGE = 20;
+	public static final int ZOMBIE_DAMAGE = 10;
+
+	public static boolean isRunning = true;
 	
 	public static enum MoveableBodyShape {
 		CIRCLE, SQUARE;

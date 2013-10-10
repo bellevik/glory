@@ -37,8 +37,11 @@ public class ItemInShopContainer {
 		
 		weaponActor = new Image (weapon);
 		stage.addActor(weaponActor);
-		weaponActor.setPosition(x, y);
+		weaponActor.setPosition(x+10, y+10);
 		
+	}public void hideContainer(){
+		bg.setVisible(false);
+		weaponActor.setVisible(false);
 	}
 	
 }

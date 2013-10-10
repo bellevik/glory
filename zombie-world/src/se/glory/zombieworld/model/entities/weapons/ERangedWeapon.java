@@ -1,17 +1,45 @@
 package se.glory.zombieworld.model.entities.weapons;
 
+import se.glory.zombieworld.model.WorldModel;
+
 public class ERangedWeapon extends EMeleeWeapon {
 	
 	private int clipSize;
 	private int clips;
-	private int currentClip;
+	private float reloadTime;
+	private int currentClipSize;
 	// Array of textures representing the bullet
 	
-	public ERangedWeapon(String name, float damage, float range, int clipSize, int clips, int currentClip) {
+	public ERangedWeapon(String name, float damage, float range, int clipSize, int clips, float reloadTime) {
 		super(name, damage, range);
 		this.clipSize = clipSize;
 		this.clips = clips;
-		this.currentClip = currentClip;
+		this.reloadTime = reloadTime;
+		this.currentClipSize = clipSize;
+		WorldModel.player.emptyClip = false;
+	}
+	
+	public void addClip (int clips) {
+		if (WorldModel.player.emptyClip) {
+			WorldModel.player.emptyClip = false;
+		}
+		this.clips += clips;
+		this.currentClipSize = clipSize;
+	}
+	
+	public void removeBulletFromClip() {
+		if (currentClipSize > 1) {
+			currentClipSize--;
+		} else {
+			if (clips > 0) {
+				clips--;
+				currentClipSize = clipSize;
+			} else {
+				clips = 0;
+				currentClipSize = 0;
+				WorldModel.player.emptyClip = true;
+			}
+		}
 	}
 	
 	public int getClipSize() {
@@ -22,8 +50,8 @@ public class ERangedWeapon extends EMeleeWeapon {
 		return clips;
 	}
 	
-	public int getCurrentClip() {
-		return currentClip;
+	public float getReloadTime() {
+		return reloadTime;
 	}
 	
 	public void setClipSize(int clipSize) {
@@ -34,7 +62,11 @@ public class ERangedWeapon extends EMeleeWeapon {
 		this.clips = clips;
 	}
 	
-	public void setCurrentClip(int currentClip) {
-		this.currentClip = currentClip;
+	public void setReloadTimep(int reloadTime) {
+		this.reloadTime = reloadTime;
+	}
+
+	public int getCurrentClipSize() {
+		return currentClipSize;
 	}
 }

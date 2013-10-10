@@ -6,6 +6,7 @@ import se.glory.zombieworld.model.entities.items.QuickSelection;
 import se.glory.zombieworld.model.entities.items.ShopView;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Joystick;
+import se.glory.zombieworld.utilities.PauseButton;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -18,6 +19,7 @@ public class StageModel {
 	public static ItemView itemView;
 	public static ShopView shopView;
 	public static Joystick moveStick, fireStick;
+	public static PauseButton pauseButton;
 	
 	public static void createUI (SpriteBatch batch) {
 		stage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true, batch);
@@ -25,10 +27,15 @@ public class StageModel {
 		moveStick = new Joystick(stage, 15, 15, 128, 128, Constants.TouchpadType.MOVEMENT);
 		fireStick = new Joystick(stage, Constants.VIEWPORT_WIDTH - 15 - 128, 15, 128, 128, Constants.TouchpadType.FIRE);
 		
+		itemView = new ItemView(stage);
 		quickSelection = new QuickSelection(stage);
+
 		//itemView = new ItemView(stage);
 		shopView = new ShopView(stage);
+
 		
+		
+		pauseButton = new PauseButton(stage, 15, Constants.VIEWPORT_HEIGHT - 32 - 15);
 		
 		healthBar = new Healthbar(stage);
 		
