@@ -1,5 +1,6 @@
 package se.glory.zombieworld.utilities;
 
+import se.glory.zombieworld.model.entities.MoveableBody;
 import se.glory.zombieworld.utilities.Constants.MoveableBodyType;
 
 import com.badlogic.gdx.Gdx;

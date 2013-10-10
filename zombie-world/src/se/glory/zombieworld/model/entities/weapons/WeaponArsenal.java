@@ -7,6 +7,7 @@ import se.glory.zombieworld.utilities.Constants;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.physics.box2d.World;
 
 /*
  * Class used for reading and storing all weapons

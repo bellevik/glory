@@ -2,10 +2,13 @@ package se.glory.zombieworld.model.entities.items;
 
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.weapons.EMeleeWeapon;
+import se.glory.zombieworld.model.entities.weapons.WeaponArsenal;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Constants.ItemType;
 import se.glory.zombieworld.utilities.Identity;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;

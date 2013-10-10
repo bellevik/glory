@@ -31,14 +31,10 @@ public class Constants {
 	}
 	
 	public static enum TouchpadType {
-		MOVEMENT, FIRE, ITEM_SELECTION;
+		MOVEMENT, FIRE, ITEM_SELECTION
 	}
 	
 	public static enum ItemType {
 		WEAPON, CONSUMABLE;
-	}
-	
-	public static enum ScoreType {
-		KILL_ZOMBIE, KILL_HUMAN, TIME_POINT;
 	}
 }

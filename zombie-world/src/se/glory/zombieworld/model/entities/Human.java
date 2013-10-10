@@ -2,11 +2,11 @@ package se.glory.zombieworld.model.entities;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.math.Vector2;
+
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Point;
 import se.glory.zombieworld.utilities.TextureHandler;
-
-import com.badlogic.gdx.math.Vector2;
 
 // TODO: Refactor, much of the code is identical to zombies, make cleaner!
 
