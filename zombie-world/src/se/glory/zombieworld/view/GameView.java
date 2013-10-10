@@ -21,7 +21,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.Fixture;
 
 public class GameView {
 	private SpriteBatch batch;
@@ -204,7 +203,7 @@ public class GameView {
 		
 		if (animation != null){
 			if(isOpen){
-				animator.drawAnimationOnce(batch, 7.35f, 5.7799997f, animation, true);
+				animator.drawAnimation(batch, 7.35f, 5.7799997f, animation, true);
 			}else{
 				animator.drawAnimation(batch,  7.35f, 5.7799997f, closedDoor, true);
 			}

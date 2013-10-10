@@ -237,34 +237,15 @@ public class Animator {
 	/*
 	 * Gets the current frame in the animation and draws to the screen.
 	 */
-	public void drawAnimation(SpriteBatch batch, float x, float y, Animation ani, boolean isMoving){
+	public void drawAnimation(SpriteBatch batch, float x, float y, Animation ani, boolean isLooping){
 		ani.setPlayMode(Animation.NORMAL);
 		//stateTime = the time spent in the state represented by this animation
         stateTimer += Gdx.graphics.getDeltaTime();
         //Get the current frame and loops if the creature is moving
-        currentFrame = ani.getKeyFrame(stateTimer, isMoving);
+        currentFrame = ani.getKeyFrame(stateTimer, isLooping);
         
         batch.begin();
         batch.draw(currentFrame, x*Constants.BOX_TO_WORLD - currentFrame.getRegionWidth() / 2, y*Constants.BOX_TO_WORLD - currentFrame.getRegionHeight() / 2);
-        batch.end();
-	}
-	
-	/*
-	 * Gets the current frame in the animation and draws to the screen.
-	 */
-	public void drawAnimationOnce(SpriteBatch batch, float x, float y, Animation ani, boolean isMoving){
-		ani.setPlayMode(Animation.NORMAL);
-		//stateTime = the time spent in the state represented by this animation
-        stateTimer += Gdx.graphics.getDeltaTime();
-        //Get the current frame and loops if the creature is moving
-        currentFrame = ani.getKeyFrame(stateTimer, isMoving);
-        done = ani.isAnimationFinished(stateTimer);
-        
-        batch.begin();
-        if(!done){
-        	batch.draw(currentFrame, x*Constants.BOX_TO_WORLD - currentFrame.getRegionWidth() / 2, y*Constants.BOX_TO_WORLD - currentFrame.getRegionHeight() / 2);
-        }else
-        	done = false;
         batch.end();
 	}
 }
