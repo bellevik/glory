@@ -133,7 +133,7 @@ public class AIModel {
 				}
 				
 				// WALK
-			//	h.walk();
+				h.walk();
 			}
 			updateHumanHealth(h);
 		}
