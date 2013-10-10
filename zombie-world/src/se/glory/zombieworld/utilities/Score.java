@@ -1,6 +1,5 @@
 package se.glory.zombieworld.utilities;
 
-import se.glory.zombieworld.utilities.Constants;
 
 public class Score {
 	public static long currentScore;
