@@ -25,7 +25,7 @@ public class ShopView {
 		
 		background = new Image(new Texture(Gdx.files.internal("img/shop/shop.png")));
 		stage.addActor(background);
-		//background.setVisible(false);
+		background.setVisible(false);
 		
 		
 		
@@ -53,11 +53,10 @@ public class ShopView {
 			int currentY = ScreenCoordinates.getRealY(Gdx.input.getY());
 		}
 	}
-	public void hideShopView(){
-		background.setVisible(false);
+	public void setShopViewVisability(boolean visable){
+		background.setVisible(visable);
 		for (int i=0;i<itemInShopContainers.length;i++){
-			itemInShopContainers[i].hideContainer();
+			itemInShopContainers[i].setContainerVisability(visable);
 		}
 	}
-	
 }

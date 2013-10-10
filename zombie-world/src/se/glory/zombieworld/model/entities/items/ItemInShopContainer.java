@@ -23,25 +23,46 @@ public class ItemInShopContainer {
 	
 	public ItemInShopContainer(Stage stage,float x,float y,EMeleeWeapon item){
 		this.stage = stage;
-		texture = new Texture(Gdx.files.internal("img/shop/shopframe.png"));
 		weapon =item.getTexture(1);
 		
-		rangeIndicatorBar = new Image ();
-		dmgIndicatorBar = new Image();
-		fireRateIndicatorBar = new Image();
-		
-		
-		bg = new Image(texture);	
+		bg = new Image(new Texture(Gdx.files.internal("img/shop/shopframe.png")));	
 		stage.addActor(bg);
 		bg.setPosition(x, y);
+		bg.setVisible(false);
+		
+		rangeIndicatorBar = new Image(new Texture(Gdx.files.internal("img/shop/smallBar.png")));
+		stage.addActor(rangeIndicatorBar);
+		rangeIndicatorBar.setPosition(x+80, y+10);
+		rangeIndicatorBar.setVisible(false);
+		
+		dmgIndicatorBar = new Image(new Texture(Gdx.files.internal("img/shop/smallBar.png")));
+		stage.addActor(dmgIndicatorBar);
+		dmgIndicatorBar.setPosition(x+80, y+40);
+		dmgIndicatorBar.setVisible(false);
+		
+		fireRateIndicatorBar = new Image(new Texture(Gdx.files.internal("img/shop/smallBar.png")));
+		stage.addActor(fireRateIndicatorBar);
+		fireRateIndicatorBar.setPosition(x+80, y+70);
+		fireRateIndicatorBar.setVisible(false);
+		
+		
+		
 		
 		weaponActor = new Image (weapon);
 		stage.addActor(weaponActor);
 		weaponActor.setPosition(x+10, y+10);
-		
-	}public void hideContainer(){
-		bg.setVisible(false);
 		weaponActor.setVisible(false);
+		
+		
+	}public void setContainerVisability(boolean visable){
+		bg.setVisible(visable);
+		weaponActor.setVisible(visable);
+		rangeIndicatorBar.setVisible(visable);
+		dmgIndicatorBar.setVisible(visable);
+		fireRateIndicatorBar.setVisible(visable);
+		
+	}public void setIndicatorRange(){
+		
 	}
 	
 }
