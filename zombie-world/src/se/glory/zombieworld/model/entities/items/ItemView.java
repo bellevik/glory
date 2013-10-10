@@ -24,7 +24,9 @@ public class ItemView {
 	/* The selected ItemContainer in the QuickSelection */
 	private int currentQuickSelection;
 	private CurrentSelection selection;
+	private CurrentSelection quickSelection;
 	private Image background;
+	private int tempSelection;
 
 	public ItemView(Stage stage) {
 		itemContainers = new ItemContainer[10];
@@ -41,10 +43,11 @@ public class ItemView {
 		}
 		
 		currentSelection = 10;
+		currentQuickSelection = 5;
 		selection = new CurrentSelection(stage, itemContainers[0].getActor().getX(), itemContainers[0].getActor().getY(), false);
 		//selection.show();
 		
-		Texture testTexture = new Texture(Gdx.files.internal("img/player.png"));
+		Texture testTexture = new Texture(Gdx.files.internal("img/zombie.png"));
 		Image testImage = new Image(testTexture);
 		itemContainers[0].newItem(testImage);
 		
@@ -76,16 +79,29 @@ public class ItemView {
 		if(Gdx.input.justTouched()) {
 			int currentX = ScreenCoordinates.getRealX(Gdx.input.getX());
 			int currentY = ScreenCoordinates.getRealY(Gdx.input.getY());
+			boolean isOutside = true;
 			
 			/* Checks if there is an ItemContainer where the user tapped */
 			for(int i = 0; i < itemContainers.length; i++) {
 				if(currentX > itemContainers[i].getActor().getX() && currentX < itemContainers[i].getActor().getX() + 64
 						&& currentY > itemContainers[i].getActor().getY() && currentY < itemContainers[i].getActor().getY() + 64) {
 					currentSelection = i;
+					isOutside = false;
 				}
 			}
 			
+			if(currentQuickSelection < 5) {
+				tempSelection = currentQuickSelection;
+			} else {
+				tempSelection = 5;
+			}
+			
 			currentQuickSelection = StageModel.quickSelection.touchedContainer(currentX, currentY);
+			
+			/* Deselects if you click outside any of the ItemContainer's */
+			if(currentQuickSelection == 5 && isOutside == true) {
+				currentSelection = 10;
+			}
 			
 			/*
 			 * If both of the clicked ItemContainer's are tapped,
@@ -93,13 +109,61 @@ public class ItemView {
 			 */
 			if(currentSelection < 10 && currentQuickSelection < 5) {
 				if(itemContainers[currentSelection].getItemImage() != null) {
-					StageModel.quickSelection.newItem(currentQuickSelection, itemContainers[currentSelection].getItemImage());
-					StageModel.quickSelection.getCurrentImage(currentQuickSelection).setVisible(true);
-					itemContainers[currentSelection].deleteItemReference();
+					if(StageModel.quickSelection.getCurrentImage(currentQuickSelection) != null) {
+						Image tempImage = StageModel.quickSelection.getCurrentImage(currentQuickSelection);
+						StageModel.quickSelection.deleteItemReference(currentQuickSelection);
+						StageModel.quickSelection.newItem(currentQuickSelection, itemContainers[currentSelection].getItemImage());
+						StageModel.quickSelection.getCurrentImage(currentQuickSelection).setVisible(true);
+						itemContainers[currentSelection].deleteItemReference();
+						itemContainers[currentSelection].newItem(tempImage);
+						itemContainers[currentSelection].show();
+					} else {
+						StageModel.quickSelection.newItem(currentQuickSelection, itemContainers[currentSelection].getItemImage());
+						StageModel.quickSelection.getCurrentImage(currentQuickSelection).setVisible(true);
+						itemContainers[currentSelection].deleteItemReference();
+					}
+					
 					currentSelection = 10;
+					currentQuickSelection = 5;
+				}
+			} else if(currentSelection == 10 && currentQuickSelection < 5 && tempSelection < 5) {
+				if(tempSelection != currentQuickSelection) {
+					if(StageModel.quickSelection.getCurrentImage(currentQuickSelection) != null && StageModel.quickSelection.getCurrentImage(tempSelection) != null) {
+						Image tempImage = StageModel.quickSelection.getCurrentImage(currentQuickSelection);
+						StageModel.quickSelection.deleteItemReference(currentQuickSelection);
+						StageModel.quickSelection.newItem(currentQuickSelection, StageModel.quickSelection.getCurrentImage(tempSelection));
+						StageModel.quickSelection.getCurrentImage(currentQuickSelection).setVisible(true);
+						StageModel.quickSelection.deleteItemReference(tempSelection);
+						StageModel.quickSelection.newItem(tempSelection, tempImage);
+						StageModel.quickSelection.getCurrentImage(tempSelection).setVisible(true);
+					} else if(StageModel.quickSelection.getCurrentImage(currentQuickSelection) == null && StageModel.quickSelection.getCurrentImage(tempSelection) != null) {
+						StageModel.quickSelection.newItem(currentQuickSelection, StageModel.quickSelection.getCurrentImage(tempSelection));
+						StageModel.quickSelection.getCurrentImage(currentQuickSelection).setVisible(true);
+						StageModel.quickSelection.deleteItemReference(tempSelection);
+					} else if(StageModel.quickSelection.getCurrentImage(currentQuickSelection) != null && StageModel.quickSelection.getCurrentImage(tempSelection) == null) {
+						StageModel.quickSelection.newItem(tempSelection, StageModel.quickSelection.getCurrentImage(currentQuickSelection));
+						StageModel.quickSelection.getCurrentImage(tempSelection).setVisible(true);
+						StageModel.quickSelection.deleteItemReference(currentQuickSelection);
+					}
+					tempSelection = 5;
+					currentQuickSelection = 5;
+					
 				}
 			}
 			
+		}
+		
+		quickSelection = StageModel.quickSelection.getSelector();
+		if(currentQuickSelection < 5) {
+			quickSelection.setActorPosition(StageModel.quickSelection.getItemContainer(currentQuickSelection).getActor().getX(),
+					StageModel.quickSelection.getItemContainer(currentQuickSelection).getActor().getY());
+			if(!quickSelection.isActorVisible()) {
+				quickSelection.show();
+			}
+		} else {
+			if(quickSelection.isActorVisible()) {
+				quickSelection.hide();
+			}
 		}
 		
 		if(currentSelection < 10) {

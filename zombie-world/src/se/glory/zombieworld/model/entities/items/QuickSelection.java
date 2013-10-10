@@ -46,6 +46,18 @@ public class QuickSelection {
 		currentSelection = new CurrentSelection(stage, selectionStick.getTouchpad().getX(), selectionStick.getTouchpad().getY(), true);
 	}
 	
+	public CurrentSelection getSelector() {
+		return currentSelection;
+	}
+	
+	public ItemContainer getItemContainer(int index) {
+		return itemContainers[index];
+	}
+	
+	public void deleteItemReference(int index) {
+		itemContainers[index].deleteItemReference();
+	}
+	
 	public Image getCurrentImage(int index) {
 		return itemContainers[index].getItemImage();
 	}
