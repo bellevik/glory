@@ -1,6 +1,5 @@
 package se.glory.zombieworld.utilities;
 
-import se.glory.zombieworld.model.entities.MoveableBody;
 import se.glory.zombieworld.utilities.Constants.MoveableBodyType;
 
 import com.badlogic.gdx.Gdx;
@@ -17,7 +16,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class Animator {
 	private final int FRAME_COLS = 4;
 	private final int FRAME_ROWS = 8;
-	private final float walkSpeed = 0.525f;
+	private final float walkSpeed = 1.525f;
 	
 	private Texture spriteSheet;
 	private TextureRegion currentFrame;

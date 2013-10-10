@@ -151,10 +151,7 @@ public class GameView {
 						
 						angle = T * MathUtils.radiansToDegrees;
 						
-						/*
-						 * Get the objects name by splitting a string and create the 
-						 * approperiate animation for that object.
-						 */
+						//Gets what type of creature the object is
 						MoveableBodyType name = identity.getType();
 						
 						Animation ani = null;
