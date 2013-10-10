@@ -6,11 +6,11 @@ public class ERangedWeapon extends EMeleeWeapon {
 	
 	private int clipSize;
 	private int clips;
-	private int reloadTime;
+	private float reloadTime;
 	private int currentClipSize;
 	// Array of textures representing the bullet
 	
-	public ERangedWeapon(String name, float damage, float range, int clipSize, int clips, int reloadTime) {
+	public ERangedWeapon(String name, float damage, float range, int clipSize, int clips, float reloadTime) {
 		super(name, damage, range);
 		this.clipSize = clipSize;
 		this.clips = clips;
@@ -50,7 +50,7 @@ public class ERangedWeapon extends EMeleeWeapon {
 		return clips;
 	}
 	
-	public int getReloadTime() {
+	public float getReloadTime() {
 		return reloadTime;
 	}
 	
