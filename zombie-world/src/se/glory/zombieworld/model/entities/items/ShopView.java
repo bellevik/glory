@@ -3,17 +3,21 @@ package se.glory.zombieworld.model.entities.items;
 import se.glory.zombieworld.model.entities.weapons.EMeleeWeapon;
 import se.glory.zombieworld.model.entities.weapons.ERangedWeapon;
 import se.glory.zombieworld.model.entities.weapons.WeaponArsenal;
+import se.glory.zombieworld.screens.GameScreen;
 import se.glory.zombieworld.utilities.ScreenCoordinates;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class ShopView {
 	
 
-
+	private Image doneButton;
 	private EMeleeWeapon [] weapon;
 	private ItemInShopContainer[] itemInShopContainers;
 	private WeaponArsenal wa = new WeaponArsenal();
@@ -26,6 +30,18 @@ public class ShopView {
 		background = new Image(new Texture(Gdx.files.internal("img/shop/shop.png")));
 		stage.addActor(background);
 		background.setVisible(false);
+		
+		doneButton = new Image(new Texture(Gdx.files.internal("img/shop/shopdone.png")));
+		doneButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				setShopViewVisability(false);//Här sätter du vart den ska länka
+				System.out.println("clicked");
+			}
+		});
+		doneButton.setPosition(400, 10);
+		stage.addActor(doneButton);
+		doneButton.setVisible(false);
 		
 		
 		
@@ -57,6 +73,7 @@ public class ShopView {
 		background.setVisible(visable);
 		for (int i=0;i<itemInShopContainers.length;i++){
 			itemInShopContainers[i].setContainerVisability(visable);
+			doneButton.setVisible(visable);
 		}
 	}
 }

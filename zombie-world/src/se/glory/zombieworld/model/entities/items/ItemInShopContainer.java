@@ -25,6 +25,8 @@ public class ItemInShopContainer {
 		this.stage = stage;
 		weapon =item.getTexture(1);
 		
+		
+		
 		bg = new Image(new Texture(Gdx.files.internal("img/shop/shopframe.png")));	
 		stage.addActor(bg);
 		bg.setPosition(x, y);
