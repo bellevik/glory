@@ -27,4 +27,4 @@ The pathfinding algorithm we use are A*, read more about it here: http://en.wiki
 
 ##What about the boring technical details?
 ###Game engine
-We use libgdx.
+We use libgdx as the game engine and Box2D as our physics engine.
