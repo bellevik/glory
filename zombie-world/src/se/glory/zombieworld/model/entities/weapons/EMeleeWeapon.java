@@ -24,7 +24,7 @@ public class EMeleeWeapon implements Item {
 		textures = new Texture[8];
 		
 		textures[0] = new Texture(Gdx.files.internal("data/weapons/" + name + "/" + name + ".png"));
-		
+		textures[1] = new Texture(Gdx.files.internal("data/weapons/" + name + "/shop" + name + ".png"));
 	}
 	
 	public int getLevel() {
