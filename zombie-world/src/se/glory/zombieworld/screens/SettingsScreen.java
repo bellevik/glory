@@ -18,8 +18,8 @@ public class SettingsScreen implements Screen {
 	
 	private SpriteBatch batch;
 	
-	private Texture backgroundTexture, buttonSFXTexture, buttonMusicTexture, buttonBackTexture;
-	private Image buttonSFX, buttonMusic, buttonBack;
+	private Texture backgroundTexture, SFXLabelTexture, musicLabelTexture, backButtonTexture;
+	private Image SFXLabel, musicLabel, backButton;
     
 	@Override
 	public void render(float delta) {
@@ -46,45 +46,48 @@ public class SettingsScreen implements Screen {
 		batch = new SpriteBatch();
 		
 		backgroundTexture = new Texture(Gdx.files.internal("ui/mainMenuBackground.png"));
-		buttonMusicTexture = new Texture(Gdx.files.internal("ui/buttonMusic.png"));
-		buttonSFXTexture = new Texture(Gdx.files.internal("ui/buttonSFX.png"));		
+		musicLabelTexture = new Texture(Gdx.files.internal("ui/buttonMusic.png"));
+		SFXLabelTexture = new Texture(Gdx.files.internal("ui/buttonSFX.png"));
+		backButtonTexture = new Texture(Gdx.files.internal("ui/buttonBack.png"));
 		
 		Gdx.input.setInputProcessor(stage);
 		
 		//Create buttons
-		buttonMusic = new Image(buttonMusicTexture);
-		buttonMusic.setX(Constants.VIEWPORT_WIDTH/4 - buttonMusicTexture.getWidth()/4);
-		buttonMusic.setY(250);
+		musicLabel = new Image(musicLabelTexture);
+		musicLabel.setX(Constants.VIEWPORT_WIDTH/4 - musicLabelTexture.getWidth()/4);
+		musicLabel.setY(250);
 		
-		buttonSFX = new Image(buttonSFXTexture);
-		buttonSFX.setX(Constants.VIEWPORT_WIDTH/4 - buttonSFXTexture.getWidth()/4);
-
-		buttonBack = new Image(buttonBackTexture);
-		buttonBack.setX(Constants.VIEWPORT_WIDTH/4 - buttonSFXTexture.getWidth()/4);
+		SFXLabel = new Image(SFXLabelTexture);
+		SFXLabel.setX(Constants.VIEWPORT_WIDTH/4 - SFXLabelTexture.getWidth()/4);
+		SFXLabel.setY(200);
+		
+		backButton = new Image(backButtonTexture);
+		backButton.setX(Constants.VIEWPORT_WIDTH/2 - SFXLabelTexture.getWidth()/2);
+		backButton.setY(100);
 		
 		//Adding listeners to buttons
-		buttonSFX.addListener(new ClickListener(){
+		SFXLabel.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				
 			}
 		});
-		buttonMusic.addListener(new ClickListener() {
+		musicLabel.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				
 			}
 		});
-		buttonBack.addListener(new ClickListener() {
+		backButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				
+				((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu());
 			}
 		});
 		
-		stage.addActor(buttonMusic);
-		stage.addActor(buttonSFX);
-		stage.addActor(buttonBack);
+		stage.addActor(musicLabel);
+		stage.addActor(SFXLabel);
+		stage.addActor(backButton);
 	}
 
 	@Override
