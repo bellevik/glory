@@ -69,9 +69,6 @@ public class GameScreen implements Screen {
 			StageModel.quickSelection.manageItems();
 		}
 		
-		// Animator.drawAnimation(batch, player.getBody().getPosition().x, player.getBody().getPosition().y);
-		// player.getAnimation().drawAnimation(batch, player.getBody().getPosition().x, player.getBody().getPosition().y);
-		
 		StageModel.stage.act(delta);
 		StageModel.stage.draw();
 		

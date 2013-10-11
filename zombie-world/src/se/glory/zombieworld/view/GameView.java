@@ -95,8 +95,6 @@ public class GameView {
 		
 		if (Constants.DEBUG_MODE){
 			useDebugRenderer();
-		} else {
-			drawEntites();
 		}
 		
 		camera.position.set(WorldModel.player.getBody().getPosition().x * Constants.BOX_TO_WORLD, WorldModel.player.getBody().getPosition().y * Constants.BOX_TO_WORLD, 0);
@@ -131,13 +129,11 @@ public class GameView {
 			if (body.getUserData() != null && body.getUserData().getClass().equals(Identity.class)) {
 				Identity identity = (Identity) body.getUserData();
 				
-				if (identity.getTexture() != null) {
 					float width = identity.getWidth();
 					float height = identity.getHeight();
 					
 					//Check if the body is a creature
 					if(identity.getObj() instanceof Creature){
-
 						/*
 						 * Calculates the angle each body is facing to display the
 						 * correct animation.
@@ -192,7 +188,6 @@ public class GameView {
 					} else if (identity.getObj() instanceof WeaponLoot) {
 						animator.drawAnimation(batch, body.getPosition().x, body.getPosition().y, animator.getLootAnimation(), true);
 					}
-				}
 			}
 		}
 		WorldModel.drawableBodies.clear();
