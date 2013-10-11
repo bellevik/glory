@@ -1,10 +1,18 @@
 package se.glory.zombieworld.screens;
 
+import java.util.Random;
+
 import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.model.WorldModel;
+<<<<<<< HEAD
 import se.glory.zombieworld.model.entities.items.WeaponLoot;
 import se.glory.zombieworld.model.entities.obstacles.CustomObstacle;
 import se.glory.zombieworld.utilities.Constants;
+=======
+import se.glory.zombieworld.model.entities.obstacles.CustomObstacle;
+import se.glory.zombieworld.utilities.Constants;
+import se.glory.zombieworld.utilities.SoundPlayer;
+>>>>>>> sound
 import se.glory.zombieworld.utilities.TextureHandler;
 import se.glory.zombieworld.view.GameView;
 
@@ -19,6 +27,8 @@ public class GameScreen implements Screen {
 	//private ItemView itemView;
 	//private boolean isRunning = true;
 	
+	private Random random = new Random();
+	
 	//private Healthbar healthBar;
 	
 	//private Stage stage;
@@ -28,6 +38,8 @@ public class GameScreen implements Screen {
 	
 	private WorldModel worldModel;
 	private GameView gameView;
+	
+	private SoundPlayer soundPlayer;
 	
 	/*
 	 * This method will be called all the time throughout the game. Libgdx method!
@@ -72,6 +84,7 @@ public class GameScreen implements Screen {
 		StageModel.stage.act(delta);
 		StageModel.stage.draw();
 		
+<<<<<<< HEAD
 		// ###############
 		Cell c = gameView.getMapLayer("events").getCell((int)WorldModel.player.getTileX(), (int)WorldModel.player.getTileY());
 		
@@ -86,6 +99,16 @@ public class GameScreen implements Screen {
 				 }
 			 }
 		}
+=======
+		WorldModel.world.step(1/60f, 6, 2);
+		worldModel.update();
+		
+	//	healthBar.updateHealth(70);
+		testHealthBar();
+		
+		if (random.nextFloat() * 1500 < 5)
+			soundPlayer.playRandomSoundEffect();
+>>>>>>> sound
 	}
 	
 	
@@ -152,6 +175,9 @@ public class GameScreen implements Screen {
 		// worldModel.getAIModel().addZombie(272, 272);
 		
 		createStaticWalls();
+		
+		soundPlayer = new SoundPlayer();
+		soundPlayer.playBackgroudMusic();
 	}
 
 	private void createStaticWalls() {
