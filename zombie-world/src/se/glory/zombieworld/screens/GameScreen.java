@@ -101,12 +101,6 @@ public class GameScreen implements Screen {
 			 }
 		}
 		
-		WorldModel.world.step(1/60f, 6, 2);
-		worldModel.update();
-		
-	//	healthBar.updateHealth(70);
-		testHealthBar();
-		
 		if (random.nextFloat() * 1500 < 5)
 			soundPlayer.playRandomSoundEffect();
 	}
