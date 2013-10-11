@@ -43,4 +43,9 @@ public class Constants {
 	public static enum ItemType {
 		WEAPON, CONSUMABLE;
 	}
+	
+	public static enum ScoreType {
+		KILL_ZOMBIE, KILL_HUMAN, TIME;
+	}
+	
 }
