@@ -43,7 +43,7 @@ public class GameScreen implements Screen {
 	public void render(float delta) {
 		gameView.render();
 		
-		if(Constants.isRunning) {
+		if(Constants.gameState == Constants.GameState.RUNNING) {
 			// Update player movement
 			WorldModel.player.getBody().setLinearVelocity(StageModel.moveStick.getTouchpad().getKnobPercentX() * 2, StageModel.moveStick.getTouchpad().getKnobPercentY() * 2);
 			
@@ -66,11 +66,11 @@ public class GameScreen implements Screen {
 			StageModel.quickSelection.selectItem();
 			StageModel.itemView.hideContainers();
 			if(StageModel.pauseButton.isTouched()) {
-				Constants.isRunning = false;
+				Constants.gameState = Constants.GameState.PAUSE;
 			}
 		} else {
 			if(StageModel.pauseButton.isTouched()) {
-				Constants.isRunning = true;
+				Constants.gameState = Constants.GameState.RUNNING;
 			}
 			StageModel.itemView.manageItems();
 			StageModel.quickSelection.manageItems();

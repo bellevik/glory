@@ -203,7 +203,7 @@ public class Animator {
 		//stateTime = the time spent in the state represented by this animation
         stateTimer += Gdx.graphics.getDeltaTime();
         
-        if(Constants.isRunning) {
+        if(Constants.gameState == Constants.GameState.RUNNING) {
         	//Get the current frame and loops if the creature is moving
             currentFrame = ani.getKeyFrame(stateTimer, isMoving);
         } else {
