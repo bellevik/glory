@@ -24,7 +24,7 @@ public class SoundPlayer {
 		backgroundMusic.play();
 	}
 	
-	public void playSoundEffect() {
+	public void playRandomSoundEffect() {
 		float rand = random.nextFloat() * 1000;
 		
 		if (rand < 300) {

@@ -21,6 +21,8 @@ public class GameScreen implements Screen {
 	//private ItemView itemView;
 	private boolean isRunning = true;
 	
+	private Random random = new Random();
+	
 	//private Healthbar healthBar;
 	
 	//private Stage stage;
@@ -76,8 +78,8 @@ public class GameScreen implements Screen {
 	//	healthBar.updateHealth(70);
 		testHealthBar();
 		
-		if (new Random().nextFloat() * 1500 < 5)
-			soundPlayer.playSoundEffect();
+		if (random.nextFloat() * 1500 < 5)
+			soundPlayer.playRandomSoundEffect();
 	}
 	
 	
