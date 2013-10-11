@@ -7,6 +7,7 @@ import se.glory.zombieworld.model.entities.obstacles.CustomObstacle;
 import se.glory.zombieworld.model.entities.obstacles.DoorObject;
 import se.glory.zombieworld.model.entities.obstacles.StreetObject;
 import se.glory.zombieworld.utilities.Constants;
+import se.glory.zombieworld.utilities.Identity;
 import se.glory.zombieworld.utilities.TextureHandler;
 import se.glory.zombieworld.view.GameView;
 
@@ -15,6 +16,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 
 public class GameScreen implements Screen {
 	//private QuickSelection quickSelection;
@@ -28,7 +31,7 @@ public class GameScreen implements Screen {
 	// moveStick controls player movement, fireStick controls item use
 	//private Joystick moveStick, fireStick;
 	
-
+	private boolean tmp = true;
 	
 	private WorldModel worldModel;
 	private GameView gameView;
@@ -90,10 +93,32 @@ public class GameScreen implements Screen {
 						 gameView.getMapLayer("roof").setVisible(true);
 					 }
 				 }
-				 gameView.setOpen(true);
+				 
+				 
+				 
+				 if (tmp) {
+					 tmp = false;
+					 gameView.setOpen("opening");
+					 Timer.schedule(new Task(){
+						    @Override
+						    public void run() {
+						    	gameView.setOpen("open");
+						    }
+						}, 0.225f);
+				 }
+				 
 			 }
 		}else {
-			 gameView.setOpen(false);
+			if (!tmp) {
+				 Timer.schedule(new Task(){
+					    @Override
+					    public void run() {
+					    	gameView.setOpen("closed");
+					    	tmp = true;
+					    }
+					}, 0.5f);
+			 }
+			 
 		 }
 	}
 	

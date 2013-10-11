@@ -30,7 +30,7 @@ public class GameView {
 	private TiledMap map;
 	
 	private Animator animator;
-	private boolean isOpen = false;
+	private String isOpen = "closed";
 	
 	private float angle;
 	
@@ -202,9 +202,12 @@ public class GameView {
 		closedDoor = animator.getClosedDoor(1);
 		
 		if (animation != null){
-			if(isOpen){
+			if(isOpen.equals("opening")){
 				animator.drawAnimation(batch, 7.35f, 5.7799997f, animation, true);
-			}else{
+				
+			} else if(isOpen.equals("open")){
+				animator.drawAnimation(batch, 7.35f, 5.7799997f, animation, false);
+			} else if(isOpen.equals("closed")) {
 				animator.drawAnimation(batch,  7.35f, 5.7799997f, closedDoor, true);
 			}
 		}
@@ -218,11 +221,11 @@ public class GameView {
 		return this.batch;
 	}
 	
-	public boolean getOpen(){
+	public String getOpen(){
 		return this.isOpen;
 	}
 	
-	public void setOpen(boolean isOpen){
+	public void setOpen(String isOpen){
 		this.isOpen = isOpen;
 	}
 }

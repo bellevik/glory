@@ -23,8 +23,6 @@ public class Animator {
 	private final float walkSpeed = 0.525f;
 	private final float openingSpeed = 0.325f;
 	
-	private boolean done = false;
-	
 	private Texture spriteSheet;
 	private TextureRegion currentFrame;
 	private TextureRegion[] frames, doorFrames;
@@ -238,7 +236,7 @@ public class Animator {
 	 * Gets the current frame in the animation and draws to the screen.
 	 */
 	public void drawAnimation(SpriteBatch batch, float x, float y, Animation ani, boolean isLooping){
-		ani.setPlayMode(Animation.NORMAL);
+
 		//stateTime = the time spent in the state represented by this animation
         stateTimer += Gdx.graphics.getDeltaTime();
         //Get the current frame and loops if the creature is moving
