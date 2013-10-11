@@ -37,7 +37,7 @@ public class QuickSelection {
 			itemContainers[i] = new ItemContainer(stage, (float)(selectionX + Math.cos(radians)), (float)(selectionY + Math.sin(radians)), true);
 		}
 		
-		itemContainers[0].newItem(new Image(new Texture(Gdx.files.internal("img/human.png"))));
+		//itemContainers[0].newItem(new Image(new Texture(Gdx.files.internal("img/human.png"))));
 		
 		selectionStick = new Joystick(stage, selectionX, selectionY, 64, 64, Constants.TouchpadType.ITEM_SELECTION);
 

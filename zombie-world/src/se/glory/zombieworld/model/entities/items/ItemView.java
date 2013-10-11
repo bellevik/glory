@@ -47,9 +47,9 @@ public class ItemView {
 		selection = new CurrentSelection(stage, itemContainers[0].getActor().getX(), itemContainers[0].getActor().getY(), false);
 		//selection.show();
 
-		Texture testTexture = new Texture(Gdx.files.internal("img/zombie.png"));
-		Image testImage = new Image(testTexture);
-		itemContainers[0].newItem(testImage);
+		//Texture testTexture = new Texture(Gdx.files.internal("img/zombie.png"));
+		//Image testImage = new Image(testTexture);
+		//itemContainers[0].newItem(testImage);
 
 		//itemContainers[0].show();
 	}

@@ -16,9 +16,9 @@ public class TextureHandler {
 	public static Texture bulletTexture;
 	
 	public static void createTextures() {
-		humanTexture = new Texture(Gdx.files.internal("img/human.png"));
-		zombieTexture = new Texture(Gdx.files.internal("img/zombie.png"));
-		bulletTexture = new Texture(Gdx.files.internal("img/bullet.png"));
+		//humanTexture = new Texture(Gdx.files.internal("img/human.png"));
+		//zombieTexture = new Texture(Gdx.files.internal("img/zombie.png"));
+		//bulletTexture = new Texture(Gdx.files.internal("img/bullet.png"));
 	}
 	
 }

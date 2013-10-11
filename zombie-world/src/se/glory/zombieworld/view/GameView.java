@@ -35,8 +35,11 @@ public class GameView {
 	
 	private Animator animator;
 	
-	BitmapFont font = new BitmapFont(Gdx.files.internal("font/scoreFOnt.fnt"),
-			Gdx.files.internal("font/scoreFont_0.png"), false);
+	// TODO Change font
+	/*BitmapFont font = new BitmapFont(Gdx.files.internal("font/scoreFOnt.fnt"),
+			Gdx.files.internal("font/scoreFont_0.png"), false);*/
+	
+	BitmapFont font = new BitmapFont();
 	
 	private float angle;
 	

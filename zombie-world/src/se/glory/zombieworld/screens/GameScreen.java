@@ -4,6 +4,7 @@ import java.util.Random;
 
 import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.model.WorldModel;
+import se.glory.zombieworld.model.entities.items.WeaponLoot;
 import se.glory.zombieworld.model.entities.obstacles.CustomObstacle;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Score;
@@ -155,6 +156,8 @@ public class GameScreen implements Screen {
 		TextureHandler.createTextures();
 		
 		SpriteBatch batch = new SpriteBatch();
+		
+		new WeaponLoot(100, 100);
 		
 		gameView = new GameView(batch);
 		worldModel.setupAIModel(gameView.getMapLayer("blocked"));

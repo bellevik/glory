@@ -52,7 +52,7 @@ public class MoveableBody implements Creature {
 		body.createFixture(fixtureDef);
 		
 		Identity identity = new Identity();
-		identity.setTexture(texture);
+		identity.setTexture(null);
 		identity.setWidth(width);
 		identity.setHeight(height);
 		identity.setType(type);
