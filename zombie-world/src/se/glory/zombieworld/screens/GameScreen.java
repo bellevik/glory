@@ -72,13 +72,13 @@ public class GameScreen implements Screen {
 		
 		worldModel.update();
 		
-		/*float t = 120;
+		float t = 120;
 		float fps = Gdx.graphics.getFramesPerSecond();
 		if (fps != 0) {
 			t = (60 / fps) * 120;
-		}*/
+		}
 		
-		WorldModel.world.step(1/120f, 6, 2);
+		WorldModel.world.step(1/t, 6, 2);
 		
 		
 		// ############### EVENTS
@@ -145,7 +145,7 @@ public class GameScreen implements Screen {
 		new WeaponLoot(200, 200);
 		
 		// ## Add humans
-		addRandomHumans(20);
+		addRandomHumans(20/12);
 		
 		// ## Add zombies
 		//worldModel.getAIModel().addZombie(16+50*16, 16+50*16);
@@ -154,7 +154,55 @@ public class GameScreen implements Screen {
 	}
 	
 	private void addRandomHumans(int num) {
-		int mapWidth = gameView.getMapLayer("blocked").getWidth();
+		for (int i = 0; i < num; i++) {
+			worldModel.getAIModel().addHuman(16*3+i*16*3, 16+15*16);
+		}
+		
+		for (int i = 0; i < num; i++) {
+			worldModel.getAIModel().addHuman(16*3+i*16*3, 16+20*16);
+		}
+		
+		for (int i = 0; i < num; i++) {
+			worldModel.getAIModel().addHuman(16*3+i*16*3, 16+25*16);
+		}
+		
+		for (int i = 0; i < num; i++) {
+			worldModel.getAIModel().addHuman(16*3+i*16*3, 16+30*16);
+		}
+		
+		for (int i = 0; i < num; i++) {
+			worldModel.getAIModel().addHuman(16*3+i*16*3, 16+40*16);
+		}
+		
+		for (int i = 0; i < num; i++) {
+			worldModel.getAIModel().addHuman(16*3+i*16*3, 16+50*16);
+		}
+		
+		for (int i = 0; i < num; i++) {
+			worldModel.getAIModel().addHuman(16*3+i*16*3, 16+60*16);
+		}
+		
+		for (int i = 0; i < num; i++) {
+			worldModel.getAIModel().addHuman(16*3+i*16*3, 16+70*16);
+		}
+		
+		for (int i = 0; i < num; i++) {
+			worldModel.getAIModel().addHuman(16*3+i*16*3, 16+80*16);
+		}
+		
+		for (int i = 0; i < num; i++) {
+			worldModel.getAIModel().addHuman(16*3+i*16*3, 16+85*16);
+		}
+		
+		for (int i = 0; i < num; i++) {
+			worldModel.getAIModel().addHuman(16*3+i*16*3, 16+90*16);
+		}
+		
+		for (int i = 0; i < num; i++) {
+			worldModel.getAIModel().addHuman(16*3+i*16*3, 16+100*16);
+		}
+		
+		/*int mapWidth = gameView.getMapLayer("blocked").getWidth();
 		int mapHeight = gameView.getMapLayer("blocked").getHeight();
 		ArrayList<Point> blockedTiles = worldModel.getAIModel().getBlockedTiles();
 		
@@ -170,7 +218,7 @@ public class GameScreen implements Screen {
 			}
 			
 			worldModel.getAIModel().addHuman(16+goalX*16, 16+goalY*16);
-		}
+		}*/
 	}
 
 	private void createStaticWalls() {

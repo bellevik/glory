@@ -7,6 +7,7 @@ import se.glory.zombieworld.model.entities.Creature;
 import se.glory.zombieworld.model.entities.Human;
 import se.glory.zombieworld.model.entities.Zombie;
 import se.glory.zombieworld.utilities.AStarPathFinder;
+import se.glory.zombieworld.utilities.AStarPathFinder2;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Point;
 import se.glory.zombieworld.utilities.UtilityTimer;
@@ -20,6 +21,8 @@ public class AIModel {
 	private ArrayList<Zombie> zombies = new ArrayList<Zombie>();
 	
 	private ArrayList<Point> blockedTiles = new ArrayList<Point>();
+	private boolean[][] blockedTilesBoolean;
+	
 	private int mapWidth = 0;
 	private int mapHeight = 0;
 	
@@ -57,6 +60,17 @@ public class AIModel {
 			this.blockedTiles.add(new Point(p.getX() - 1, p.getY()));
 			this.blockedTiles.add(new Point(p.getX(), p.getY() - 1));
 		}
+		
+		setBlockedTiles2();
+	}
+	
+	public void setBlockedTiles2() {
+		blockedTilesBoolean = new boolean[mapWidth][mapHeight];
+		
+		for (Point p : blockedTiles) {
+			if (p.getX() > -1 && p.getY() > -1)
+				blockedTilesBoolean[p.getX()][p.getY()] = true;
+		}
 	}
 	
 	public ArrayList<Point> getBlockedTiles() {
@@ -71,8 +85,8 @@ public class AIModel {
 		updateHumans();
 		long resultTime = System.currentTimeMillis() - startTime;
 		
-		if (resultTime > 30)
-			System.out.println("AI-humans: " + resultTime);
+		/*if (resultTime > 30)
+			System.out.println("AI-humans: " + resultTime);*/
 			
 		//##
 		
@@ -181,13 +195,14 @@ public class AIModel {
 					}*/
 				}
 				
-				//h.setState(Human.State.WALKING);
+				if (h.getState() != Human.State.COLLIDING)
+					h.setState(Human.State.WALKING);
 				
 				// WALK
 				//h.walk();
 			}
 			
-			updateHumanHealth(h);
+			//updateHumanHealth(h);
 		}
 	}
 	
@@ -195,6 +210,116 @@ public class AIModel {
 		for (Human h: humans) {
 			if (h.getState() == Human.State.WALKING || h.getState() == Human.State.COLLIDING)
 				h.walk();
+		}
+	}
+	
+	public void updateHuman2() {
+		for (Human h : humans) {
+			float totX = 0;
+			float totY = 0;
+			
+			for (Zombie z : zombies) {
+				float tmpX = h.getBody().getPosition().x - z.getBody().getPosition().x;
+				float tmpY = h.getBody().getPosition().y - z.getBody().getPosition().y;
+				
+				double size = Math.sqrt(tmpX * tmpX + tmpY * tmpY);
+				
+				// Range 1.5
+				if (size < 1.5) {
+					double distance = 1.5 - size;
+					
+					tmpX /= (size/distance);
+					tmpY /= (size/distance);
+					
+					totX += tmpX;
+					totY += tmpY;
+				}
+			}
+			
+			// If any zombie are nearby, flee
+			if (totX + totY != 0) {
+				double size = Math.sqrt(totX * totX + totY * totY);
+				
+				totX /= size;
+				totY /= size;
+				
+				float angle = (float) Math.atan(totY/totX);
+				
+				if (totX < 0)
+					angle = angle - (float) Math.PI;
+				
+				//h.getBody().setTransform(h.getBody().getPosition(), angle);		
+				//h.getBody().setLinearVelocity(totX, totY);
+				h.setState(Human.State.FLEEING);
+			} else {
+				// If the human just got away form a zombie, set its state to idle.
+				if (h.getState() == Human.State.FLEEING)
+					h.setState(Human.State.IDLE);
+				
+				if (h.getState() == Human.State.IDLE) {
+					// ###############
+					int startX = (int) h.getTileX();
+					int startY = (int) h.getTileY();
+					
+					int goalMinX = startX - 20;
+					goalMinX = goalMinX < 1 ? 1 : goalMinX;
+					
+					int goalMaxX = startX + 20;
+					goalMaxX = goalMaxX > mapWidth - 1 ? mapWidth - 1 : goalMaxX;
+					
+					int goalMinY = startY - 20;
+					goalMinY = goalMinY < 1 ? 1 : goalMinY;
+					
+					int goalMaxY = startY + 20;
+					goalMaxY = goalMaxY > mapHeight - 1 ? mapHeight - 1 : goalMaxY;
+					
+					//System.out.println("Generate between: " + goalMinX + " and " + goalMaxX);
+					// ###############
+					
+					int goalX = goalMinX + generator.nextInt(goalMaxX - goalMinX + 1);
+					int goalY = goalMinY + generator.nextInt(goalMaxY - goalMinY + 1);
+					
+					while (blockedTiles.contains(new Point(goalX, goalY))) {
+						goalX = goalMinX + generator.nextInt(goalMaxX - goalMinX + 1);
+						goalY = goalMinY + generator.nextInt(goalMaxY - goalMinY + 1);
+					}
+					
+					// TODO: DEBUG
+					long startTime = System.currentTimeMillis();
+					
+					ArrayList<Point> walkPath = AStarPathFinder2.getShortestPath(startX, startY, goalX, goalY, blockedTilesBoolean);
+					h.setWalkPath(walkPath);
+					h.setState(Human.State.WALKING);
+					
+					// TODO: DEBUG
+					long resultTime = System.currentTimeMillis() - startTime;
+					
+					if (resultTime > 50) {
+						System.out.println("Time for A*: " + resultTime + ". Walkpath size: " + walkPath.size());
+						//System.out.println();
+					}
+					
+					/*if (walkPath.size() > 70) {
+						System.out.println();
+						System.out.println("######## FROM " + startX + ":" + startY + " TO " + goalX + ":" + goalY);
+						
+						for (Point p : walkPath) {
+							System.out.println(p.getX() + ":" + p.getY());
+						}
+						
+						System.out.println();
+						System.out.println("########");
+						System.out.println();
+						
+						//System.exit(0);
+					}*/
+				}
+				
+				// WALK
+				h.walk();
+			}
+			
+			//updateHumanHealth(h);
 		}
 	}
 	

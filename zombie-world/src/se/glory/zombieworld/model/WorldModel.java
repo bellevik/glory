@@ -55,15 +55,16 @@ public class WorldModel {
 					blockedTiles.add(new Point(x, y));
 			}
 		}
-
-		aiModel.setBlockedTiles(blockedTiles);
+		
 		aiModel.setMapSize(collideLayer.getWidth(), collideLayer.getHeight());
+		aiModel.setBlockedTiles(blockedTiles);
 	}
 	
 	public void update() {
 		//sweepDeadBodies();
-		
-		if (!threadStarted) {
+
+		if (false) {
+		//if (!threadStarted) {
 			threadStarted = true;
 			
 			new Thread(new Runnable() {
@@ -82,7 +83,9 @@ public class WorldModel {
 			}).start();
 		}
 		
-		aiModel.updateHumansWalk();
+		//aiModel.updateHumansWalk();
+		
+		aiModel.updateHuman2();
 		
 		//healthUpdate();
 	}
