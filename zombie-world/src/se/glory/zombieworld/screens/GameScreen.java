@@ -1,10 +1,13 @@
 package se.glory.zombieworld.screens;
 
+import java.util.Random;
+
 import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.model.WorldModel;
-import se.glory.zombieworld.model.entities.items.WeaponLoot;
 import se.glory.zombieworld.model.entities.obstacles.CustomObstacle;
 import se.glory.zombieworld.utilities.Constants;
+import se.glory.zombieworld.utilities.Score;
+import se.glory.zombieworld.utilities.SoundPlayer;
 import se.glory.zombieworld.utilities.TextureHandler;
 import se.glory.zombieworld.view.GameView;
 
@@ -13,21 +16,19 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 
 public class GameScreen implements Screen {
-	//private QuickSelection quickSelection;
-	//private ItemView itemView;
-	//private boolean isRunning = true;
+	private Random random = new Random();
 	
 	//private Healthbar healthBar;
-	
-	//private Stage stage;
-	
-	// moveStick controls player movement, fireStick controls item use
-	//private Joystick moveStick, fireStick;
+	private boolean ready = true;
 	
 	private WorldModel worldModel;
 	private GameView gameView;
+	
+	private SoundPlayer soundPlayer;
 	
 	/*
 	 * This method will be called all the time throughout the game. Libgdx method!
@@ -36,7 +37,18 @@ public class GameScreen implements Screen {
 	public void render(float delta) {
 		gameView.render();
 		
-		if(Constants.isRunning) {
+		if(Constants.gameState == Constants.GameState.RUNNING) {
+			if (ready) {
+				ready = false;
+				Timer.schedule(new Task(){
+				    @Override
+				    public void run() {
+				    	Score.addScore(Constants.ScoreType.TIME);
+				    	ready = true;
+				    }
+				}, (float) .3);
+			}
+			
 			// Update player movement
 			WorldModel.player.getBody().setLinearVelocity(StageModel.moveStick.getTouchpad().getKnobPercentX() * 2, StageModel.moveStick.getTouchpad().getKnobPercentY() * 2);
 			
@@ -59,18 +71,17 @@ public class GameScreen implements Screen {
 			StageModel.quickSelection.selectItem();
 			StageModel.itemView.hideContainers();
 			if(StageModel.pauseButton.isTouched()) {
-				Constants.isRunning = false;
+				Constants.gameState = Constants.GameState.PAUSE;
 			}
-		} else {
+		} else if (Constants.gameState == Constants.GameState.PAUSE) {
 			if(StageModel.pauseButton.isTouched()) {
-				Constants.isRunning = true;
+				Constants.gameState = Constants.GameState.RUNNING;
 			}
 			StageModel.itemView.manageItems();
 			StageModel.quickSelection.manageItems();
+		} else if (Constants.gameState == Constants.GameState.SHOP) {
+			// TODO Xoster: Put your shop screen here
 		}
-		
-		// Animator.drawAnimation(batch, player.getBody().getPosition().x, player.getBody().getPosition().y);
-		// player.getAnimation().drawAnimation(batch, player.getBody().getPosition().x, player.getBody().getPosition().y);
 		
 		StageModel.stage.act(delta);
 		StageModel.stage.draw();
@@ -89,6 +100,15 @@ public class GameScreen implements Screen {
 				 }
 			 }
 		}
+		
+		WorldModel.world.step(1/60f, 6, 2);
+		worldModel.update();
+		
+	//	healthBar.updateHealth(70);
+		testHealthBar();
+		
+		if (random.nextFloat() * 1500 < 5)
+			soundPlayer.playRandomSoundEffect();
 	}
 	
 	
@@ -155,6 +175,9 @@ public class GameScreen implements Screen {
 		// worldModel.getAIModel().addZombie(272, 272);
 		
 		createStaticWalls();
+		
+		soundPlayer = new SoundPlayer();
+		soundPlayer.playBackgroudMusic();
 	}
 
 	private void createStaticWalls() {

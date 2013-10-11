@@ -4,7 +4,7 @@ public class Constants {
 	public static final float WORLD_TO_BOX = 0.01f;
 	public static final float BOX_TO_WORLD = 100f;
 	
-	public static final boolean DEBUG_MODE = false;
+	public static final boolean DEBUG_MODE = true;
 	
 	public static final int WEAPON_DAMAGE = 1;
 	public static final int WEAPON_RANGE = 2;
@@ -19,8 +19,14 @@ public class Constants {
 	public static final int INFECTED_INTERVAL = 1500;
 	public static final int INFECTED_DAMAGE = 20;
 	public static final int ZOMBIE_DAMAGE = 10;
+	
+	public static GameState gameState = GameState.RUNNING;
 
-	public static boolean isRunning = true;
+	//public static boolean isRunning = true;
+	
+	public static enum GameState {
+		RUNNING, PAUSE, SHOP;
+	}
 	
 	public static enum MoveableBodyShape {
 		CIRCLE, SQUARE;
@@ -37,4 +43,9 @@ public class Constants {
 	public static enum ItemType {
 		WEAPON, CONSUMABLE;
 	}
+	
+	public static enum ScoreType {
+		KILL_ZOMBIE, KILL_HUMAN, TIME;
+	}
+	
 }
