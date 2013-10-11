@@ -8,6 +8,7 @@ import se.glory.zombieworld.utilities.Animator;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Constants.MoveableBodyType;
 import se.glory.zombieworld.utilities.Identity;
+import se.glory.zombieworld.utilities.Score;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
@@ -34,7 +35,8 @@ public class GameView {
 	
 	private Animator animator;
 	
-	BitmapFont font = new BitmapFont();
+	BitmapFont font = new BitmapFont(Gdx.files.internal("font/scoreFOnt.fnt"),
+			Gdx.files.internal("font/scoreFont_0.png"), false);
 	
 	private float angle;
 	
@@ -113,6 +115,22 @@ public class GameView {
 			mapRenderer.renderTileLayer(getMapLayer("roof"));
 		}
 		mapRenderer.getSpriteBatch().end();
+		
+		//Draw the ammo for the equipped weapon on the screen
+		if (WorldModel.player.getEquippedWeapon() != null) {
+			drawLabelOnScreen("Ammo: " + WorldModel.player.getEquippedWeapon().getClips() + " " + WorldModel.player.getEquippedWeapon().getCurrentClipSize(), WorldModel.player.getBody().getPosition().x * Constants.BOX_TO_WORLD - 20, WorldModel.player.getBody().getPosition().y * Constants.BOX_TO_WORLD + Constants.VIEWPORT_HEIGHT / 2 - 30);
+		}
+		//Draw the score on the screen
+		drawLabelOnScreen("Score : " + Score.currentScore, WorldModel.player.getBody().getPosition().x * Constants.BOX_TO_WORLD - 20, WorldModel.player.getBody().getPosition().y * Constants.BOX_TO_WORLD + Constants.VIEWPORT_HEIGHT / 2 - 10);
+	}
+	
+	/*
+	 * This methods draws labels on the screen
+	 */
+	public void drawLabelOnScreen(String label, float x, float y) {
+		batch.begin();
+		font.draw(batch, label, x, y);
+		batch.end();
 	}
 	
 	/*
