@@ -68,12 +68,14 @@ public class GameScreen implements Screen {
 			if(StageModel.pauseButton.isTouched()) {
 				Constants.gameState = Constants.GameState.PAUSE;
 			}
-		} else {
+		} else if (Constants.gameState == Constants.GameState.PAUSE) {
 			if(StageModel.pauseButton.isTouched()) {
 				Constants.gameState = Constants.GameState.RUNNING;
 			}
 			StageModel.itemView.manageItems();
 			StageModel.quickSelection.manageItems();
+		} else if (Constants.gameState == Constants.GameState.SHOP) {
+			// TODO Xoster: Put your shop screen here
 		}
 		
 		StageModel.stage.act(delta);
