@@ -6,9 +6,11 @@ import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.items.WeaponLoot;
 import se.glory.zombieworld.model.entities.obstacles.CustomObstacle;
+import se.glory.zombieworld.model.entities.obstacles.StreetObject;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Score;
 import se.glory.zombieworld.utilities.SoundPlayer;
+import se.glory.zombieworld.utilities.Identity;
 import se.glory.zombieworld.utilities.TextureHandler;
 import se.glory.zombieworld.view.GameView;
 
@@ -25,6 +27,8 @@ public class GameScreen implements Screen {
 	
 	//private Healthbar healthBar;
 	private boolean ready = true;
+	
+	private boolean tmp = false;
 	
 	private WorldModel worldModel;
 	private GameView gameView;
@@ -87,7 +91,9 @@ public class GameScreen implements Screen {
 		StageModel.stage.act(delta);
 		StageModel.stage.draw();
 		
-		// ###############
+		if (random.nextFloat() * 1500 < 5)
+			soundPlayer.playRandomSoundEffect();
+
 		Cell c = gameView.getMapLayer("events").getCell((int)WorldModel.player.getTileX(), (int)WorldModel.player.getTileY());
 		
 		if (c != null) {
@@ -96,14 +102,34 @@ public class GameScreen implements Screen {
 					 if (gameView.getMapLayer("roof").isVisible())
 						 gameView.getMapLayer("roof").setVisible(false);
 				 } else if (c.getTile().getProperties().get("indoors").toString().equals("0")) {
-					 if (!gameView.getMapLayer("roof").isVisible())
+					 if (!gameView.getMapLayer("roof").isVisible()){
 						 gameView.getMapLayer("roof").setVisible(true);
+					 }
+				 }
+				 
+				 if (tmp) {
+					 tmp = false;
+					 gameView.setOpen("opening");
+					 Timer.schedule(new Task(){
+						    @Override
+						    public void run() {
+						    	gameView.setOpen("open");
+						    }
+						}, 0.225f);
 				 }
 			 }
-		}
-		
-		if (random.nextFloat() * 1500 < 5)
-			soundPlayer.playRandomSoundEffect();
+		} else {
+			if (!tmp) {
+				 Timer.schedule(new Task(){
+					    @Override
+					    public void run() {
+					    	gameView.setOpen("closed");
+					    	tmp = true;
+					    }
+					}, 0.5f);
+			 }
+			 
+		 }
 	}
 	
 	
@@ -164,17 +190,20 @@ public class GameScreen implements Screen {
 		
 		StageModel.createUI(batch);
 		
+		
 		// ## Add humans
 		worldModel.getAIModel().addHuman(16+22*16, 16+8*16);
 		worldModel.getAIModel().addHuman(16+22*16, 16+15*16);
 		
 		// ## Add zombies
-		// worldModel.getAIModel().addZombie(272, 272);
+		worldModel.getAIModel().addZombie(272, 272);
 		
 		createStaticWalls();
 		
 		soundPlayer = new SoundPlayer();
 		soundPlayer.playBackgroudMusic();
+		createObjects();
+		
 	}
 
 	private void createStaticWalls() {
@@ -216,6 +245,22 @@ public class GameScreen implements Screen {
 		}
 		
 		createStaticWallsHorizontal(lonelyWalls);
+	}
+	private void createObjects(){
+		TiledMapTileLayer objectLayer = gameView.getMapLayer("objects");
+		
+		for (int x = 0; x < objectLayer.getWidth(); x++) {
+			for (int y = 0; y < objectLayer.getHeight(); y++) {
+				Cell c = objectLayer.getCell(x, y);
+				
+				if (c != null) {
+					new StreetObject(c.getTile().getProperties().get("object").toString(),x*16+8,y*16+8);
+					System.out.println("created at : "+ x+ ", "+y);
+				}
+				
+			}		
+		}
+		
 	}
 	
 	private void createStaticWallsHorizontal(boolean[][] lonelyWalls) {

@@ -34,6 +34,7 @@ public class GameView {
 	private TiledMap map;
 	
 	private Animator animator;
+	private String isOpen = "closed";
 	
 	// TODO Change font
 	/*BitmapFont font = new BitmapFont(Gdx.files.internal("font/scoreFOnt.fnt"),
@@ -119,6 +120,8 @@ public class GameView {
 		}
 		mapRenderer.getSpriteBatch().end();
 		
+		animateDoor();
+
 		//Draw the ammo for the equipped weapon on the screen
 		if (WorldModel.player.getEquippedWeapon() != null) {
 			drawLabelOnScreen("Ammo: " + WorldModel.player.getEquippedWeapon().getClips() + " " + WorldModel.player.getEquippedWeapon().getCurrentClipSize(), WorldModel.player.getBody().getPosition().x * Constants.BOX_TO_WORLD - 20, WorldModel.player.getBody().getPosition().y * Constants.BOX_TO_WORLD + Constants.VIEWPORT_HEIGHT / 2 - 30);
@@ -212,5 +215,39 @@ public class GameView {
 			}
 		}
 		WorldModel.drawableBodies.clear();
+	}
+	
+	public void animateDoor(){
+		Animation animation = null;
+		Animation closedDoor = null;
+		
+		animation = animator.getDoorAnimation(0);
+		closedDoor = animator.getClosedDoor();
+		
+		if (animation != null){
+			if(isOpen.equals("opening")){
+				animator.drawAnimation(batch, 7.35f, 5.7799997f, animation, true);
+			} else if(isOpen.equals("open")){
+				animator.drawAnimation(batch, 7.35f, 5.7799997f, animation, false);
+			} else if(isOpen.equals("closed")) {
+				animator.drawAnimation(batch,  7.35f, 5.7799997f, closedDoor, true);
+			}
+		}
+	}
+	
+	public Animator getAnimator(){
+		return this.animator;
+	}
+	
+	public SpriteBatch getSpriteBatch(){
+		return this.batch;
+	}
+	
+	public String getOpen(){
+		return this.isOpen;
+	}
+	
+	public void setOpen(String isOpen){
+		this.isOpen = isOpen;
 	}
 }
