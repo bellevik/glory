@@ -1,11 +1,15 @@
 package se.glory.zombieworld.model.entities;
 
+import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.items.Item;
 import se.glory.zombieworld.model.entities.weapons.Bullet;
+import se.glory.zombieworld.model.entities.weapons.EMeleeWeapon;
+import se.glory.zombieworld.model.entities.weapons.ERangedWeapon;
 import se.glory.zombieworld.utilities.Animator;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Identity;
+import se.glory.zombieworld.utilities.UtilityTimer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -19,7 +23,10 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 
 /*
  * This class will represent the moveable Player in the world.
@@ -31,21 +38,28 @@ import com.badlogic.gdx.utils.Array;
 public class Player implements Creature {
 	
 	private float x, y, width, height;
-	
+
 	private Body body;
 	private BodyDef bodyDef;
-	private Texture texture;
-	
-	private Body weaponBody;
 	
 	//This array will contain the items in the Quick-Swap. Usually Weapons or Potions.
 	private Array<Item> quickSwapList = new Array<Item>();
 	
-	private RevoluteJoint joint;
 	private Animation animation;
-	private int health;
-	private int maxHealth;
+	
+	private boolean isIndoors;
+	
+	// TODO Set the variable depending on the weapons arsenal class. What weapon is equipped
+	//These variables will handle the shooting method
+	private boolean readyToFire = true;
+	
+	private float health;
+	private float maxHealth;
+	private UtilityTimer infectedHealth = null;
+	private ERangedWeapon equippedWeapon = null;
 
+	public static boolean emptyClip;
+	
 	public Player (float x, float y, float width, float height) {
 		this.x = x;
 		this.y = y;
@@ -67,70 +81,20 @@ public class Player implements Creature {
 		fixtureDef.restitution = 0.6f;
 
 		body.createFixture(fixtureDef);
-		texture = new Texture(Gdx.files.internal("img/player.png"));
 
 		Identity identity = new Identity();
-		identity.setTexture(texture);
 		identity.setWidth(width);
 		identity.setHeight(height);
 		identity.setType(Constants.MoveableBodyType.PLAYER);
+		//setObj needed for drawing the animation of the player in GameView
+		identity.setObj(this);
 
 		body.setUserData(identity);
 		
 		body.setFixedRotation(true);
 		
-		createWeaponBody();
-		attachWeapon();
-		
-		//this.animation = new Animator("dudesheet.png", this.x, this.y, 0);
-		//this.animation = Animator.createAnimation("spriteSheetMain.png", this.x, this.y, 7);
-
 		maxHealth = health = 100;
-	}
-	
-	/*
-	 * This method will create a weapon as a Box2d body.
-	 */
-	public void createWeaponBody() {
-		//Creating the weapon
-		BodyDef weapon = new BodyDef();
-		weapon.type = BodyType.DynamicBody;
-		weapon.position.set(x * Constants.WORLD_TO_BOX + width * Constants.WORLD_TO_BOX, y * Constants.WORLD_TO_BOX + height * Constants.WORLD_TO_BOX);
-		weaponBody = WorldModel.world.createBody(weapon);
-		PolygonShape weaponShape = new PolygonShape();
-		weaponShape.setAsBox(8 * Constants.WORLD_TO_BOX, 4 * Constants.WORLD_TO_BOX);
-		
-		FixtureDef weaponFixture = new FixtureDef();
-		weaponFixture.shape = weaponShape;
-		weaponFixture.density = 0.5f;
-		weaponFixture.friction = 0.4f;
-		weaponFixture.restitution = 0.6f;
-		weaponBody.createFixture(weaponFixture);
-		
-		Identity weaponIdentity = new Identity();
-		weaponIdentity.setTexture(null);
-		//Rethink if the weapons type should be player or weapon. 
-		//This will cause problem in the loot pickup
-		weaponIdentity.setType(Constants.MoveableBodyType.PLAYER);
-		weaponBody.setUserData(weaponIdentity);
-	}
-	
-	/*
-	 * This method will attach the weapon body to the player body.
-	 * It will use a Joint. Joints are given to us by the library.
-	 */
-	public void attachWeapon() {
-		//The joint between weapon and player
-		RevoluteJointDef jointDef = new RevoluteJointDef();
-        jointDef.bodyA = body;
-        jointDef.bodyB = weaponBody;
-        //16 here is equal to the weapons width!
-        jointDef.localAnchorA.set(width * Constants.WORLD_TO_BOX, 0);
-        jointDef.localAnchorB.set(-8 * Constants.WORLD_TO_BOX, 0);
-        //This row will enable a limit for the weapon. I.e the weapon is fixed to the PlayerBody.
-        jointDef.enableLimit = true;
-
-        joint = (RevoluteJoint) WorldModel.world.createJoint(jointDef);
+		quickSwapList.size = 5;
 	}
 	
 	/*
@@ -139,23 +103,100 @@ public class Player implements Creature {
 	 * inventory will be set to 5 slots
 	 */
 	public boolean addItemToQuickSwap(Item item) {
-		if(quickSwapList.size < 5) {
-			quickSwapList.add(item);
-			return true;
+		//Loops throught he array and checks if its room for an item. If its room it adds tot he array.
+		//otherwise return false
+		for (int i = 0; i < quickSwapList.size; i++) {
+			//If the position is empty and the item doesnt exists in the quickswaplist, add a new item to the list
+			if (quickSwapList.get(i) == null && !existsInSwapList(item)) {
+				quickSwapList.set(i, item);
+				updateQuickSelectionImages();
+				return true;
+			} else if (quickSwapList.get(i) != null) {
+				if (((ERangedWeapon)quickSwapList.get(i)).getName().equals(((ERangedWeapon)item).getName())) {
+					((ERangedWeapon)quickSwapList.get(i)).addClip(2);
+					WorldModel.player.emptyClip = false;
+				}
+			}
 		}
 		return false;
+	}
+	
+	/*
+	 * This method checks if the item allready exists in the quickswaplist.
+	 */
+	public boolean existsInSwapList (Item item) {
+		for (int i = 0; i < quickSwapList.size; i++) {
+			if (quickSwapList.get(i) != null) {
+				if ( ((ERangedWeapon)(item)).getName().equals(((ERangedWeapon)(quickSwapList.get(i))).getName()) ) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	/*
+	 * This method will change the images shown on the UI. This will be done every time
+	 * the user picks up new loot (retreives new items). 
+	 */
+	public void updateQuickSelectionImages () {
+		for (int i = 0; i < quickSwapList.size; i++) {
+			if (quickSwapList.get(i) != null) {
+				Texture tmp = ((ERangedWeapon)(quickSwapList.get(i))).getTexture(0);
+				StageModel.quickSelection.changeImage(i, new Image(tmp));
+			}
+		}
+	}
+	
+	/*
+	 * This method is called every render update from the quickSelection class.
+	 * The int pos is the position of the quickSelection UI that is selected.
+	 * Every time this method gets called we will check if its a new position and if so
+	 * we will change the item of the player.
+	 */
+	public void changeEquippedItem (int pos) {
+		if(quickSwapList.get(pos) != null && equippedWeapon != (ERangedWeapon)(quickSwapList.get(pos))){
+			equippedWeapon = (ERangedWeapon)(quickSwapList.get(pos));
+			if (((ERangedWeapon)(quickSwapList.get(pos))).getClips() != 0) {
+				emptyClip = false;
+			}
+		}
+		// TODO Maybe add funtionality to unequip weapon?
+	}
+	
+	/*
+	 * This method will fire a shot everytime the boolean readyToFire is set to true. Right after
+	 * the player fired a bullet the boolean will be set to false for a specific amount of time.
+	 * This time will be different depending on what weapon is equipped. The reloadTime is the
+	 * short amount of time when the player is unable to fire a shot. 
+	 */
+	public void shoot() {
+		if (readyToFire && equippedWeapon != null && !emptyClip) {
+			fireBullet();
+			equippedWeapon.removeBulletFromClip();
+			readyToFire = false;
+			//It will take realoadTime seconds to set the boolean to true again
+			Timer.schedule(new Task(){
+			    @Override
+			    public void run() {
+			    	readyToFire = true;
+			    }
+			}, equippedWeapon.getReloadTime());
+		}	
 	}
 	
 	/*
 	 * First we calculate the angle. Then we create a bullet with a constant velocity
 	 * to be fired at the angle we calculated
 	 */
-	public void shoot() {
-		float rot = (float) (weaponBody.getTransform().getRotation());
+	public void fireBullet() {
+		float rot = (float) (body.getTransform().getRotation());
         float xAngle = MathUtils.cos(rot);
         float yAngle = MathUtils.sin(rot);
 		
-		new Bullet(weaponBody.getPosition().x + 14 * xAngle * Constants.WORLD_TO_BOX, weaponBody.getPosition().y + 14 * yAngle * Constants.WORLD_TO_BOX, xAngle, yAngle);
+        //14 here is to create the bullet a fix distance from the weapon
+		new Bullet(body.getPosition().x + 14 * xAngle * Constants.WORLD_TO_BOX, body.getPosition().y + 14 * yAngle * Constants.WORLD_TO_BOX, xAngle, yAngle, equippedWeapon.getDamage(), equippedWeapon.getRange());
+
 	}
 	
 	/*
@@ -190,30 +231,61 @@ public class Player implements Creature {
 		}
 		
 		WorldModel.player.getBody().setTransform(WorldModel.player.getBody().getPosition(), knobDegree * MathUtils.degreesToRadians);
-		WorldModel.player.getBody().getJointList().get(0).joint.getBodyB().setTransform(WorldModel.player.getBody().getJointList().get(0).joint.getBodyB().getPosition(), knobDegree * MathUtils.degreesToRadians);
-		WorldModel.player.getBody().getJointList().get(0).joint.getBodyB().setAwake(true);
 	}
 	
-	public int getHealth() {
+	public float getHealth() {
 		return health;
 	}
 	
-	public void takeDamage(int damage) {
-		health -= damage;
+	public int getHealthPercentage() {
+		return (int)((health*100)/maxHealth);
 	}
 	
-	public int getMaxHealth() {
+	public void changeHealth(float healthChange) {
+		
+		//Remove infected status if getting healed
+		if(healthChange >= 0 && infectedHealth != null) {
+			StageModel.healthBar.setInfectedState(false);
+			infectedHealth = null;
+		}
+		
+		//Add or remove health depending on the change
+		health += healthChange;
+		
+		//Set health to 0 if it is less than 0 and to maxHealth if going above it
+		if(health<0) {
+			health = 0;
+		}else if(health > maxHealth) {
+			health = maxHealth;
+		}
+	}
+	
+	public float getMaxHealth() {
 		return maxHealth;
+	}
+	
+	public UtilityTimer getInfectedHealthTimer() {
+		return infectedHealth;
+	}
+	
+	public void infect() {
+		infectedHealth = new UtilityTimer(Constants.INFECTED_INTERVAL);
+		StageModel.healthBar.setInfectedState(true);
+	}
+	
+	public void kill() {
+	//	(Identity)player.getBody().getUserData();
+		((Identity)this.getBody().getUserData()).setDead(true);
 	}
 	
 	@Override
 	public float getTileX() {
-		return (getBody().getPosition().x * Constants.BOX_TO_WORLD - width)/32;
+		return (getBody().getPosition().x * Constants.BOX_TO_WORLD - width)/16;
 	}
 
 	@Override
 	public float getTileY() {
-		return (getBody().getPosition().y * Constants.BOX_TO_WORLD - height)/32;
+		return (getBody().getPosition().y * Constants.BOX_TO_WORLD - height)/16;
 	}
 	
 	@Override
@@ -221,7 +293,23 @@ public class Player implements Creature {
 		return body;
 	}
 	
-	public Animation getAnimation(){
+	public Animation getAnimation() {
 		return this.animation;
+	}
+	
+	public void setIsIndoors(boolean isIndoors) {
+		this.isIndoors=isIndoors;
+	}
+	public boolean getIsIndoors() {
+		return this.isIndoors;
+	}
+		
+	@Override
+	public boolean isMoving() {
+		return getBody().getLinearVelocity().len() != 0;
+	}
+
+	public ERangedWeapon getEquippedWeapon() {
+		return equippedWeapon;
 	}
 }

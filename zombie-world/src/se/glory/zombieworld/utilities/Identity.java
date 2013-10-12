@@ -7,8 +7,8 @@ import com.badlogic.gdx.graphics.Texture;
  * our Box2d World.
  */
 public class Identity {
-	private Texture texture;
-	private boolean isDead = false;
+	private Texture texture = null;
+	private boolean isDead = false, isOpen = false;
 	private Constants.MoveableBodyType type;
 	private float width, height;
 	private Object obj = null;
@@ -18,6 +18,12 @@ public class Identity {
 	}
 	public void setTexture(Texture texture) {
 		this.texture = texture;
+	}
+	public boolean isOpen() {
+		return isOpen;
+	}
+	public void setOpen(boolean isOpen) {
+		this.isOpen = isOpen;
 	}
 	public boolean isDead() {
 		return isDead;

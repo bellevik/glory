@@ -1,5 +1,7 @@
 package se.glory.zombieworld.utilities;
 
+import se.glory.zombieworld.utilities.Constants.MoveableBodyType;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -14,32 +16,157 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class Animator {
 	private final int FRAME_COLS = 4;
 	private final int FRAME_ROWS = 8;
-	private final float walkSpeed = 0.525f;
+	private final float walkSpeed = 1.525f;
+	
+	int col = 4;
+	int row = 3;
+	
+	private final float openingSpeed = 0.325f;
 	
 	private Texture spriteSheet;
 	private TextureRegion currentFrame;
-	private TextureRegion[] frames;
+	private TextureRegion[] frames, doorFrames;
 	
 	private float stateTimer;
 	
 	private Animation[] humanAnimations = new Animation[8];
+	private Animation[] playerAnimations = new Animation[8];
+	private Animation[] zombieAnimations = new Animation[8];
 	
+	private Animation loot;
+	private Animation[] doorAnimations = new Animation[3];
+	
+	private Animation closedDoor;
+	
+	/*
+	 * Creates all animations for all types of creatures. This will speed up the game
+	 * since they are not created on-the-fly.
+	 */
 	public Animator() {
-		humanAnimations[0] = createAnimation("SpriteSheetMain.png", 0);
-		humanAnimations[1] = createAnimation("SpriteSheetMain.png", 1);
-		humanAnimations[2] = createAnimation("SpriteSheetMain.png", 2);
-		humanAnimations[3] = createAnimation("SpriteSheetMain.png", 3);
-		humanAnimations[4] = createAnimation("SpriteSheetMain.png", 4);
-		humanAnimations[5] = createAnimation("SpriteSheetMain.png", 5);
-		humanAnimations[6] = createAnimation("SpriteSheetMain.png", 6);
-		humanAnimations[7] = createAnimation("SpriteSheetMain.png", 7);
+		//Creating human animation
+		for (int i = 0; i< humanAnimations.length;i++){
+			humanAnimations[i] = createAnimation("humanSheet.png", i);
+		}
+		//Creating player animation
+		for (int i = 0; i< playerAnimations.length;i++){
+			playerAnimations[i] = createAnimation("playerSheet.png", i);
+		}
+		//Creating zombie animation
+		for (int i = 0; i< zombieAnimations.length;i++){
+			zombieAnimations[i] = createAnimation("zombieSheet.png", i);
+		}
+		for (int i = 0; i < doorAnimations.length; i++){
+			doorAnimations[i] = createDoorAnimation("doorSheet.png", i);
+		}
+		loot = createWeaponLootAnimation("AKSheet66.png");
+		
 	}
 	
-	public Animation getAnimation(int i) {
-		return humanAnimations[i];
+	public Animation getLootAnimation() {
+		return loot;
+	}
+	public void createDoorAnimation(){
+		//Creating door animation
+		for (int i = 0; i<2;i++){
+			doorAnimations[i] = createDoorAnimation("doorSheet.png", i);
+		}
+	}
+	public Animation getClosedDoor(){
+		return closedDoor;
 	}
 	
-	//Creates and returns an animation
+	public Animation getDoorAnimation(int i){
+		return doorAnimations[i];
+	}
+	
+	/*
+	 * Returns different animations depending on the type and index passed along.
+	 */
+	public Animation getAnimation(MoveableBodyType type, int i) {
+		if(type == MoveableBodyType.HUMAN){
+			return humanAnimations[i];
+		}else if(type == MoveableBodyType.PLAYER){
+			return playerAnimations[i];
+		}else if (type == MoveableBodyType.ZOMBIE){
+			return zombieAnimations[i];
+		}else{
+			return null;
+		}
+	}
+	
+
+	private Animation createWeaponLootAnimation(String fileName) {
+		Animation animation = null;
+		
+		spriteSheet = new Texture(Gdx.files.internal("img/" + fileName));
+		int col = spriteSheet.getWidth() / 64;
+		int row = spriteSheet.getHeight() / 64;
+		
+		TextureRegion[][] tmp = TextureRegion.split(spriteSheet, spriteSheet.getWidth() / col, spriteSheet.getHeight() / row);
+		
+		frames = new TextureRegion[row * col];
+		
+		int index = 0;
+		
+		for (int i = 0; i < row ; i++) {
+			for (int j = 0; j < col; j++) {
+				frames[index++] = tmp[i][j];
+			}
+			//Parameters (update speed, array of TextureRegions to make an animation
+			animation = new Animation(1f, frames);
+		}
+		return animation;
+	}
+	private Animation createDoorAnimation(String fileName, int type){
+		Animation animation = null;
+		
+		//Loading the spritesheet
+		spriteSheet = new Texture(Gdx.files.internal("img/" + fileName));
+		//Dividing the spritesheet into regions with an image in each frame
+		TextureRegion[][] tmp = TextureRegion.split(spriteSheet, spriteSheet.getWidth() / col, spriteSheet.getHeight() / row);
+		
+		doorFrames = new TextureRegion[col];
+		
+		int index = 0;
+		
+		closedDoor = new Animation(walkSpeed, tmp[2][0]);
+
+		switch(type){
+		case 0:
+			for (int i = 0; i < 1 ; i++) {
+				for (int j = 0; j < col; j++) {
+					doorFrames[index++] = tmp[i][j];
+				}
+				//Parameters (update speed, array of TextureRegions to make an animation
+				animation = new Animation(openingSpeed, doorFrames);
+				index = 0;
+			};;
+		case 1:
+			for (int i = 1; i < 2 ; i++) {
+				for (int j = 0; j < col; j++) {
+					doorFrames[index++] = tmp[i][j];
+				}
+				//Parameters (update speed, array of TextureRegions to make an animation
+				animation = new Animation(openingSpeed, doorFrames);
+				index = 0;
+			};;
+		case 2:
+			for (int i = 2; i < 3 ; i++) {
+				for (int j = 0; j < col; j++) {
+					doorFrames[index++] = tmp[i][j];
+				}
+				//Parameters (update speed, array of TextureRegions to make an animation
+				animation = new Animation(openingSpeed, doorFrames);
+				index = 0;
+			};;
+		}
+		return animation;
+	}
+	
+	/*
+	 * Creates an animation depending on the filename and direction passed along.
+	 * Returns the created animation.
+	 */
 	private Animation createAnimation(String fileName, int direction) {
 		Animation animation = null;
 		
@@ -140,11 +267,22 @@ public class Animator {
 		}
 	}
 	
-	public void drawAnimation(SpriteBatch batch, float x, float y, Animation ani){
+	/*
+	 * Gets the current frame in the animation and draws to the screen.
+	 */
+	public void drawAnimation(SpriteBatch batch, float x, float y, Animation ani, boolean isLooping){
+
 		//stateTime = the time spent in the state represented by this animation
         stateTimer += Gdx.graphics.getDeltaTime();
-        //Get the current frame
-        currentFrame = ani.getKeyFrame(stateTimer, true);
+        
+        if(Constants.gameState == Constants.GameState.RUNNING) {
+        	//Get the current frame and loops if the creature is moving
+            currentFrame = ani.getKeyFrame(stateTimer, isLooping);
+        } else {
+        	//Show the stand-still-frame if the game is paused
+        	currentFrame = ani.getKeyFrame(stateTimer, false);
+        }
+        
         batch.begin();
         batch.draw(currentFrame, x*Constants.BOX_TO_WORLD - currentFrame.getRegionWidth() / 2, y*Constants.BOX_TO_WORLD - currentFrame.getRegionHeight() / 2);
         batch.end();

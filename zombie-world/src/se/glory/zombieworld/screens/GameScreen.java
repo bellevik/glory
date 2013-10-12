@@ -1,11 +1,16 @@
 package se.glory.zombieworld.screens;
 
+import java.util.Random;
+
+import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.model.WorldModel;
-import se.glory.zombieworld.model.entities.items.Healthbar;
-import se.glory.zombieworld.model.entities.items.QuickSelection;
+import se.glory.zombieworld.model.entities.items.WeaponLoot;
 import se.glory.zombieworld.model.entities.obstacles.CustomObstacle;
+import se.glory.zombieworld.model.entities.obstacles.StreetObject;
 import se.glory.zombieworld.utilities.Constants;
-import se.glory.zombieworld.utilities.Joystick;
+import se.glory.zombieworld.utilities.Score;
+import se.glory.zombieworld.utilities.SoundPlayer;
+import se.glory.zombieworld.utilities.Identity;
 import se.glory.zombieworld.utilities.TextureHandler;
 import se.glory.zombieworld.view.GameView;
 
@@ -14,49 +19,117 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 
 public class GameScreen implements Screen {
-	private QuickSelection quickSelection;
+	private Random random = new Random();
 	
-	private Healthbar healthBar;
+	//private Healthbar healthBar;
+	private boolean ready = true;
 	
-	private Stage stage;
-	
-	// moveStick controls player movement, fireStick controls item use
-	private Joystick moveStick, fireStick;
+	private boolean tmp = false;
 	
 	private WorldModel worldModel;
 	private GameView gameView;
 	
+	private SoundPlayer soundPlayer;
+	
+	/*
+	 * This method will be called all the time throughout the game. Libgdx method!
+	 */
 	@Override
 	public void render(float delta) {
 		gameView.render();
 		
-		// Update player movement
-		WorldModel.player.getBody().setLinearVelocity(moveStick.getTouchpad().getKnobPercentX() * 2, moveStick.getTouchpad().getKnobPercentY() * 2);
+		if(Constants.gameState == Constants.GameState.RUNNING) {
+			if (ready) {
+				ready = false;
+				Timer.schedule(new Task(){
+				    @Override
+				    public void run() {
+				    	Score.addScore(Constants.ScoreType.TIME);
+				    	ready = true;
+				    }
+				}, (float) .3);
+			}
+			
+			// Update player movement
+			WorldModel.player.getBody().setLinearVelocity(StageModel.moveStick.getTouchpad().getKnobPercentX() * 2, StageModel.moveStick.getTouchpad().getKnobPercentY() * 2);
+			
+			//The four floats below will represent the percentage in X and Y direction of the Joysticks
+			float moveKnobX = StageModel.moveStick.getTouchpad().getKnobPercentX();
+			float moveKnobY = StageModel.moveStick.getTouchpad().getKnobPercentY();
+			float fireKnobX = StageModel.fireStick.getTouchpad().getKnobPercentX();
+			float fireKnobY = StageModel.fireStick.getTouchpad().getKnobPercentY();
+			//This method will rotate the player
+			WorldModel.player.applyRotationToPlayer(moveKnobX, moveKnobY, fireKnobX, fireKnobY);
+			
+			//If someone is touching the right joystick then we need the player to be ready to shoot
+			if (fireKnobX != 0 && fireKnobY != 0) {
+				WorldModel.player.shoot();
+			}
+			
+			WorldModel.world.step(1/60f, 6, 2);
+			worldModel.update();
+			
+			StageModel.quickSelection.selectItem();
+			StageModel.itemView.hideContainers();
+			if(StageModel.pauseButton.isTouched()) {
+				Constants.gameState = Constants.GameState.PAUSE;
+			}
+		} else if (Constants.gameState == Constants.GameState.PAUSE) {
+			if(StageModel.pauseButton.isTouched()) {
+				Constants.gameState = Constants.GameState.RUNNING;
+			}
+			StageModel.itemView.manageItems();
+			StageModel.quickSelection.manageItems();
+		} else if (Constants.gameState == Constants.GameState.SHOP) {
+			// TODO Xoster: Put your shop screen here
+		}
 		
-		//The four floats below will represent the percentage in X and Y direction of the Joysticks
-		float moveKnobX = moveStick.getTouchpad().getKnobPercentX();
-		float moveKnobY = moveStick.getTouchpad().getKnobPercentY();
-		float fireKnobX = fireStick.getTouchpad().getKnobPercentX();
-		float fireKnobY = fireStick.getTouchpad().getKnobPercentY();
-		//This method will rotate the player
-		WorldModel.player.applyRotationToPlayer(moveKnobX, moveKnobY, fireKnobX, fireKnobY);
+		StageModel.stage.act(delta);
+		StageModel.stage.draw();
 		
-		quickSelection.selectItem();
+		if (random.nextFloat() * 1500 < 5)
+			soundPlayer.playRandomSoundEffect();
+
+		Cell c = gameView.getMapLayer("events").getCell((int)WorldModel.player.getTileX(), (int)WorldModel.player.getTileY());
 		
-		// Animator.drawAnimation(batch, player.getBody().getPosition().x, player.getBody().getPosition().y);
-		// player.getAnimation().drawAnimation(batch, player.getBody().getPosition().x, player.getBody().getPosition().y);
-		
-		stage.act(delta);
-		stage.draw();
-		
-		WorldModel.world.step(1/60f, 6, 2);
-		worldModel.update();
-		
-	//	healthBar.updateHealth(70);
-		testHealthBar();
+		if (c != null) {
+			 if (c.getTile().getProperties().get("indoors") != null) {
+				 if (c.getTile().getProperties().get("indoors").toString().equals("1")) {
+					 if (gameView.getMapLayer("roof").isVisible())
+						 gameView.getMapLayer("roof").setVisible(false);
+				 } else if (c.getTile().getProperties().get("indoors").toString().equals("0")) {
+					 if (!gameView.getMapLayer("roof").isVisible()){
+						 gameView.getMapLayer("roof").setVisible(true);
+					 }
+				 }
+				 
+				 if (tmp) {
+					 tmp = false;
+					 gameView.setOpen("opening");
+					 Timer.schedule(new Task(){
+						    @Override
+						    public void run() {
+						    	gameView.setOpen("open");
+						    }
+						}, 0.225f);
+				 }
+			 }
+		} else {
+			if (!tmp) {
+				 Timer.schedule(new Task(){
+					    @Override
+					    public void run() {
+					    	gameView.setOpen("closed");
+					    	tmp = true;
+					    }
+					}, 0.5f);
+			 }
+			 
+		 }
 	}
 	
 	
@@ -64,12 +137,13 @@ public class GameScreen implements Screen {
 	private int negVar = 1;
 	private void testHealthBar() {
 		healthVar += negVar;
-		healthBar.updateHealth(healthVar);
+		StageModel.healthBar.updateHealth(healthVar);
 		if(healthVar == 100 || healthVar == 0) {
 			negVar *= -1;
+
 		}
 	}
-
+	
 	@Override
 	public void resize(int width, int height) {
 		double scale = Constants.VIEWPORT_WIDTH / (double) width;
@@ -78,16 +152,25 @@ public class GameScreen implements Screen {
 		gameView.getCamera().viewportWidth = Constants.VIEWPORT_WIDTH;
 		gameView.getCamera().viewportHeight = Constants.VIEWPORT_HEIGHT;
 		
-	    stage.setViewport(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT, false);
-	    quickSelection.updatePosition();
-	    healthBar.updatePosition();
+	    StageModel.stage.setViewport(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT, false);
+	    StageModel.quickSelection.updatePosition();
+	    StageModel.healthBar.updatePosition();
+	    StageModel.itemView.updatePosition();
+	    StageModel.pauseButton.updatePosition();
 	}
 	
+	/*
+	 * This method will set a constant for scaling the window. Really good when Android
+	 * got so many different screen siezes.
+	 */
 	private void adjustViewportScale() {
 		double scale = Constants.VIEWPORT_WIDTH / (double) Gdx.graphics.getWidth();
 		Constants.VIEWPORT_HEIGHT = (int) (Gdx.graphics.getHeight() * scale);
 	}
-
+	
+	/*
+	 * This method will be called upon screen load. Libgdx method!
+	 */
 	@Override
 	public void show() {
 		adjustViewportScale();
@@ -100,36 +183,31 @@ public class GameScreen implements Screen {
 		
 		SpriteBatch batch = new SpriteBatch();
 		
+		new WeaponLoot(100, 100);
+		
 		gameView = new GameView(batch);
-		worldModel.setupAIModel(gameView.getMapLayer(1));
+		worldModel.setupAIModel(gameView.getMapLayer("blocked"));
 		
-		stage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true, batch);
+		StageModel.createUI(batch);
 		
-		moveStick = new Joystick(stage, 15, 15, 128, 128, Constants.TouchpadType.MOVEMENT);
-		fireStick = new Joystick(stage, Constants.VIEWPORT_WIDTH - 15 - 128, 15, 128, 128, Constants.TouchpadType.FIRE);
-		
-		quickSelection = new QuickSelection(stage);
-		
-		healthBar = new Healthbar(stage);
-		
-		Gdx.input.setInputProcessor(stage);
 		
 		// ## Add humans
-		worldModel.getAIModel().addHuman(16+10*32, 16+3*32);
-		worldModel.getAIModel().addHuman(16+15*32, 16+15*32);
-		worldModel.getAIModel().addHuman(16+16*32, 16+20*32);
-		worldModel.getAIModel().addHuman(16+8*32, 16+20*32);
-		worldModel.getAIModel().addHuman(16+30*32, 16+15*32);
-		worldModel.getAIModel().addHuman(16+30*32, 16+23*32);
+		worldModel.getAIModel().addHuman(16+22*16, 16+8*16);
+		worldModel.getAIModel().addHuman(16+22*16, 16+15*16);
 		
 		// ## Add zombies
-		// worldModel.getAIModel().addZombie(272, 272);
+		worldModel.getAIModel().addZombie(272, 272);
 		
 		createStaticWalls();
+		
+		soundPlayer = new SoundPlayer();
+		soundPlayer.playBackgroudMusic();
+		createObjects();
+		
 	}
 
 	private void createStaticWalls() {
-		TiledMapTileLayer collideLayer = gameView.getMapLayer(1);
+		TiledMapTileLayer collideLayer = gameView.getMapLayer("blocked");
 		boolean[][] lonelyWalls = new boolean[collideLayer.getWidth()][collideLayer.getHeight()];
 		
 		for (int x = 0; x < collideLayer.getWidth(); x++) {
@@ -150,7 +228,7 @@ public class GameScreen implements Screen {
 				if (c == null || y == collideLayer.getHeight() - 1) {
 					if (start != -1) {
 						if (start != end) {
-							new CustomObstacle(x * 32, start * 32, 32, (end - start + 1) * 32);
+							new CustomObstacle(x * 16, start * 16, 16, (end - start + 1) * 16);
 						} else {
 							if (y == collideLayer.getHeight() - 1)
 								lonelyWalls[x][y] = true;
@@ -167,6 +245,22 @@ public class GameScreen implements Screen {
 		}
 		
 		createStaticWallsHorizontal(lonelyWalls);
+	}
+	private void createObjects(){
+		TiledMapTileLayer objectLayer = gameView.getMapLayer("objects");
+		
+		for (int x = 0; x < objectLayer.getWidth(); x++) {
+			for (int y = 0; y < objectLayer.getHeight(); y++) {
+				Cell c = objectLayer.getCell(x, y);
+				
+				if (c != null) {
+					new StreetObject(c.getTile().getProperties().get("object").toString(),x*16+8,y*16+8);
+					System.out.println("created at : "+ x+ ", "+y);
+				}
+				
+			}		
+		}
+		
 	}
 	
 	private void createStaticWallsHorizontal(boolean[][] lonelyWalls) {
@@ -187,7 +281,7 @@ public class GameScreen implements Screen {
 				
 				if (c == false || x == lonelyWalls.length - 1) {
 					if (start != -1) {
-						new CustomObstacle(start * 32, y * 32, (end - start + 1) * 32, 32);
+						new CustomObstacle(start * 16, y * 16, (end - start + 1) * 16, 16);
 					}
 					
 					start = -1;
@@ -216,6 +310,6 @@ public class GameScreen implements Screen {
 	public void dispose() {
 		WorldModel.world.dispose();
 		gameView.dispose();
-		stage.dispose();
+		StageModel.stage.dispose();
 	}
 }

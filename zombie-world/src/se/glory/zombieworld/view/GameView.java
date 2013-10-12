@@ -1,16 +1,21 @@
 package se.glory.zombieworld.view;
 
+
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.Creature;
+import se.glory.zombieworld.model.entities.items.WeaponLoot;
 import se.glory.zombieworld.utilities.Animator;
 import se.glory.zombieworld.utilities.Constants;
+import se.glory.zombieworld.utilities.Constants.MoveableBodyType;
 import se.glory.zombieworld.utilities.Identity;
+import se.glory.zombieworld.utilities.Score;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -29,6 +34,13 @@ public class GameView {
 	private TiledMap map;
 	
 	private Animator animator;
+	private String isOpen = "closed";
+	
+	// TODO Change font
+	/*BitmapFont font = new BitmapFont(Gdx.files.internal("font/scoreFOnt.fnt"),
+			Gdx.files.internal("font/scoreFont_0.png"), false);*/
+	
+	BitmapFont font = new BitmapFont();
 	
 	private float angle;
 	
@@ -37,14 +49,20 @@ public class GameView {
 		debugRenderer = new Box2DDebugRenderer();
 		camera = new OrthographicCamera();
 		
-		map = new TmxMapLoader().load("img/tilemap/map.tmx");
+		map = new TmxMapLoader().load("img/tilemap/theWorld.tmx");
+		// map = new TmxMapLoader().load("img/tilemap/debug_16/map.tmx");
+
 		mapRenderer = new OrthogonalTiledMapRenderer(map);
 		
 		animator = new Animator();
 	}
 	
-	public TiledMapTileLayer getMapLayer(int i) {
+	/*public TiledMapTileLayer getMapLayer(int i) {
 		return (TiledMapTileLayer) map.getLayers().get(i);
+	}*/
+	
+	public TiledMapTileLayer getMapLayer(String name) {
+		return (TiledMapTileLayer) map.getLayers().get(name);
 	}
 	
 	public void useDebugRenderer() {
@@ -65,7 +83,7 @@ public class GameView {
 	
 	public void render() {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		Gdx.gl.glClearColor(0.5f, 1, 1, 1);
+		Gdx.gl.glClearColor(0, 0, 0, 1);
 		
 		mapRenderer.setView(camera);
 		mapRenderer.render();
@@ -73,16 +91,52 @@ public class GameView {
 		camera.position.set(WorldModel.player.getBody().getPosition().x * Constants.BOX_TO_WORLD, WorldModel.player.getBody().getPosition().y * Constants.BOX_TO_WORLD, 0);
 		camera.update();
 		
+		if (WorldModel.player.getEquippedWeapon() != null) {
+			batch.begin();
+			font.draw(batch, "Ammo: " + WorldModel.player.getEquippedWeapon().getClips() + " " + WorldModel.player.getEquippedWeapon().getCurrentClipSize(), 200, 100);
+			batch.end();
+		}
+		
 		batch.setProjectionMatrix(camera.combined);
 		
 		if (Constants.DEBUG_MODE){
 			useDebugRenderer();
-		} else {
-			drawEntites();
 		}
+		
+		camera.position.set(WorldModel.player.getBody().getPosition().x * Constants.BOX_TO_WORLD, WorldModel.player.getBody().getPosition().y * Constants.BOX_TO_WORLD, 0);
+		camera.update();
+		
+		batch.setProjectionMatrix(camera.combined);
 		
 		// Debug: Always draw textures
 		drawEntites();
+		
+		// Draw certain map layers on top of player
+		mapRenderer.getSpriteBatch().begin();
+		if (!getMapLayer("roof").isVisible()) {
+			mapRenderer.renderTileLayer(getMapLayer("overlay"));
+		} else {
+			mapRenderer.renderTileLayer(getMapLayer("roof"));
+		}
+		mapRenderer.getSpriteBatch().end();
+		
+		animateDoor();
+
+		//Draw the ammo for the equipped weapon on the screen
+		if (WorldModel.player.getEquippedWeapon() != null) {
+			drawLabelOnScreen("Ammo: " + WorldModel.player.getEquippedWeapon().getClips() + " " + WorldModel.player.getEquippedWeapon().getCurrentClipSize(), WorldModel.player.getBody().getPosition().x * Constants.BOX_TO_WORLD - 20, WorldModel.player.getBody().getPosition().y * Constants.BOX_TO_WORLD + Constants.VIEWPORT_HEIGHT / 2 - 30);
+		}
+		//Draw the score on the screen
+		drawLabelOnScreen("Score : " + Score.currentScore, WorldModel.player.getBody().getPosition().x * Constants.BOX_TO_WORLD - 20, WorldModel.player.getBody().getPosition().y * Constants.BOX_TO_WORLD + Constants.VIEWPORT_HEIGHT / 2 - 10);
+	}
+	
+	/*
+	 * This methods draws labels on the screen
+	 */
+	public void drawLabelOnScreen(String label, float x, float y) {
+		batch.begin();
+		font.draw(batch, label, x, y);
+		batch.end();
 	}
 	
 	/*
@@ -99,19 +153,15 @@ public class GameView {
 			if (body.getUserData() != null && body.getUserData().getClass().equals(Identity.class)) {
 				Identity identity = (Identity) body.getUserData();
 				
-				if (identity.getTexture() != null) {
 					float width = identity.getWidth();
 					float height = identity.getHeight();
 					
 					//Check if the body is a creature
 					if(identity.getObj() instanceof Creature){
-						angle = (float) (body.getAngle() * (double)(180/3.14));
-
 						/*
-						* Check to see in what direction the body is facing, and create an animation if 
-						* it's different from the previous direction. 
-						*/
-						
+						 * Calculates the angle each body is facing to display the
+						 * correct animation.
+						 */
 						float T = body.getAngle();
 						
 						if (T > Math.PI)
@@ -121,40 +171,83 @@ public class GameView {
 						
 						angle = T * MathUtils.radiansToDegrees;
 						
+						//Gets what type of creature the object is
+						MoveableBodyType name = identity.getType();
+						
 						Animation ani = null;
 						
+						/*
+						* Check to see in what direction the body is facing, and gets the 
+						* approperiate animation.
+						*/
 						if(angle > -22  && angle <= 22){
-							ani = animator.getAnimation(2);
+							//Facing east
+							ani = animator.getAnimation(name, 2);
 						}else if(angle > 22 && angle <= 67){
-							ani = animator.getAnimation(3);
+							//Facing northeast
+							ani = animator.getAnimation(name, 3);
 						}else if(angle > 67 && angle <= 112){
-							ani = animator.getAnimation(4);
+							//Facing north
+							ani = animator.getAnimation(name, 4);
 						}else if(angle > 112 && angle <= 157){
-							ani = animator.getAnimation(5);
+							//Facing northwest
+							ani = animator.getAnimation(name, 5);
 						}else if(angle > 157 || angle <= -157){
-							ani = animator.getAnimation(6);
+							//Facing west
+							ani = animator.getAnimation(name, 6);
 						}else if(angle > -157 && angle <= -112){
-							ani = animator.getAnimation(7);
+							//Facing southwest
+							ani = animator.getAnimation(name, 7);
 						}else if(angle > -112 && angle <= -67){
-							ani = animator.getAnimation(0);
+							//Facing south
+							ani = animator.getAnimation(name, 0);
 						}else if(angle > -67 && angle <= -22){
-							ani = animator.getAnimation(1);
-						} else {
-							//System.out.println("ERROR, ANGLE: " + body.getAngle());
+							//Facing southeast
+							ani = animator.getAnimation(name, 1);
 						}
 						
 						if (ani != null) {
-							animator.drawAnimation(batch, body.getPosition().x, body.getPosition().y, ani);
+							animator.drawAnimation(batch, body.getPosition().x, body.getPosition().y, ani, ((Creature)identity.getObj()).isMoving());
 						}
+					} else if (identity.getObj() instanceof WeaponLoot) {
+						animator.drawAnimation(batch, body.getPosition().x, body.getPosition().y, animator.getLootAnimation(), true);
 					}
-					
-					batch.begin();
-					//batch.draw(identity.getTexture(), body.getPosition().x * Constants.BOX_TO_WORLD - width, body.getPosition().y * Constants.BOX_TO_WORLD - height);
-					batch.end();
-				}
 			}
 		}
-		
 		WorldModel.drawableBodies.clear();
+	}
+	
+	public void animateDoor(){
+		Animation animation = null;
+		Animation closedDoor = null;
+		
+		animation = animator.getDoorAnimation(0);
+		closedDoor = animator.getClosedDoor();
+		
+		if (animation != null){
+			if(isOpen.equals("opening")){
+				animator.drawAnimation(batch, 7.35f, 5.7799997f, animation, true);
+			} else if(isOpen.equals("open")){
+				animator.drawAnimation(batch, 7.35f, 5.7799997f, animation, false);
+			} else if(isOpen.equals("closed")) {
+				animator.drawAnimation(batch,  7.35f, 5.7799997f, closedDoor, true);
+			}
+		}
+	}
+	
+	public Animator getAnimator(){
+		return this.animator;
+	}
+	
+	public SpriteBatch getSpriteBatch(){
+		return this.batch;
+	}
+	
+	public String getOpen(){
+		return this.isOpen;
+	}
+	
+	public void setOpen(String isOpen){
+		this.isOpen = isOpen;
 	}
 }

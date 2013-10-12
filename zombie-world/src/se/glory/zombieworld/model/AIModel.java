@@ -7,21 +7,29 @@ import se.glory.zombieworld.model.entities.Creature;
 import se.glory.zombieworld.model.entities.Human;
 import se.glory.zombieworld.model.entities.Zombie;
 import se.glory.zombieworld.utilities.AStarPathFinder;
+import se.glory.zombieworld.utilities.Constants;
+import se.glory.zombieworld.utilities.Identity;
 import se.glory.zombieworld.utilities.Point;
+import se.glory.zombieworld.utilities.UtilityTimer;
 
 // TODO: If zombie is chasing a human and lose trail, 
 // it needs a new path - now it will use the same => try to walk through walls!
 
 public class AIModel {
 	private ArrayList<Human> humans = new ArrayList<Human>();
+	private ArrayList<Human> deadHumans = new ArrayList<Human>();
 	private ArrayList<Zombie> zombies = new ArrayList<Zombie>();
+	
 	private ArrayList<Point> blockedTiles = new ArrayList<Point>();
+	private int mapWidth = 0;
+	private int mapHeight = 0;
 	
 	public void addHuman(float x, float y) {
 		humans.add(new Human(x, y));
 	}
 	
 	public void removeHuman(Human human) {
+		((Identity)human.getBody().getUserData()).setDead(true);
 		humans.remove(human);
 	}
 	
@@ -30,14 +38,30 @@ public class AIModel {
 	}
 	
 	public void removeZombie(Zombie zombie) {
+		((Identity)zombie.getBody().getUserData()).setDead(true);
 		zombies.remove(zombie);
 	}
 	
+	public void setMapSize(int mapWidth, int mapHeight) {
+		this.mapWidth = mapWidth;
+		this.mapHeight = mapHeight;
+	}
+	
 	public void setBlockedTiles(ArrayList<Point> blockedTiles) {
-		this.blockedTiles = blockedTiles;
+		this.blockedTiles.clear();
+		
+		for (Point p : blockedTiles) {
+			this.blockedTiles.add(new Point(p.getX(), p.getY()));
+			
+			// Add "extra blocks" to compensate for AI bodies being 2x2 tiles big.
+			this.blockedTiles.add(new Point(p.getX() - 1, p.getY()));
+			this.blockedTiles.add(new Point(p.getX(), p.getY() - 1));
+		}
 	}
 	
 	public void update() {
+		turnHumansToZombie();
+		
 		updateHumans();
 		updateZombies();
 	}
@@ -72,30 +96,74 @@ public class AIModel {
 				totX /= size;
 				totY /= size;
 				
+				float angle = (float) Math.atan(totY/totX);
+				
+				if (totX < 0)
+					angle = angle - (float) Math.PI;
+				
+				h.getBody().setTransform(h.getBody().getPosition(), angle);		
 				h.getBody().setLinearVelocity(totX, totY);
 				h.setState(Human.State.FLEEING);
 			} else {
+				// If the human just got away form a zombie, set its state to idle.
+				if (h.getState() == Human.State.FLEEING)
+					h.setState(Human.State.IDLE);
+				
 				if (h.getState() == Human.State.IDLE) {
 					Random generator = new Random();
 					
-					int goalX = generator.nextInt(40);
-					int goalY = generator.nextInt(20);
+					int goalX = generator.nextInt(mapWidth);
+					int goalY = generator.nextInt(mapHeight);
 					
 					while (blockedTiles.contains(new Point(goalX, goalY))) {
-						goalX = generator.nextInt(40);
-						goalY = generator.nextInt(20);
+						goalX = generator.nextInt(mapWidth);
+						goalY = generator.nextInt(mapHeight);
 					}
 					
-					ArrayList<Point> walkPath = AStarPathFinder.getShortestPath((int) h.getTileX(), (int) h.getTileY(), goalX, goalY, blockedTiles);
-					h.setWalkPath(walkPath);
+					int x = (int) h.getTileX();
+					int y = (int) h.getTileY();
 					
-					h.setState(Human.State.WALKING);
+					if (x != 0 || y != 0) {
+						ArrayList<Point> walkPath = AStarPathFinder.getShortestPath(x, y, goalX, goalY, blockedTiles);
+						h.setWalkPath(walkPath);
+						h.setState(Human.State.WALKING);
+					} else {
+						System.out.println("### calculate zombie new path: error: human");
+					}
 				}
 				
 				// WALK
 				h.walk();
 			}
+			updateHumanHealth(h);
 		}
+	}
+	
+	private void updateHumanHealth(Human h) {
+		UtilityTimer infectedHealthTimer = h.getInfectedHealthTimer();
+		
+		if(infectedHealthTimer != null && infectedHealthTimer.isDone()) {
+			h.changeHealth(-Constants.INFECTED_DAMAGE);
+			infectedHealthTimer.resetTimer();
+			System.out.println(h.getHealth());
+		}
+		
+		if(h.getHealth() == 0) {
+			deadHumans.add(h);
+		}
+	}
+	
+	private void turnHumansToZombie() {
+		for (Human h : deadHumans) {
+			float xPos = h.getBody().getPosition().x/Constants.WORLD_TO_BOX;
+			float yPos = h.getBody().getPosition().y/Constants.WORLD_TO_BOX;
+			removeHuman(h);
+			if(h.getInfectedHealthTimer() != null) {
+				addZombie(xPos, yPos);
+			}
+		}
+		
+		deadHumans.clear();
 	}
 	
 	private void updateZombies() {
@@ -112,24 +180,36 @@ public class AIModel {
 				tmpX /= size * 1.2;
 				tmpY /= size * 1.2;
 				
+				float angle = (float) Math.atan(tmpY/tmpX);
+				
+				if (tmpX < 0)
+					angle = angle - (float)Math.PI;
+				
+				z.getBody().setTransform(z.getBody().getPosition(), angle);	
 				z.getBody().setLinearVelocity(tmpX, tmpY);
 				z.setState(Zombie.State.CHASING);
 			} else {
 				if (z.getState() == Zombie.State.IDLE) {
 					Random generator = new Random();
 					
-					int goalX = generator.nextInt(40);
-					int goalY = generator.nextInt(20);
+					int goalX = generator.nextInt(mapWidth);
+					int goalY = generator.nextInt(mapHeight);
 					
 					while (blockedTiles.contains(new Point(goalX, goalY))) {
-						goalX = generator.nextInt(40);
-						goalY = generator.nextInt(20);
+						goalX = generator.nextInt(mapWidth);
+						goalY = generator.nextInt(mapHeight);
 					}
 					
-					ArrayList<Point> walkPath = AStarPathFinder.getShortestPath((int) z.getTileX(), (int) z.getTileY(), goalX, goalY, blockedTiles);
-					z.setWalkPath(walkPath);
+					int x = (int) z.getTileX();
+					int y = (int) z.getTileY();
 					
-					z.setState(Zombie.State.WALKING);
+					if (x != 0 || y != 0) {
+						ArrayList<Point> walkPath = AStarPathFinder.getShortestPath(x, y, goalX, goalY, blockedTiles);
+						z.setWalkPath(walkPath);
+						z.setState(Zombie.State.WALKING);
+					} else {
+						System.out.println("### calculate zombie new path: error: zombie");
+					}
 				}
 				
 				// WALK

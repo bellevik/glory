@@ -1,0 +1,4 @@
+pistol
+shotgun
+colt
+ak47

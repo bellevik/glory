@@ -3,9 +3,12 @@ package se.glory.zombieworld.model;
 import java.util.ArrayList;
 
 import se.glory.zombieworld.model.entities.Player;
+import se.glory.zombieworld.model.entities.weapons.WeaponArsenal;
 import se.glory.zombieworld.utilities.CollisionDetection;
+import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Identity;
 import se.glory.zombieworld.utilities.Point;
+import se.glory.zombieworld.utilities.UtilityTimer;
 
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
@@ -20,6 +23,8 @@ public class WorldModel {
 	
 	public static Player player;
 	
+	public static WeaponArsenal weaponArsenal;
+	
 	public static Array<Body> drawableBodies = new Array<Body>();
 	public static Array<Body> removeableBodies = new Array<Body>();
 	
@@ -27,7 +32,9 @@ public class WorldModel {
 		world = new World(new Vector2(0, 0), true);
 		aiModel = new AIModel();
 		
-		player = new Player (300, 400, 16, 16);
+		player = new Player (300, 300, 16, 16);
+		
+		weaponArsenal = new WeaponArsenal();
 		
 		world.setContactListener(new CollisionDetection());
 	}
@@ -48,11 +55,13 @@ public class WorldModel {
 		}
 
 		aiModel.setBlockedTiles(blockedTiles);
+		aiModel.setMapSize(collideLayer.getWidth(), collideLayer.getHeight());
 	}
 	
 	public void update() {
-		// sweepDeadBodies();
+		sweepDeadBodies();
 		aiModel.update();
+		healthUpdate();
 	}
 	
 	/*
@@ -65,11 +74,13 @@ public class WorldModel {
 		WorldModel.world.getBodies(WorldModel.removeableBodies);
 		
 		for (Body body : WorldModel.removeableBodies) {
-			if ( body.getUserData().getClass().equals(Identity.class) ) {
-				if(body!=null) {
-					if (((Identity)(body.getUserData())).isDead()) {
-						if (!WorldModel.world.isLocked()) {
-							WorldModel.world.destroyBody(body);
+			if(body.getUserData() != null){
+				if ( body.getUserData().getClass().equals(Identity.class) ) {
+					if(body!=null) {
+						if (((Identity)(body.getUserData())).isDead()) {
+							if (!WorldModel.world.isLocked()) {
+								WorldModel.world.destroyBody(body);
+							}
 						}
 					}
 				}
@@ -77,5 +88,19 @@ public class WorldModel {
 		}
 		
 		WorldModel.removeableBodies.clear();
+	}
+	
+	public void healthUpdate() {
+		UtilityTimer infectedHealthTimer = player.getInfectedHealthTimer();
+		if(infectedHealthTimer != null && infectedHealthTimer.isDone()) {
+			player.changeHealth(-Constants.INFECTED_DAMAGE);
+			infectedHealthTimer.resetTimer();
+		}
+		
+		if(StageModel.healthBar.getHealthPercentGoal() != player.getHealthPercentage()) {
+			StageModel.healthBar.setHealthPercentGoal(player.getHealthPercentage());
+			//.updateHealth(player.getHealthPercentage());
+		}
+		StageModel.healthBar.updateHealthMovementSlowly();
 	}
 }

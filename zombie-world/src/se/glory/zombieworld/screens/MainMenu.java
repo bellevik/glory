@@ -1,35 +1,34 @@
 package se.glory.zombieworld.screens;
 
+import se.glory.zombieworld.utilities.Constants;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class MainMenu implements Screen {
 	private Stage stage;
-	private TextureAtlas atlas;
-	private Skin skin;
-	private Table table;
-	private TextButton buttonPlay, buttonExit;
-	private BitmapFont font;
-	private Label heading;
+	
+	private SpriteBatch batch;
+	
+	private Texture backgroundTexture, buttonExitTexture, buttonPlayTexture, buttonSettingsTexture;
+	private Image buttonExit, buttonPlay, buttonSettings;
     
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(255, 255, 255, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+		batch.begin();
+		batch.draw(backgroundTexture, 0, 0);
+		batch.end();
 		
 		stage.act(delta);
 		stage.draw();
@@ -44,35 +43,28 @@ public class MainMenu implements Screen {
 	public void show() {
 		stage = new Stage();
 		
+		batch = new SpriteBatch();
+		
+		backgroundTexture = new Texture(Gdx.files.internal("ui/mainMenuBackground.png"));
+		buttonExitTexture = new Texture(Gdx.files.internal("ui/buttonExit.png"));
+		buttonPlayTexture = new Texture(Gdx.files.internal("ui/buttonPlay.png"));
+		buttonSettingsTexture = new Texture(Gdx.files.internal("ui/buttonSettings.png"));
+		
 		Gdx.input.setInputProcessor(stage);
 		
-		atlas = new TextureAtlas("ui/button.pack");
-		skin = new Skin(atlas);
-		
-		//Create layouttable
-		table = new Table(skin);
-		table.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
-		//Init font
-		font = new BitmapFont(Gdx.files.internal("font/font.fnt"), false);
-		
-		//Create buttonstyle
-		TextButtonStyle textButtonStyle = new TextButtonStyle();
-		textButtonStyle.up = skin.getDrawable("button_up");
-		textButtonStyle.down = skin.getDrawable("button_down");
-		textButtonStyle.pressedOffsetX = 1;
-		textButtonStyle.pressedOffsetY = -1;
-		textButtonStyle.font = font;
-		
-		LabelStyle headingStyle = new LabelStyle(font, Color.BLACK);
-		
-		heading = new Label("Main menu", headingStyle);
-		heading.setFontScale(2);
-		
 		//Create buttons
-		buttonExit = new TextButton("EXIT", textButtonStyle);
-		buttonPlay = new TextButton("PLAY", textButtonStyle);
+		buttonPlay = new Image(buttonPlayTexture);
+		buttonPlay.setX(Constants.VIEWPORT_WIDTH/2 - buttonPlayTexture.getWidth()/2);
+		buttonPlay.setY(250);
 		
+		buttonSettings = new Image(buttonSettingsTexture);
+		buttonSettings.setX(Constants.VIEWPORT_WIDTH/2 - buttonSettingsTexture.getWidth()/2);
+		buttonSettings.setY(buttonPlay.getY() - 75);
+		
+		buttonExit = new Image(buttonExitTexture);
+		buttonExit.setX(Constants.VIEWPORT_WIDTH/2 - buttonExitTexture.getWidth()/2);
+		buttonExit.setY(buttonSettings.getY() - 75);
+
 		//Adding listeners to buttons
 		buttonExit.addListener(new ClickListener(){
 			@Override
@@ -80,24 +72,22 @@ public class MainMenu implements Screen {
 				Gdx.app.exit();
 			}
 		});
+		buttonSettings.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				((Game) Gdx.app.getApplicationListener()).setScreen(new SettingsScreen());
+			}
+		});
 		buttonPlay.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen());//Här sätter du vart den ska länka
+				((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen());
 			}
 		});
 		
-		//Add padding to buttontext
-		buttonExit.pad(3);
-		buttonPlay.pad(3);
-		
-		table.add(heading);
-		table.row();
-		table.add(buttonPlay);
-		table.row();
-		table.add(buttonExit);
-		stage.addActor(table);
-		
+		stage.addActor(buttonPlay);
+		stage.addActor(buttonSettings);
+		stage.addActor(buttonExit);
 	}
 
 	@Override
