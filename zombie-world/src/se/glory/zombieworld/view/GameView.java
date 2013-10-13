@@ -14,6 +14,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -210,7 +211,7 @@ public class GameView {
 							animator.drawAnimation(batch, body.getPosition().x, body.getPosition().y, ani, ((Creature)identity.getObj()).isMoving());
 						}
 					} else if (identity.getObj() instanceof WeaponLoot) {
-						animator.drawAnimation(batch, body.getPosition().x, body.getPosition().y, animator.getLootAnimation(), true);
+						animator.drawAnimation(batch, body.getPosition().x, body.getPosition().y, animator.getAnimation(MoveableBodyType.WEAPON, 0), true);
 					}
 			}
 		}
@@ -219,9 +220,9 @@ public class GameView {
 	
 	public void animateDoor(){
 		Animation animation = null;
-		Animation closedDoor = null;
+		Texture closedDoor = null;
 		
-		animation = animator.getDoorAnimation(0);
+		animation = animator.getAnimation(MoveableBodyType.DOOR, 2);
 		closedDoor = animator.getClosedDoor();
 		
 		if (animation != null){
@@ -230,7 +231,9 @@ public class GameView {
 			} else if(isOpen.equals("open")){
 				animator.drawAnimation(batch, 7.35f, 5.7799997f, animation, false);
 			} else if(isOpen.equals("closed")) {
-				animator.drawAnimation(batch,  7.35f, 5.7799997f, closedDoor, true);
+				batch.begin();
+				batch.draw(closedDoor, 7.35f*Constants.BOX_TO_WORLD - closedDoor.getWidth()/2, 5.7799997f*Constants.BOX_TO_WORLD - closedDoor.getHeight()/2 );
+				batch.end();
 			}
 		}
 	}
