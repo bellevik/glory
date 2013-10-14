@@ -218,19 +218,29 @@ public class GameView {
 		WorldModel.drawableBodies.clear();
 	}
 	
+	/*
+	 * Draws the animation of an door opening when the player is 
+	 * entering or exiting a house
+	 */
 	public void animateDoor(){
 		Animation animation = null;
 		Texture closedDoor = null;
 		
+		// Gets the animation for an opening door
 		animation = animator.getAnimation(MoveableBodyType.DOOR, 2);
+		// Gets the texture for a closed door
 		closedDoor = animator.getClosedDoor();
 		
+		// TODO : Fix x- and y-values for the door
 		if (animation != null){
 			if(isOpen.equals("opening")){
+				// Draw an animation of an opening door
 				animator.drawAnimation(batch, 7.35f, 5.7799997f, animation, true);
 			} else if(isOpen.equals("open")){
+				// Draw an animation of a completely open door
 				animator.drawAnimation(batch, 7.35f, 5.7799997f, animation, false);
 			} else if(isOpen.equals("closed")) {
+				// Draw a texture of a closed door
 				batch.begin();
 				batch.draw(closedDoor, 7.35f*Constants.BOX_TO_WORLD - closedDoor.getWidth()/2, 5.7799997f*Constants.BOX_TO_WORLD - closedDoor.getHeight()/2 );
 				batch.end();

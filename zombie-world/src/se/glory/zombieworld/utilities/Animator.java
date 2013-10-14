@@ -14,15 +14,18 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  * the screen.
  */
 public class Animator {
+	// Rows and columns for the characters animations
 	private final int CHAR_FRAME_COLS = 4;
 	private final int CHAR_FRAME_ROWS = 8;
 	
+	// Rows and columns for the door animations
 	private final int DOOR_FRAME_COLS = 4;
 	private final int DOOR_FRAME_ROWS = 3;
 	
-	private final float walkSpeed = 1.525f;
-	private final float openingSpeed = 0.385f;
-	private final float rotateSpeed = 0.2f;
+	// Animation speeds
+	private final float WALKSPEED = 1.525f;
+	private final float OPENINGSPEED = 0.385f;
+	private final float ROTATESPEED = 0.2f;
 	
 	private Texture spriteSheet;
 	private TextureRegion currentFrame;
@@ -30,6 +33,7 @@ public class Animator {
 	
 	private float stateTimer;
 	
+	// Arrays for all animations
 	private Animation[] humanAnimations = new Animation[8];
 	private Animation[] playerAnimations = new Animation[8];
 	private Animation[] zombieAnimations = new Animation[8];
@@ -61,6 +65,8 @@ public class Animator {
 		for (int i = 0; i < doorAnimations.length; i++){
 			doorAnimations[i] = createAnimation("doorSheet.png", door, i);
 		}
+		// TODO: Ekman får fixa med weaponsloot animationerna
+		
 		/*for (int i = 0; i < weaponLootAnimations.length; i++){
 			weaponLootAnimations[i] = createAnimation("AKSheet66.png", weapon, i);
 		}*/
@@ -116,7 +122,7 @@ public class Animator {
 				frames[index++] = tmp[direction][i];
 			}
 			//Parameters (update speed, array of TextureRegions to make an animation)
-			animation = new Animation(walkSpeed, frames);
+			animation = new Animation(WALKSPEED, frames);
 			index = 0;
 			
 		}else if(type.equals(door)){
@@ -135,9 +141,11 @@ public class Animator {
 				frames[index++] = tmp[direction][i];
 			}
 			//Parameters (update speed, array of TextureRegions to make an animation)
-			animation = new Animation(openingSpeed, frames);
+			animation = new Animation(OPENINGSPEED, frames);
 			index = 0;
+			
 		}else if(type.equals(weapon)){
+			
 			int col = spriteSheet.getWidth() / 64;
 			int row = spriteSheet.getHeight() / 64;
 			
@@ -151,8 +159,9 @@ public class Animator {
 				}
 			}
 			//Parameters (update speed, array of TextureRegions to make an animation)
-			animation = new Animation(rotateSpeed, frames);
+			animation = new Animation(ROTATESPEED, frames);
 			index = 0;
+			
 		}
 		return animation;
 	}
@@ -162,7 +171,7 @@ public class Animator {
 	 */
 	public void drawAnimation(SpriteBatch batch, float x, float y, Animation ani, boolean isLooping){
 
-		//stateTime = the time spent in the state represented by this animation
+		//stateTimer = the time spent in the state represented by this animation
         stateTimer += Gdx.graphics.getDeltaTime();
         
         if(Constants.gameState == Constants.GameState.RUNNING) {
