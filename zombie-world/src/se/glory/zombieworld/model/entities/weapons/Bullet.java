@@ -5,14 +5,12 @@ import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Identity;
 import se.glory.zombieworld.utilities.TextureHandler;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 
@@ -29,9 +27,11 @@ public class Bullet {
 	public Bullet (float x, float y, float xAngle, float yAngle, float damage, float range) {
 		this.damage = damage;
 		this.range = range;
-	// TODO The lifetime of the bullet will need to get info from the range in weapons arsenal
-	//This variable will set the lifetime for the bullet in seconds.
-		float bulletLifetime = 1;
+		
+		// TODO: The lifetime of the bullet will need to get info from the range in weapons arsenal
+		// This variable will set the lifetime for the bullet in seconds.
+		// float bulletlifetime = 1;
+		
 		BodyDef bulletDef = new BodyDef();
 		bulletDef.type = BodyType.DynamicBody;
 		bulletDef.position.set(x, y);

@@ -1,7 +1,6 @@
 package se.glory.zombieworld.model.entities.items;
 
 import se.glory.zombieworld.model.StageModel;
-import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.ScreenCoordinates;
 
 import com.badlogic.gdx.Gdx;
@@ -14,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
  * This view is where all managing of items will happen.
  */
 public class ItemView {
-
 	private ItemContainer[] itemContainers;
 	/* The x- and y-coordinates of the bottom-left ItemContainer */
 	private int cornerX = 224;

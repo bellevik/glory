@@ -14,7 +14,6 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
-
 /*
  * This class will handle all of the Collisions in our Box2D world.
  */

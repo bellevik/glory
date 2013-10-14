@@ -8,8 +8,6 @@ import com.badlogic.gdx.graphics.Texture;
 public class StreetObject extends CustomObstacle{
 	Texture image;
 	
-	
-
 	public StreetObject(String name, float x, float y){
 		super(x,y,5f);
 		Identity identity = new Identity();
@@ -31,5 +29,3 @@ public class StreetObject extends CustomObstacle{
 	}
 		
 }
-	
-

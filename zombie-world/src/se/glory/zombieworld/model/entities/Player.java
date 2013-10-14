@@ -4,14 +4,11 @@ import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.items.Item;
 import se.glory.zombieworld.model.entities.weapons.Bullet;
-import se.glory.zombieworld.model.entities.weapons.EMeleeWeapon;
 import se.glory.zombieworld.model.entities.weapons.ERangedWeapon;
-import se.glory.zombieworld.utilities.Animator;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Identity;
 import se.glory.zombieworld.utilities.UtilityTimer;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.MathUtils;
@@ -21,8 +18,6 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
@@ -36,8 +31,7 @@ import com.badlogic.gdx.utils.Timer.Task;
  * other bodies. The player will be moved and rotated from the GameScreen class.
  */
 public class Player implements Creature {
-	
-	private float x, y, width, height;
+	private float width, height;
 
 	private Body body;
 	private BodyDef bodyDef;
@@ -61,8 +55,6 @@ public class Player implements Creature {
 	public static boolean emptyClip;
 	
 	public Player (float x, float y, float width, float height) {
-		this.x = x;
-		this.y = y;
 		this.width = width;
 		this.height = height;
 		
@@ -86,6 +78,7 @@ public class Player implements Creature {
 		identity.setWidth(width);
 		identity.setHeight(height);
 		identity.setType(Constants.MoveableBodyType.PLAYER);
+		
 		//setObj needed for drawing the animation of the player in GameView
 		identity.setObj(this);
 
@@ -103,10 +96,10 @@ public class Player implements Creature {
 	 * inventory will be set to 5 slots
 	 */
 	public boolean addItemToQuickSwap(Item item) {
-		//Loops throught he array and checks if its room for an item. If its room it adds tot he array.
+		//Loops through the array and checks if its room for an item. If its room it adds tot he array.
 		//otherwise return false
 		for (int i = 0; i < quickSwapList.size; i++) {
-			//If the position is empty and the item doesnt exists in the quickswaplist, add a new item to the list
+			//If the position is empty and the item doesn't exists in the quickswaplist, add a new item to the list
 			if (quickSwapList.get(i) == null && !existsInSwapList(item)) {
 				quickSwapList.set(i, item);
 				updateQuickSelectionImages();
@@ -114,7 +107,7 @@ public class Player implements Creature {
 			} else if (quickSwapList.get(i) != null) {
 				if (((ERangedWeapon)quickSwapList.get(i)).getName().equals(((ERangedWeapon)item).getName())) {
 					((ERangedWeapon)quickSwapList.get(i)).addClip(2);
-					WorldModel.player.emptyClip = false;
+					emptyClip = false;
 				}
 			}
 		}
@@ -122,7 +115,7 @@ public class Player implements Creature {
 	}
 	
 	/*
-	 * This method checks if the item allready exists in the quickswaplist.
+	 * This method checks if the item already exists in the quickswaplist.
 	 */
 	public boolean existsInSwapList (Item item) {
 		for (int i = 0; i < quickSwapList.size; i++) {
@@ -137,7 +130,7 @@ public class Player implements Creature {
 	
 	/*
 	 * This method will change the images shown on the UI. This will be done every time
-	 * the user picks up new loot (retreives new items). 
+	 * the user picks up new loot (retrieves new items). 
 	 */
 	public void updateQuickSelectionImages () {
 		for (int i = 0; i < quickSwapList.size; i++) {
@@ -161,7 +154,7 @@ public class Player implements Creature {
 				emptyClip = false;
 			}
 		}
-		// TODO Maybe add funtionality to unequip weapon?
+		// TODO Maybe add functionality to unequip weapon?
 	}
 	
 	/*
@@ -241,8 +234,7 @@ public class Player implements Creature {
 		return (int)((health*100)/maxHealth);
 	}
 	
-	public void changeHealth(float healthChange) {
-		
+	public void changeHealth(float healthChange) {	
 		//Remove infected status if getting healed
 		if(healthChange >= 0 && infectedHealth != null) {
 			StageModel.healthBar.setInfectedState(false);

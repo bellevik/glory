@@ -14,7 +14,6 @@ import com.badlogic.gdx.utils.Array;
  * This is used for visually representing an Item in the GUI.
  */
 public class ItemContainer {
-	
 	private Stage stage;
 	private Texture texture;
 	private Image actor;

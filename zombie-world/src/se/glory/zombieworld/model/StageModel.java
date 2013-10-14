@@ -27,10 +27,8 @@ public class StageModel {
 		
 		itemView = new ItemView(stage);
 		quickSelection = new QuickSelection(stage);
-		
-		
-		pauseButton = new PauseButton(stage, 15, Constants.VIEWPORT_HEIGHT - 32 - 15);
-		
+			
+		pauseButton = new PauseButton(stage, 15, Constants.VIEWPORT_HEIGHT - 32 - 15);		
 		healthBar = new Healthbar(stage);
 		
 		Gdx.input.setInputProcessor(stage);

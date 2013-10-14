@@ -1,6 +1,5 @@
 package se.glory.zombieworld.model.entities.items;
 
-import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.utilities.Constants;
 
 import com.badlogic.gdx.Gdx;
@@ -9,11 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
-public class Healthbar extends Actor{
-	
+public class Healthbar extends Actor{	
 	private Texture texture;
 	private Image actor;
-	private Stage stage;
 	
 	private int lastHealthPercent, healthGoal;
 	private int maxHealthPercent = 100;
@@ -34,7 +31,6 @@ public class Healthbar extends Actor{
 	
 	
 	public Healthbar(Stage stage){
-
 		x = ((Constants.VIEWPORT_WIDTH/2) - (310/2));
 		y = (62);
 
@@ -73,13 +69,13 @@ public class Healthbar extends Actor{
 		x = ((Constants.VIEWPORT_WIDTH/2) - (310/2));
 		y = (62);
 		bgActor.setPosition(x, y);
+		
 		for(int i=0; i<maxHealthPercent; i++) {
 			healthBarAmount[i].updatePosition();
 			infectedHealthBarAmount[i].updatePosition();
 		}
-		fgActor.setPosition(x, y);
 		
-		
+		fgActor.setPosition(x, y);	
 	}
 	
 	public float getActorX() {

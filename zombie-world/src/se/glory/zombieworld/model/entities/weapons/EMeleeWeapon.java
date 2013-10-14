@@ -22,9 +22,7 @@ public class EMeleeWeapon implements Item {
 		this.range = range;
 		
 		textures = new Texture[8];
-		
 		textures[0] = new Texture(Gdx.files.internal("data/weapons/" + name + "/" + name + ".png"));
-		
 	}
 	
 	public int getLevel() {
@@ -76,5 +74,4 @@ public class EMeleeWeapon implements Item {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

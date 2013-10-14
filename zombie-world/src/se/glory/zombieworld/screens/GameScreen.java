@@ -10,7 +10,6 @@ import se.glory.zombieworld.model.entities.obstacles.StreetObject;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Score;
 import se.glory.zombieworld.utilities.SoundPlayer;
-import se.glory.zombieworld.utilities.Identity;
 import se.glory.zombieworld.utilities.TextureHandler;
 import se.glory.zombieworld.view.GameView;
 
@@ -132,18 +131,6 @@ public class GameScreen implements Screen {
 		 }
 	}
 	
-	
-	private int healthVar = 0;
-	private int negVar = 1;
-	private void testHealthBar() {
-		healthVar += negVar;
-		StageModel.healthBar.updateHealth(healthVar);
-		if(healthVar == 100 || healthVar == 0) {
-			negVar *= -1;
-
-		}
-	}
-	
 	@Override
 	public void resize(int width, int height) {
 		double scale = Constants.VIEWPORT_WIDTH / (double) width;
@@ -161,7 +148,7 @@ public class GameScreen implements Screen {
 	
 	/*
 	 * This method will set a constant for scaling the window. Really good when Android
-	 * got so many different screen siezes.
+	 * got so many different screen sizes.
 	 */
 	private void adjustViewportScale() {
 		double scale = Constants.VIEWPORT_WIDTH / (double) Gdx.graphics.getWidth();
@@ -190,7 +177,6 @@ public class GameScreen implements Screen {
 		
 		StageModel.createUI(batch);
 		
-		
 		// ## Add humans
 		worldModel.getAIModel().addHuman(16+22*16, 16+8*16);
 		worldModel.getAIModel().addHuman(16+22*16, 16+15*16);
@@ -203,7 +189,6 @@ public class GameScreen implements Screen {
 		soundPlayer = new SoundPlayer();
 		soundPlayer.playBackgroudMusic();
 		createObjects();
-		
 	}
 
 	private void createStaticWalls() {

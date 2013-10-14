@@ -1,6 +1,5 @@
 package se.glory.zombieworld.view;
 
-
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.Creature;
 import se.glory.zombieworld.model.entities.items.WeaponLoot;
@@ -36,7 +35,7 @@ public class GameView {
 	private Animator animator;
 	private String isOpen = "closed";
 	
-	// TODO Change font
+	// TODO: Change font
 	/*BitmapFont font = new BitmapFont(Gdx.files.internal("font/scoreFOnt.fnt"),
 			Gdx.files.internal("font/scoreFont_0.png"), false);*/
 	
@@ -152,9 +151,6 @@ public class GameView {
 		for (Body body : WorldModel.drawableBodies) {
 			if (body.getUserData() != null && body.getUserData().getClass().equals(Identity.class)) {
 				Identity identity = (Identity) body.getUserData();
-				
-					float width = identity.getWidth();
-					float height = identity.getHeight();
 					
 					//Check if the body is a creature
 					if(identity.getObj() instanceof Creature){
@@ -178,7 +174,7 @@ public class GameView {
 						
 						/*
 						* Check to see in what direction the body is facing, and gets the 
-						* approperiate animation.
+						* appropriate animation.
 						*/
 						if(angle > -22  && angle <= 22){
 							//Facing east
@@ -214,6 +210,7 @@ public class GameView {
 					}
 			}
 		}
+		
 		WorldModel.drawableBodies.clear();
 	}
 	

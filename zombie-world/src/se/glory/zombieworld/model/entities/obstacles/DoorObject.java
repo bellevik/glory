@@ -4,7 +4,6 @@ import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Identity;
 
 public class DoorObject extends CustomObstacle {
-	
 	public DoorObject(float x, float y, float width, float height) {
 		super(x, y, width, height);
 		
@@ -16,5 +15,4 @@ public class DoorObject extends CustomObstacle {
 		
 		body.setUserData(identity);
 	}
-
 }
