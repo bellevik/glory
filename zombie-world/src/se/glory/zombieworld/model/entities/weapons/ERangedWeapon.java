@@ -2,7 +2,7 @@ package se.glory.zombieworld.model.entities.weapons;
 
 import se.glory.zombieworld.model.WorldModel;
 
-public class ERangedWeapon extends EMeleeWeapon {
+public class ERangedWeapon extends EquipedItem {
 	
 	private int clipSize;
 	private int clips;

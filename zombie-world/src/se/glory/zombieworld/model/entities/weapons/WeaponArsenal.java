@@ -14,7 +14,7 @@ import com.badlogic.gdx.physics.box2d.World;
  * available in the Game's weapons-folder.
  */
 public class WeaponArsenal {
-	private HashMap<String, EMeleeWeapon> weapons = new HashMap<String, EMeleeWeapon>();
+	private HashMap<String, EquipedItem> weapons = new HashMap<String, EquipedItem>();
 	
 	/*
 	 * Public main constructor.
@@ -31,19 +31,19 @@ public class WeaponArsenal {
 			if(Gdx.files.internal("data/weapons/" + weaponNames[i]).exists()) {
 				FileHandle statFile = Gdx.files.internal("data/weapons/" + weaponNames[i] + "/" + weaponNames[i] + ".txt");
 				String[] stats = statFile.readString().split("::");
-				if(stats[0].equals("melee")) {
-					weapons.put(weaponNames[i], new EMeleeWeapon(weaponNames[i], Float.parseFloat(stats[Constants.WEAPON_DAMAGE]),
-							Float.parseFloat(stats[Constants.WEAPON_RANGE])));
-				} else {
+				if(stats[0].equals("ranged")) {
 					weapons.put(weaponNames[i], new ERangedWeapon(weaponNames[i], Float.parseFloat(stats[Constants.WEAPON_DAMAGE]),
 							Float.parseFloat(stats[Constants.WEAPON_RANGE]), Integer.parseInt(stats[Constants.WEAPON_CLIP_SIZE]),
 							Integer.parseInt(stats[Constants.WEAPON_CLIPS]), Float.parseFloat(stats[Constants.WEAPON_RELOAD_TIME])));
+				} else {
+					weapons.put(weaponNames[i], new EquipedItem(weaponNames[i], Float.parseFloat(stats[Constants.WEAPON_DAMAGE]),
+							Float.parseFloat(stats[Constants.WEAPON_RANGE])));
 				}
 			}
 		}
 	}
 
-	public EMeleeWeapon getWeapon(String weapon) {
+	public EquipedItem getWeapon(String weapon) {
 		return weapons.get(weapon);
 	}
 	
@@ -51,7 +51,7 @@ public class WeaponArsenal {
 	 * Returns a random weapon form the weapon arsenal. This method
 	 * will be used to randomize out weapons on the map.
 	 */
-	public EMeleeWeapon getRandomWeapon() {
+	public EquipedItem getRandomWeapon() {
 		String[] tmp = getWeaponList();
 		Random r = new Random();
 		return getWeapon(tmp[r.nextInt(tmp.length)]);

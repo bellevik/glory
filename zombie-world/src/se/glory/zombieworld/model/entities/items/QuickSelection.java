@@ -1,6 +1,7 @@
 package se.glory.zombieworld.model.entities.items;
 
 import se.glory.zombieworld.model.WorldModel;
+import se.glory.zombieworld.model.entities.weapons.EquipedItem;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Joystick;
 import se.glory.zombieworld.utilities.ScreenCoordinates;
@@ -56,12 +57,12 @@ public class QuickSelection {
 		itemContainers[index].deleteItemReference();
 	}
 	
-	public Image getCurrentImage(int index) {
-		return itemContainers[index].getItemImage();
+	public EquipedItem getCurrentItem(int index) {
+		return itemContainers[index].getItem();
 	}
 	
-	public void changeImage(int pos, Image image) {
-		itemContainers[pos].newItem(image);
+	public void changeItem(int pos, EquipedItem item) {
+		itemContainers[pos].newItem(item);
 	}
 
 	/*
@@ -75,8 +76,8 @@ public class QuickSelection {
 	/*
 	 * Adds a new Item to the selected ItemContainer.
 	 */
-	public void newItem(int index, Image image) {
-		itemContainers[index].newItem(image);
+	public void newItem(int index, EquipedItem item) {
+		itemContainers[index].newItem(item);
 		//System.out.println(itemContainers[0].isTouched());
 	}
 	
@@ -87,8 +88,8 @@ public class QuickSelection {
 	public int touchedContainer(float x, float y) {
 		int touched = 5;
 		for(int i = 0; i < itemContainers.length; i++) {
-			if(x > itemContainers[i].getActor().getX() && x < itemContainers[i].getActor().getX() + 64
-					&& y > itemContainers[i].getActor().getY() && y < itemContainers[i].getActor().getY() + 64) {
+			if(x > itemContainers[i].getBackground().getX() && x < itemContainers[i].getBackground().getX() + 64
+					&& y > itemContainers[i].getBackground().getY() && y < itemContainers[i].getBackground().getY() + 64) {
 				touched = i;
 			}
 		}
@@ -104,8 +105,8 @@ public class QuickSelection {
 	 * it is determined which ItemContainer to select.
 	 */
 	public void selectItem() {
-		double vertical = Math.pow((selectionStick.getTouchpad().getX() - itemContainers[0].getActorX()), 2);
-		double horizontal = Math.pow((selectionStick.getTouchpad().getY() - itemContainers[0].getActorY()), 2);
+		double vertical = Math.pow((selectionStick.getTouchpad().getX() - itemContainers[0].getX()), 2);
+		double horizontal = Math.pow((selectionStick.getTouchpad().getY() - itemContainers[0].getY()), 2);
 		
 		/* Shows and quickly moves the ItemContainers to the correct position */
 		if(selectionStick.getTouchpad().isTouched()) {
@@ -122,8 +123,8 @@ public class QuickSelection {
 			}
 			for(int i = 0; i < itemContainers.length; i++) {
 				Double radians = Math.toRadians(360 - i * 45);
-				itemContainers[i].setActorX((float)(selectionX + Math.cos(radians) * distance));
-				itemContainers[i].setActorY((float)(selectionY + Math.sin(radians) * distance));
+				itemContainers[i].setX((float)(selectionX + Math.cos(radians) * distance));
+				itemContainers[i].setY((float)(selectionY + Math.sin(radians) * distance));
 			}
 			
 		} else {
@@ -136,8 +137,8 @@ public class QuickSelection {
 			}
 			for(int i = 0; i < itemContainers.length; i++) {
 				Double radians = Math.toRadians(360 - i * 45);
-				itemContainers[i].setActorX((float)(selectionX + Math.cos(radians) * distance));
-				itemContainers[i].setActorY((float)(selectionY + Math.sin(radians) * distance));
+				itemContainers[i].setX((float)(selectionX + Math.cos(radians) * distance));
+				itemContainers[i].setY((float)(selectionY + Math.sin(radians) * distance));
 			}
 			/* Only hides the ItemContainers that are visible */
 			if(itemContainers[0].isActorVisible() && distance < 16) {
@@ -171,7 +172,7 @@ public class QuickSelection {
 				/* Changes the equipped item of the player according to the position in the quickselection menu */
 				WorldModel.player.changeEquippedItem(selection);
 				
-				currentSelection.setActorPosition(itemContainers[selection].getActorX(), itemContainers[selection].getActorY());
+				currentSelection.setActorPosition(itemContainers[selection].getX(), itemContainers[selection].getY());
 				
 				if(!currentSelection.isActorVisible()) {
 					currentSelection.show();
@@ -195,14 +196,14 @@ public class QuickSelection {
 	 * to make managing the Items easier.
 	 */
 	public void manageItems() {
-		double vertical = Math.pow((selectionStick.getTouchpad().getX() - itemContainers[0].getActorX()), 2);
-		double horizontal = Math.pow((selectionStick.getTouchpad().getY() - itemContainers[0].getActorY()), 2);
+		double vertical = Math.pow((selectionStick.getTouchpad().getX() - itemContainers[0].getX()), 2);
+		double horizontal = Math.pow((selectionStick.getTouchpad().getY() - itemContainers[0].getY()), 2);
 		
 		if(Math.abs(Math.sqrt(vertical + horizontal)) < 95) {
 			for(int i = 0; i < itemContainers.length; i++) {
 				Double radians = Math.toRadians(360 - i * 45);
-				itemContainers[i].setActorX((float)(selectionX + Math.cos(radians) * 96));
-				itemContainers[i].setActorY((float)(selectionY + Math.sin(radians) * 96));
+				itemContainers[i].setX((float)(selectionX + Math.cos(radians) * 96));
+				itemContainers[i].setY((float)(selectionY + Math.sin(radians) * 96));
 				itemContainers[i].show();
 			}
 		}

@@ -1,7 +1,7 @@
 package se.glory.zombieworld.model.entities.items;
 
 import se.glory.zombieworld.model.WorldModel;
-import se.glory.zombieworld.model.entities.weapons.EMeleeWeapon;
+import se.glory.zombieworld.model.entities.weapons.EquipedItem;
 import se.glory.zombieworld.model.entities.weapons.WeaponArsenal;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Constants.ItemType;
@@ -23,7 +23,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
  * inventory. 
  */
 public class WeaponLoot implements Item {
-	private EMeleeWeapon weapon;
+	private EquipedItem weapon;
 	private Constants.ItemType type;
 	private float x, y;
 	private final float width = 16;
@@ -42,7 +42,7 @@ public class WeaponLoot implements Item {
 	/*
 	 * This constructor will place a weapon on the type weaponName at (x, y)
 	 */
-	public WeaponLoot(EMeleeWeapon weapon, float x, float y) {
+	public WeaponLoot(EquipedItem weapon, float x, float y) {
 		this.weapon = weapon;
 		this.x = x;
 		this.y = y;
@@ -64,7 +64,7 @@ public class WeaponLoot implements Item {
 		Identity identity = new Identity();
 		identity.setWidth(width);
 		identity.setHeight(height);
-		identity.setTexture(weapon.getTexture(0));
+		identity.setTexture(weapon.getTexture());
 		identity.setType(Constants.MoveableBodyType.ITEM);
 		identity.setObj(this);
 		
@@ -81,7 +81,7 @@ public class WeaponLoot implements Item {
 		return "";
 	}
 
-	public EMeleeWeapon getWeapon() {
+	public EquipedItem getWeapon() {
 		return weapon;
 	}
 }

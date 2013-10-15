@@ -5,30 +5,24 @@ import se.glory.zombieworld.utilities.Constants.ItemType;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
-public class EMeleeWeapon implements Item {
+public class EquipedItem implements Item{
 
 	protected String name;
 	protected float damage;
 	protected float range;
-	// Difficulty to find weapon higher number = harder to find
-	protected int level = 0;
-	// Array of textures representing the weapon
-	protected Texture[] textures;
-	
-	public EMeleeWeapon(String name, float damage, float range) {
+
+	protected Texture texture;
+	protected Image icon;
+
+	public EquipedItem(String name, float damage, float range) {
 		this.name = name;
 		this.damage = damage;
 		this.range = range;
-		
-		textures = new Texture[8];
-		
-		textures[0] = new Texture(Gdx.files.internal("data/weapons/" + name + "/" + name + ".png"));
-		
-	}
-	
-	public int getLevel() {
-		return level;
+
+		texture = new Texture(Gdx.files.internal("data/weapons/" + name + "/" + name + ".png"));
+		icon = new Image(texture);
 	}
 
 	public String getName() {
@@ -43,8 +37,12 @@ public class EMeleeWeapon implements Item {
 		return range;
 	}
 
-	public Texture getTexture(int index) {
-		return textures[index];
+	public Texture getTexture() {
+		return texture;
+	}
+	
+	public Image getIcon() {
+		return icon;
 	}
 
 	public void setName(String name) {
@@ -59,10 +57,8 @@ public class EMeleeWeapon implements Item {
 		this.range = range;
 	}
 
-	public void setTextures(Texture[] texture) {
-		for(int i = 0; i < texture.length; i++) {
-			this.textures[i] = texture[i];
-		}
+	public void setTexture(Texture icon) {
+		this.texture = icon;
 	}
 
 	@Override
