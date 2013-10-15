@@ -27,8 +27,6 @@ public class GameScreen implements Screen {
 	//private Healthbar healthBar;
 	private boolean ready = true;
 	
-	private boolean tmp = false;
-	
 	private WorldModel worldModel;
 	private GameView gameView;
 	
@@ -106,24 +104,23 @@ public class GameScreen implements Screen {
 					 }
 				 }
 				 
-				 if (tmp) {
-					 tmp = false;
+				 if (gameView.getOpen().equals("closed")) {
 					 gameView.setOpen("opening");
+					 
 					 Timer.schedule(new Task(){
-						    @Override
-						    public void run() {
-						    	gameView.setOpen("open");
-						    }
-						}, 0.225f);
+						 @Override
+						 public void run() {
+						 	gameView.setOpen("open");
+						 }
+					 }, 0.225f);
 				 }
 			 }
 		} else {
-			if (!tmp) {
+			if (!gameView.getOpen().equals("closed")) {
 				 Timer.schedule(new Task(){
 					    @Override
 					    public void run() {
 					    	gameView.setOpen("closed");
-					    	tmp = true;
 					    }
 					}, 0.5f);
 			 }
