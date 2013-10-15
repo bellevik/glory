@@ -4,6 +4,7 @@ import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.items.Item;
 import se.glory.zombieworld.model.entities.weapons.Bullet;
+import se.glory.zombieworld.model.entities.weapons.EquipedItem;
 import se.glory.zombieworld.model.entities.weapons.ERangedWeapon;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Identity;
@@ -135,8 +136,11 @@ public class Player implements Creature {
 	public void updateQuickSelectionImages () {
 		for (int i = 0; i < quickSwapList.size; i++) {
 			if (quickSwapList.get(i) != null) {
-				Texture tmp = ((ERangedWeapon)(quickSwapList.get(i))).getTexture(0);
-				StageModel.quickSelection.changeImage(i, new Image(tmp));
+				StageModel.quickSelection.changeItem(i, (ERangedWeapon)(quickSwapList.get(i)));
+				/*
+				Texture tmp = ((ERangedWeapon)(quickSwapList.get(i))).getTexture();
+				StageModel.quickSelection.changeItem(i, new Image(tmp));
+				*/
 			}
 		}
 	}

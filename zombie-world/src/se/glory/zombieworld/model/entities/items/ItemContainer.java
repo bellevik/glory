@@ -1,5 +1,6 @@
 package se.glory.zombieworld.model.entities.items;
 
+import se.glory.zombieworld.model.entities.weapons.EquipedItem;
 import se.glory.zombieworld.utilities.ScreenCoordinates;
 
 import com.badlogic.gdx.Gdx;
@@ -16,8 +17,10 @@ import com.badlogic.gdx.utils.Array;
 public class ItemContainer {
 	private Stage stage;
 	private Texture texture;
-	private Image actor;
-	private Image currentItem;
+	private Image background;
+	//private Image currentItem;
+	
+	private EquipedItem item;
 	
 	private int delay = 0;
 	private int delayMax = 30;
@@ -31,59 +34,59 @@ public class ItemContainer {
 			texture = new Texture(Gdx.files.internal("img/itemBaseRSquare.png"));
 		}
 		
-		actor = new Image(texture);
+		background = new Image(texture);
 		
-		stage.addActor(actor);
-		actor.setPosition(x, y);
+		stage.addActor(background);
+		background.setPosition(x, y);
 		hide();
 	}
 	
-	public Image getActor() {
-		return actor;
+	public Image getBackground() {
+		return background;
 	}
 	
 	public boolean isActorVisible() {
-		return actor.isVisible();
+		return background.isVisible();
 	}
 	
-	public float getActorX() {
-		return actor.getX();
+	public float getX() {
+		return background.getX();
 	}
 	
-	public float getActorY() {
-		return actor.getY();
+	public float getY() {
+		return background.getY();
 	}
 	
-	public Image getItemImage() {
-		return currentItem;
+	public EquipedItem getItem() {
+		return item;
 	}
 	
-	public void setActorX(float x) {
-		actor.setX(x);
-		if(currentItem != null) {
-			currentItem.setX(x + 2);
+	public void setX(float x) {
+		background.setX(x);
+		if(item != null) {
+			item.getIcon().setX(x + 2);
 		}
 	}
 	
-	public void setActorY(float y) {
-		actor.setY(y);
-		if(currentItem != null) {
-			currentItem.setY(y + 2);
+	public void setY(float y) {
+		background.setY(y);
+		if(item != null) {
+			item.getIcon().setY(y + 2);
 		}
 	}
 	
 	public void show() {
-		actor.setVisible(true);
-		if(currentItem != null) {
-			currentItem.setPosition(actor.getX() + 16, actor.getY() + 16);
-			currentItem.setVisible(true);
+		background.setVisible(true);
+		if(item != null) {
+			item.getIcon().setPosition(background.getX(), background.getY());
+			item.getIcon().setVisible(true);
 		}
 	}
 	
 	public void hide() {
-		actor.setVisible(false);
-		if(currentItem != null) {
-			currentItem.setVisible(false);
+		background.setVisible(false);
+		if(item != null) {
+			item.getIcon().setVisible(false);
 		}
 	}
 	
@@ -91,18 +94,18 @@ public class ItemContainer {
 	 * Adds a new Item to the ItemContainer.
 	 * If there already is an Item there that one is removed
 	 */
-	public void newItem(Image image) {
-		currentItem = image;
+	public void newItem(EquipedItem item) {
+		this.item = item;
 		removeItem();
-		stage.addActor(currentItem);
-		currentItem.setPosition(actor.getX() + 16, actor.getY() + 16);
-		currentItem.setVisible(false);
+		stage.addActor(item.getIcon());
+		item.getIcon().setPosition(background.getX(), background.getY());
+		item.getIcon().setVisible(false);
 	}
 	
 	public void removeItem() {
 		Array<Actor> tempArray = stage.getActors();
-		if(tempArray.contains(currentItem, true)) {
-			stage.getRoot().removeActor(currentItem);
+		if(tempArray.contains(item.getIcon(), true)) {
+			stage.getRoot().removeActor(item.getIcon());
 		}
 	}
 	
@@ -111,7 +114,7 @@ public class ItemContainer {
 	 * to it's former Image.
 	 */
 	public void deleteItemReference() {
-		currentItem = null;
+		item = null;
 	}
 	
 	/*
@@ -125,8 +128,8 @@ public class ItemContainer {
 		int currentY = ScreenCoordinates.getRealY(Gdx.input.getY());
 		boolean isTouched = Gdx.input.justTouched();
 		
-		if(currentX > actor.getX() && currentX < actor.getX() + 32 && currentY > actor.getY() && 
-				currentY < actor.getY() + 32 && isTouched) {
+		if(currentX > background.getX() && currentX < background.getX() + 32 && currentY > background.getY() && 
+				currentY < background.getY() + 32 && isTouched) {
 			delay = 0;
 			return true;
 		} else {
