@@ -28,10 +28,6 @@ public class Bullet {
 		this.damage = damage;
 		this.range = range;
 		
-		// TODO: The lifetime of the bullet will need to get info from the range in weapons arsenal
-		// This variable will set the lifetime for the bullet in seconds.
-		// float bulletlifetime = 1;
-		
 		BodyDef bulletDef = new BodyDef();
 		bulletDef.type = BodyType.DynamicBody;
 		bulletDef.position.set(x, y);
@@ -59,7 +55,7 @@ public class Bullet {
 		i.setObj(this);
 		bulletBody.setUserData(i);
 		
-		bulletBody.setLinearVelocity(2 * xAngle, 2 * yAngle);
+		bulletBody.setLinearVelocity(8 * xAngle, 8 * yAngle);
 
 		Timer.schedule(new Task(){
 		    @Override
