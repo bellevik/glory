@@ -10,6 +10,7 @@ import se.glory.zombieworld.utilities.AStarPathFinder;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Identity;
 import se.glory.zombieworld.utilities.Point;
+import se.glory.zombieworld.utilities.Score;
 import se.glory.zombieworld.utilities.UtilityTimer;
 
 // TODO: If zombie is chasing a human and lose trail, 
@@ -149,6 +150,7 @@ public class AIModel {
 		}
 		
 		if(h.getHealth() == 0) {
+			Score.addScore(Constants.ScoreType.KILL_HUMAN);
 			deadHumans.add(h);
 		}
 	}
