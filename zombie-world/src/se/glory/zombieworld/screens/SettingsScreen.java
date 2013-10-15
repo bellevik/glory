@@ -1,6 +1,7 @@
 package se.glory.zombieworld.screens;
 
 import se.glory.zombieworld.utilities.Constants;
+import se.glory.zombieworld.utilities.SoundPlayer;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -43,6 +44,9 @@ public class SettingsScreen implements Screen {
 
 		SFXValue = (int) SFXVolume.getVisualValue() + "%";
 		musicValue = (int) musicVolume.getVisualValue() + "%";
+		
+		SoundPlayer.setMusicVolume(musicVolume.getVisualValue()/100);
+		SoundPlayer.setSFXVolume(SFXVolume.getVisualValue()/100);
 		
 		batch.begin();
 		batch.draw(backgroundTexture, 0, 0);
