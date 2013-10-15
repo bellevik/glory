@@ -36,7 +36,7 @@ public class WeaponArsenal {
 				} else {
 					weapons.put(weaponNames[i], new ERangedWeapon(weaponNames[i], Float.parseFloat(stats[Constants.WEAPON_DAMAGE]),
 							Float.parseFloat(stats[Constants.WEAPON_RANGE]), Integer.parseInt(stats[Constants.WEAPON_CLIP_SIZE]),
-							Integer.parseInt(stats[Constants.WEAPON_CLIPS]), Float.parseFloat(stats[Constants.WEAPON_RELOAD_TIME])));
+							Integer.parseInt(stats[Constants.WEAPON_CLIPS]), Float.parseFloat(stats[Constants.WEAPON_FIRE_RATE])));
 				}
 			}
 		}
