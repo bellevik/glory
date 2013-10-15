@@ -6,19 +6,23 @@ public class ERangedWeapon extends EMeleeWeapon {
 	
 	private int clipSize;
 	private int clips;
-	private float reloadTime;
+	private float fireRate;
 	private int currentClipSize;
-	// Array of textures representing the bullet
 	
-	public ERangedWeapon(String name, float damage, float range, int clipSize, int clips, float reloadTime) {
+	public ERangedWeapon(String name, float damage, float range, int clipSize, int clips, float fireRate) {
 		super(name, damage, range);
 		this.clipSize = clipSize;
 		this.clips = clips;
-		this.reloadTime = reloadTime;
+		this.fireRate = fireRate;
 		this.currentClipSize = clipSize;
 		WorldModel.player.emptyClip = false;
 	}
 	
+	/*
+	 * This will add a clip to the weapon. It will happen when the player buys an item from
+	 * the shop or if he/she picks up a weapon on the ground that allready exists in
+	 * the inventory
+	 */
 	public void addClip (int clips) {
 		if (WorldModel.player.emptyClip) {
 			WorldModel.player.emptyClip = false;
@@ -27,6 +31,11 @@ public class ERangedWeapon extends EMeleeWeapon {
 		this.currentClipSize = clipSize;
 	}
 	
+	/*
+	 * Whenever the player fires off a shot this method will be called. First it checks if its
+	 * bullets left in the clip if so remove 1 bullet from the clip. Otherwise it removes a
+	 * clip and sets the bullets in that clip to default value.
+	 */
 	public void removeBulletFromClip() {
 		if (currentClipSize > 1) {
 			currentClipSize--;
@@ -50,8 +59,8 @@ public class ERangedWeapon extends EMeleeWeapon {
 		return clips;
 	}
 	
-	public float getReloadTime() {
-		return reloadTime;
+	public float getFireRate() {
+		return fireRate;
 	}
 	
 	public void setClipSize(int clipSize) {
@@ -62,8 +71,8 @@ public class ERangedWeapon extends EMeleeWeapon {
 		this.clips = clips;
 	}
 	
-	public void setReloadTimep(int reloadTime) {
-		this.reloadTime = reloadTime;
+	public void setFireRate(int fireRate) {
+		this.fireRate = fireRate;
 	}
 
 	public int getCurrentClipSize() {

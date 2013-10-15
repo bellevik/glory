@@ -90,12 +90,6 @@ public class GameView {
 		camera.position.set(WorldModel.player.getBody().getPosition().x * Constants.BOX_TO_WORLD, WorldModel.player.getBody().getPosition().y * Constants.BOX_TO_WORLD, 0);
 		camera.update();
 		
-		if (WorldModel.player.getEquippedWeapon() != null) {
-			batch.begin();
-			font.draw(batch, "Ammo: " + WorldModel.player.getEquippedWeapon().getClips() + " " + WorldModel.player.getEquippedWeapon().getCurrentClipSize(), 200, 100);
-			batch.end();
-		}
-		
 		batch.setProjectionMatrix(camera.combined);
 		
 		if (Constants.DEBUG_MODE){

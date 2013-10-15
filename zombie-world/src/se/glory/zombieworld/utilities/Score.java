@@ -6,7 +6,7 @@ public class Score {
 	public static void addScore(Constants.ScoreType type) {
 		switch (type) {
 		case KILL_HUMAN: 
-			currentScore -= 111;
+			currentScore -= 1452;
 		case KILL_ZOMBIE:
 			currentScore += 97;
 		case TIME:
