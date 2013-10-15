@@ -39,20 +39,12 @@ public class ItemView {
 		for(int i = 0; i < 5; i++) {
 			for(int j = 0; j < 2; j++) {
 				itemContainers[(j*5)+i] = new ItemContainer(stage, cornerX + 72 * i, cornerY + 72 * j, false);
-				//itemContainers[(j*5)+i].show();
 			}
 		}
 
 		currentSelection = 10;
 		currentQuickSelection = 5;
 		selection = new CurrentSelection(stage, itemContainers[0].getBackground().getX(), itemContainers[0].getBackground().getY(), false);
-		//selection.show();
-
-		//Texture testTexture = new Texture(Gdx.files.internal("img/zombie.png"));
-		//Image testImage = new Image(testTexture);
-		//itemContainers[0].newItem(testImage);
-
-		//itemContainers[0].show();
 	}
 
 	/*
@@ -108,7 +100,6 @@ public class ItemView {
 			 * If both of the clicked ItemContainer's are tapped,
 			 * the Item is moved from one to the other.
 			 */
-			System.out.println("CS: " + currentSelection + " " + "CQS: " + currentQuickSelection + " " + "TS: " + tempSelection);
 			if(currentSelection < 10 && currentQuickSelection < 5) {
 				if(itemContainers[currentSelection].getItem() != null && StageModel.quickSelection.getCurrentItem(currentQuickSelection) != null) {
 					EquipedItem tempItem = StageModel.quickSelection.getCurrentItem(currentQuickSelection);
