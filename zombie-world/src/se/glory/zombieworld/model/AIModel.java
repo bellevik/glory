@@ -20,6 +20,7 @@ public class AIModel {
 	private ArrayList<Human> humans = new ArrayList<Human>();
 	private ArrayList<Human> deadHumans = new ArrayList<Human>();
 	private ArrayList<Zombie> zombies = new ArrayList<Zombie>();
+	private ArrayList<Zombie> deadZombies = new ArrayList<Zombie>();
 	
 	private ArrayList<Point> blockedTiles = new ArrayList<Point>();
 	private int mapWidth = 0;
@@ -62,6 +63,7 @@ public class AIModel {
 	
 	public void update() {
 		turnHumansToZombie();
+		clearZombies();
 		
 		updateHumans();
 		updateZombies();
@@ -154,6 +156,12 @@ public class AIModel {
 		}
 	}
 	
+	private void checkZombieHealth(Zombie z) {
+		if(z.getHealth() == 0) {
+			deadZombies.add(z);
+		}
+	}
+	
 	private void turnHumansToZombie() {
 		for (Human h : deadHumans) {
 			float xPos = h.getBody().getPosition().x/Constants.WORLD_TO_BOX;
@@ -165,6 +173,13 @@ public class AIModel {
 		}
 		
 		deadHumans.clear();
+	}
+	
+	private void clearZombies() {
+		for (Zombie z : deadZombies) {
+			removeZombie(z);
+		}
+		deadZombies.clear();
 	}
 	
 	private void updateZombies() {
@@ -216,6 +231,7 @@ public class AIModel {
 				// WALK
 				z.walk();
 			}
+			checkZombieHealth(z);
 		}
 	}
 	
