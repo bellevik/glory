@@ -178,6 +178,10 @@ public class CollisionDetection implements ContactListener {
 			float bulletDamage = ((Bullet)bulletIdentity.getObj()).getDamage();
 			bulletIdentity.setDead(true);
 			
+			if (z.getHealth() - bulletDamage <= 0) {
+				Score.addScore(Constants.ScoreType.KILL_ZOMBIE);
+			}
+			
 			z.changeHealth(-bulletDamage);
 		}
 		
