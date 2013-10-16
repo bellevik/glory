@@ -1,5 +1,6 @@
 package se.glory.zombieworld.utilities;
 
+import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.utilities.Constants.MoveableBodyType;
 
 import com.badlogic.gdx.Gdx;
@@ -40,6 +41,11 @@ public class Animator {
 	private Animation[] doorAnimations = new Animation[3];
 	//private Animation[] weaponLootAnimations = new Animation[];
 	
+	private Animation[] akAnimations = new Animation[8];
+	private Animation[] coltAnimations = new Animation[8];
+	private Animation[] pistolAnimations = new Animation[8];
+	private Animation[] shotgunAnimations = new Animation[8];
+	
 	private Texture closedDoor;
 	private Animation weaponLoot;
 	
@@ -65,6 +71,19 @@ public class Animator {
 		for (int i = 0; i < doorAnimations.length; i++){
 			doorAnimations[i] = createAnimation("doorSheet.png", door, i);
 		}
+		
+		for (int i = 0; i < akAnimations.length; i++){
+			akAnimations[i] = createAnimation("playerSheetAK.png", character, i);
+		}
+		for (int i = 0; i < coltAnimations.length; i++){
+			coltAnimations[i] = createAnimation("playerSheetColt.png", character, i);
+		}
+		for (int i = 0; i < pistolAnimations.length; i++){
+			pistolAnimations[i] = createAnimation("playerSheetPistol.png", character, i);
+		}
+		for (int i = 0; i < shotgunAnimations.length; i++){
+			shotgunAnimations[i] = createAnimation("playerSheetShotgun.png", character, i);
+		}
 		// TODO: Ekman får fixa med weaponsloot animationerna
 		
 		/*for (int i = 0; i < weaponLootAnimations.length; i++){
@@ -85,7 +104,20 @@ public class Animator {
 		if(type == MoveableBodyType.HUMAN){
 			return humanAnimations[i];
 		}else if(type == MoveableBodyType.PLAYER){
+			if (WorldModel.player.getEquippedWeapon() != null) {
+				if (WorldModel.player.getEquippedWeapon().getItemName().equals("pistol")) {
+					return pistolAnimations[i];
+				} else if (WorldModel.player.getEquippedWeapon().getItemName().equals("shotgun")) {
+					return shotgunAnimations[i];
+				} else if (WorldModel.player.getEquippedWeapon().getItemName().equals("ak47")) {
+					return akAnimations[i];
+				} else if (WorldModel.player.getEquippedWeapon().getItemName().equals("colt")) {
+					return coltAnimations[i];
+				}
+			}
+		
 			return playerAnimations[i];
+			
 		}else if (type == MoveableBodyType.ZOMBIE){
 			return zombieAnimations[i];
 		}else if (type == MoveableBodyType.DOOR){
