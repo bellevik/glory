@@ -1,5 +1,7 @@
 package se.glory.zombieworld.view;
 
+import java.util.ArrayList;
+
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.Creature;
 import se.glory.zombieworld.model.entities.items.WeaponLoot;
@@ -7,6 +9,7 @@ import se.glory.zombieworld.utilities.Animator;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Constants.MoveableBodyType;
 import se.glory.zombieworld.utilities.Identity;
+import se.glory.zombieworld.utilities.Point;
 import se.glory.zombieworld.utilities.Score;
 
 import com.badlogic.gdx.Gdx;
@@ -36,6 +39,8 @@ public class GameView {
 	private Animator animator;
 	private String isOpen = "closed";
 	
+	private ArrayList<Point> doors = new ArrayList<Point>();
+	
 	// TODO: Change font
 	/*BitmapFont font = new BitmapFont(Gdx.files.internal("font/scoreFOnt.fnt"),
 			Gdx.files.internal("font/scoreFont_0.png"), false);*/
@@ -50,16 +55,12 @@ public class GameView {
 		camera = new OrthographicCamera();
 		
 		map = new TmxMapLoader().load("img/tilemap/theWorld.tmx");
-		// map = new TmxMapLoader().load("img/tilemap/debug_16/map.tmx");
-
 		mapRenderer = new OrthogonalTiledMapRenderer(map);
 		
 		animator = new Animator();
+		
+		doors.add(new Point(46, 36));
 	}
-	
-	/*public TiledMapTileLayer getMapLayer(int i) {
-		return (TiledMapTileLayer) map.getLayers().get(i);
-	}*/
 	
 	public TiledMapTileLayer getMapLayer(String name) {
 		return (TiledMapTileLayer) map.getLayers().get(name);
@@ -85,6 +86,9 @@ public class GameView {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		
+		// TODO: Test enable blending
+		batch.enableBlending();
+		
 		mapRenderer.setView(camera);
 		mapRenderer.render();
 		
@@ -102,7 +106,7 @@ public class GameView {
 		
 		batch.setProjectionMatrix(camera.combined);
 		
-		// Debug: Always draw textures
+		// Draw textures
 		drawEntites();
 		
 		// Draw certain map layers on top of player
@@ -213,28 +217,32 @@ public class GameView {
 	 * Draws the animation of an door opening when the player is 
 	 * entering or exiting a house
 	 */
-	public void animateDoor(){
-		Animation animation = null;
-		Texture closedDoor = null;
-		
-		// Gets the animation for an opening door
-		animation = animator.getAnimation(MoveableBodyType.DOOR, 2);
-		// Gets the texture for a closed door
-		closedDoor = animator.getClosedDoor();
-		
-		// TODO : Fix x- and y-values for the door
-		if (animation != null){
-			if(isOpen.equals("opening")){
-				// Draw an animation of an opening door
-				animator.drawAnimation(batch, 7.35f, 5.7799997f, animation, true);
-			} else if(isOpen.equals("open")){
-				// Draw an animation of a completely open door
-				animator.drawAnimation(batch, 7.35f, 5.7799997f, animation, false);
-			} else if(isOpen.equals("closed")) {
-				// Draw a texture of a closed door
-				batch.begin();
-				batch.draw(closedDoor, 7.35f*Constants.BOX_TO_WORLD - closedDoor.getWidth()/2, 5.7799997f*Constants.BOX_TO_WORLD - closedDoor.getHeight()/2 );
-				batch.end();
+	public void animateDoor() {
+		for (Point p: doors) {
+			float realX = p.getX() * 16 / Constants.BOX_TO_WORLD;
+			float realY = p.getY() * 16 / Constants.BOX_TO_WORLD;
+			
+			Animation animation = null;
+			Texture closedDoor = null;
+			
+			// Gets the animation for an opening door
+			animation = animator.getAnimation(MoveableBodyType.DOOR, 2);
+			// Gets the texture for a closed door
+			closedDoor = animator.getClosedDoor();
+			
+			if (animation != null){
+				if(isOpen.equals("opening")){
+					// Draw an animation of an opening door
+					animator.drawAnimation(batch, realX, realY, animation, true);
+				} else if(isOpen.equals("open")){
+					// Draw an animation of a completely open door
+					animator.drawAnimation(batch, realX, realY, animation, false);
+				} else if(isOpen.equals("closed")) {
+					// Draw a texture of a closed door
+					batch.begin();
+					batch.draw(closedDoor, realX*Constants.BOX_TO_WORLD - closedDoor.getWidth()/2, realY*Constants.BOX_TO_WORLD - closedDoor.getHeight()/2 );
+					batch.end();
+				}
 			}
 		}
 	}
