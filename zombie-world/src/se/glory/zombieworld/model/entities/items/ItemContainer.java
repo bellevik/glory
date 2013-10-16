@@ -1,6 +1,6 @@
 package se.glory.zombieworld.model.entities.items;
 
-import se.glory.zombieworld.model.entities.weapons.EquipedItem;
+import se.glory.zombieworld.model.entities.weapons.EquippableItem;
 import se.glory.zombieworld.utilities.ScreenCoordinates;
 
 import com.badlogic.gdx.Gdx;
@@ -20,7 +20,7 @@ public class ItemContainer {
 	private Image background;
 	//private Image currentItem;
 	
-	private EquipedItem item;
+	private EquippableItem item;
 	
 	private int delay = 0;
 	private int delayMax = 30;
@@ -57,7 +57,7 @@ public class ItemContainer {
 		return background.getY();
 	}
 	
-	public EquipedItem getItem() {
+	public EquippableItem getItem() {
 		return item;
 	}
 	
@@ -94,14 +94,17 @@ public class ItemContainer {
 	 * Adds a new Item to the ItemContainer.
 	 * If there already is an Item there that one is removed
 	 */
-	public void newItem(EquipedItem item) {
+	public void newItem(EquippableItem item) {
 		this.item = item;
 		removeItem();
 		stage.addActor(item.getIcon());
-		item.getIcon().setPosition(background.getX(), background.getY());
+		item.getIcon().setPosition(background.getX() + 2, background.getY() + 2);
 		item.getIcon().setVisible(false);
 	}
 	
+	/*
+	 * Removes the Item from the ItemContainer
+	 */
 	public void removeItem() {
 		Array<Actor> tempArray = stage.getActors();
 		if(tempArray.contains(item.getIcon(), true)) {

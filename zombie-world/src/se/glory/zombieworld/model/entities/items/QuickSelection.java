@@ -1,10 +1,12 @@
 package se.glory.zombieworld.model.entities.items;
 
+import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.model.WorldModel;
-import se.glory.zombieworld.model.entities.weapons.EquipedItem;
+import se.glory.zombieworld.model.entities.weapons.EquippableItem;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Joystick;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -21,43 +23,47 @@ public class QuickSelection {
 	private float selectionY;
 	private ItemContainer[] itemContainers;
 	private CurrentSelection currentSelection;
-	private double distance = 0;
-	private int selection;
-	
+	private float distance = 0;
+	private int selection = 5;
+
 	public QuickSelection(Stage stage) {
 		selectionX = (Constants.VIEWPORT_WIDTH - 15 - 196);
 		selectionY = (Constants.VIEWPORT_HEIGHT - 15 - 64);
-		
+
 		itemContainers = new ItemContainer[5];
 		for(int i = 0; i < itemContainers.length; i++) {
 			Double radians = Math.toRadians(360 - i * 45);
 			itemContainers[i] = new ItemContainer(stage, (float)(selectionX + Math.cos(radians)), (float)(selectionY + Math.sin(radians)), true);
 		}
-		
+
 		//itemContainers[0].newItem(new Image(new Texture(Gdx.files.internal("img/human.png"))));
-		
+
 		selectionStick = new Joystick(stage, selectionX, selectionY, 64, 64, Constants.TouchpadType.ITEM_SELECTION);
 
 		currentSelection = new CurrentSelection(stage, selectionStick.getTouchpad().getX(), selectionStick.getTouchpad().getY(), true);
 	}
-	
+
+	public int getNumberOfContainers() {
+		return itemContainers.length;
+	}
+
 	public CurrentSelection getSelector() {
 		return currentSelection;
 	}
-	
+
 	public ItemContainer getItemContainer(int index) {
 		return itemContainers[index];
 	}
-	
+
 	public void deleteItemReference(int index) {
 		itemContainers[index].deleteItemReference();
 	}
-	
-	public EquipedItem getCurrentItem(int index) {
+
+	public EquippableItem getCurrentItem(int index) {
 		return itemContainers[index].getItem();
 	}
-	
-	public void changeItem(int pos, EquipedItem item) {
+
+	public void changeItem(int pos, EquippableItem item) {
 		itemContainers[pos].newItem(item);
 	}
 
@@ -68,15 +74,29 @@ public class QuickSelection {
 		selectionY = (Constants.VIEWPORT_HEIGHT - 15 - 64);
 		selectionStick.getTouchpad().setY(selectionY);
 	}
-	
+
 	/*
 	 * Adds a new Item to the selected ItemContainer.
 	 */
-	public void newItem(int index, EquipedItem item) {
+	public void newItem(int index, EquippableItem item) {
 		itemContainers[index].newItem(item);
-		//System.out.println(itemContainers[0].isTouched());
 	}
-	
+
+	/*
+	 * Checks if an item exists in the list
+	 */
+	public boolean existsInList(EquippableItem item) {
+		boolean exists = false;
+		for(int i = 0; i < itemContainers.length; i++) {
+			if(itemContainers[i].getItem() != null) {
+				if(itemContainers[i].getItem().getItemName().equals(item.getItemName())) {
+					exists = true;
+				}
+			}
+		}
+		return exists;
+	}
+
 	/*
 	 * Loops through all it's ItemContainers to determine which
 	 * one is tapped.
@@ -91,7 +111,7 @@ public class QuickSelection {
 		}
 		return touched;
 	}
-	
+
 	// Method gets called every render from GameScreen
 	// This is used to show the current available items and also select them
 	/*
@@ -103,7 +123,7 @@ public class QuickSelection {
 	public void selectItem() {
 		double vertical = Math.pow((selectionStick.getTouchpad().getX() - itemContainers[0].getX()), 2);
 		double horizontal = Math.pow((selectionStick.getTouchpad().getY() - itemContainers[0].getY()), 2);
-		
+
 		/* Shows and quickly moves the ItemContainers to the correct position */
 		if(selectionStick.getTouchpad().isTouched()) {
 			// Only shows the ItemContainers that are hidden
@@ -112,7 +132,7 @@ public class QuickSelection {
 					itemContainers[i].show();
 				}
 			}
-			
+
 			/* Increases the distance between the selection-stick and the ItemContainers */
 			if(Math.abs(Math.sqrt(vertical + horizontal)) < 95) {
 				distance += 16;
@@ -122,9 +142,9 @@ public class QuickSelection {
 				itemContainers[i].setX((float)(selectionX + Math.cos(radians) * distance));
 				itemContainers[i].setY((float)(selectionY + Math.sin(radians) * distance));
 			}
-			
+
 		} else {
-			
+
 			/* Decreses the distance between the selection-stick and the ItemContainers */
 			if(Math.abs(Math.sqrt(vertical + horizontal)) > 16) {
 				distance -= 16;
@@ -142,34 +162,44 @@ public class QuickSelection {
 					itemContainers[i].hide();
 				}
 			}
+
+			if(distance < 15) {
+				if(selection < 5 && itemContainers[selection].getItem() != null) {
+					String weaponName = itemContainers[selection].getItem().getItemName();
+					Texture weaponTexture = new Texture("data/weapons/" + weaponName + "/" + weaponName + ".png");
+					selectionStick.changeStickBackground(weaponTexture);
+				} else {
+					selectionStick.removeStickBackground();
+				}
+			}
 		}
-		
+
 		/* Used to determine the fingers position relative to the selection-stick */
 		if(selectionStick.getTouchpad().getKnobPercentX() != 0 || selectionStick.getTouchpad().getKnobPercentY() != 0) {
 			float knobX = selectionStick.getTouchpad().getKnobPercentX();
 			float knobY = selectionStick.getTouchpad().getKnobPercentY();
-			
+
 			float knobDegree;
 			selection = 5;
-			
+
 			if (knobY >= 0) {
 				knobDegree = -(int) (Math.acos(knobX) * MathUtils.radiansToDegrees);
 			} else {
 				knobDegree = (int) (Math.acos(knobX) * MathUtils.radiansToDegrees);
 			}
-			
+
 			if((knobDegree <= 0 && knobDegree > -30) || (knobDegree <= -150 && knobDegree > -180)) {
 				knobDegree = Math.abs(knobDegree);
 			}
-			
+
 			if (knobDegree >= 0 && knobDegree < 180) {
 				selection = (int) (knobDegree / 36);
-				
+
 				/* Changes the equipped item of the player according to the position in the quickselection menu */
 				WorldModel.player.changeEquippedItem(selection);
-				
+
 				currentSelection.setActorPosition(itemContainers[selection].getX(), itemContainers[selection].getY());
-				
+
 				if(!currentSelection.isActorVisible()) {
 					currentSelection.show();
 				}
@@ -179,13 +209,16 @@ public class QuickSelection {
 					currentSelection.hide();
 				}
 			}
+
 		} else {
 			if(currentSelection.isActorVisible()) {
 				currentSelection.hide();
 			}
 		}
+
+
 	}
-	
+
 	/*
 	 * This method is used when the game is paused.
 	 * While in this 'mode' all ItemContainers are always visible
@@ -194,7 +227,8 @@ public class QuickSelection {
 	public void manageItems() {
 		double vertical = Math.pow((selectionStick.getTouchpad().getX() - itemContainers[0].getX()), 2);
 		double horizontal = Math.pow((selectionStick.getTouchpad().getY() - itemContainers[0].getY()), 2);
-		
+
+		/* Moves all QuickSelection's ItemContainers to the correct position */
 		if(Math.abs(Math.sqrt(vertical + horizontal)) < 95) {
 			for(int i = 0; i < itemContainers.length; i++) {
 				Double radians = Math.toRadians(360 - i * 45);
@@ -202,7 +236,27 @@ public class QuickSelection {
 				itemContainers[i].setY((float)(selectionY + Math.sin(radians) * 96));
 				itemContainers[i].show();
 			}
+
 		}
-		
+
+		/* Checks if the position of the Items are off and corrects them */
+		for(int i = 0; i < itemContainers.length; i++) {
+			itemContainers[i].setX(itemContainers[i].getX());
+			itemContainers[i].setY(itemContainers[i].getY());
+		}
+
+		if(selection < 5 && itemContainers[selection].getItem() == null) {
+			WorldModel.player.removeEquipedWeapon();
+			selectionStick.removeStickBackground();
+			selection = 5;
+		}
+
+		if(selection < 5 && itemContainers[selection].getItem() != null) {
+			String weaponName = itemContainers[selection].getItem().getItemName();
+			Texture weaponTexture = new Texture("data/weapons/" + weaponName + "/" + weaponName + ".png");
+			selectionStick.changeStickBackground(weaponTexture);
+		} else {
+			selectionStick.removeStickBackground();
+		}
 	}
 }
