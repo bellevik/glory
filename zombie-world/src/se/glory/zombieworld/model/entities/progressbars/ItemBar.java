@@ -1,4 +1,5 @@
-package se.glory.zombieworld.model.entities.items;
+package se.glory.zombieworld.model.entities.progressbars;
+
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

@@ -1,6 +1,7 @@
 package se.glory.zombieworld.model.entities.items;
 
 import se.glory.zombieworld.model.WorldModel;
+import se.glory.zombieworld.model.entities.progressbars.ItemBar;
 import se.glory.zombieworld.model.entities.weapons.EMeleeWeapon;
 import se.glory.zombieworld.utilities.ScreenCoordinates;
 
