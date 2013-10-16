@@ -1,6 +1,9 @@
 package se.glory.zombieworld.screens;
 
+import java.util.HashMap;
+
 import se.glory.zombieworld.utilities.Constants;
+import se.glory.zombieworld.utilities.Score;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -38,6 +41,11 @@ public class HighscoreScreen implements Screen {
 		font.draw(batch, "5.", Constants.VIEWPORT_WIDTH/4, 150);
 		batch.end();
 	
+		for (int i = 0; i < 5; i++) {
+			batch.begin();
+			font.draw(batch, Score.getHighscoreAtPosition(i), Constants.VIEWPORT_WIDTH/4 + 100, 270 - (30 * i));
+			batch.end();
+		}
 		
 		stage.act(delta);
 		stage.draw();
