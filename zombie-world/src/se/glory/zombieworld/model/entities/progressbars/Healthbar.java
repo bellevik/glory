@@ -65,11 +65,8 @@ public class Healthbar{
 		//Hiding last active healthBar
 		int currentHealth = activeBar.getLastKnownHealthPercent();
 		int currentHealthGoal = activeBar.getHealthPercentGoal();
-	//	activeBar.forceHealthUpdate(0);
 		activeBar.setVisibility(false);
 		
-		//activeHealthBar = state ? infectedHealthBarAmount : healthBarAmount;
-		//forceHealthUpdate(lastHealthPercent);
 		activeBar = state ? infectedHealthBar : healthBar;
 		activeBar.setVisibility(true);
 		activeBar.forceHealthUpdate(currentHealth);
