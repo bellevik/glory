@@ -1,6 +1,7 @@
 package se.glory.zombieworld.screens;
 
 import se.glory.zombieworld.utilities.Constants;
+import se.glory.zombieworld.utilities.SoundPlayer;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -43,6 +44,9 @@ public class SettingsScreen implements Screen {
 
 		SFXValue = (int) SFXVolume.getVisualValue() + "%";
 		musicValue = (int) musicVolume.getVisualValue() + "%";
+		
+		SoundPlayer.setMusicVolume(musicVolume.getVisualValue()/100);
+		SoundPlayer.setSFXVolume(SFXVolume.getVisualValue()/100);
 		
 		batch.begin();
 		batch.draw(backgroundTexture, 0, 0);
@@ -93,8 +97,8 @@ public class SettingsScreen implements Screen {
 		
 		musicVolume = new Slider(0, 100, 1, false, new Slider.SliderStyle(sliderBar, sliderKnob));
 		musicVolume.setX(Constants.VIEWPORT_WIDTH/2 - musicVolume.getWidth()/2);
-		musicVolume.setY(250 + musicVolume.getHeight());
-		musicVolume.setValue(100);
+		musicVolume.setY(250 + musicVolume.getHeight());	
+		musicVolume.setValue(SoundPlayer.getMusicVolume() * 100);
 		
 		
 		SFXLabel = new Image(SFXLabelTexture);
@@ -104,7 +108,7 @@ public class SettingsScreen implements Screen {
 		SFXVolume = new Slider(0, 100, 1, false, new Slider.SliderStyle(sliderBar, sliderKnob));
 		SFXVolume.setX(Constants.VIEWPORT_WIDTH/2 - SFXVolume.getWidth()/2);
 		SFXVolume.setY(200 + SFXVolume.getHeight());
-		SFXVolume.setValue(100);
+		SFXVolume.setValue(SoundPlayer.getSFXVolume() * 100);
 		
 		backButton = new Image(backButtonTexture);
 		backButton.setX(Constants.VIEWPORT_WIDTH/2 - SFXLabelTexture.getWidth()/2);

@@ -184,7 +184,7 @@ public class GameScreen implements Screen {
 		createStaticWalls();
 		
 		soundPlayer = new SoundPlayer();
-		soundPlayer.playBackgroudMusic();
+		soundPlayer.playBackgroundMusic();
 		createObjects();
 	}
 
