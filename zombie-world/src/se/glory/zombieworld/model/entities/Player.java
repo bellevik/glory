@@ -44,7 +44,7 @@ public class Player implements Creature {
 	
 	//This array will contain the items in the Quick-Swap. Usually Weapons or Potions.
 	private Array<Item> quickSwapList = new Array<Item>();
-	
+
 	private Animation animation;
 	
 	private boolean isIndoors;

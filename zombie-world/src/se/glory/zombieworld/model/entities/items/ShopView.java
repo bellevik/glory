@@ -63,10 +63,19 @@ public class ShopView {
 		}
 	}
 	
-	public void buyItem() {
+	public void checkClicked() {
 		if(Gdx.input.isTouched()) {
 			int currentX = ScreenCoordinates.getRealX(Gdx.input.getX());
 			int currentY = ScreenCoordinates.getRealY(Gdx.input.getY());
+			for (int i=0;i<itemInShopContainers.length;i++){
+				if (currentX>itemInShopContainers[i].getBgX()&&currentX<itemInShopContainers[i].getBgX() + itemInShopContainers[i].getBg().getImageWidth()
+							&&currentY>itemInShopContainers[i].getBgY()&&currentY<itemInShopContainers[i].getBgY()+itemInShopContainers[i].getBg().getImageHeight()){
+					
+					itemInShopContainers[i].buyItem();	
+					System.out.println("bought");
+				}
+					
+			}
 		}
 	}
 	public void setShopViewVisability(boolean visable){
@@ -75,5 +84,8 @@ public class ShopView {
 			itemInShopContainers[i].setContainerVisability(visable);
 			doneButton.setVisible(visable);
 		}
+	}
+	public boolean getShopViewVisabiliy(){
+		return background.isVisible();
 	}
 }

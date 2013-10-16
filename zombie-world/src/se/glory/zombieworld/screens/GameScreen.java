@@ -99,14 +99,13 @@ public class GameScreen implements Screen {
 				 }
 			 }else if (c.getTile().getProperties().get("buyzone") != null&& !WorldModel.player.getRecentlyBought()){
 				 WorldModel.player.setRecentlyBought(true);
-				 StageModel.shopView.setShopViewVisability(true);
-			 }else if (c.getTile().getProperties().get("buyzone") == null){
-				 WorldModel.player.setRecentlyBought(false);
+				 StageModel.shopView.setShopViewVisability(true);	
 			 }
-			 System.out.println(WorldModel.player.getRecentlyBought());
-			 if(c.getTile().getProperties().get("buyzone") == null)
-			 System.out.println("tja");
-		}
+		}else{
+			 WorldModel.player.setRecentlyBought(false);
+		 }if (StageModel.shopView.getShopViewVisabiliy()){
+			 StageModel.shopView.checkClicked();
+		 }
 	}
 	
 	
