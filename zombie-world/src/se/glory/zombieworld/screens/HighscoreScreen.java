@@ -58,7 +58,7 @@ public class HighscoreScreen implements Screen {
 		
 		Gdx.input.setInputProcessor(stage);
 		
-		highscoreLabel = new Image(new Texture(Gdx.files.internal("ui/buttonBack.png")));
+		highscoreLabel = new Image(new Texture(Gdx.files.internal("ui/highScoreLabel.png")));
 		highscoreLabel.setX(Constants.VIEWPORT_WIDTH/2 - highscoreLabel.getWidth()/2);
 		highscoreLabel.setY(295);
 		
