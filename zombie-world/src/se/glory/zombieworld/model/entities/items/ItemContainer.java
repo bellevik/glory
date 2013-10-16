@@ -98,10 +98,13 @@ public class ItemContainer {
 		this.item = item;
 		removeItem();
 		stage.addActor(item.getIcon());
-		item.getIcon().setPosition(background.getX(), background.getY());
+		item.getIcon().setPosition(background.getX() + 2, background.getY() + 2);
 		item.getIcon().setVisible(false);
 	}
 	
+	/*
+	 * Removes the Item from the ItemContainer
+	 */
 	public void removeItem() {
 		Array<Actor> tempArray = stage.getActors();
 		if(tempArray.contains(item.getIcon(), true)) {

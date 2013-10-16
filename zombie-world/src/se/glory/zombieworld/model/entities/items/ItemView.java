@@ -37,13 +37,13 @@ public class ItemView {
 
 		for(int i = 0; i < 5; i++) {
 			for(int j = 0; j < 2; j++) {
-				itemContainers[(j*5)+i] = new ItemContainer(stage, cornerX + 72 * i, cornerY + 72 * j, false);
+				itemContainers[(j*5)+i] = new ItemContainer(stage, cornerX + 72 * i, cornerY + 72 * j, true);
 			}
 		}
 
 		currentSelection = 10;
 		currentQuickSelection = 5;
-		selection = new CurrentSelection(stage, itemContainers[0].getBackground().getX(), itemContainers[0].getBackground().getY(), false);
+		selection = new CurrentSelection(stage, itemContainers[0].getBackground().getX(), itemContainers[0].getBackground().getY(), true);
 	}
 	
 	public int getNumberOfContainers() {
@@ -79,11 +79,24 @@ public class ItemView {
 	 * and the QuickSelection.
 	 */
 	public void manageItems() {
+		
+		/* Checks if the position of the Items are off and corrects them */
+		/*if(itemContainers[0].getX() == itemContainers[0].getItem().getIcon().getX()) {
+			for(int i = 0; i < itemContainers.length; i++) {
+				itemContainers[i].setX(itemContainers[i].getX());
+				itemContainers[i].setY(itemContainers[i].getY());
+			}
+		}*/
+		
 		/* Check if the ItemContainer's already are visible to only show them is necessary */
 		if(!itemContainers[0].isActorVisible()) {
 			background.setVisible(true);
 			for(int i = 0; i < itemContainers.length; i++) {
 				itemContainers[i].show();
+			}
+			for(int i = 0; i < itemContainers.length; i++) {
+				itemContainers[i].setX(itemContainers[i].getX());
+				itemContainers[i].setY(itemContainers[i].getY());
 			}
 		}
 
@@ -136,6 +149,9 @@ public class ItemView {
 					StageModel.quickSelection.getCurrentItem(currentQuickSelection).getIcon().setVisible(true);
 					itemContainers[currentSelection].deleteItemReference();
 				}
+				
+				itemContainers[currentSelection].setX(itemContainers[currentSelection].getX());
+				itemContainers[currentSelection].setY(itemContainers[currentSelection].getY());
 
 				currentSelection = 10;
 				currentQuickSelection = 5;
@@ -157,7 +173,10 @@ public class ItemView {
 					itemContainers[currentSelection].deleteItemReference();
 					StageModel.quickSelection.getCurrentItem(tempSelection).getIcon().setVisible(true);
 				}
-
+				
+				itemContainers[currentSelection].setX(itemContainers[currentSelection].getX());
+				itemContainers[currentSelection].setY(itemContainers[currentSelection].getY());
+				
 				currentSelection = 10;
 				tempSelection = 5;
 

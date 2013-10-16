@@ -18,8 +18,17 @@ public class Joystick {
 	private Skin touchpadSkin;
 	private Drawable touchBackground, touchKnob;
 	private Touchpad touchpad;
+	private Stage stage;
+	
+	private float x, y, width, height;
 	
 	public Joystick (Stage stage, float x, float y, float width, float height, Constants.TouchpadType type) {
+		this.stage = stage;
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+		
 		//Create a touchpad skin    
         touchpadSkin = new Skin();
         
@@ -56,6 +65,44 @@ public class Joystick {
 
 	public Touchpad getTouchpad() {
 		return touchpad;
+	}
+	
+	public void changeStickBackground(Texture texture) {
+		touchpadSkin = new Skin();
+		touchpadSkin.add("touchBackground", texture);
+		touchpadSkin.add("touchKnob", new Texture("img/selectionKnob.png"));
+		
+		touchpadStyle = new TouchpadStyle();
+		touchBackground = touchpadSkin.getDrawable("touchBackground");
+		touchKnob = touchpadSkin.getDrawable("touchKnob");
+		
+		touchpadStyle.background = touchBackground;
+        touchpadStyle.knob = touchKnob;
+        
+        stage.getRoot().removeActor(touchpad);
+        touchpad = new Touchpad(10, touchpadStyle);
+        touchpad.setBounds(x, y, width, height);
+		
+        stage.addActor(touchpad);
+	}
+	
+	public void removeStickBackground() {
+		touchpadSkin = new Skin();
+		touchpadSkin.add("touchBackground", new Texture("img/selectionBase.png"));
+		touchpadSkin.add("touchKnob", new Texture("img/selectionKnob.png"));
+		
+		touchpadStyle = new TouchpadStyle();
+		touchBackground = touchpadSkin.getDrawable("touchBackground");
+		touchKnob = touchpadSkin.getDrawable("touchKnob");
+		
+		touchpadStyle.background = touchBackground;
+        touchpadStyle.knob = touchKnob;
+        
+        stage.getRoot().removeActor(touchpad);
+        touchpad = new Touchpad(10, touchpadStyle);
+        touchpad.setBounds(x, y, width, height);
+		
+        stage.addActor(touchpad);
 	}
 
 }
