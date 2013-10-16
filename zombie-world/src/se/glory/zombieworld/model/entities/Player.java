@@ -6,10 +6,14 @@ import se.glory.zombieworld.model.entities.items.Item;
 import se.glory.zombieworld.model.entities.weapons.Bullet;
 import se.glory.zombieworld.model.entities.weapons.EquipedItem;
 import se.glory.zombieworld.model.entities.weapons.ERangedWeapon;
+import se.glory.zombieworld.screens.GameOverScreen;
+import se.glory.zombieworld.screens.MainMenu;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Identity;
 import se.glory.zombieworld.utilities.UtilityTimer;
 
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.MathUtils;
@@ -253,6 +257,11 @@ public class Player implements Creature {
 			health = 0;
 		}else if(health > maxHealth) {
 			health = maxHealth;
+		}
+		
+		//When the player dies you will get to the game over screen and type in your name
+		if (health == 0) {
+			((Game) Gdx.app.getApplicationListener()).setScreen(new GameOverScreen());
 		}
 	}
 	
