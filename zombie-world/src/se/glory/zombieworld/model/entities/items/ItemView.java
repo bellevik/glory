@@ -1,7 +1,7 @@
 package se.glory.zombieworld.model.entities.items;
 
 import se.glory.zombieworld.model.StageModel;
-import se.glory.zombieworld.model.entities.weapons.EquipedItem;
+import se.glory.zombieworld.model.entities.weapons.EquippableItem;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.ScreenCoordinates;
 
@@ -44,6 +44,22 @@ public class ItemView {
 		currentSelection = 10;
 		currentQuickSelection = 5;
 		selection = new CurrentSelection(stage, itemContainers[0].getBackground().getX(), itemContainers[0].getBackground().getY(), false);
+	}
+	
+	/*
+	 * Checks if an item exists in the list
+	 */
+	public boolean existsInList(EquippableItem item) {
+		boolean exists = false;
+		for(int i = 0; i < itemContainers.length; i++) {
+			System.out.println(i);
+			if(itemContainers[i].getItem() != null) {
+				if(itemContainers[i].getItem().getItemName().equals(item.getItemName())) {
+					exists = true;
+				}
+			}
+		}
+		return exists;
 	}
 
 	/*
@@ -101,7 +117,7 @@ public class ItemView {
 			 */
 			if(currentSelection < 10 && currentQuickSelection < 5) {
 				if(itemContainers[currentSelection].getItem() != null && StageModel.quickSelection.getCurrentItem(currentQuickSelection) != null) {
-					EquipedItem tempItem = StageModel.quickSelection.getCurrentItem(currentQuickSelection);
+					EquippableItem tempItem = StageModel.quickSelection.getCurrentItem(currentQuickSelection);
 					StageModel.quickSelection.deleteItemReference(currentQuickSelection);
 					StageModel.quickSelection.newItem(currentQuickSelection, itemContainers[currentSelection].getItem());
 					StageModel.quickSelection.getCurrentItem(currentQuickSelection).getIcon().setVisible(true);
@@ -126,7 +142,7 @@ public class ItemView {
 					StageModel.quickSelection.deleteItemReference(tempSelection);
 					itemContainers[currentSelection].show();
 				} else if(itemContainers[currentSelection].getItem() != null && StageModel.quickSelection.getCurrentItem(tempSelection) != null){
-					EquipedItem tempItem = StageModel.quickSelection.getCurrentItem(tempSelection);
+					EquippableItem tempItem = StageModel.quickSelection.getCurrentItem(tempSelection);
 					StageModel.quickSelection.deleteItemReference(tempSelection);
 					StageModel.quickSelection.newItem(tempSelection, itemContainers[currentSelection].getItem());
 					StageModel.quickSelection.getCurrentItem(tempSelection).getIcon().setVisible(true);
@@ -145,7 +161,7 @@ public class ItemView {
 			} else if(currentSelection == 10 && currentQuickSelection < 5 && tempSelection < 5) {
 				if(tempSelection != currentQuickSelection) {
 					if(StageModel.quickSelection.getCurrentItem(currentQuickSelection) != null && StageModel.quickSelection.getCurrentItem(tempSelection) != null) {
-						EquipedItem tempItem = StageModel.quickSelection.getCurrentItem(currentQuickSelection);
+						EquippableItem tempItem = StageModel.quickSelection.getCurrentItem(currentQuickSelection);
 						StageModel.quickSelection.deleteItemReference(currentQuickSelection);
 						StageModel.quickSelection.newItem(currentQuickSelection, StageModel.quickSelection.getCurrentItem(tempSelection));
 						StageModel.quickSelection.getCurrentItem(currentQuickSelection).getIcon().setVisible(true);

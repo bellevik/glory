@@ -13,7 +13,7 @@ import com.badlogic.gdx.files.FileHandle;
  * available in the Game's weapons-folder.
  */
 public class WeaponArsenal {
-	private HashMap<String, EquipedItem> weapons = new HashMap<String, EquipedItem>();
+	private HashMap<String, EquippableItem> weapons = new HashMap<String, EquippableItem>();
 
 	/*
 	 * Public main constructor.
@@ -30,19 +30,16 @@ public class WeaponArsenal {
 			if(Gdx.files.internal("data/weapons/" + weaponNames[i]).exists()) {
 				FileHandle statFile = Gdx.files.internal("data/weapons/" + weaponNames[i] + "/" + weaponNames[i] + ".txt");
 				String[] stats = statFile.readString().split("::");
-				if(stats[0].equals("ranged")) {
-					weapons.put(weaponNames[i], new ERangedWeapon(weaponNames[i], Float.parseFloat(stats[Constants.WEAPON_DAMAGE]),
-							Float.parseFloat(stats[Constants.WEAPON_RANGE]), Integer.parseInt(stats[Constants.WEAPON_CLIP_SIZE]),
-							Integer.parseInt(stats[Constants.WEAPON_CLIPS]), Float.parseFloat(stats[Constants.WEAPON_FIRE_RATE])));
-				} else {
-					weapons.put(weaponNames[i], new EquipedItem(weaponNames[i], Float.parseFloat(stats[Constants.WEAPON_DAMAGE]),
-							Float.parseFloat(stats[Constants.WEAPON_RANGE])));
-				}
+				
+				weapons.put(weaponNames[i], new EquippableItem(weaponNames[i], stats[Constants.WEAPON_TYPE], 
+						Float.parseFloat(stats[Constants.WEAPON_DAMAGE]), Float.parseFloat(stats[Constants.WEAPON_RANGE]), 
+						Integer.parseInt(stats[Constants.WEAPON_CLIP_SIZE]), Integer.parseInt(stats[Constants.WEAPON_CLIPS]), 
+						Float.parseFloat(stats[Constants.WEAPON_FIRE_RATE])));
 			}
 		}
 	}
 
-	public EquipedItem getWeapon(String weapon) {
+	public EquippableItem getWeapon(String weapon) {
 		return weapons.get(weapon);
 	}
 
@@ -50,7 +47,7 @@ public class WeaponArsenal {
 	 * Returns a random weapon form the weapon arsenal. This method
 	 * will be used to randomize out weapons on the map.
 	 */
-	public EquipedItem getRandomWeapon() {
+	public EquippableItem getRandomWeapon() {
 		String[] tmp = getWeaponList();
 		Random r = new Random();
 		return getWeapon(tmp[r.nextInt(tmp.length)]);

@@ -1,7 +1,8 @@
 package se.glory.zombieworld.model.entities.items;
 
+import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.model.WorldModel;
-import se.glory.zombieworld.model.entities.weapons.EquipedItem;
+import se.glory.zombieworld.model.entities.weapons.EquippableItem;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Joystick;
 
@@ -41,6 +42,10 @@ public class QuickSelection {
 		currentSelection = new CurrentSelection(stage, selectionStick.getTouchpad().getX(), selectionStick.getTouchpad().getY(), true);
 	}
 	
+	public int getNumberOfContainers() {
+		return itemContainers.length;
+	}
+	
 	public CurrentSelection getSelector() {
 		return currentSelection;
 	}
@@ -53,11 +58,11 @@ public class QuickSelection {
 		itemContainers[index].deleteItemReference();
 	}
 	
-	public EquipedItem getCurrentItem(int index) {
+	public EquippableItem getCurrentItem(int index) {
 		return itemContainers[index].getItem();
 	}
 	
-	public void changeItem(int pos, EquipedItem item) {
+	public void changeItem(int pos, EquippableItem item) {
 		itemContainers[pos].newItem(item);
 	}
 
@@ -72,9 +77,24 @@ public class QuickSelection {
 	/*
 	 * Adds a new Item to the selected ItemContainer.
 	 */
-	public void newItem(int index, EquipedItem item) {
+	public void newItem(int index, EquippableItem item) {
 		itemContainers[index].newItem(item);
 		//System.out.println(itemContainers[0].isTouched());
+	}
+	
+	/*
+	 * Checks if an item exists in the list
+	 */
+	public boolean existsInList(EquippableItem item) {
+		boolean exists = false;
+		for(int i = 0; i < itemContainers.length; i++) {
+			if(itemContainers[i].getItem() != null) {
+				if(itemContainers[i].getItem().getItemName().equals(item.getItemName())) {
+					exists = true;
+				}
+			}
+		}
+		return exists;
 	}
 	
 	/*

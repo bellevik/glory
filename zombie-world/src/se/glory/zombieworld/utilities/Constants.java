@@ -6,6 +6,7 @@ public class Constants {
 	
 	public static final boolean DEBUG_MODE = true;
 	
+	public static final int WEAPON_TYPE = 0;
 	public static final int WEAPON_DAMAGE = 1;
 	public static final int WEAPON_RANGE = 2;
 	public static final int WEAPON_CLIP_SIZE = 3;

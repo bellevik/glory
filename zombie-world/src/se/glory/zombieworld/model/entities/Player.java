@@ -2,9 +2,8 @@ package se.glory.zombieworld.model.entities;
 
 import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.model.WorldModel;
-import se.glory.zombieworld.model.entities.items.Item;
 import se.glory.zombieworld.model.entities.weapons.Bullet;
-import se.glory.zombieworld.model.entities.weapons.EquipedItem;
+import se.glory.zombieworld.model.entities.weapons.EquippableItem;
 import se.glory.zombieworld.model.entities.weapons.ERangedWeapon;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Identity;
@@ -37,8 +36,8 @@ public class Player implements Creature {
 	private Body body;
 	private BodyDef bodyDef;
 	
-	//This array will contain the items in the Quick-Swap. Usually Weapons or Potions.
-	private Array<Item> quickSwapList = new Array<Item>();
+	// The currently-selected weapon
+	private int currentItem;
 	
 	private Animation animation;
 	
@@ -51,7 +50,7 @@ public class Player implements Creature {
 	private float health;
 	private float maxHealth;
 	private UtilityTimer infectedHealth = null;
-	private ERangedWeapon equippedWeapon = null;
+	private EquippableItem equippedWeapon = null;
 
 	public static boolean emptyClip;
 	
@@ -88,7 +87,7 @@ public class Player implements Creature {
 		body.setFixedRotation(true);
 		
 		maxHealth = health = 100;
-		quickSwapList.size = 5;
+		//quickSwapList.size = 5;
 	}
 	
 	/*
@@ -96,33 +95,20 @@ public class Player implements Creature {
 	 * will return false. If it succeeds it will return true. The size of this
 	 * inventory will be set to 5 slots
 	 */
-	public boolean addItemToQuickSwap(Item item) {
+	public boolean addItemToQuickSwap(EquippableItem item) {
 		//Loops through the array and checks if its room for an item. If its room it adds tot he array.
 		//otherwise return false
-		for (int i = 0; i < quickSwapList.size; i++) {
+		for (int i = 0; i < StageModel.quickSelection.getNumberOfContainers(); i++) {
 			//If the position is empty and the item doesn't exists in the quickswaplist, add a new item to the list
-			if (quickSwapList.get(i) == null && !existsInSwapList(item)) {
-				quickSwapList.set(i, item);
+			if (StageModel.quickSelection.getCurrentItem(i) == null && !StageModel.quickSelection.existsInList(item) && 
+					!StageModel.itemView.existsInList(item)) {
+				StageModel.quickSelection.newItem(i, item);
 				updateQuickSelectionImages();
 				return true;
-			} else if (quickSwapList.get(i) != null) {
-				if (((ERangedWeapon)quickSwapList.get(i)).getName().equals(((ERangedWeapon)item).getName())) {
-					((ERangedWeapon)quickSwapList.get(i)).addClip(2);
+			} else if (StageModel.quickSelection.getCurrentItem(i) != null) {
+				if(StageModel.quickSelection.getCurrentItem(i).getItemName().equals(item.getItemName())) {
+					StageModel.quickSelection.getCurrentItem(i).addClip(2);
 					emptyClip = false;
-				}
-			}
-		}
-		return false;
-	}
-	
-	/*
-	 * This method checks if the item already exists in the quickswaplist.
-	 */
-	public boolean existsInSwapList (Item item) {
-		for (int i = 0; i < quickSwapList.size; i++) {
-			if (quickSwapList.get(i) != null) {
-				if ( ((ERangedWeapon)(item)).getName().equals(((ERangedWeapon)(quickSwapList.get(i))).getName()) ) {
-					return true;
 				}
 			}
 		}
@@ -134,13 +120,9 @@ public class Player implements Creature {
 	 * the user picks up new loot (retrieves new items). 
 	 */
 	public void updateQuickSelectionImages () {
-		for (int i = 0; i < quickSwapList.size; i++) {
-			if (quickSwapList.get(i) != null) {
-				StageModel.quickSelection.changeItem(i, (ERangedWeapon)(quickSwapList.get(i)));
-				/*
-				Texture tmp = ((ERangedWeapon)(quickSwapList.get(i))).getTexture();
-				StageModel.quickSelection.changeItem(i, new Image(tmp));
-				*/
+		for (int i = 0; i < StageModel.quickSelection.getNumberOfContainers(); i++) {
+			if (StageModel.quickSelection.getCurrentItem(i) != null) {
+				StageModel.quickSelection.changeItem(i, StageModel.quickSelection.getCurrentItem(i));
 			}
 		}
 	}
@@ -152,13 +134,14 @@ public class Player implements Creature {
 	 * we will change the item of the player.
 	 */
 	public void changeEquippedItem (int pos) {
-		if(quickSwapList.get(pos) != null && equippedWeapon != (ERangedWeapon)(quickSwapList.get(pos))){
-			equippedWeapon = (ERangedWeapon)(quickSwapList.get(pos));
-			if (((ERangedWeapon)(quickSwapList.get(pos))).getClips() != 0) {
+		if(StageModel.quickSelection.getCurrentItem(pos) != null && equippedWeapon != StageModel.quickSelection.getCurrentItem(pos)) {
+			equippedWeapon = StageModel.quickSelection.getCurrentItem(pos);
+			if(StageModel.quickSelection.getCurrentItem(pos).getClips() != 0) {
 				emptyClip = false;
 			}
+		} else if(StageModel.quickSelection.getCurrentItem(pos) == null) {
+			equippedWeapon = null;
 		}
-		// TODO Maybe add functionality to unequip weapon?
 	}
 	
 	/*
@@ -305,7 +288,7 @@ public class Player implements Creature {
 		return getBody().getLinearVelocity().len() != 0;
 	}
 
-	public ERangedWeapon getEquippedWeapon() {
+	public EquippableItem getEquippedWeapon() {
 		return equippedWeapon;
 	}
 }

@@ -1,7 +1,7 @@
 package se.glory.zombieworld.model.entities.items;
 
 import se.glory.zombieworld.model.WorldModel;
-import se.glory.zombieworld.model.entities.weapons.EquipedItem;
+import se.glory.zombieworld.model.entities.weapons.EquippableItem;
 import se.glory.zombieworld.model.entities.weapons.WeaponArsenal;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Constants.ItemType;
@@ -20,8 +20,8 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
  * in the world and got space in its inventory the player will get the Weapon in its
  * inventory. 
  */
-public class WeaponLoot implements Item {
-	private EquipedItem weapon;
+public class WeaponLoot {
+	private EquippableItem weapon;
 	private Constants.ItemType type;
 	private final float width = 16;
 	private final float height = 16;
@@ -39,7 +39,7 @@ public class WeaponLoot implements Item {
 	/*
 	 * This constructor will place a weapon on the type weaponName at (x, y)
 	 */
-	public WeaponLoot(EquipedItem weapon, float x, float y) {
+	public WeaponLoot(EquippableItem weapon, float x, float y) {
 		this.weapon = weapon;
 		
 		bodyDef = new BodyDef();
@@ -66,17 +66,15 @@ public class WeaponLoot implements Item {
 		body.setUserData(identity);
 	}
 
-	@Override
 	public ItemType getItemType() {
 		return type;
 	}
 
-	@Override
 	public String getItemName() {
-		return "";
+		return weapon.getItemName();
 	}
 
-	public EquipedItem getWeapon() {
+	public EquippableItem getWeapon() {
 		return weapon;
 	}
 }
