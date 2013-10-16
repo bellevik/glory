@@ -150,7 +150,6 @@ public class AIModel {
 		}
 		
 		if(h.getHealth() == 0) {
-			Score.addScore(Constants.ScoreType.KILL_HUMAN);
 			deadHumans.add(h);
 		}
 	}

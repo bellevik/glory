@@ -191,7 +191,12 @@ public class CollisionDetection implements ContactListener {
 			float bulletDamage = ((Bullet)bulletIdentity.getObj()).getDamage();
 			bulletIdentity.setDead(true);
 			
+			if (h.getHealth() - bulletDamage <= 0) {
+				Score.addScore(Constants.ScoreType.KILL_HUMAN);
+			}
+			
 			h.changeHealth(-bulletDamage);
+			
 		}
 	}
 
