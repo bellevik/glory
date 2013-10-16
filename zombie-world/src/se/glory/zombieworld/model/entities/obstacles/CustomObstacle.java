@@ -18,7 +18,20 @@ public class CustomObstacle {
 	Body body;
 	Shape shape;
 	
-	private CustomObstacle(float x, float y) {
+	public CustomObstacle(){
+
+	}
+
+	public CustomObstacle(float x, float y, float width, float height) {
+		setCustomBody(x + width/2, y + height/2);
+		
+		shape = new PolygonShape();
+		((PolygonShape) shape).setAsBox(width/2 * Constants.WORLD_TO_BOX, height/2 * Constants.WORLD_TO_BOX);
+	
+		finish();
+	}
+	
+	private void setCustomBody(float x, float y) {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.StaticBody;
 		bodyDef.position.set(new Vector2(x * Constants.WORLD_TO_BOX, y * Constants.WORLD_TO_BOX));
@@ -30,21 +43,21 @@ public class CustomObstacle {
 		body.setUserData(i);
 	}
 	
-	public CustomObstacle(float x, float y, float width, float height) {
-		this(x + width/2, y + height/2);
-		
-		shape = new PolygonShape();
-		((PolygonShape) shape).setAsBox(width/2 * Constants.WORLD_TO_BOX, height/2 * Constants.WORLD_TO_BOX);
-	
-		finish();
-	}
-	
-	public CustomObstacle(float x, float y, float radius) {
-		this(x, y);
+	public void setCircle(float x, float y, float radius) {
+		setCustomBody(x, y);
 		
 		shape = new CircleShape();
 		((CircleShape) shape).setRadius(radius * Constants.WORLD_TO_BOX);
 		
+		finish();
+	}
+	
+	public void setBox(float x, float y, float width, float height) {
+		setCustomBody(x, y);
+		
+		shape = new PolygonShape();
+		((PolygonShape) shape).setAsBox(width/2 * Constants.WORLD_TO_BOX, height/2 * Constants.WORLD_TO_BOX);
+	
 		finish();
 	}
 	
@@ -56,5 +69,9 @@ public class CustomObstacle {
 		fixtureDef.restitution = 0.6f;
 		
 		body.createFixture(fixtureDef);
+	}
+	
+	public Body getBody(){
+		return this.body;
 	}
 }

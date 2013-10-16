@@ -47,6 +47,8 @@ public class Player implements Creature {
 
 	private boolean isIndoors;
 
+	private boolean recentlyBought=false;
+
 	// TODO Set the variable depending on the weapons arsenal class. What weapon is equipped
 	//These variables will handle the shooting method
 	private boolean readyToFire = true;
@@ -316,5 +318,11 @@ public class Player implements Creature {
 
 	public EquippableItem getEquippedWeapon() {
 		return equippedWeapon;
+	}
+	public boolean getRecentlyBought(){
+		return recentlyBought;
+	}
+	public void setRecentlyBought(boolean value){
+		recentlyBought=value;
 	}
 }

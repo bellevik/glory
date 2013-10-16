@@ -20,6 +20,7 @@ public class EquippableItem {
 	protected int currentClipSize;
 
 	protected Texture texture;
+	protected Texture shopTexture;
 	protected Image icon;
 
 	public EquippableItem(String name, String itemType, float damage, float range, int clipSize, int clips, float fireRate) {
@@ -38,6 +39,7 @@ public class EquippableItem {
 		}
 		
 		texture = new Texture(Gdx.files.internal("data/weapons/" + name + "/" + name + ".png"));
+		shopTexture = new Texture(Gdx.files.internal("data/weapons/" + name + "/shop" + name + ".png"));
 		icon = new Image(texture);
 	}
 
@@ -51,6 +53,10 @@ public class EquippableItem {
 
 	public Texture getTexture() {
 		return texture;
+	}
+	
+	public Texture getShopTexture() {
+		return shopTexture;
 	}
 	
 	public Image getIcon() {

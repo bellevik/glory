@@ -15,7 +15,7 @@ public class Score {
 		case KILL_HUMAN: 
 			currentScore -= 1452;
 		case KILL_ZOMBIE:
-			currentScore += 97;
+			currentScore += 126;
 		case TIME:
 			currentScore += 1;
 		}

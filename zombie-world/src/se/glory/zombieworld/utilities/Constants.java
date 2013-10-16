@@ -18,7 +18,7 @@ public class Constants {
 	
 
 	public static final int INFECTED_INTERVAL = 1500;
-	public static final int INFECTED_DAMAGE = 20;
+	public static final int INFECTED_DAMAGE = 2;
 	public static final int ZOMBIE_DAMAGE = 10;
 	
 	public static GameState gameState = GameState.RUNNING;
@@ -34,7 +34,7 @@ public class Constants {
 	}
 	
 	public static enum MoveableBodyType {
-		PLAYER, HUMAN, ZOMBIE, BULLET, HOUSE, ITEM, WEAPON, DOOR;
+		PLAYER, HUMAN, ZOMBIE, BULLET, HOUSE, ITEM, WEAPON, DOOR, STREETOBJECT;
 	}
 	
 	public static enum TouchpadType {

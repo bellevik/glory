@@ -1,4 +1,4 @@
-package se.glory.zombieworld.model.entities.items;
+package se.glory.zombieworld.model.entities.progressbars;
 
 import se.glory.zombieworld.utilities.Constants;
 
@@ -8,7 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
-public class Healthbar extends Actor{	
+public class ProgressBar extends Actor{
+
 	private Texture texture;
 	private Image actor;
 	
@@ -23,39 +24,41 @@ public class Healthbar extends Actor{
 	private int yMargin = 4;
 	private int fillLength = 3;
 	
-	private HealthFill[] healthBarAmount = null;
-	private HealthFill[] infectedHealthBarAmount = null;
-	private HealthFill[] activeHealthBar;
+	private ProgressFill[] progressBarAmount = null;
 	
 	private Image bgActor, fgActor;
 	
-	
-	public Healthbar(Stage stage){
-		x = ((Constants.VIEWPORT_WIDTH/2) - (310/2));
-		y = (62);
+	public ProgressBar(Stage stage, int x, int y, int xMargin, int yMargin, int fillLength, int maxPercent, Texture bg, Texture fill, Texture fg){
+
+		this.x = x;
+		this.y = y;
+		this.xMargin = xMargin;
+		this.yMargin = yMargin;
+		this.fillLength = fillLength;
+		maxHealthPercent = maxPercent;
 
 		lastHealthPercent = maxHealthPercent;
 		
 		//Creating the background layer
-		texture = new Texture(Gdx.files.internal("img/health/healthBarBottom.png"));
+		texture = bg;
 		bgActor = new Image(texture);
 		
 		stage.addActor(bgActor);
 		bgActor.setPosition(x, y);
 		
 		//Creating both the infected healthbar and the regular one
-		healthBarAmount = new HealthFill[maxHealthPercent];
-		infectedHealthBarAmount = new HealthFill[maxHealthPercent];
+		progressBarAmount = new ProgressFill[maxHealthPercent];
+//		infectedHealthBarAmount = new HealthFill[maxHealthPercent];
 		
 		//Creating all the HealthFills and places them in the array
 		for(int i=0; i<maxHealthPercent; i++) {
 			int newX = i*fillLength+x+xMargin;
-			healthBarAmount[i] = new HealthFill(stage, newX, y+yMargin, i, false);
-			infectedHealthBarAmount[i] = new HealthFill(stage, newX, y+yMargin, i, true);
+			progressBarAmount[i] = new ProgressFill(stage, newX, y+yMargin, i, fill);
+	//		infectedHealthBarAmount[i] = new HealthFill(stage, newX, y+yMargin, i, true);
 		}
 		
 		//Creating a visual layer above the healthbar to work as container.
-		texture = new Texture(Gdx.files.internal("img/health/healthBarTop.png"));
+		texture = fg;
 		fgActor = new Image(texture);
 		
 		stage.addActor(fgActor);
@@ -65,14 +68,22 @@ public class Healthbar extends Actor{
 		resetHealthBar();
 	}
 	
+	public void setVisibility(boolean visibility) {
+		bgActor.setVisible(visibility);
+		for(int i=0; i<maxHealthPercent; i++) {
+			progressBarAmount[i].setVisibility(visibility);
+		}
+		fgActor.setVisible(visibility);
+	}
+	
 	public void updatePosition() {
-		x = ((Constants.VIEWPORT_WIDTH/2) - (310/2));
-		y = (62);
+	//	x = ((Constants.VIEWPORT_WIDTH/2) - (310/2));
+	//	y = (62);
 		bgActor.setPosition(x, y);
 		
 		for(int i=0; i<maxHealthPercent; i++) {
-			healthBarAmount[i].updatePosition();
-			infectedHealthBarAmount[i].updatePosition();
+			progressBarAmount[i].updatePosition();
+//			infectedHealthBarAmount[i].updatePosition();
 		}
 		
 		fgActor.setPosition(x, y);	
@@ -99,9 +110,9 @@ public class Healthbar extends Actor{
 	}
 	
 	public void resetHealthBar() {
-		activeHealthBar = infectedHealthBarAmount;
+//		activeHealthBar = infectedHealthBarAmount;
 		lastHealthPercent = maxHealthPercent;
-		setInfectedState(false);
+//		setInfectedState(false);
 	}
 	
 	public void setHealthPercentGoal(int healthToUpdate) {
@@ -121,33 +132,35 @@ public class Healthbar extends Actor{
 	
 	//Inc and dec are used to slowly change the healthbar
 	private void incHealthBar() {
-		activeHealthBar[lastHealthPercent++].show();
+		progressBarAmount[lastHealthPercent++].show();
 	}
 	
 	private void decHealthBar() {
-		activeHealthBar[--lastHealthPercent].hide();
+		progressBarAmount[--lastHealthPercent].hide();
 	}
 	
 	//Forcing the entire health to update to the chosen percentage. Useful when changing between infected and normal healthBar
-	private void forceHealthUpdate(int newHealth) {
+	public void forceHealthUpdate(int newHealth) {
 		for(int i=0; i<newHealth; i++) {
-			activeHealthBar[i].show();
+			progressBarAmount[i].show();
 		}
 		
 		for(int j=newHealth; j<maxHealthPercent; j++) {
-			activeHealthBar[j].hide();
+			progressBarAmount[j].hide();
 		}
+		lastHealthPercent = newHealth;
+		healthGoal = newHealth;
 	}
 	
 	//Not in use right now. May be removed later
 	public void updateHealth(int healthToUpdate) {
 		if(lastHealthPercent < healthToUpdate) {
 			for(int i=lastHealthPercent; i<healthToUpdate; i++) {
-				activeHealthBar[i].show();
+				progressBarAmount[i].show();
 			}
 		}else{
 			for(int i=lastHealthPercent; i>healthToUpdate; i--) {
-				activeHealthBar[i-1].hide();
+				progressBarAmount[i-1].hide();
 			}
 		}
 		lastHealthPercent = healthToUpdate;
@@ -158,22 +171,22 @@ public class Healthbar extends Actor{
 	 * @param state changes the bar to the colors depending on if it is true or false. It shows if the bar should be in infected
 	 * state or not
 	 */
-	public void setInfectedState(boolean state) {
+	/*public void setInfectedState(boolean state) {
 		//Hiding last active healthBar
 		forceHealthUpdate(0);
 		
-		activeHealthBar = state ? infectedHealthBarAmount : healthBarAmount;
+	//	activeHealthBar = state ? infectedHealthBarAmount : healthBarAmount;
 		forceHealthUpdate(lastHealthPercent);
-	}
+	}*/
 	
-	private class HealthFill {
+	private class ProgressFill {
 		private Texture texture;
 		private Image actor;
 		private float x, y;
 		private int index;
 		
-		public HealthFill(Stage stage, float x, float y, int index, boolean infected) {
-			texture = infected ? new Texture(Gdx.files.internal("img/health/infectedHealthBar.png")) : new Texture(Gdx.files.internal("img/health/healthBar.png"));
+		private ProgressFill(Stage stage, float x, float y, int index, Texture texture) {
+			this.texture = texture;
 			this.x = x;
 			this.y = y;
 			this.index = index;
@@ -181,6 +194,10 @@ public class Healthbar extends Actor{
 			
 			stage.addActor(actor);
 			actor.setPosition(x, y);
+		}
+		
+		private void setVisibility(boolean visibility) {
+			actor.setVisible(visibility);
 		}
 		
 		private void updatePosition() {
