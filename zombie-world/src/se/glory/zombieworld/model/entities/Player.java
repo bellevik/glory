@@ -35,29 +35,29 @@ public class Player implements Creature {
 
 	private Body body;
 	private BodyDef bodyDef;
-	
+
 	// The currently-selected weapon
 	private int currentItem;
-	
+
 	private Animation animation;
-	
+
 	private boolean isIndoors;
-	
+
 	// TODO Set the variable depending on the weapons arsenal class. What weapon is equipped
 	//These variables will handle the shooting method
 	private boolean readyToFire = true;
-	
+
 	private float health;
 	private float maxHealth;
 	private UtilityTimer infectedHealth = null;
 	private EquippableItem equippedWeapon = null;
 
 	public static boolean emptyClip;
-	
+
 	public Player (float x, float y, float width, float height) {
 		this.width = width;
 		this.height = height;
-		
+
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;
 		bodyDef.position.set(new Vector2(x * Constants.WORLD_TO_BOX, y * Constants.WORLD_TO_BOX));
@@ -78,43 +78,53 @@ public class Player implements Creature {
 		identity.setWidth(width);
 		identity.setHeight(height);
 		identity.setType(Constants.MoveableBodyType.PLAYER);
-		
+
 		//setObj needed for drawing the animation of the player in GameView
 		identity.setObj(this);
 
 		body.setUserData(identity);
-		
+
 		body.setFixedRotation(true);
-		
+
 		maxHealth = health = 100;
 		//quickSwapList.size = 5;
 	}
-	
+
 	/*
 	 * This method will add an Item to the item list. If it fails it
 	 * will return false. If it succeeds it will return true. The size of this
 	 * inventory will be set to 5 slots
 	 */
-	public boolean addItemToQuickSwap(EquippableItem item) {
+	public void addItemToQuickSwap(EquippableItem item) {
 		//Loops through the array and checks if its room for an item. If its room it adds tot he array.
 		//otherwise return false
+		boolean addedToQuickSelection = false;
+
 		for (int i = 0; i < StageModel.quickSelection.getNumberOfContainers(); i++) {
 			//If the position is empty and the item doesn't exists in the quickswaplist, add a new item to the list
 			if (StageModel.quickSelection.getCurrentItem(i) == null && !StageModel.quickSelection.existsInList(item) && 
 					!StageModel.itemView.existsInList(item)) {
 				StageModel.quickSelection.newItem(i, item);
 				updateQuickSelectionImages();
-				return true;
+				addedToQuickSelection = true;
 			} else if (StageModel.quickSelection.getCurrentItem(i) != null) {
 				if(StageModel.quickSelection.getCurrentItem(i).getItemName().equals(item.getItemName())) {
 					StageModel.quickSelection.getCurrentItem(i).addClip(2);
 					emptyClip = false;
+					addedToQuickSelection = true;
 				}
 			}
 		}
-		return false;
+
+		if(!addedToQuickSelection) {
+			for(int i = 0; i < StageModel.itemView.getNumberOfContainers(); i++) {
+				
+			}
+		}
+
+
 	}
-	
+
 	/*
 	 * This method will change the images shown on the UI. This will be done every time
 	 * the user picks up new loot (retrieves new items). 
@@ -126,7 +136,7 @@ public class Player implements Creature {
 			}
 		}
 	}
-	
+
 	/*
 	 * This method is called every render update from the quickSelection class.
 	 * The int pos is the position of the quickSelection UI that is selected.
@@ -145,6 +155,13 @@ public class Player implements Creature {
 	}
 	
 	/*
+	 * Removes the equipped weapon
+	 */
+	public void removeEquipedWeapon() {
+		equippedWeapon = null;
+	}
+
+	/*
 	 * This method will fire a shot everytime the boolean readyToFire is set to true. Right after
 	 * the player fired a bullet the boolean will be set to false for a specific amount of time.
 	 * This time will be different depending on what weapon is equipped. The reloadTime is the
@@ -157,28 +174,28 @@ public class Player implements Creature {
 			readyToFire = false;
 			//It will take realoadTime seconds to set the boolean to true again
 			Timer.schedule(new Task(){
-			    @Override
-			    public void run() {
-			    	readyToFire = true;
-			    }
+				@Override
+				public void run() {
+					readyToFire = true;
+				}
 			}, equippedWeapon.getFireRate());
 		}	
 	}
-	
+
 	/*
 	 * First we calculate the angle. Then we create a bullet with a constant velocity
 	 * to be fired at the angle we calculated
 	 */
 	public void fireBullet() {
 		float rot = (float) (body.getTransform().getRotation());
-        float xAngle = MathUtils.cos(rot);
-        float yAngle = MathUtils.sin(rot);
-		
-        //14 here is to create the bullet a fix distance from the weapon
+		float xAngle = MathUtils.cos(rot);
+		float yAngle = MathUtils.sin(rot);
+
+		//14 here is to create the bullet a fix distance from the weapon
 		new Bullet(body.getPosition().x + 14 * xAngle * Constants.WORLD_TO_BOX, body.getPosition().y + 14 * yAngle * Constants.WORLD_TO_BOX, xAngle, yAngle, equippedWeapon.getDamage(), equippedWeapon.getRange());
 
 	}
-	
+
 	/*
 	 * This method will choose weather to rotate the player according to the Fire-Joystick
 	 * or the Movement-Joystick. The three cases in order are: if only the movement joystick
@@ -194,7 +211,7 @@ public class Player implements Creature {
 			rotatePlayer(fireKnobX, fireKnobY);
 		}
 	}
-	
+
 	/*
 	 * This method will actually rotate the player according to the angle received
 	 * from the joysticks. The float knobDegree will be the angle of the Joystick.
@@ -203,34 +220,34 @@ public class Player implements Creature {
 	 */
 	public void rotatePlayer (float knobX, float knobY) {
 		float knobDegree;
-		
+
 		if (knobY >= 0) {
 			knobDegree = (int) (Math.acos(knobX) * MathUtils.radiansToDegrees);
 		} else {
 			knobDegree = -(int) (Math.acos(knobX) * MathUtils.radiansToDegrees);
 		}
-		
+
 		WorldModel.player.getBody().setTransform(WorldModel.player.getBody().getPosition(), knobDegree * MathUtils.degreesToRadians);
 	}
-	
+
 	public float getHealth() {
 		return health;
 	}
-	
+
 	public int getHealthPercentage() {
 		return (int)((health*100)/maxHealth);
 	}
-	
+
 	public void changeHealth(float healthChange) {	
 		//Remove infected status if getting healed
 		if(healthChange >= 0 && infectedHealth != null) {
 			StageModel.healthBar.setInfectedState(false);
 			infectedHealth = null;
 		}
-		
+
 		//Add or remove health depending on the change
 		health += healthChange;
-		
+
 		//Set health to 0 if it is less than 0 and to maxHealth if going above it
 		if(health<0) {
 			health = 0;
@@ -238,25 +255,25 @@ public class Player implements Creature {
 			health = maxHealth;
 		}
 	}
-	
+
 	public float getMaxHealth() {
 		return maxHealth;
 	}
-	
+
 	public UtilityTimer getInfectedHealthTimer() {
 		return infectedHealth;
 	}
-	
+
 	public void infect() {
 		infectedHealth = new UtilityTimer(Constants.INFECTED_INTERVAL);
 		StageModel.healthBar.setInfectedState(true);
 	}
-	
+
 	public void kill() {
-	//	(Identity)player.getBody().getUserData();
+		//	(Identity)player.getBody().getUserData();
 		((Identity)this.getBody().getUserData()).setDead(true);
 	}
-	
+
 	@Override
 	public float getTileX() {
 		return (getBody().getPosition().x * Constants.BOX_TO_WORLD - width)/16;
@@ -266,23 +283,23 @@ public class Player implements Creature {
 	public float getTileY() {
 		return (getBody().getPosition().y * Constants.BOX_TO_WORLD - height)/16;
 	}
-	
+
 	@Override
 	public Body getBody() {
 		return body;
 	}
-	
+
 	public Animation getAnimation() {
 		return this.animation;
 	}
-	
+
 	public void setIsIndoors(boolean isIndoors) {
 		this.isIndoors=isIndoors;
 	}
 	public boolean getIsIndoors() {
 		return this.isIndoors;
 	}
-		
+
 	@Override
 	public boolean isMoving() {
 		return getBody().getLinearVelocity().len() != 0;

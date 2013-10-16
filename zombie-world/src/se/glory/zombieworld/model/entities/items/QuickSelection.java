@@ -79,7 +79,6 @@ public class QuickSelection {
 	 */
 	public void newItem(int index, EquippableItem item) {
 		itemContainers[index].newItem(item);
-		//System.out.println(itemContainers[0].isTouched());
 	}
 	
 	/*
@@ -224,5 +223,8 @@ public class QuickSelection {
 			}
 		}
 		
+		if(selection < 5 && itemContainers[selection].getItem() == null) {
+			WorldModel.player.removeEquipedWeapon();
+		}
 	}
 }

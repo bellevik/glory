@@ -46,13 +46,16 @@ public class ItemView {
 		selection = new CurrentSelection(stage, itemContainers[0].getBackground().getX(), itemContainers[0].getBackground().getY(), false);
 	}
 	
+	public int getNumberOfContainers() {
+		return itemContainers.length;
+	}
+	
 	/*
 	 * Checks if an item exists in the list
 	 */
 	public boolean existsInList(EquippableItem item) {
 		boolean exists = false;
 		for(int i = 0; i < itemContainers.length; i++) {
-			System.out.println(i);
 			if(itemContainers[i].getItem() != null) {
 				if(itemContainers[i].getItem().getItemName().equals(item.getItemName())) {
 					exists = true;
