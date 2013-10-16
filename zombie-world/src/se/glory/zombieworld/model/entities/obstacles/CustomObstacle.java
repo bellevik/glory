@@ -2,6 +2,8 @@ package se.glory.zombieworld.model.entities.obstacles;
 
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.utilities.Constants;
+import se.glory.zombieworld.utilities.Constants.MoveableBodyType;
+import se.glory.zombieworld.utilities.Identity;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -22,6 +24,10 @@ public class CustomObstacle {
 		bodyDef.position.set(new Vector2(x * Constants.WORLD_TO_BOX, y * Constants.WORLD_TO_BOX));
 		
 		body = WorldModel.world.createBody(bodyDef);
+		
+		Identity i = new Identity();
+		i.setType(Constants.MoveableBodyType.HOUSE);
+		body.setUserData(i);
 	}
 	
 	public CustomObstacle(float x, float y, float width, float height) {
