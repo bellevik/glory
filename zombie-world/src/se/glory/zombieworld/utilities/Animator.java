@@ -14,29 +14,36 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  * the screen.
  */
 public class Animator {
-	private final int FRAME_COLS = 4;
-	private final int FRAME_ROWS = 8;
-	private final float walkSpeed = 1.525f;
+	// Rows and columns for the characters animations
+	private final int CHAR_FRAME_COLS = 4;
+	private final int CHAR_FRAME_ROWS = 8;
 	
-	int col = 4;
-	int row = 3;
+	// Rows and columns for the door animations
+	private final int DOOR_FRAME_COLS = 4;
+	private final int DOOR_FRAME_ROWS = 3;
 	
-	private final float openingSpeed = 0.325f;
+	// Animation speeds
+	private final float WALKSPEED = 1.525f;
+	private final float OPENINGSPEED = 0.385f;
+	private final float ROTATESPEED = 0.2f;
 	
 	private Texture spriteSheet;
 	private TextureRegion currentFrame;
-	private TextureRegion[] frames, doorFrames;
+	private TextureRegion[] frames;
 	
 	private float stateTimer;
 	
+	// Arrays for all animations
 	private Animation[] humanAnimations = new Animation[8];
 	private Animation[] playerAnimations = new Animation[8];
 	private Animation[] zombieAnimations = new Animation[8];
-	
-	private Animation loot;
 	private Animation[] doorAnimations = new Animation[3];
+	//private Animation[] weaponLootAnimations = new Animation[];
 	
-	private Animation closedDoor;
+	private Texture closedDoor;
+	private Animation weaponLoot;
+	
+	private String character = "character", door = "door", weapon = "weapon";
 	
 	/*
 	 * Creates all animations for all types of creatures. This will speed up the game
@@ -45,38 +52,30 @@ public class Animator {
 	public Animator() {
 		//Creating human animation
 		for (int i = 0; i< humanAnimations.length;i++){
-			humanAnimations[i] = createAnimation("humanSheet.png", i);
+			humanAnimations[i] = createAnimation("humanSheet.png", character, i);
 		}
 		//Creating player animation
 		for (int i = 0; i< playerAnimations.length;i++){
-			playerAnimations[i] = createAnimation("playerSheet.png", i);
+			playerAnimations[i] = createAnimation("playerSheet.png", character, i);
 		}
 		//Creating zombie animation
 		for (int i = 0; i< zombieAnimations.length;i++){
-			zombieAnimations[i] = createAnimation("zombieSheet.png", i);
+			zombieAnimations[i] = createAnimation("zombieSheet.png", character, i);
 		}
 		for (int i = 0; i < doorAnimations.length; i++){
-			doorAnimations[i] = createDoorAnimation("doorSheet.png", i);
+			doorAnimations[i] = createAnimation("doorSheet.png", door, i);
 		}
-		loot = createWeaponLootAnimation("AKSheet66.png");
+		// TODO: Ekman får fixa med weaponsloot animationerna
+		
+		/*for (int i = 0; i < weaponLootAnimations.length; i++){
+			weaponLootAnimations[i] = createAnimation("AKSheet66.png", weapon, i);
+		}*/
+		weaponLoot = createAnimation("AKSheet66.png", weapon, 0);
 		
 	}
 	
-	public Animation getLootAnimation() {
-		return loot;
-	}
-	public void createDoorAnimation(){
-		//Creating door animation
-		for (int i = 0; i<2;i++){
-			doorAnimations[i] = createDoorAnimation("doorSheet.png", i);
-		}
-	}
-	public Animation getClosedDoor(){
+	public Texture getClosedDoor(){
 		return closedDoor;
-	}
-	
-	public Animation getDoorAnimation(int i){
-		return doorAnimations[i];
 	}
 	
 	/*
@@ -89,182 +88,82 @@ public class Animator {
 			return playerAnimations[i];
 		}else if (type == MoveableBodyType.ZOMBIE){
 			return zombieAnimations[i];
+		}else if (type == MoveableBodyType.DOOR){
+			return doorAnimations[i];
+		}else if (type == MoveableBodyType.WEAPON){
+			return weaponLoot;
 		}else{
 			return null;
 		}
-	}
-	
-
-	private Animation createWeaponLootAnimation(String fileName) {
-		Animation animation = null;
-		
-		spriteSheet = new Texture(Gdx.files.internal("img/" + fileName));
-		int col = spriteSheet.getWidth() / 64;
-		int row = spriteSheet.getHeight() / 64;
-		
-		TextureRegion[][] tmp = TextureRegion.split(spriteSheet, spriteSheet.getWidth() / col, spriteSheet.getHeight() / row);
-		
-		frames = new TextureRegion[row * col];
-		
-		int index = 0;
-		
-		for (int i = 0; i < row ; i++) {
-			for (int j = 0; j < col; j++) {
-				frames[index++] = tmp[i][j];
-			}
-			//Parameters (update speed, array of TextureRegions to make an animation
-			animation = new Animation(1f, frames);
-		}
-		return animation;
-	}
-	private Animation createDoorAnimation(String fileName, int type){
-		Animation animation = null;
-		
-		//Loading the spritesheet
-		spriteSheet = new Texture(Gdx.files.internal("img/" + fileName));
-		//Dividing the spritesheet into regions with an image in each frame
-		TextureRegion[][] tmp = TextureRegion.split(spriteSheet, spriteSheet.getWidth() / col, spriteSheet.getHeight() / row);
-		
-		doorFrames = new TextureRegion[col];
-		
-		int index = 0;
-		
-		closedDoor = new Animation(walkSpeed, tmp[2][0]);
-
-		switch(type){
-		case 0:
-			for (int i = 0; i < 1 ; i++) {
-				for (int j = 0; j < col; j++) {
-					doorFrames[index++] = tmp[i][j];
-				}
-				//Parameters (update speed, array of TextureRegions to make an animation
-				animation = new Animation(openingSpeed, doorFrames);
-				index = 0;
-			};;
-		case 1:
-			for (int i = 1; i < 2 ; i++) {
-				for (int j = 0; j < col; j++) {
-					doorFrames[index++] = tmp[i][j];
-				}
-				//Parameters (update speed, array of TextureRegions to make an animation
-				animation = new Animation(openingSpeed, doorFrames);
-				index = 0;
-			};;
-		case 2:
-			for (int i = 2; i < 3 ; i++) {
-				for (int j = 0; j < col; j++) {
-					doorFrames[index++] = tmp[i][j];
-				}
-				//Parameters (update speed, array of TextureRegions to make an animation
-				animation = new Animation(openingSpeed, doorFrames);
-				index = 0;
-			};;
-		}
-		return animation;
 	}
 	
 	/*
 	 * Creates an animation depending on the filename and direction passed along.
 	 * Returns the created animation.
 	 */
-	private Animation createAnimation(String fileName, int direction) {
+	public Animation createAnimation (String fileName, String type, int direction){
 		Animation animation = null;
 		
 		//Loading the spritesheet
 		spriteSheet = new Texture(Gdx.files.internal("img/" + fileName));
-		//Dividing the spritesheet into regions with an image in each frame
-		TextureRegion[][] tmp = TextureRegion.split(spriteSheet, spriteSheet.getWidth() / FRAME_COLS, spriteSheet.getHeight() / FRAME_ROWS);
-
-		//Specifiying number of images in the array that will be animated
-		frames = new TextureRegion[FRAME_COLS];
 
 		int index = 0;
-		//Creating different animations depending which direction the player is facing
-		switch (direction){
-		//Returns an animation facing east
-		case 0:
-			for (int i = 0; i < 1 ; i++) {
-				for (int j = 0; j < FRAME_COLS; j++) {
+
+		if(type.equals(character)){
+			
+			//Dividing the spritesheet into regions with an image in each frame
+			TextureRegion[][] tmp = TextureRegion.split(spriteSheet, spriteSheet.getWidth() / CHAR_FRAME_COLS, spriteSheet.getHeight() / CHAR_FRAME_ROWS);
+
+			//Specifiying number of images in the array that will be animated
+			frames = new TextureRegion[CHAR_FRAME_COLS];
+			
+			//Creates different animations depending on the direction
+			for (int i = 0; i < CHAR_FRAME_COLS; i++) {
+				frames[index++] = tmp[direction][i];
+			}
+			//Parameters (update speed, array of TextureRegions to make an animation)
+			animation = new Animation(WALKSPEED, frames);
+			index = 0;
+			
+		}else if(type.equals(door)){
+			
+			//Dividing the spritesheet into regions with an image in each frame
+			TextureRegion[][] tmp = TextureRegion.split(spriteSheet, spriteSheet.getWidth() / DOOR_FRAME_COLS, spriteSheet.getHeight() / DOOR_FRAME_ROWS);
+			
+			//Specifiying number of images in the array that will be animated
+			frames = new TextureRegion[DOOR_FRAME_COLS];
+			
+			//Creates the animation for a closed door
+			closedDoor = new Texture("img/closedDoor_" + direction + ".png");
+			
+			//Creates different animations depending on the door type
+			for (int i = 0; i < DOOR_FRAME_COLS; i++) {
+				frames[index++] = tmp[direction][i];
+			}
+			//Parameters (update speed, array of TextureRegions to make an animation)
+			animation = new Animation(OPENINGSPEED, frames);
+			index = 0;
+			
+		}else if(type.equals(weapon)){
+			
+			int col = spriteSheet.getWidth() / 64;
+			int row = spriteSheet.getHeight() / 64;
+			
+			TextureRegion[][] tmp = TextureRegion.split(spriteSheet, spriteSheet.getWidth() / col, spriteSheet.getHeight() / row);
+			
+			frames = new TextureRegion[row * col];
+			
+			for (int i = 0; i < row ; i++) {
+				for (int j = 0; j < col; j++) {
 					frames[index++] = tmp[i][j];
 				}
-				//Parameters (update speed, array of TextureRegions to make an animation
-				animation = new Animation(walkSpeed, frames);
-			};
-			return animation;
-		//Returns an animation facing northeast
-		case 1:
-			for (int i = 1; i < 2 ; i++) {
-				for (int j = 0; j < FRAME_COLS; j++) {
-					frames[index++] = tmp[i][j];
-				}
-				//Parameters (update speed, array of TextureRegions to make an animation
-				animation = new Animation(walkSpeed, frames);
-			};
-			return animation;
-		//Returns an animation facing north
-		case 2:
-			for (int i = 2; i < 3 ; i++) {
-				for (int j = 0; j < FRAME_COLS; j++) {
-					frames[index++] = tmp[i][j];
-				}
-				//Parameters (update speed, array of TextureRegions to make an animation
-				animation = new Animation(walkSpeed, frames);
-			};
-			return animation;
-		//Returns an animation facing northwest
-		case 3:
-			for (int i = 3; i < 4 ; i++) {
-				for (int j = 0; j < FRAME_COLS; j++) {
-					frames[index++] = tmp[i][j];
-				}
-				//Parameters (update speed, array of TextureRegions to make an animation
-				animation = new Animation(walkSpeed, frames);
-			};
-			return animation;
-		//Returns an animation facing west
-		case 4:
-			for (int i = 4; i < 5 ; i++) {
-				for (int j = 0; j < FRAME_COLS; j++) {
-					frames[index++] = tmp[i][j];
-				}
-				//Parameters (update speed, array of TextureRegions to make an animation
-				animation = new Animation(walkSpeed, frames);
-			};
-			return animation;
-		//Returns an animation facing southwest
-		case 5:
-			for (int i = 5; i < 6 ; i++) {
-				for (int j = 0; j < FRAME_COLS; j++) {
-					frames[index++] = tmp[i][j];
-				}
-				//Parameters (update speed, array of TextureRegions to make an animation
-				animation = new Animation(walkSpeed, frames);
-			};
-			return animation;
-		//Returns an animation facing south
-		case 6:
-			for (int i = 6; i < 7 ; i++) {
-				for (int j = 0; j < FRAME_COLS; j++) {
-					frames[index++] = tmp[i][j];
-				}
-				//Parameters (update speed, array of TextureRegions to make an animation
-				animation = new Animation(walkSpeed, frames);
-			};
-			return animation;
-		//Returns an animation facing southeast
-		case 7:
-			for (int i = 7; i < 8 ; i++) {
-				for (int j = 0; j < FRAME_COLS; j++) {
-					frames[index++] = tmp[i][j];
-				}
-				//Parameters (update speed, array of TextureRegions to make an animation
-				animation = new Animation(walkSpeed, frames);
-			};
-			return animation;
-		//If the direction doesn't exist , returns null
-		default:
-			return null;
+			}
+			//Parameters (update speed, array of TextureRegions to make an animation)
+			animation = new Animation(ROTATESPEED, frames);
+			index = 0;
+			
 		}
+		return animation;
 	}
 	
 	/*
@@ -272,7 +171,7 @@ public class Animator {
 	 */
 	public void drawAnimation(SpriteBatch batch, float x, float y, Animation ani, boolean isLooping){
 
-		//stateTime = the time spent in the state represented by this animation
+		//stateTimer = the time spent in the state represented by this animation
         stateTimer += Gdx.graphics.getDeltaTime();
         
         if(Constants.gameState == Constants.GameState.RUNNING) {

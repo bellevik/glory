@@ -13,6 +13,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -200,7 +201,7 @@ public class GameView {
 							animator.drawAnimation(batch, body.getPosition().x, body.getPosition().y, ani, ((Creature)identity.getObj()).isMoving());
 						}
 					} else if (identity.getObj() instanceof WeaponLoot) {
-						animator.drawAnimation(batch, body.getPosition().x, body.getPosition().y, animator.getLootAnimation(), true);
+						animator.drawAnimation(batch, body.getPosition().x, body.getPosition().y, animator.getAnimation(MoveableBodyType.WEAPON, 0), true);
 					}
 			}
 		}
@@ -208,20 +209,32 @@ public class GameView {
 		WorldModel.drawableBodies.clear();
 	}
 	
+	/*
+	 * Draws the animation of an door opening when the player is 
+	 * entering or exiting a house
+	 */
 	public void animateDoor(){
 		Animation animation = null;
-		Animation closedDoor = null;
+		Texture closedDoor = null;
 		
-		animation = animator.getDoorAnimation(0);
+		// Gets the animation for an opening door
+		animation = animator.getAnimation(MoveableBodyType.DOOR, 2);
+		// Gets the texture for a closed door
 		closedDoor = animator.getClosedDoor();
 		
+		// TODO : Fix x- and y-values for the door
 		if (animation != null){
 			if(isOpen.equals("opening")){
+				// Draw an animation of an opening door
 				animator.drawAnimation(batch, 7.35f, 5.7799997f, animation, true);
 			} else if(isOpen.equals("open")){
+				// Draw an animation of a completely open door
 				animator.drawAnimation(batch, 7.35f, 5.7799997f, animation, false);
 			} else if(isOpen.equals("closed")) {
-				animator.drawAnimation(batch,  7.35f, 5.7799997f, closedDoor, true);
+				// Draw a texture of a closed door
+				batch.begin();
+				batch.draw(closedDoor, 7.35f*Constants.BOX_TO_WORLD - closedDoor.getWidth()/2, 5.7799997f*Constants.BOX_TO_WORLD - closedDoor.getHeight()/2 );
+				batch.end();
 			}
 		}
 	}
