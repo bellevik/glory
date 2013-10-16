@@ -260,7 +260,7 @@ public class Player implements Creature {
 		}
 		
 		//When the player dies you will get to the game over screen and type in your name
-		if (health == 0) {
+		if (health == 0 && !Constants.DEBUG_MODE) {
 			((Game) Gdx.app.getApplicationListener()).setScreen(new GameOverScreen());
 		}
 	}
