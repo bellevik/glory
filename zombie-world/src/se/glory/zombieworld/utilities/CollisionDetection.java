@@ -202,6 +202,12 @@ public class CollisionDetection implements ContactListener {
 			h.changeHealth(-bulletDamage);
 			
 		}
+		
+		if (i1.getType() == Constants.MoveableBodyType.BULLET || i2.getType() == Constants.MoveableBodyType.BULLET) {
+			Identity bulletIdentity = i1.getType() == Constants.MoveableBodyType.BULLET ? i1 : i2;
+			bulletIdentity.setDead(true);
+		}
+		
 	}
 
 	@Override
