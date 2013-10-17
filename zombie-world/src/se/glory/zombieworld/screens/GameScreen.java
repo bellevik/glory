@@ -90,6 +90,7 @@ public class GameScreen implements Screen {
 		StageModel.stage.act(delta);
 		StageModel.stage.draw();
 
+		// Play a random sound effect
 		if (random.nextFloat() * 1500 < 5)
 			soundPlayer.playRandomSoundEffect();
 

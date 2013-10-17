@@ -3,6 +3,8 @@ package se.glory.zombieworld.model;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.badlogic.gdx.math.Vector2;
+
 import se.glory.zombieworld.model.entities.Creature;
 import se.glory.zombieworld.model.entities.Human;
 import se.glory.zombieworld.model.entities.Zombie;
@@ -65,8 +67,67 @@ public class AIModel {
 		turnHumansToZombie();
 		clearZombies();
 		
-		updateHumans();
-		updateZombies();
+		updateHumansDumb();
+		updateZombiesDumb();
+	}
+	
+	private void updateHumansDumb() {
+		for (Human h : humans) {
+			float totX = 0;
+			float totY = 0;
+			
+			for (Zombie z : zombies) {
+				float tmpX = h.getBody().getPosition().x - z.getBody().getPosition().x;
+				float tmpY = h.getBody().getPosition().y - z.getBody().getPosition().y;
+				
+				double size = Math.sqrt(tmpX * tmpX + tmpY * tmpY);
+				
+				// Range 2.0
+				if (size < 2.0) {
+					double distance = 2.0 - size;
+					
+					tmpX /= (size/distance);
+					tmpY /= (size/distance);
+					
+					totX += tmpX;
+					totY += tmpY;
+				}
+			}
+			
+			// If any zombie are nearby, flee
+			if (totX + totY != 0) {
+				double size = Math.sqrt(totX * totX + totY * totY);
+				
+				totX /= size;
+				totY /= size;
+				
+				float angle = (float) Math.atan(totY/totX);
+				
+				if (totX < 0)
+					angle = angle - (float) Math.PI;
+				
+				h.getBody().setTransform(h.getBody().getPosition(), angle);		
+				h.getBody().setLinearVelocity(totX, totY);
+				h.setState(Human.State.FLEEING);
+			} else {
+				// If the human just got away form a zombie, set its state to idle.
+				if (h.getState() == Human.State.FLEEING)
+					h.setState(Human.State.IDLE);
+				
+				if (h.getState() == Human.State.IDLE) {
+					Random generator = new Random();
+					
+					int distance = generator.nextInt(200);
+					Vector2 direction = new Vector2(0,1);
+					direction.setAngle(generator.nextInt(360));
+					
+					h.setState(Human.State.DUMB_AI);
+					h.setCollidingInfo(direction, distance);
+				}
+				
+				h.walk();
+			}
+		}
 	}
 	
 	private void updateHumans() {
@@ -142,44 +203,49 @@ public class AIModel {
 		}
 	}
 	
-	private void updateHumanHealth(Human h) {
-		UtilityTimer infectedHealthTimer = h.getInfectedHealthTimer();
-		
-		if(infectedHealthTimer != null && infectedHealthTimer.isDone()) {
-			h.changeHealth(-Constants.INFECTED_DAMAGE);
-			infectedHealthTimer.resetTimer();
-			System.out.println(h.getHealth());
-		}
-		
-		if(h.getHealth() == 0) {
-			deadHumans.add(h);
-		}
-	}
-	
-	private void checkZombieHealth(Zombie z) {
-		if(z.getHealth() == 0) {
-			deadZombies.add(z);
-		}
-	}
-	
-	private void turnHumansToZombie() {
-		for (Human h : deadHumans) {
-			float xPos = h.getBody().getPosition().x/Constants.WORLD_TO_BOX;
-			float yPos = h.getBody().getPosition().y/Constants.WORLD_TO_BOX;
-			removeHuman(h);
-			if(h.getInfectedHealthTimer() != null) {
-				addZombie(xPos, yPos);
+	private void updateZombiesDumb() {
+		for (Zombie z : zombies) {
+			Creature closestTarget = getClosestTarget(z);
+			
+			// If any humans are nearby, chase
+			if (closestTarget != null) {
+				float tmpX = closestTarget.getBody().getPosition().x - z.getBody().getPosition().x;
+				float tmpY = closestTarget.getBody().getPosition().y - z.getBody().getPosition().y;
+				
+				double size = Math.sqrt(tmpX*tmpX+tmpY*tmpY);
+				
+				tmpX /= size * 1.2;
+				tmpY /= size * 1.2;
+				
+				float angle = (float) Math.atan(tmpY/tmpX);
+				
+				if (tmpX < 0)
+					angle = angle - (float)Math.PI;
+				
+				z.getBody().setTransform(z.getBody().getPosition(), angle);	
+				z.getBody().setLinearVelocity(tmpX, tmpY);
+				z.setState(Zombie.State.CHASING);
+			} else {
+				// If the zombie just ended chasing a human, set its state to idle.
+				if (z.getState() == Zombie.State.CHASING)
+					z.setState(Zombie.State.IDLE);
+				
+				if (z.getState() == Zombie.State.IDLE) {
+					Random generator = new Random();
+					
+					int distance = generator.nextInt(200);
+					Vector2 direction = new Vector2(0,1);
+					direction.setAngle(generator.nextInt(360));
+					
+					z.setState(Zombie.State.DUMB_AI);
+					z.setCollidingInfo(direction, distance);
+				}
+				
+				z.walk();
 			}
+			
+			checkZombieHealth(z);
 		}
-		
-		deadHumans.clear();
-	}
-	
-	private void clearZombies() {
-		for (Zombie z : deadZombies) {
-			removeZombie(z);
-		}
-		deadZombies.clear();
 	}
 	
 	private void updateZombies() {
@@ -235,6 +301,46 @@ public class AIModel {
 		}
 	}
 	
+	private void updateHumanHealth(Human h) {
+		UtilityTimer infectedHealthTimer = h.getInfectedHealthTimer();
+		
+		if(infectedHealthTimer != null && infectedHealthTimer.isDone()) {
+			h.changeHealth(-Constants.INFECTED_DAMAGE);
+			infectedHealthTimer.resetTimer();
+			System.out.println(h.getHealth());
+		}
+		
+		if(h.getHealth() == 0) {
+			deadHumans.add(h);
+		}
+	}
+	
+	private void checkZombieHealth(Zombie z) {
+		if(z.getHealth() == 0) {
+			deadZombies.add(z);
+		}
+	}
+	
+	private void turnHumansToZombie() {
+		for (Human h : deadHumans) {
+			float xPos = h.getBody().getPosition().x/Constants.WORLD_TO_BOX;
+			float yPos = h.getBody().getPosition().y/Constants.WORLD_TO_BOX;
+			removeHuman(h);
+			if(h.getInfectedHealthTimer() != null) {
+				addZombie(xPos, yPos);
+			}
+		}
+		
+		deadHumans.clear();
+	}
+	
+	private void clearZombies() {
+		for (Zombie z : deadZombies) {
+			removeZombie(z);
+		}
+		deadZombies.clear();
+	}
+	
 	private Creature getClosestTarget(Zombie z) {
 		double distance = Double.MAX_VALUE;
 		Creature closestTarget = null;
@@ -246,7 +352,7 @@ public class AIModel {
 			double size = Math.sqrt(tmpX * tmpX + tmpY * tmpY);
 			
 			// Range and closest
-			if (size < 1.5 && size < distance) {
+			if (size < 2.5 && size < distance) {
 				closestTarget = h;
 				distance = size;
 			}
@@ -259,7 +365,7 @@ public class AIModel {
 		double size = Math.sqrt(tmpX * tmpX + tmpY * tmpY);
 		
 		// Range and closest
-		if (size < 1.5 && size < distance) {
+		if (size < 2.5 && size < distance) {
 			closestTarget = WorldModel.player;
 		}
 		

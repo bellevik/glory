@@ -31,6 +31,22 @@ public class Human extends MoveableBody implements Creature {
 	}
 	
 	public void walk() {
+		if (state == State.DUMB_AI || state == State.COLLIDING) {
+			float angle = (float) Math.atan(collidingDirection.y/collidingDirection.x);
+			
+			if (collidingDirection.x < 0)
+				angle = angle - (float) Math.PI;
+			
+			getBody().setLinearVelocity(collidingDirection.x, collidingDirection.y);
+			getBody().setTransform(getBody().getPosition(), angle);
+			
+			collidingNumber--;
+			if (collidingNumber < 1)
+				state = State.IDLE;
+		}
+	}
+	
+	/*public void walk() {
 		// Check if in colliding state, if so, walk according to the calculated direction
 		if (state == State.COLLIDING) {
 			float angle = (float) Math.atan(collidingDirection.y/collidingDirection.x);
@@ -78,7 +94,7 @@ public class Human extends MoveableBody implements Creature {
 		} else {
 			setState(State.IDLE);
 		}
-	}
+	}*/
 
 	public State getState() {
 		return state;
@@ -89,6 +105,6 @@ public class Human extends MoveableBody implements Creature {
 	}
 	
 	public enum State {
-		FLEEING, WALKING, IDLE, COLLIDING;
+		FLEEING, WALKING, IDLE, COLLIDING, DUMB_AI;
 	}
 }

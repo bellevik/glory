@@ -33,8 +33,8 @@ public class CollisionDetection implements ContactListener {
 			return;
 		}
 		
-		// If two humans collide, fix this. TODO: Refactor, use same code for zombies.
-		if (i1.getType() == Constants.MoveableBodyType.HUMAN && i2.getType() == Constants.MoveableBodyType.HUMAN) {
+		// If two humans collide, fix this.
+		/*if (i1.getType() == Constants.MoveableBodyType.HUMAN && i2.getType() == Constants.MoveableBodyType.HUMAN) {
 			// Make the first human turn to his right for 15 updates
 			Human h1 = (Human) i1.getObj();
 			Vector2 h1v = h1.getBody().getLinearVelocity().cpy().rotate(90);	
@@ -52,29 +52,31 @@ public class CollisionDetection implements ContactListener {
 				h2.setState(Human.State.COLLIDING);
 				h2.setCollidingInfo(h2v, 15);
 			}
-		}
+		}*/
 		
-		// If two zombies collide, fix this. TODO: Refactor, use same code as for humans.
-		if (i1.getType() == Constants.MoveableBodyType.ZOMBIE && i2.getType() == Constants.MoveableBodyType.ZOMBIE) {
-			// Make the first zombie turn to his right for 15 updates
-			Zombie z1 = (Zombie) i1.getObj();
-			Vector2 z1v = z1.getBody().getLinearVelocity().cpy().rotate(90);	
-			
-			if (z1.getState() != Zombie.State.COLLIDING) {
-				z1.setState(Zombie.State.COLLIDING);
-				z1.setCollidingInfo(z1v, 15);
+		if (i1.getType() == Constants.MoveableBodyType.HUMAN || i2.getType() == Constants.MoveableBodyType.HUMAN) {
+			if (i1.getType() == Constants.MoveableBodyType.HUMAN) {
+				Human h1 = (Human) i1.getObj();
+				
+				if (h1.getState() != Human.State.COLLIDING) {
+					Vector2 direction = h1.getBody().getLinearVelocity().cpy().rotate(90);
+					
+					((Human) i1.getObj()).setState(Human.State.COLLIDING);
+					h1.setCollidingInfo(direction, 20);
+				}
 			}
 			
-			// Make the second human turn to his right for 15 updates
-			Zombie z2 = (Zombie) i2.getObj();
-			Vector2 z2v = z2.getBody().getLinearVelocity().cpy().rotate(90);
-			
-			if (z2.getState() != Zombie.State.COLLIDING) {
-				z2.setState(Zombie.State.COLLIDING);
-				z2.setCollidingInfo(z2v, 15);
+			if (i2.getType() == Constants.MoveableBodyType.HUMAN) {
+				Human h2 = (Human) i2.getObj();
+				
+				if (h2.getState() != Human.State.COLLIDING) {
+					Vector2 direction = h2.getBody().getLinearVelocity().cpy().rotate(90);
+					
+					((Human) i2.getObj()).setState(Human.State.COLLIDING);
+					h2.setCollidingInfo(direction, 20);
+				}
 			}
 		}
-		
 		
 		//Only activated if zombie walks into player. not if player walks into human
 		if ((i1.getType() == Constants.MoveableBodyType.PLAYER && i2.getType() == Constants.MoveableBodyType.ZOMBIE)
