@@ -18,6 +18,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
+import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.Creature;
 import se.glory.zombieworld.model.entities.Human;
 import se.glory.zombieworld.model.entities.Zombie;
@@ -29,29 +30,29 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class TestCases {
 
-	World testWorld;
+	WorldModel testWorld;
 	ArrayList<Zombie> zombies = new ArrayList<Zombie>();
 	ArrayList<Creature> humans = new ArrayList<Creature>();
 	Human testHuman;
 	
 	@Test
 	public void testReactions() {
-		//difficult without creating a world...
+	//	testWorld = new WorldModel();
+	//	testWorld.createWorld();
 		
-	//	assertTrue("truetrue", new Vector2(20,0).x==20);
-	//	testWorld = new World(new Vector2(0, 0), true);
-	//	testHuman = new Human(testWorld, 150, 150);
+	//	testHuman = new Human(150, 150);
 	//	humans.add(testHuman);
-	//	zombies.add(new Zombie(testWorld, 200,150));
+	//	zombies.add(new Zombie(200,150));
 		
-	//	assertsEquals("Human starts at correct x position", 150, 150);
-	//	assertsEquals(150, 150);
+		//still wrong...
 		assertNotNull("Human object null", testHuman);
-		assertTrue("truetrue", testHuman.getBody().getPosition().x==150);
+		//assertsEquals("Human starts at correct x position", 150, 150);
+		//assertThat(testHuman.getBody().localVector.x, is(150));
+		//assertTrue("truetrue", testHuman.getBody().getPosition().x==150);
 //		assertsEquals("Human starts at correct y position", expected, actual)
 		
 	//	testHuman.autoUpdateMovement(zombies);
-		fail("Test not finished");
+	//	fail("Test not finished");
 	}
 	
 	@Test
