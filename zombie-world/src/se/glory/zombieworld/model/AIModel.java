@@ -127,6 +127,7 @@ public class AIModel {
 				
 				h.walk();
 			}
+			updateHumanHealth(h);
 		}
 	}
 	
@@ -243,6 +244,7 @@ public class AIModel {
 				
 				z.walk();
 			}
+			checkZombieHealth(z);
 		}
 	}
 	
@@ -346,7 +348,7 @@ public class AIModel {
 	
 	//Adds zombie to the deadZombie list if the health is zero so the body can be removed correctly
 	private void checkZombieHealth(Zombie z) {
-		if(z.getHealth() == 0) {
+		if(z.getHealth() <= 0) {
 			deadZombies.add(z);
 		}
 	}
