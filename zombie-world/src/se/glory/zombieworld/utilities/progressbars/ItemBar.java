@@ -1,4 +1,4 @@
-package se.glory.zombieworld.model.entities.progressbars;
+package se.glory.zombieworld.utilities.progressbars;
 
 
 import com.badlogic.gdx.Gdx;
