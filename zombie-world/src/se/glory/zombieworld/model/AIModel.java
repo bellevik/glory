@@ -28,6 +28,10 @@ public class AIModel {
 	private int mapWidth = 0;
 	private int mapHeight = 0;
 	
+	public ArrayList<Point> getBlockedTiles() {
+		return blockedTiles;
+	}
+	
 	public void addHuman(float x, float y) {
 		humans.add(new Human(x, y));
 	}

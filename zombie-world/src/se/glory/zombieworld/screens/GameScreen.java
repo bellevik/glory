@@ -1,5 +1,6 @@
 package se.glory.zombieworld.screens;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import se.glory.zombieworld.model.StageModel;
@@ -9,6 +10,7 @@ import se.glory.zombieworld.model.entities.items.WeaponLoot;
 import se.glory.zombieworld.model.entities.obstacles.CustomObstacle;
 import se.glory.zombieworld.model.entities.obstacles.StreetObject;
 import se.glory.zombieworld.utilities.Constants;
+import se.glory.zombieworld.utilities.Point;
 import se.glory.zombieworld.utilities.Score;
 import se.glory.zombieworld.utilities.SoundPlayer;
 import se.glory.zombieworld.utilities.TextureHandler;
@@ -187,18 +189,39 @@ public class GameScreen implements Screen {
 		StageModel.createUI(batch);
 
 		// ## Add humans
-		worldModel.getAIModel().addHuman(16+22*16, 16+8*16);
-		worldModel.getAIModel().addHuman(16+22*16, 16+15*16);
+		addRandomCreatures(10, Constants.MoveableBodyType.HUMAN);
 
 		// ## Add zombies
-		worldModel.getAIModel().addZombie(272, 272);
-		worldModel.getAIModel().addZombie(0, 272);
+		addRandomCreatures(2, Constants.MoveableBodyType.ZOMBIE);
 
 		createStaticWalls();
 
 		soundPlayer = new SoundPlayer();
 		soundPlayer.playBackgroundMusic();
 		createObjects();
+	}
+	
+	private void addRandomCreatures(int num, Constants.MoveableBodyType type) {
+		int mapWidth = gameView.getMapLayer("blocked").getWidth();
+		int mapHeight = gameView.getMapLayer("blocked").getHeight();
+		ArrayList<Point> blockedTiles = worldModel.getAIModel().getBlockedTiles();
+		
+		Random generator = new Random();
+		
+		for (int i = 0; i < num; i++) {
+			int x = generator.nextInt(mapWidth);
+			int y = generator.nextInt(mapHeight);
+			
+			while (blockedTiles.contains(new Point(x, y))) {
+				x = generator.nextInt(mapWidth);
+				y = generator.nextInt(mapHeight);
+			}
+			
+			if (type == Constants.MoveableBodyType.HUMAN)
+				worldModel.getAIModel().addHuman(16+x*16, 16+y*16);
+			else if (type == Constants.MoveableBodyType.ZOMBIE)
+				worldModel.getAIModel().addZombie(16+x*16, 16+y*16);
+		}
 	}
 
 	private void createStaticWalls() {
