@@ -142,13 +142,13 @@ public class AIModel {
 		}
 	}
 	
+	//Updates human health if they are infected
 	private void updateHumanHealth(Human h) {
 		UtilityTimer infectedHealthTimer = h.getInfectedHealthTimer();
 		
 		if(infectedHealthTimer != null && infectedHealthTimer.isDone()) {
 			h.changeHealth(-Constants.INFECTED_DAMAGE);
 			infectedHealthTimer.resetTimer();
-			System.out.println(h.getHealth());
 		}
 		
 		if(h.getHealth() == 0) {
@@ -156,12 +156,14 @@ public class AIModel {
 		}
 	}
 	
+	//Adds zombie to the deadZombie list if the health is zero so the body can be removed correctly
 	private void checkZombieHealth(Zombie z) {
 		if(z.getHealth() == 0) {
 			deadZombies.add(z);
 		}
 	}
 	
+	//Will replace the dead humans to zombies if they were infected. otherwise they will just be removed
 	private void turnHumansToZombie() {
 		for (Human h : deadHumans) {
 			float xPos = h.getBody().getPosition().x/Constants.WORLD_TO_BOX;
@@ -175,6 +177,7 @@ public class AIModel {
 		deadHumans.clear();
 	}
 	
+	//Clears the zombies from the screen
 	private void clearZombies() {
 		for (Zombie z : deadZombies) {
 			removeZombie(z);
