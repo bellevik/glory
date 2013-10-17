@@ -184,7 +184,7 @@ public class Player implements Creature {
 				public void run() {
 					readyToFire = true;
 				}
-			}, equippedWeapon.getFireRate());
+			}, 1 / equippedWeapon.getFireRate());
 		}	
 	}
 

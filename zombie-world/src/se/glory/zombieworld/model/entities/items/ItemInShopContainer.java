@@ -3,6 +3,7 @@ package se.glory.zombieworld.model.entities.items;
 import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.weapons.EquippableItem;
+import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.ScreenCoordinates;
 import se.glory.zombieworld.utilities.progressbars.ItemBar;
 
@@ -46,9 +47,9 @@ public class ItemInShopContainer {
 		bgOwned.setVisible(false);
 		
 		
-		int range = (int)((item.getRange()/100)*60);
-		int dmg = (int)((item.getDamage()/100)*60);
-		int fireRate = 36;
+		int range = (int)((item.getRange() / Constants.MAX_RANGE)*60);
+		int dmg = (int)((item.getDamage() / Constants.MAX_DAMAGE)*60);
+		int fireRate = (int)((item.getFireRate() / Constants.MAX_FIRE_RATE)*60);
 		
 		rangeIndicatorBar = new ItemBar(stage, (int)x+80, (int)y+10, range);
 		rangeIndicatorBar.setVisibility(false);

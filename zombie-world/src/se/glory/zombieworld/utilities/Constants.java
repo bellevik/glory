@@ -21,6 +21,10 @@ public class Constants {
 	public static final int INFECTED_DAMAGE = 2;
 	public static final int ZOMBIE_DAMAGE = 10;
 	
+	public static final float MAX_DAMAGE = 100;
+	public static final float MAX_RANGE = 3;
+	public static final float MAX_FIRE_RATE = 4;
+	
 	public static GameState gameState = GameState.RUNNING;
 
 	//public static boolean isRunning = true;
