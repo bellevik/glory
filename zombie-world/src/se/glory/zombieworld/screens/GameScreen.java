@@ -84,7 +84,8 @@ public class GameScreen implements Screen {
 			StageModel.itemView.manageItems();
 			StageModel.quickSelection.manageItems();
 		} else if (Constants.gameState == Constants.GameState.SHOP) {
-			// TODO Xoster: Put your shop screen here
+			WorldModel.player.setRecentlyBought(true);
+			StageModel.shopView.setShopViewVisability(true);
 		}
 
 		StageModel.stage.act(delta);
@@ -118,8 +119,7 @@ public class GameScreen implements Screen {
 					}, 0.225f);
 				}
 			}else if (c.getTile().getProperties().get("buyzone") != null&& !WorldModel.player.getRecentlyBought()){
-				WorldModel.player.setRecentlyBought(true);
-				StageModel.shopView.setShopViewVisability(true);	
+				Constants.gameState = Constants.GameState.SHOP;
 			}
 		} else {
 			if (!gameView.getOpen().equals("closed")) {

@@ -21,9 +21,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import se.glory.zombieworld.model.entities.Creature;
 import se.glory.zombieworld.model.entities.Human;
 import se.glory.zombieworld.model.entities.Zombie;
-import se.glory.zombieworld.model.entities.progressbars.Healthbar;
 import se.glory.zombieworld.utilities.AStarPathFinder;
 import se.glory.zombieworld.utilities.Point;
+import se.glory.zombieworld.utilities.progressbars.Healthbar;
 
 import com.badlogic.gdx.physics.box2d.World;
 

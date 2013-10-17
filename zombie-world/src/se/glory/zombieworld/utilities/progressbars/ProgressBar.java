@@ -1,4 +1,4 @@
-package se.glory.zombieworld.model.entities.progressbars;
+package se.glory.zombieworld.utilities.progressbars;
 
 import se.glory.zombieworld.utilities.Constants;
 
@@ -48,13 +48,11 @@ public class ProgressBar extends Actor{
 		
 		//Creating both the infected healthbar and the regular one
 		progressBarAmount = new ProgressFill[maxHealthPercent];
-//		infectedHealthBarAmount = new HealthFill[maxHealthPercent];
 		
 		//Creating all the HealthFills and places them in the array
 		for(int i=0; i<maxHealthPercent; i++) {
 			int newX = i*fillLength+x+xMargin;
 			progressBarAmount[i] = new ProgressFill(stage, newX, y+yMargin, i, fill);
-	//		infectedHealthBarAmount[i] = new HealthFill(stage, newX, y+yMargin, i, true);
 		}
 		
 		//Creating a visual layer above the healthbar to work as container.
@@ -165,19 +163,6 @@ public class ProgressBar extends Actor{
 		}
 		lastHealthPercent = healthToUpdate;
 	}
-	
-	/**
-	 * Changes the color of the healthbar to give visual feedback of infected state
-	 * @param state changes the bar to the colors depending on if it is true or false. It shows if the bar should be in infected
-	 * state or not
-	 */
-	/*public void setInfectedState(boolean state) {
-		//Hiding last active healthBar
-		forceHealthUpdate(0);
-		
-	//	activeHealthBar = state ? infectedHealthBarAmount : healthBarAmount;
-		forceHealthUpdate(lastHealthPercent);
-	}*/
 	
 	private class ProgressFill {
 		private Texture texture;

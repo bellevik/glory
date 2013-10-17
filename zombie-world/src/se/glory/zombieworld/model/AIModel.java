@@ -243,8 +243,6 @@ public class AIModel {
 				
 				z.walk();
 			}
-			
-			checkZombieHealth(z);
 		}
 	}
 	
@@ -301,46 +299,6 @@ public class AIModel {
 		}
 	}
 	
-	private void updateHumanHealth(Human h) {
-		UtilityTimer infectedHealthTimer = h.getInfectedHealthTimer();
-		
-		if(infectedHealthTimer != null && infectedHealthTimer.isDone()) {
-			h.changeHealth(-Constants.INFECTED_DAMAGE);
-			infectedHealthTimer.resetTimer();
-			System.out.println(h.getHealth());
-		}
-		
-		if(h.getHealth() == 0) {
-			deadHumans.add(h);
-		}
-	}
-	
-	private void checkZombieHealth(Zombie z) {
-		if(z.getHealth() == 0) {
-			deadZombies.add(z);
-		}
-	}
-	
-	private void turnHumansToZombie() {
-		for (Human h : deadHumans) {
-			float xPos = h.getBody().getPosition().x/Constants.WORLD_TO_BOX;
-			float yPos = h.getBody().getPosition().y/Constants.WORLD_TO_BOX;
-			removeHuman(h);
-			if(h.getInfectedHealthTimer() != null) {
-				addZombie(xPos, yPos);
-			}
-		}
-		
-		deadHumans.clear();
-	}
-	
-	private void clearZombies() {
-		for (Zombie z : deadZombies) {
-			removeZombie(z);
-		}
-		deadZombies.clear();
-	}
-	
 	private Creature getClosestTarget(Zombie z) {
 		double distance = Double.MAX_VALUE;
 		Creature closestTarget = null;
@@ -370,5 +328,48 @@ public class AIModel {
 		}
 		
 		return closestTarget;
+	}
+	
+	//Updates human health if they are infected
+	private void updateHumanHealth(Human h) {
+		UtilityTimer infectedHealthTimer = h.getInfectedHealthTimer();
+		
+		if(infectedHealthTimer != null && infectedHealthTimer.isDone()) {
+			h.changeHealth(-Constants.INFECTED_DAMAGE);
+			infectedHealthTimer.resetTimer();
+		}
+		
+		if(h.getHealth() == 0) {
+			deadHumans.add(h);
+		}
+	}
+	
+	//Adds zombie to the deadZombie list if the health is zero so the body can be removed correctly
+	private void checkZombieHealth(Zombie z) {
+		if(z.getHealth() == 0) {
+			deadZombies.add(z);
+		}
+	}
+	
+	//Will replace the dead humans to zombies if they were infected. otherwise they will just be removed
+	private void turnHumansToZombie() {
+		for (Human h : deadHumans) {
+			float xPos = h.getBody().getPosition().x/Constants.WORLD_TO_BOX;
+			float yPos = h.getBody().getPosition().y/Constants.WORLD_TO_BOX;
+			removeHuman(h);
+			if(h.getInfectedHealthTimer() != null) {
+				addZombie(xPos, yPos);
+			}
+		}
+		
+		deadHumans.clear();
+	}
+	
+	//Clears the zombies from the screen
+	private void clearZombies() {
+		for (Zombie z : deadZombies) {
+			removeZombie(z);
+		}
+		deadZombies.clear();
 	}
 }
