@@ -25,8 +25,8 @@ public class Animator {
 	
 	// Animation speeds
 	private final float WALKSPEED = 1.525f;
-	private final float OPENINGSPEED = 0.385f;
-	private final float ROTATESPEED = 0.2f;
+	private final float OPENINGSPEED = 0.750f;
+	private final float ROTATESPEED = 0.4f;
 	
 	private Texture spriteSheet;
 	private TextureRegion currentFrame;

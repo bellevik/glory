@@ -29,7 +29,7 @@ public class StageModel {
 		
 		itemView = new ItemView(stage);
 		quickSelection = new QuickSelection(stage);
-		
+
 		healthBar = new Healthbar(stage);
 		
 		shopView = new ShopView(stage);
