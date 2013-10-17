@@ -13,7 +13,7 @@ public class Constants {
 	public static final int WEAPON_CLIPS = 4;
 	public static final int WEAPON_FIRE_RATE = 5;
 	
-	public static final int VIEWPORT_WIDTH = 2000;
+	public static final int VIEWPORT_WIDTH = 800;
 	public static int VIEWPORT_HEIGHT;
 	
 
