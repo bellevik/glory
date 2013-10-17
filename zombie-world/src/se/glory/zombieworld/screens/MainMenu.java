@@ -18,8 +18,8 @@ public class MainMenu implements Screen {
 	
 	private SpriteBatch batch;
 	
-	private Texture backgroundTexture, buttonExitTexture, buttonPlayTexture, buttonSettingsTexture;
-	private Image buttonExit, buttonPlay, buttonSettings;
+	private Texture backgroundTexture, buttonExitTexture, buttonPlayTexture, buttonSettingsTexture, buttonHighscoreTexture;
+	private Image buttonExit, buttonPlay, buttonSettings, buttonHighscore;
     
 	@Override
 	public void render(float delta) {
@@ -49,6 +49,7 @@ public class MainMenu implements Screen {
 		buttonExitTexture = new Texture(Gdx.files.internal("ui/buttonExit.png"));
 		buttonPlayTexture = new Texture(Gdx.files.internal("ui/buttonPlay.png"));
 		buttonSettingsTexture = new Texture(Gdx.files.internal("ui/buttonSettings.png"));
+		buttonHighscoreTexture = new Texture(Gdx.files.internal("ui/highScoreLabel.png"));
 		
 		Gdx.input.setInputProcessor(stage);
 		
@@ -61,9 +62,13 @@ public class MainMenu implements Screen {
 		buttonSettings.setX(Constants.VIEWPORT_WIDTH/2 - buttonSettingsTexture.getWidth()/2);
 		buttonSettings.setY(buttonPlay.getY() - 75);
 		
+		buttonHighscore = new Image(buttonHighscoreTexture);
+		buttonHighscore.setX(Constants.VIEWPORT_WIDTH/2 - buttonSettingsTexture.getWidth()/2);
+		buttonHighscore.setY(buttonSettings.getY() - 75);
+		
 		buttonExit = new Image(buttonExitTexture);
 		buttonExit.setX(Constants.VIEWPORT_WIDTH/2 - buttonExitTexture.getWidth()/2);
-		buttonExit.setY(buttonSettings.getY() - 75);
+		buttonExit.setY(buttonHighscore.getY() - 75);
 
 		//Adding listeners to buttons
 		buttonExit.addListener(new ClickListener(){
@@ -78,6 +83,12 @@ public class MainMenu implements Screen {
 				((Game) Gdx.app.getApplicationListener()).setScreen(new SettingsScreen());
 			}
 		});
+		buttonHighscore.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				((Game) Gdx.app.getApplicationListener()).setScreen(new HighscoreScreen());
+			}
+		});
 		buttonPlay.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -88,6 +99,7 @@ public class MainMenu implements Screen {
 		stage.addActor(buttonPlay);
 		stage.addActor(buttonSettings);
 		stage.addActor(buttonExit);
+		stage.addActor(buttonHighscore);
 	}
 
 	@Override
