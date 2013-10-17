@@ -18,6 +18,7 @@ public class EquippableItem {
 	protected int clips;
 	protected float fireRate;
 	protected int currentClipSize;
+	protected int offset;
 
 	protected Texture texture;
 	protected Texture shopTexture;
@@ -34,8 +35,10 @@ public class EquippableItem {
 
 		if(itemType.equals("ranged")) {
 			this.itemType = Constants.ItemType.WEAPON;
+			this.offset = 24;
 		} else if(itemType.equals("consumable")) {
 			this.itemType = Constants.ItemType.CONSUMABLE;
+			this.offset = 0;
 		}
 		
 		texture = new Texture(Gdx.files.internal("data/weapons/" + name + "/" + name + ".png"));
@@ -61,6 +64,10 @@ public class EquippableItem {
 	
 	public Image getIcon() {
 		return icon;
+	}
+	
+	public int getOffset() {
+		return offset;
 	}
 
 	public void setName(String name) {

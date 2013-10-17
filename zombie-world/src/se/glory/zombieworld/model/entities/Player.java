@@ -198,7 +198,7 @@ public class Player implements Creature {
         float yAngle = MathUtils.sin(rot);
 		
         //24 here is to create the bullet a fix distance from the weapon
-		new Bullet(body.getPosition().x + 24 * xAngle * Constants.WORLD_TO_BOX, body.getPosition().y + 24 * yAngle * Constants.WORLD_TO_BOX, xAngle, yAngle, equippedWeapon.getDamage(), equippedWeapon.getRange());
+		new Bullet(body.getPosition().x + equippedWeapon.getOffset() * xAngle * Constants.WORLD_TO_BOX, body.getPosition().y + equippedWeapon.getOffset() * yAngle * Constants.WORLD_TO_BOX, xAngle, yAngle, equippedWeapon.getDamage(), equippedWeapon.getRange());
 
 	}
 
