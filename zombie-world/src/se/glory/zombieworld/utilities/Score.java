@@ -1,14 +1,12 @@
 package se.glory.zombieworld.utilities;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.Arrays;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
 public class Score {
-	public static long currentScore;
+	public static int currentScore;
 	
 	public static void addScore(Constants.ScoreType type) {
 		switch (type) {
@@ -21,24 +19,50 @@ public class Score {
 		}
 	}
 	
-	public static String[] getHighscoreList () {
+	public static UserScore[] getHighscoreList () {
 		FileHandle file = Gdx.files.internal("highscore.txt");
 		String text = file.readString();
-		return text.split("::");
+		
+		String[] tmp = text.split("::");
+		UserScore[] score = new UserScore[tmp.length];
+		
+		for (int i = 0; i < score.length; i++) {
+			String[] tmp1 = tmp[i].split(":");
+			score[i] = new UserScore(tmp1[0], Integer.parseInt(tmp1[1]));
+		}
+		
+		return score;
 	}
 	
 	public static String getHighscoreAtPosition (int pos) {
 		if (getHighscoreList().length <= pos) {
 			return "";
 		}
-		String tmp[] = getHighscoreList()[pos].split(":");
-		return tmp[0] + "   " + tmp[1];
+		UserScore[] score = getHighscoreList();
+		return score[pos].name + "    " + score[pos].score;
 	}
 	
-	public static void addNewHighscore (String highscore) {
+	public static void addNewHighscore (String name, int points) {
+		UserScore[] score = new UserScore[6];
+		for (int i = 0; i < getHighscoreList().length; i++) {
+			score[i] = getHighscoreList()[i];
+		}
+		score[getHighscoreList().length] = new UserScore(name, points);
+		
+		for (int j = getHighscoreList().length + 1; j < 6; j++) {
+			score[j] = new UserScore("", 0);
+		}
+		
+		Arrays.sort(score);
+		
+		String hs = "";
+		for (int j = 0; j < 4; j++) {
+			hs += score[j].name + ":" + score[j].score + "::";
+		}
+		hs += score[4].name + ":" + score[4].score;
+		
 		FileHandle file = Gdx.files.local("highscore.txt");
-		//Write existing plus new or just new?
-		file.writeString("::"+highscore, false);
+		file.writeString(hs, false);
 	}
-	// TODO SORT SCORE!
+	
 }
