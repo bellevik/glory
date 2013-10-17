@@ -18,7 +18,7 @@ public class ItemView {
 	private ItemContainer[] itemContainers;
 	/* The x- and y-coordinates of the bottom-left ItemContainer */
 	private int cornerX = 224;
-	private int cornerY = 232;
+	private int cornerY = 150;
 	/* The selected ItemContainer in the main inventory */
 	private int currentSelection;
 	/* The selected ItemContainer in the QuickSelection */
