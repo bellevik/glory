@@ -4,6 +4,7 @@ import se.glory.zombieworld.model.entities.weapons.ERangedWeapon;
 import se.glory.zombieworld.model.entities.weapons.EquippableItem;
 import se.glory.zombieworld.model.entities.weapons.WeaponArsenal;
 import se.glory.zombieworld.screens.GameScreen;
+import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.ScreenCoordinates;
 
 import com.badlogic.gdx.Game;
@@ -35,8 +36,8 @@ public class ShopView {
 		doneButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				setShopViewVisability(false);//Här sätter du vart den ska länka
-				System.out.println("clicked");
+				setShopViewVisability(false);
+				Constants.gameState = Constants.GameState.RUNNING;
 			}
 		});
 		doneButton.setPosition(400, 10);
