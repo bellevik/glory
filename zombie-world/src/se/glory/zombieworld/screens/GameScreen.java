@@ -177,9 +177,9 @@ public class GameScreen implements Screen {
 
 		SpriteBatch batch = new SpriteBatch();
 
-		new WeaponLoot(100, 100);
-		new WeaponLoot(200, 200);
-		new WeaponLoot(300, 300);
+		//new WeaponLoot(100, 100);
+		//new WeaponLoot(200, 200);
+		//new WeaponLoot(300, 300);
 
 		gameView = new GameView(batch);
 		worldModel.setupAIModel(gameView.getMapLayer("blocked"));
@@ -187,12 +187,12 @@ public class GameScreen implements Screen {
 		StageModel.createUI(batch);
 
 		// ## Add humans
-		worldModel.getAIModel().addHuman(16+22*16, 16+8*16);
-		worldModel.getAIModel().addHuman(16+22*16, 16+15*16);
+		worldModel.getAIModel().addHuman(1300+22*16, 1300+8*16);
+		worldModel.getAIModel().addHuman(1200+22*16, 1200+15*16);
 
 		// ## Add zombies
-		worldModel.getAIModel().addZombie(272, 272);
-		worldModel.getAIModel().addZombie(0, 272);
+		worldModel.getAIModel().addZombie(1100, 1100);
+		worldModel.getAIModel().addZombie(3000, 1300);
 
 		createStaticWalls();
 

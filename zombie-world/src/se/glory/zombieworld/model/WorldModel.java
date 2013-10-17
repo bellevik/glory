@@ -32,7 +32,7 @@ public class WorldModel {
 		world = new World(new Vector2(0, 0), true);
 		aiModel = new AIModel();
 		
-		player = new Player(300, 300, 16, 16);
+		player = new Player(600, 600, 16, 16);
 		
 		weaponArsenal = new WeaponArsenal();
 		
