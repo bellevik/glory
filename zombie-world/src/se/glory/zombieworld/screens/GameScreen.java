@@ -189,10 +189,10 @@ public class GameScreen implements Screen {
 		StageModel.createUI(batch);
 
 		// ## Add humans
-		addRandomCreatures(5, Constants.MoveableBodyType.HUMAN);
+		//addRandomCreatures(5, Constants.MoveableBodyType.HUMAN);
 
 		// ## Add zombies
-		addRandomCreatures(2, Constants.MoveableBodyType.ZOMBIE);
+		//addRandomCreatures(2, Constants.MoveableBodyType.ZOMBIE);
 
 		createStaticWalls();
 
