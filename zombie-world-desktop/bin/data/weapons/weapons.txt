@@ -2,3 +2,4 @@ pistol
 shotgun
 colt
 ak47
+healthpack
