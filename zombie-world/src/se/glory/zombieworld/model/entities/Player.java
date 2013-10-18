@@ -9,6 +9,7 @@ import se.glory.zombieworld.screens.GameOverScreen;
 import se.glory.zombieworld.screens.MainMenu;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Identity;
+import se.glory.zombieworld.utilities.Score;
 import se.glory.zombieworld.utilities.UtilityTimer;
 
 import com.badlogic.gdx.Game;
@@ -199,7 +200,7 @@ public class Player implements Creature {
 		
         //24 here is to create the bullet a fix distance from the weapon
 		new Bullet(body.getPosition().x + equippedWeapon.getOffset() * xAngle * Constants.WORLD_TO_BOX, body.getPosition().y + equippedWeapon.getOffset() * yAngle * Constants.WORLD_TO_BOX, xAngle, yAngle, equippedWeapon.getDamage(), equippedWeapon.getRange());
-
+		Score.shotsFired++;
 	}
 
 	/*

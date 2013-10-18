@@ -6,14 +6,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
 public class Score {
-	public static int currentScore;
+	public static int currentScore, zombiesKilled, humansKilled, shotsFired = 0;
 	
 	public static void addScore(Constants.ScoreType type) {
 		switch (type) {
 		case KILL_HUMAN: 
 			currentScore -= 1452;
+			humansKilled++;
 		case KILL_ZOMBIE:
 			currentScore += 126;
+			zombiesKilled++;
 		case TIME:
 			currentScore += 1;
 		}
