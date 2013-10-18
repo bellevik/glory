@@ -205,6 +205,16 @@ public class CollisionDetection implements ContactListener {
 			
 		}
 		
+		if (i1.getType() == Constants.MoveableBodyType.BULLET && i2.getType() == Constants.MoveableBodyType.PLAYER || i1.getType() == Constants.MoveableBodyType.PLAYER && i2.getType() == Constants.MoveableBodyType.BULLET) {
+			Identity bulletIdentity = i1.getType() == Constants.MoveableBodyType.BULLET ? i1 : i2;
+			
+			//Saving bulletdamage in case the bullet is removed before the damage is dealt
+			float bulletDamage = ((Bullet)bulletIdentity.getObj()).getDamage();
+			bulletIdentity.setDead(true);
+			
+			WorldModel.player.changeHealth(-bulletDamage);
+		}
+		
 		if (i1.getType() == Constants.MoveableBodyType.BULLET || i2.getType() == Constants.MoveableBodyType.BULLET) {
 			Identity bulletIdentity = i1.getType() == Constants.MoveableBodyType.BULLET ? i1 : i2;
 			bulletIdentity.setDead(true);
