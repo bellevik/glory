@@ -28,6 +28,12 @@ public class AIModel {
 	private int mapWidth = 0;
 	private int mapHeight = 0;
 	
+	private Random gen;
+	
+	public AIModel() {
+		gen = new Random();
+	}
+	
 	public ArrayList<Point> getBlockedTiles() {
 		return blockedTiles;
 	}
@@ -76,25 +82,29 @@ public class AIModel {
 	}
 	
 	private void updateHumansDumb() {
-		for (Human h : humans) {
+		for (Human h : humans) {			
 			float totX = 0;
 			float totY = 0;
 			
-			for (Zombie z : zombies) {
-				float tmpX = h.getBody().getPosition().x - z.getBody().getPosition().x;
-				float tmpY = h.getBody().getPosition().y - z.getBody().getPosition().y;
-				
-				double size = Math.sqrt(tmpX * tmpX + tmpY * tmpY);
-				
-				// Range 2.0
-				if (size < 2.0) {
-					double distance = 2.0 - size;
+			int slump = gen.nextInt(60);
+			
+			if (slump == 0) {
+				for (Zombie z : zombies) {
+					float tmpX = h.getBody().getPosition().x - z.getBody().getPosition().x;
+					float tmpY = h.getBody().getPosition().y - z.getBody().getPosition().y;
 					
-					tmpX /= (size/distance);
-					tmpY /= (size/distance);
+					double size = Math.sqrt(tmpX * tmpX + tmpY * tmpY);
 					
-					totX += tmpX;
-					totY += tmpY;
+					// Range 2.0
+					if (size < 2.0) {
+						double distance = 2.0 - size;
+						
+						tmpX /= (size/distance);
+						tmpY /= (size/distance);
+						
+						totX += tmpX;
+						totY += tmpY;
+					}
 				}
 			}
 			
@@ -115,7 +125,7 @@ public class AIModel {
 				h.setState(Human.State.FLEEING);
 			} else {
 				// If the human just got away form a zombie, set its state to idle.
-				if (h.getState() == Human.State.FLEEING)
+				if (slump == 0 && h.getState() == Human.State.FLEEING)
 					h.setState(Human.State.IDLE);
 				
 				if (h.getState() == Human.State.IDLE) {
@@ -209,8 +219,13 @@ public class AIModel {
 	}
 	
 	private void updateZombiesDumb() {
+		int slump = gen.nextInt(60);
+		
 		for (Zombie z : zombies) {
-			Creature closestTarget = getClosestTarget(z);
+			Creature closestTarget = null;
+			
+			if (slump == 0)
+				closestTarget = getClosestTarget(z);
 			
 			// If any humans are nearby, chase
 			if (closestTarget != null) {
@@ -232,7 +247,7 @@ public class AIModel {
 				z.setState(Zombie.State.CHASING);
 			} else {
 				// If the zombie just ended chasing a human, set its state to idle.
-				if (z.getState() == Zombie.State.CHASING)
+				if (slump == 0 && z.getState() == Zombie.State.CHASING)
 					z.setState(Zombie.State.IDLE);
 				
 				if (z.getState() == Zombie.State.IDLE) {

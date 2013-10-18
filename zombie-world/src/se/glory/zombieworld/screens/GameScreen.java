@@ -189,10 +189,35 @@ public class GameScreen implements Screen {
 		StageModel.createUI(batch);
 
 		// ## Add humans
-		addRandomCreatures(10, Constants.MoveableBodyType.HUMAN);
+		//addRandomCreatures(10, Constants.MoveableBodyType.HUMAN);
 
 		// ## Add zombies
-		addRandomCreatures(2, Constants.MoveableBodyType.ZOMBIE);
+		//addRandomCreatures(2, Constants.MoveableBodyType.ZOMBIE);
+		
+		
+		for(int i = 10; i < 30; i+=1) {
+			worldModel.getAIModel().addHuman(10*16, i*2*16);
+		}
+		
+		for(int i = 10; i < 20; i+=1) {
+			worldModel.getAIModel().addZombie(8*16, i*2*16);
+		}
+		
+		/*
+		worldModel.getAIModel().addHuman(10*16, 10*16);
+		worldModel.getAIModel().addHuman(12*16, 11*16);
+		worldModel.getAIModel().addHuman(14*16, 12*16);
+		worldModel.getAIModel().addHuman(16*16, 13*16);
+		worldModel.getAIModel().addHuman(18*16, 14*16);
+		worldModel.getAIModel().addHuman(20*16, 15*16);
+		worldModel.getAIModel().addZombie(22*16, 16*16);
+		worldModel.getAIModel().addHuman(24*16, 17*16);
+		worldModel.getAIModel().addHuman(26*16, 18*16);
+		worldModel.getAIModel().addZombie(28*16, 19*16);
+		worldModel.getAIModel().addHuman(30*16, 20*16);
+		worldModel.getAIModel().addHuman(32*16, 21*16);
+		worldModel.getAIModel().addHuman(34*16, 22*16);
+		*/
 
 		createStaticWalls();
 
