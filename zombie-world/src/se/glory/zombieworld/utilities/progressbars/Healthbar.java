@@ -41,7 +41,7 @@ public class Healthbar {
 		infectedHealthBar = new ProgressBar(stage, x, y, xMargin, yMargin, fillLength, 
 			maxHealthPercent, 
 			new Texture(Gdx.files.internal("img/health/healthBarBottom2.png")),
-			new Texture(Gdx.files.internal("img/health/infectedHealthBar.png")),
+			new Texture(Gdx.files.internal("img/health/infectedHealthBar2.png")),
 			new Texture(Gdx.files.internal("img/health/healthBarTop.png")));
 	
 		resetHealthBar();
