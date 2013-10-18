@@ -42,11 +42,9 @@ public class GameView {
 
 	private ArrayList<Point> doors = new ArrayList<Point>();
 
-	// TODO: Change font
-	/*BitmapFont font = new BitmapFont(Gdx.files.internal("font/scoreFOnt.fnt"),
-			Gdx.files.internal("font/scoreFont_0.png"), false);*/
-
-	BitmapFont font = new BitmapFont();
+	// TODO Move the font to a separate class
+	BitmapFont font = new BitmapFont(Gdx.files.internal("font/scoreFont.fnt"),
+			Gdx.files.internal("font/scoreFont_0.png"), false);
 
 	private float angle;
 

@@ -24,7 +24,9 @@ public class HighscoreScreen implements Screen {
 	
 	private Texture backgroundTexture;
 	
-	private BitmapFont font;
+	// TODO Move the font to a separate class
+	BitmapFont font = new BitmapFont(Gdx.files.internal("font/scoreFont.fnt"),
+			Gdx.files.internal("font/scoreFont_0.png"), false);
 
 	@Override
 	public void render(float delta) {
@@ -60,7 +62,6 @@ public class HighscoreScreen implements Screen {
 	public void show() {
 		backgroundTexture = new Texture(Gdx.files.internal("ui/mainMenuBackground.png"));
 		
-		font = new BitmapFont();
 		stage = new Stage();
 		batch = new SpriteBatch();
 		
