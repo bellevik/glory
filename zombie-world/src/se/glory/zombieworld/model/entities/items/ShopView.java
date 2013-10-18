@@ -5,6 +5,7 @@ import se.glory.zombieworld.model.entities.weapons.EquippableItem;
 import se.glory.zombieworld.model.entities.weapons.WeaponArsenal;
 import se.glory.zombieworld.screens.GameScreen;
 import se.glory.zombieworld.utilities.Constants;
+import se.glory.zombieworld.utilities.Score;
 import se.glory.zombieworld.utilities.ScreenCoordinates;
 
 import com.badlogic.gdx.Game;
@@ -57,10 +58,16 @@ public class ShopView {
 			weapon[i] = wa.getWeapon(strWeaponList[i]);
 		}
 		
-		for (int i=0;i<weapon.length;i++){
-			
-			itemInShopContainers[i] = new ItemInShopContainer(stage,180*i+50,300*1,weapon[i]);
-	
+		int rows = 2;
+		int cols = 4;
+		int counter = 0;
+		for (int i=0;i<rows;i++){
+			for (int j =0;j<cols;j++){
+				if (counter < strWeaponList.length) {
+					itemInShopContainers[counter] = new ItemInShopContainer(stage,180*j+50,300-150*i,weapon[counter]);
+					counter++;
+				}
+			}	
 		}
 	}
 	
@@ -72,8 +79,12 @@ public class ShopView {
 				if (currentX>itemInShopContainers[i].getBgX()&&currentX<itemInShopContainers[i].getBgX() + itemInShopContainers[i].getBg().getImageWidth()
 							&&currentY>itemInShopContainers[i].getBgY()&&currentY<itemInShopContainers[i].getBgY()+itemInShopContainers[i].getBg().getImageHeight()){
 					
-					itemInShopContainers[i].buyItem();	
-					System.out.println("bought");
+					if (Score.currentScore >= itemInShopContainers[i].getItem().getPrice()) {
+						itemInShopContainers[i].buyItem();
+						Score.currentScore -= itemInShopContainers[i].getItem().getPrice();
+					} else {
+						// TODO Priont that the player aint got no money!!!!!!!
+					}
 				}
 					
 			}

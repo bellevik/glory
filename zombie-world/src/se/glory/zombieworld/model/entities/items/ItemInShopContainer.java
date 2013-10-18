@@ -6,6 +6,7 @@ import se.glory.zombieworld.model.entities.weapons.EquippableItem;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.ScreenCoordinates;
 import se.glory.zombieworld.utilities.progressbars.ItemBar;
+import se.glory.zombieworld.view.GameView;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -48,9 +49,15 @@ public class ItemInShopContainer {
 		
 		
 		int range = (int)((item.getRange() / Constants.MAX_RANGE)*60);
-		int dmg = (int)((item.getDamage() / Constants.MAX_DAMAGE)*60);
+		int dmg = 60;
+		
+		if (item.getDamage() >= 0) {
+			dmg = (int)((item.getDamage() / Constants.MAX_DAMAGE)*60);
+		}
+		
 		int fireRate = (int)((item.getFireRate() / Constants.MAX_FIRE_RATE)*60);
 		
+
 		rangeIndicatorBar = new ItemBar(stage, (int)x+80, (int)y+10, range);
 		rangeIndicatorBar.setVisibility(false);
 		
@@ -91,8 +98,9 @@ public class ItemInShopContainer {
 	public Image getBg(){
 		return bg;
 	}
-
 	
-	
+	public EquippableItem getItem () {
+		return item;
+	}
 	
 }
