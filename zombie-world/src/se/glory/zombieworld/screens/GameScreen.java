@@ -57,7 +57,7 @@ public class GameScreen implements Screen {
 
 			// Update player movement
 			WorldModel.player.getBody().setLinearVelocity(StageModel.moveStick.getTouchpad().getKnobPercentX() * 2, StageModel.moveStick.getTouchpad().getKnobPercentY() * 2);
-
+			
 			//The four floats below will represent the percentage in X and Y direction of the Joysticks
 			float moveKnobX = StageModel.moveStick.getTouchpad().getKnobPercentX();
 			float moveKnobY = StageModel.moveStick.getTouchpad().getKnobPercentY();
@@ -192,7 +192,10 @@ public class GameScreen implements Screen {
 		addRandomCreatures(10, Constants.MoveableBodyType.HUMAN);
 
 		// ## Add zombies
-		addRandomCreatures(2, Constants.MoveableBodyType.ZOMBIE);
+		addRandomCreatures(20, Constants.MoveableBodyType.ZOMBIE);
+		
+		worldModel.getAIModel().addZombie(272,272);
+		worldModel.getAIModel().addHuman(200,272);
 
 		createStaticWalls();
 
