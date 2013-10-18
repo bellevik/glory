@@ -1,10 +1,14 @@
 package se.glory.zombieworld.utilities.progressbars;
 
 import se.glory.zombieworld.model.StageModel;
+import se.glory.zombieworld.utilities.Animator;
 import se.glory.zombieworld.utilities.Constants;
+import se.glory.zombieworld.utilities.Constants.MoveableBodyType;
+import se.glory.zombieworld.view.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -27,17 +31,18 @@ public class Healthbar {
 	 * either regular healthbar or an infected version
 	 */
 	public Healthbar(Stage stage) {
+		
 		healthBar = new ProgressBar(stage, x, y, xMargin, yMargin, fillLength, 
 			maxHealthPercent, 
 			new Texture(Gdx.files.internal("img/health/healthBarBottom.png")),
 			new Texture(Gdx.files.internal("img/health/healthBar.png")),
-			new Texture(Gdx.files.internal("img/health/healthBarTop.png")));
+			new Texture(Gdx.files.internal("img/health/healthBarTop2.png")));
 	
 		infectedHealthBar = new ProgressBar(stage, x, y, xMargin, yMargin, fillLength, 
 			maxHealthPercent, 
 			new Texture(Gdx.files.internal("img/health/healthBarBottom.png")),
 			new Texture(Gdx.files.internal("img/health/infectedHealthBar.png")),
-			new Texture(Gdx.files.internal("img/health/healthBarTop.png")));
+			new Texture(Gdx.files.internal("img/health/healthBarTop2.png")));
 	
 		resetHealthBar();
 	}
@@ -49,6 +54,7 @@ public class Healthbar {
 	}
 
 	public int getHealthPercentGoal() {
+		
 		return activeBar.getHealthPercentGoal();
 	}
 	

@@ -2,6 +2,7 @@ package se.glory.zombieworld.view;
 
 import java.util.ArrayList;
 
+import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.Creature;
 import se.glory.zombieworld.model.entities.items.WeaponLoot;
@@ -29,6 +30,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class GameView {
 	private SpriteBatch batch;
@@ -119,7 +121,7 @@ public class GameView {
 		}
 		mapRenderer.getSpriteBatch().end();
 
-		animateDoor();
+		animate();
 
 		//Draw the ammo for the equipped weapon on the screen
 		if (WorldModel.player.getEquippedWeapon() != null) {
@@ -228,7 +230,7 @@ public class GameView {
 	 * Draws the animation of an door opening when the player is 
 	 * entering or exiting a house
 	 */
-	public void animateDoor() {
+	public void animate() {
 		for (Point p: doors) {
 			float realX = p.getX() * 16 / Constants.BOX_TO_WORLD;
 			float realY = p.getY() * 16 / Constants.BOX_TO_WORLD;
@@ -255,6 +257,13 @@ public class GameView {
 					batch.end();
 				}
 			}
+		}
+		
+		//Bad fix to make it change position depending on players position since it is not
+		//an actor and has to be placed as part of the world
+		if(WorldModel.player.getInfectedHealthTimer() != null) {
+			Animation infectedAnimation = animator.getAnimation(MoveableBodyType.INFECTEDBAR, 0);
+			animator.drawAnimation(batch, (float)(WorldModel.player.getTileX()*16+Constants.VIEWPORT_WIDTH*0.03)*Constants.WORLD_TO_BOX, (float)(WorldModel.player.getTileY()*16-Constants.VIEWPORT_HEIGHT*0.34)*Constants.WORLD_TO_BOX, infectedAnimation, true);
 		}
 	}
 

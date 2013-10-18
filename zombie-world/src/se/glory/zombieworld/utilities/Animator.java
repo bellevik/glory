@@ -39,6 +39,7 @@ public class Animator {
 	private Animation[] playerAnimations = new Animation[8];
 	private Animation[] zombieAnimations = new Animation[8];
 	private Animation[] doorAnimations = new Animation[3];
+	private Animation infectedBarAnimation;
 	//private Animation[] weaponLootAnimations = new Animation[];
 	
 	private Animation[] akAnimations = new Animation[8];
@@ -49,7 +50,7 @@ public class Animator {
 	private Texture closedDoor;
 	private Animation weaponLoot;
 	
-	private String character = "character", door = "door", weapon = "weapon";
+	private String character = "character", door = "door", weapon = "weapon", infectedBar = "infectedBar";
 	
 	/*
 	 * Creates all animations for all types of creatures. This will speed up the game
@@ -90,6 +91,7 @@ public class Animator {
 			weaponLootAnimations[i] = createAnimation("AKSheet66.png", weapon, i);
 		}*/
 		weaponLoot = createAnimation("AKSheet66.png", weapon, 0);
+		infectedBarAnimation = createAnimation("infectedSheet.png", infectedBar, 0);
 		
 	}
 	
@@ -124,6 +126,8 @@ public class Animator {
 			return doorAnimations[i];
 		}else if (type == MoveableBodyType.WEAPON){
 			return weaponLoot;
+		}else if (type == MoveableBodyType.INFECTEDBAR) {
+			return infectedBarAnimation;
 		}else{
 			return null;
 		}
@@ -194,6 +198,22 @@ public class Animator {
 			animation = new Animation(ROTATESPEED, frames);
 			index = 0;
 			
+		}else if(type.equals(infectedBar)){
+			int col = spriteSheet.getWidth() / 310;
+			int row = spriteSheet.getHeight() / 80;
+			
+			TextureRegion[][] tmp = TextureRegion.split(spriteSheet, spriteSheet.getWidth() / col, spriteSheet.getHeight() / row);
+			
+			frames = new TextureRegion[row * col];
+			
+			for (int i = 0; i < row ; i++) {
+				for (int j = 0; j < col; j++) {
+					frames[index++] = tmp[i][j];
+				}
+			}
+			//Parameters (update speed, array of TextureRegions to make an animation)
+			animation = new Animation(WALKSPEED, frames);
+			index = 0;
 		}
 		return animation;
 	}
