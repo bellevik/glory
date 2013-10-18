@@ -19,12 +19,13 @@ public class EquippableItem {
 	protected float fireRate;
 	protected int currentClipSize;
 	protected int offset;
+	protected int price;
 
 	protected Texture texture;
 	protected Texture shopTexture;
 	protected Image icon;
 
-	public EquippableItem(String name, String itemType, float damage, float range, int clipSize, int clips, float fireRate) {
+	public EquippableItem(String name, String itemType, float damage, float range, int clipSize, int clips, float fireRate, int price) {
 		this.name = name;
 		this.damage = damage;
 		this.range = range;
@@ -32,6 +33,7 @@ public class EquippableItem {
 		this.clips = clips;
 		this.fireRate = fireRate;
 		this.currentClipSize = clipSize;
+		this.price = price;
 
 		if(itemType.equals("ranged")) {
 			this.itemType = Constants.ItemType.WEAPON;
@@ -153,5 +155,9 @@ public class EquippableItem {
 
 	public int getCurrentClipSize() {
 		return currentClipSize;
+	}
+	
+	public int getPrice () {
+		return price;
 	}
 }

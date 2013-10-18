@@ -2,6 +2,8 @@ package se.glory.zombieworld.utilities;
 
 import java.util.Arrays;
 
+import se.glory.zombieworld.model.entities.weapons.EquippableItem;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 

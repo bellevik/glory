@@ -34,7 +34,7 @@ public class WeaponArsenal {
 				weapons.put(weaponNames[i], new EquippableItem(weaponNames[i], stats[Constants.WEAPON_TYPE], 
 						Float.parseFloat(stats[Constants.WEAPON_DAMAGE]), Float.parseFloat(stats[Constants.WEAPON_RANGE]), 
 						Integer.parseInt(stats[Constants.WEAPON_CLIP_SIZE]), Integer.parseInt(stats[Constants.WEAPON_CLIPS]), 
-						Float.parseFloat(stats[Constants.WEAPON_FIRE_RATE])));
+						Float.parseFloat(stats[Constants.WEAPON_FIRE_RATE]), Integer.parseInt(stats[Constants.WEAPON_PRICE])));
 			}
 		}
 	}
