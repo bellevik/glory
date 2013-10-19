@@ -179,9 +179,9 @@ public class GameScreen implements Screen {
 
 		SpriteBatch batch = new SpriteBatch();
 
-		new WeaponLoot(100, 100);
-		new WeaponLoot(200, 200);
-		new WeaponLoot(300, 300);
+		//new WeaponLoot(100, 100);
+		//new WeaponLoot(200, 200);
+		//new WeaponLoot(300, 300);
 
 		gameView = new GameView(batch);
 		worldModel.setupAIModel(gameView.getMapLayer("blocked"));
@@ -221,6 +221,7 @@ public class GameScreen implements Screen {
 		worldModel.getAIModel().addHuman(34*16, 22*16);
 		*/
 
+
 		createStaticWalls();
 
 		soundPlayer = new SoundPlayer();
@@ -245,9 +246,9 @@ public class GameScreen implements Screen {
 			}
 			
 			if (type == Constants.MoveableBodyType.HUMAN)
-				worldModel.getAIModel().addHuman(16+x*16, 16+y*16);
+				worldModel.getAIModel().addHuman(x*16, y*16);
 			else if (type == Constants.MoveableBodyType.ZOMBIE)
-				worldModel.getAIModel().addZombie(16+x*16, 16+y*16);
+				worldModel.getAIModel().addZombie(x*16, y*16);
 		}
 	}
 

@@ -61,7 +61,7 @@ public class GameView {
 
 		animator = new Animator();
 
-		doors.add(new Point(46, 36));
+		doors.add(new Point(116, 130));
 	}
 
 	public TiledMapTileLayer getMapLayer(String name) {
@@ -120,6 +120,7 @@ public class GameView {
 		} else {
 			mapRenderer.renderTileLayer(getMapLayer("roof"));
 		}
+		mapRenderer.renderTileLayer(getMapLayer("static roof"));
 		mapRenderer.getSpriteBatch().end();
 
 		animate();
