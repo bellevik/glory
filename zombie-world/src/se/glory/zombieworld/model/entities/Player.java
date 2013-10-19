@@ -155,6 +155,8 @@ public class Player implements Creature {
 			equippedWeapon = StageModel.quickSelection.getCurrentItem(pos);
 			if(StageModel.quickSelection.getCurrentItem(pos).getClips() != 0) {
 				emptyClip = false;
+			}else{
+				emptyClip = true;
 			}
 		} else if(StageModel.quickSelection.getCurrentItem(pos) == null) {
 			equippedWeapon = null;
