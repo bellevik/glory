@@ -10,6 +10,7 @@ import se.glory.zombieworld.utilities.Identity;
 import se.glory.zombieworld.utilities.Point;
 import se.glory.zombieworld.utilities.UtilityTimer;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Vector2;
@@ -74,11 +75,12 @@ public class WorldModel {
 		WorldModel.world.getBodies(WorldModel.removeableBodies);
 		
 		for (Body body : WorldModel.removeableBodies) {
-			if(body.getUserData() != null){
-				if ( body.getUserData().getClass().equals(Identity.class) ) {
-					if(body!=null) {
+			if (body != null) {
+				if (body.getUserData() != null){
+					if (body.getUserData().getClass().equals(Identity.class)) {
 						if (((Identity)(body.getUserData())).isDead()) {
 							if (!WorldModel.world.isLocked()) {
+								Gdx.app.error("MyTaf", "SWEEP BODY: " + ((Identity)(body.getUserData())).getType() + " IS DEAD: " + ((Identity)(body.getUserData())).isDead());
 								WorldModel.world.destroyBody(body);
 							}
 						}

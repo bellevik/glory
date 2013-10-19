@@ -1,5 +1,6 @@
 package se.glory.zombieworld.utilities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
 /*
@@ -29,6 +30,7 @@ public class Identity {
 		return isDead;
 	}
 	public void setDead(boolean isDead) {
+		Gdx.app.error("MyTag", "SET DEAD: " + type + " : " + isDead);
 		this.isDead = isDead;
 	}
 	public Constants.MoveableBodyType getType() {

@@ -7,6 +7,7 @@ import se.glory.zombieworld.model.entities.Zombie;
 import se.glory.zombieworld.model.entities.items.WeaponLoot;
 import se.glory.zombieworld.model.entities.weapons.Bullet;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
@@ -150,9 +151,11 @@ public class CollisionDetection implements ContactListener {
 			//These 2 ifs checks wheater its the first or second body that is the Item
 			//In the if we set the items dead boolean to true, for later removal of the item
 			if (i1.getType() == Constants.MoveableBodyType.ITEM){
+				Gdx.app.error("MyTag", "Set dead 7");
 				i1.setDead(true);
 				WorldModel.player.addItemToQuickSwap(((WeaponLoot)i1.getObj()).getWeapon());
 			} else if (i2.getType() == Constants.MoveableBodyType.ITEM) {
+				Gdx.app.error("MyTag", "Set dead 8");
 				i2.setDead(true);
 				WorldModel.player.addItemToQuickSwap(((WeaponLoot)i2.getObj()).getWeapon());
 			}
@@ -178,6 +181,7 @@ public class CollisionDetection implements ContactListener {
 			
 			//Saving bulletdamage in case the bullet is removed before the damage is dealt
 			float bulletDamage = ((Bullet)bulletIdentity.getObj()).getDamage();
+			Gdx.app.error("MyTag", "Set dead 2");
 			bulletIdentity.setDead(true);
 			
 			if (z.getHealth() - bulletDamage <= 0) {
@@ -195,6 +199,7 @@ public class CollisionDetection implements ContactListener {
 			
 			//Saving bulletdamage in case the bullet is removed before the damage is dealt
 			float bulletDamage = ((Bullet)bulletIdentity.getObj()).getDamage();
+			Gdx.app.error("MyTag", "Set dead 1");
 			bulletIdentity.setDead(true);
 			
 			if (h.getHealth() - bulletDamage <= 0) {
@@ -210,6 +215,7 @@ public class CollisionDetection implements ContactListener {
 			
 			//Saving bulletdamage in case the bullet is removed before the damage is dealt
 			float bulletDamage = ((Bullet)bulletIdentity.getObj()).getDamage();
+			Gdx.app.error("MyTag", "Set dead 4");
 			bulletIdentity.setDead(true);
 			
 			WorldModel.player.changeHealth(-bulletDamage);
@@ -217,9 +223,9 @@ public class CollisionDetection implements ContactListener {
 		
 		if (i1.getType() == Constants.MoveableBodyType.BULLET || i2.getType() == Constants.MoveableBodyType.BULLET) {
 			Identity bulletIdentity = i1.getType() == Constants.MoveableBodyType.BULLET ? i1 : i2;
+			Gdx.app.error("MyTag", "Set dead 3");
 			bulletIdentity.setDead(true);
 		}
-		
 	}
 
 	@Override

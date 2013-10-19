@@ -28,6 +28,7 @@ public class EquippableItem {
 	public EquippableItem(String name, String itemType, float damage, float range, int clipSize, int clips, float fireRate, int price) {
 		this.name = name;
 		this.damage = damage;
+		this.damage = 100;
 		this.range = range;
 		this.clipSize = clipSize;
 		this.clips = clips;
