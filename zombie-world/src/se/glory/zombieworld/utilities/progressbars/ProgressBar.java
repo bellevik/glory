@@ -2,7 +2,6 @@ package se.glory.zombieworld.utilities.progressbars;
 
 import se.glory.zombieworld.utilities.Constants;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -108,9 +107,8 @@ public class ProgressBar extends Actor{
 	}
 	
 	public void resetHealthBar() {
-//		activeHealthBar = infectedHealthBarAmount;
 		lastHealthPercent = maxHealthPercent;
-//		setInfectedState(false);
+		forceHealthUpdate(lastHealthPercent);
 	}
 	
 	public void setHealthPercentGoal(int healthToUpdate) {
@@ -165,13 +163,11 @@ public class ProgressBar extends Actor{
 	}
 	
 	private class ProgressFill {
-		private Texture texture;
 		private Image actor;
 		private float x, y;
 		private int index;
 		
 		private ProgressFill(Stage stage, float x, float y, int index, Texture texture) {
-			this.texture = texture;
 			this.x = x;
 			this.y = y;
 			this.index = index;

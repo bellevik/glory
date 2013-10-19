@@ -28,7 +28,9 @@ public class Healthbar {
 	
 	/*
 	 * Special healthbar class to support the fact that the healthbar uses 2 bars to show
-	 * either regular healthbar or an infected version
+	 * either regular healthbar or an infected version. Therefor it does not extend the progressbar
+	 * This is to keep the objects of the healthbars in the world instead
+	 * of creating a new one evertime we have to switch between regular and infected
 	 */
 	public Healthbar(Stage stage) {
 		
@@ -53,19 +55,23 @@ public class Healthbar {
 		setInfectedState(false);
 	}
 
-	public int getHealthPercentGoal() {
-		
+	//Returns the goal from the current used Healthbar
+	public int getHealthPercentGoal() {	
 		return activeBar.getHealthPercentGoal();
 	}
 	
+	//Uses the same method for the activeBar
 	public void setHealthPercentGoal(int healthToUpdate) {
 		activeBar.setHealthPercentGoal(healthToUpdate);
 	}
 
+	//Uses the same method for the activeBar
 	public void updateHealthMovementSlowly() {
 		activeBar.updateHealthMovementSlowly();
 	}
 	
+	//Changes the bar and updates the states and goals in the new bar by using the
+	//data from the old one
 	public void setInfectedState(boolean state) {
 		//Hiding last active healthBar
 		int currentHealth = activeBar.getLastKnownHealthPercent();
@@ -79,6 +85,7 @@ public class Healthbar {
 		
 	}
 	
+	//Used to update the positioning for both healthbars
 	public void updatePosition() {
 		healthBar.updatePosition();
 		infectedHealthBar.updatePosition();
