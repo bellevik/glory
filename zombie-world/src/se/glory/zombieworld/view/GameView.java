@@ -16,6 +16,7 @@ import se.glory.zombieworld.utilities.Score;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -136,6 +137,7 @@ public class GameView {
 	 */
 	public void drawLabelOnScreen(String label, float x, float y) {
 		batch.begin();
+		font.setColor(Color.RED);
 		font.draw(batch, label, x, y);
 		batch.end();
 	}

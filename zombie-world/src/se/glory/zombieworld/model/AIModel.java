@@ -74,21 +74,58 @@ public class AIModel {
 	}
 	
 	public void update() {
-		turnHumansToZombie();
+		for (Human h : humans) {
+			if (h.getBody() == null)
+				System.out.println("ERROR FFS!");
+		}
+		
+		for (Human h : deadHumans) {
+			if (h.getBody() == null)
+				System.out.println("ERROR FFS!");
+		}
+		
+		for (Zombie h : zombies) {
+			if (h.getBody() == null)
+				System.out.println("ERROR FFS!");
+		}
+		
+		for (Zombie h : deadZombies) {
+			if (h.getBody() == null)
+				System.out.println("ERROR FFS!");
+		}
+		
+		
+		
 		clearZombies();
+		turnHumansToZombie();
+		//clearZombies();
 		
 		updateHumansDumb();
 		updateZombiesDumb();
 	}
 	
 	private void updateHumansDumb() {
-		for (Human h : humans) {			
+		for (Human h : humans) {
+			// ##### Set rotation
+			float directionX = h.getBody().getLinearVelocity().x == 0 ? 0.0001f : h.getBody().getLinearVelocity().x;
+			float directionY = h.getBody().getLinearVelocity().y;
+			
+			float angle = (float) Math.atan(directionY/directionX);
+			
+			if (directionX < 0)
+				angle = angle - (float)Math.PI;
+			
+			h.getBody().setTransform(h.getBody().getPosition(), angle);
+			// ##### Set rotation
+			
 			float totX = 0;
 			float totY = 0;
 			
-			int slump = gen.nextInt(60);
+			int logicCounter = h.getLogicCounter();
 			
-			if (slump == 0) {
+			if (logicCounter < 0) {
+				h.resetLogicCounter();
+				
 				for (Zombie z : zombies) {
 					float tmpX = h.getBody().getPosition().x - z.getBody().getPosition().x;
 					float tmpY = h.getBody().getPosition().y - z.getBody().getPosition().y;
@@ -114,18 +151,12 @@ public class AIModel {
 				
 				totX /= size;
 				totY /= size;
-				
-				float angle = (float) Math.atan(totY/totX);
-				
-				if (totX < 0)
-					angle = angle - (float) Math.PI;
-				
-				h.getBody().setTransform(h.getBody().getPosition(), angle);		
+					
 				h.getBody().setLinearVelocity(totX, totY);
 				h.setState(Human.State.FLEEING);
 			} else {
 				// If the human just got away form a zombie, set its state to idle.
-				if (slump == 0 && h.getState() == Human.State.FLEEING)
+				if (logicCounter < 0 && h.getState() == Human.State.FLEEING)
 					h.setState(Human.State.IDLE);
 				
 				if (h.getState() == Human.State.IDLE) {
@@ -219,13 +250,26 @@ public class AIModel {
 	}
 	
 	private void updateZombiesDumb() {
-		int slump = gen.nextInt(60);
-		
 		for (Zombie z : zombies) {
+			// ##### Set rotation
+			float directionX = z.getBody().getLinearVelocity().x == 0 ? 0.0001f : z.getBody().getLinearVelocity().x;
+			float directionY = z.getBody().getLinearVelocity().y;
+			
+			float angle = (float) Math.atan(directionY/directionX);
+			
+			if (directionX < 0)
+				angle = angle - (float)Math.PI;
+			
+			z.getBody().setTransform(z.getBody().getPosition(), angle);
+			// ##### Set rotation
+			
 			Creature closestTarget = null;
 			
-			if (slump == 0)
+			int logic = z.getLogicCounter();
+			if (logic < 0) {
 				closestTarget = getClosestTarget(z);
+				z.resetLogicCounter();
+			}
 			
 			// If any humans are nearby, chase
 			if (closestTarget != null) {
@@ -236,18 +280,12 @@ public class AIModel {
 				
 				tmpX /= size * 1.2;
 				tmpY /= size * 1.2;
-				
-				float angle = (float) Math.atan(tmpY/tmpX);
-				
-				if (tmpX < 0)
-					angle = angle - (float)Math.PI;
-				
-				z.getBody().setTransform(z.getBody().getPosition(), angle);	
+					
 				z.getBody().setLinearVelocity(tmpX, tmpY);
 				z.setState(Zombie.State.CHASING);
 			} else {
 				// If the zombie just ended chasing a human, set its state to idle.
-				if (slump == 0 && z.getState() == Zombie.State.CHASING)
+				if (logic < 0 && z.getState() == Zombie.State.CHASING)
 					z.setState(Zombie.State.IDLE);
 				
 				if (z.getState() == Zombie.State.IDLE) {
@@ -331,7 +369,7 @@ public class AIModel {
 			double size = Math.sqrt(tmpX * tmpX + tmpY * tmpY);
 			
 			// Range and closest
-			if (size < 2.5 && size < distance) {
+			if (size < 6 && size < distance) {
 				closestTarget = h;
 				distance = size;
 			}
@@ -344,7 +382,7 @@ public class AIModel {
 		double size = Math.sqrt(tmpX * tmpX + tmpY * tmpY);
 		
 		// Range and closest
-		if (size < 2.5 && size < distance) {
+		if (size < 6 && size < distance) {
 			closestTarget = WorldModel.player;
 		}
 		

@@ -1,12 +1,13 @@
 package se.glory.zombieworld.model.entities;
 
 import java.util.ArrayList;
-
-import com.badlogic.gdx.math.Vector2;
+import java.util.Random;
 
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Point;
 import se.glory.zombieworld.utilities.TextureHandler;
+
+import com.badlogic.gdx.math.Vector2;
 
 // TODO: Refactor, much of the code is identical to zombies, make cleaner!
 
@@ -14,11 +15,23 @@ public class Human extends MoveableBody implements Creature {
 	private State state = State.IDLE;
 	private ArrayList<Point> walkPath = new ArrayList<Point>();
 	
+	private int logicCounter;
+	
 	private int collidingNumber = 0;
 	private Vector2 collidingDirection = null;
 
 	public Human(float x, float y) {
 		super(x, y, 15, 15, TextureHandler.humanTexture, Constants.MoveableBodyShape.CIRCLE , Constants.MoveableBodyType.HUMAN);
+		logicCounter = new Random().nextInt(60);
+	}
+	
+	public int getLogicCounter() {
+		logicCounter--;
+		return logicCounter;
+	}
+	
+	public void resetLogicCounter() {
+		logicCounter = 60;
 	}
 	
 	public void setCollidingInfo(Vector2 direction, int collidingNumber) {
@@ -32,13 +45,7 @@ public class Human extends MoveableBody implements Creature {
 	
 	public void walk() {
 		if (state == State.DUMB_AI || state == State.COLLIDING) {
-			float angle = (float) Math.atan(collidingDirection.y/collidingDirection.x);
-			
-			if (collidingDirection.x < 0)
-				angle = angle - (float) Math.PI;
-			
 			getBody().setLinearVelocity(collidingDirection.x, collidingDirection.y);
-			getBody().setTransform(getBody().getPosition(), angle);
 			
 			collidingNumber--;
 			if (collidingNumber < 1)

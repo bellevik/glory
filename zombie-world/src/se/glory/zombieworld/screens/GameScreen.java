@@ -195,13 +195,15 @@ public class GameScreen implements Screen {
 		//addRandomCreatures(2, Constants.MoveableBodyType.ZOMBIE);
 		
 		
-		for(int i = 10; i < 30; i+=1) {
+		for(int i = 10; i < 12; i+=1) {
 			worldModel.getAIModel().addHuman(10*16, i*2*16);
 		}
 		
-		for(int i = 10; i < 20; i+=1) {
+		for(int i = 10; i < 12; i+=1) {
 			worldModel.getAIModel().addZombie(8*16, i*2*16);
 		}
+		
+		//worldModel.getAIModel().addZombie(8*16, 10*2*16);
 		
 		/*
 		worldModel.getAIModel().addHuman(10*16, 10*16);
