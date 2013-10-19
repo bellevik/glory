@@ -17,6 +17,9 @@ public class Constants {
 	public static final int VIEWPORT_WIDTH = 800;
 	public static int VIEWPORT_HEIGHT;
 	
+	public static final int MAX_CREATURES_IN_WORLD = 50;
+	public static final int START_ZOMBIES = 2;
+	public static final int START_HUMANS = MAX_CREATURES_IN_WORLD - START_ZOMBIES - 1; //1 is the player
 
 	public static final int INFECTED_INTERVAL = 1500;
 	public static final int INFECTED_DAMAGE = 2;
