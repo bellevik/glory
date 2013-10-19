@@ -49,12 +49,7 @@ public class ItemInShopContainer {
 		
 		
 		int range = (int)((item.getRange() / Constants.MAX_RANGE)*60);
-		int dmg = 60;
-		
-		if (item.getDamage() >= 0) {
-			dmg = (int)((item.getDamage() / Constants.MAX_DAMAGE)*60);
-		}
-		
+		int dmg = Math.abs((int)((item.getDamage() / Constants.MAX_DAMAGE)*60));
 		int fireRate = (int)((item.getFireRate() / Constants.MAX_FIRE_RATE)*60);
 		
 
