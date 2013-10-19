@@ -99,7 +99,7 @@ public class AIModel {
 		clearZombies();
 		turnHumansToZombie();
 		//clearZombies();
-		
+		// TODO Add new zombie if max creatures > current creatures
 		updateHumansDumb();
 		updateZombiesDumb();
 	}
