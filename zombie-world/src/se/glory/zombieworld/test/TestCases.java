@@ -1,7 +1,5 @@
 package se.glory.zombieworld.test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -10,6 +8,7 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
+import static org.junit.matchers.JUnitMatchers.*;
 import static org.hamcrest.CoreMatchers.*;
 
 import com.badlogic.gdx.Gdx;
@@ -24,9 +23,8 @@ import se.glory.zombieworld.model.entities.Human;
 import se.glory.zombieworld.model.entities.Zombie;
 import se.glory.zombieworld.utilities.AStarPathFinder;
 import se.glory.zombieworld.utilities.Point;
+import se.glory.zombieworld.utilities.UtilityTimer;
 import se.glory.zombieworld.utilities.progressbars.Healthbar;
-
-import com.badlogic.gdx.physics.box2d.World;
 
 public class TestCases {
 
@@ -36,23 +34,26 @@ public class TestCases {
 	Human testHuman;
 	
 	@Test
-	public void testReactions() {
-	//	testWorld = new WorldModel();
-	//	testWorld.createWorld();
-		
-	//	testHuman = new Human(150, 150);
-	//	humans.add(testHuman);
-	//	zombies.add(new Zombie(200,150));
-		
-		//still wrong...
-		assertNotNull("Human object null", testHuman);
-		//assertsEquals("Human starts at correct x position", 150, 150);
-		//assertThat(testHuman.getBody().localVector.x, is(150));
-		//assertTrue("truetrue", testHuman.getBody().getPosition().x==150);
-//		assertsEquals("Human starts at correct y position", expected, actual)
-		
-	//	testHuman.autoUpdateMovement(zombies);
-	//	fail("Test not finished");
+	public void testTimer() {
+		//Creates a new timer with the interval 1000 milliseconds
+		UtilityTimer timer = new UtilityTimer(1000);
+		//Checks that the interval is what we wanted
+		assertThat(timer.getInterval(), is(1000));
+		//Resets the timer
+		timer.resetTimer();
+		//Checks that the timer is not done (has not passed 1 second)
+		assertThat(timer.isDone(), is(false));
+		//Waits for the timer to get through the 1 second
+		while(!timer.isDone()){
+			//Checks that the elapsed time has not reached the interval time yet
+			assertTrue("Elapsed time less than interval", timer.getElapsedTime() < 1000);
+			assertTrue("Elapsed time more than 0", timer.getElapsedTime() >= 0);
+		}
+		//Checks so the timer really is done
+		assertThat(timer.isDone(), is(true));
+		//Checks the elapsed time to see if it really is the same as interval
+		//to make sure it is done
+		assertThat(timer.getElapsedTime(), is((long)timer.getInterval()));
 	}
 	
 	@Test
@@ -98,11 +99,5 @@ public class TestCases {
 		assertThat(correctPath, is(shortestPath));
 		//Asserts the false path does not have the same points as the shortestPath to make sure the assertThat doesn't accept all paths
 		assertThat(falsePath, not(shortestPath));
-	}
-	
-	@Test
-	public void testHealthBar() {
-		//Difficult without creating a stage....
-		fail("Test not finished");
 	}
 }

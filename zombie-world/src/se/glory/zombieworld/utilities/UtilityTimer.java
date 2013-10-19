@@ -27,6 +27,9 @@ public class UtilityTimer {
 		elapsedTime = System.currentTimeMillis() - startTime;
 		return (elapsedTime >= interval);
 	}
+	public long getElapsedTime() {
+		return isDone() ? interval : elapsedTime;
+	}
 	
 	// Setters
 	public void resetTimer(){
