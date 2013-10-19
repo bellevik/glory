@@ -1,6 +1,7 @@
 package se.glory.zombieworld.model.entities;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Point;
@@ -12,11 +13,23 @@ public class Zombie extends MoveableBody implements Creature {
 	private State state = State.IDLE;
 	private ArrayList<Point> walkPath = new ArrayList<Point>();
 	
+	private int logicCounter;
+	
 	private int collidingNumber = 0;
 	private Vector2 collidingDirection = null;
 	
 	public Zombie(float x, float y) {
 		super(x, y, 15, 15, TextureHandler.zombieTexture, Constants.MoveableBodyShape.CIRCLE , Constants.MoveableBodyType.ZOMBIE);
+		logicCounter = new Random().nextInt(60);
+	}
+	
+	public int getLogicCounter() {
+		logicCounter--;
+		return logicCounter;
+	}
+	
+	public void resetLogicCounter() {
+		logicCounter = 60;
 	}
 	
 	public void setCollidingInfo(Vector2 direction, int collidingNumber) {
@@ -30,13 +43,7 @@ public class Zombie extends MoveableBody implements Creature {
 	
 	public void walk() {
 		if (state == State.DUMB_AI) {
-			float angle = (float) Math.atan(collidingDirection.y/collidingDirection.x);
-			
-			if (collidingDirection.x < 0)
-				angle = angle - (float) Math.PI;
-			
 			getBody().setLinearVelocity(collidingDirection.x, collidingDirection.y);
-			getBody().setTransform(getBody().getPosition(), angle);
 			
 			collidingNumber--;
 			if (collidingNumber < 1)
