@@ -18,6 +18,7 @@ public class ProgressBar extends Actor{
 	//Positioning for the healthbar
 	private int x;
 	private int y;
+	private float width, height;
 	
 	private int xMargin = 5;
 	private int yMargin = 4;
@@ -35,6 +36,7 @@ public class ProgressBar extends Actor{
 		this.yMargin = yMargin;
 		this.fillLength = fillLength;
 		maxHealthPercent = maxPercent;
+		width = fillLength * maxPercent;
 
 		lastHealthPercent = maxHealthPercent;
 		
@@ -87,11 +89,19 @@ public class ProgressBar extends Actor{
 	}
 	
 	public float getActorX() {
-		return actor.getX();
+		return x;
 	}
 	
 	public float getActorY() {
-		return actor.getY();
+		return y;
+	}
+	
+	public float getWidth() {
+		return bgActor.getWidth();
+	}
+	
+	public float getHeight() {
+		return bgActor.getHeight();
 	}
 	
 	public int getLastKnownHealthPercent() {
