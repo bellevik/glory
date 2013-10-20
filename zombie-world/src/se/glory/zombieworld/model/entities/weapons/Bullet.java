@@ -1,5 +1,8 @@
 package se.glory.zombieworld.model.entities.weapons;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Identity;
@@ -12,8 +15,6 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.utils.Timer;
-import com.badlogic.gdx.utils.Timer.Task;
 
 /*
  * This class will represent a Bullet. The bullet will be used to kill
@@ -24,6 +25,8 @@ public class Bullet {
 	private float damage;
 	private float range;
 	private Texture[] textures;
+	private Timer t;
+	private TimerTask tt;
 	
 	public Bullet (float x, float y, float xAngle, float yAngle, float damage, float range) {
 		this.damage = damage;
@@ -58,16 +61,35 @@ public class Bullet {
 		
 		bulletBody.setLinearVelocity(8 * xAngle, 8 * yAngle);
 
+		/*
 		Timer.schedule(new Task(){
 		    @Override
 		    public void run() {
 		    	if (this != null && bulletBody.getUserData() != null) {
 		    		Identity tmp = (Identity) bulletBody.getUserData();
-		    		Gdx.app.error("MyTag", "Set dead 5");
-			    	//tmp.setDead(true);
+			    	tmp.setDead(true);
 		    	}
 		    }
-		}, range);
+		}, range);*/
+		
+		
+		t = new Timer();
+		tt = new TimerTask() {
+		    @Override
+		    public void run() {
+		    	if (this != null && bulletBody.getUserData() != null) {
+		    		Identity tmp = (Identity) bulletBody.getUserData();
+			    	tmp.setDead(true);
+		    	}
+		    };
+		};
+		t.schedule(tt,(long)(range*1000));
+		
+	}
+	
+	public void destroyTimer() {
+		tt.cancel();
+		t.cancel();
 	}
 
 	public float getDamage() {

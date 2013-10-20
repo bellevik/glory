@@ -3,6 +3,7 @@ package se.glory.zombieworld.model;
 import java.util.ArrayList;
 
 import se.glory.zombieworld.model.entities.Player;
+import se.glory.zombieworld.model.entities.weapons.Bullet;
 import se.glory.zombieworld.model.entities.weapons.WeaponArsenal;
 import se.glory.zombieworld.utilities.CollisionDetection;
 import se.glory.zombieworld.utilities.Constants;
@@ -78,8 +79,12 @@ public class WorldModel {
 			if (body != null) {
 				if (body.getUserData() != null){
 					if (body.getUserData().getClass().equals(Identity.class)) {
-						if (((Identity)(body.getUserData())).isDead()) {
+						Identity id = (Identity)body.getUserData();
+						if (id.isDead()) {
 							if (!WorldModel.world.isLocked()) {
+								if(id.getType() == Constants.MoveableBodyType.BULLET) {
+									((Bullet)id.getObj()).destroyTimer();
+								}
 								Gdx.app.error("MyTaf", "SWEEP BODY: " + ((Identity)(body.getUserData())).getType() + " IS DEAD: " + ((Identity)(body.getUserData())).isDead());
 								WorldModel.world.destroyBody(body);
 							}
