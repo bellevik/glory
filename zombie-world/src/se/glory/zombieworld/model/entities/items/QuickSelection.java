@@ -43,6 +43,10 @@ public class QuickSelection {
 		currentSelection = new CurrentSelection(stage, selectionStick.getTouchpad().getX(), selectionStick.getTouchpad().getY(), true);
 	}
 
+	public Joystick getSelectionStick() {
+		return selectionStick;
+	}
+
 	public int getNumberOfContainers() {
 		return itemContainers.length;
 	}
@@ -98,6 +102,19 @@ public class QuickSelection {
 	}
 
 	/*
+	 * Checks if the list is empty
+	 */
+	public boolean isListEmpty() {
+		boolean empty = true;
+		for(int i = 0; i < itemContainers.length; i++) {
+			if(itemContainers[i].getItem() != null) {
+				empty = false;
+			}
+		}
+		return empty;
+	}
+
+	/*
 	 * Loops through all it's ItemContainers to determine which
 	 * one is tapped.
 	 */
@@ -110,6 +127,15 @@ public class QuickSelection {
 			}
 		}
 		return touched;
+	}
+	
+	
+	public void changeStickBackground() {
+		if(selection < 5 && itemContainers[selection].getItem() != null) {
+			String weaponName = itemContainers[selection].getItem().getItemName();
+			Texture weaponTexture = new Texture("data/weapons/" + weaponName + "/" + weaponName + ".png");
+			selectionStick.changeStickBackground(weaponTexture);
+		}
 	}
 
 	// Method gets called every render from GameScreen
@@ -148,6 +174,15 @@ public class QuickSelection {
 			/* Decreses the distance between the selection-stick and the ItemContainers */
 			if(Math.abs(Math.sqrt(vertical + horizontal)) > 16) {
 				distance -= 16;
+				
+				/* Here we change the background for the selectionStick */
+				if(selection < 5 && itemContainers[selection].getItem() != null) {
+					changeStickBackground();
+				} else {
+					selectionStick.removeStickBackground();
+				}
+				
+				
 			} else {
 				distance = 0;
 			}
@@ -160,16 +195,6 @@ public class QuickSelection {
 			if(itemContainers[0].isActorVisible() && distance < 16) {
 				for(int i = 0; i < itemContainers.length; i++) {
 					itemContainers[i].hide();
-				}
-			}
-
-			if(distance < 15) {
-				if(selection < 5 && itemContainers[selection].getItem() != null) {
-					String weaponName = itemContainers[selection].getItem().getItemName();
-					Texture weaponTexture = new Texture("data/weapons/" + weaponName + "/" + weaponName + ".png");
-					selectionStick.changeStickBackground(weaponTexture);
-				} else {
-					selectionStick.removeStickBackground();
 				}
 			}
 		}
@@ -204,6 +229,8 @@ public class QuickSelection {
 					currentSelection.show();
 				}
 			} else {
+				
+
 				selection = 5;
 				if(currentSelection.isActorVisible()) {
 					currentSelection.hide();
@@ -249,13 +276,7 @@ public class QuickSelection {
 			WorldModel.player.removeEquipedWeapon();
 			selectionStick.removeStickBackground();
 			selection = 5;
-		}
-
-		if(selection < 5 && itemContainers[selection].getItem() != null) {
-			String weaponName = itemContainers[selection].getItem().getItemName();
-			Texture weaponTexture = new Texture("data/weapons/" + weaponName + "/" + weaponName + ".png");
-			selectionStick.changeStickBackground(weaponTexture);
-		} else {
+		} else if(selection == 5){
 			selectionStick.removeStickBackground();
 		}
 	}
