@@ -181,7 +181,7 @@ public class GameScreen implements Screen {
 
 		new WeaponLoot(100, 100);
 		new WeaponLoot(200, 200);
-		new WeaponLoot(300, 300);
+		//new WeaponLoot(300, 300);
 
 		gameView = new GameView(batch);
 		worldModel.setupAIModel(gameView.getMapLayer("blocked"));

@@ -107,6 +107,12 @@ public class Player implements Creature {
 		//otherwise return false
 		boolean addedToQuickSelection = false;
 
+		if(StageModel.quickSelection.isListEmpty()) {
+			equippedWeapon = item;
+			
+			//StageModel.quickSelection.getSelectionStick().changeStickBackground(item.getTexture());
+		}
+		
 		for (int i = 0; i < StageModel.quickSelection.getNumberOfContainers(); i++) {
 			//If the position is empty and the item doesn't exists in the quickswaplist, add a new item to the list
 			if (StageModel.quickSelection.getCurrentItem(i) == null && !StageModel.quickSelection.existsInList(item) && 
