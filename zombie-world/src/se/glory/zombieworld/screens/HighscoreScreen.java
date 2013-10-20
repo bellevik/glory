@@ -36,16 +36,16 @@ public class HighscoreScreen implements Screen {
 		
 		batch.begin();
 		batch.draw(backgroundTexture, 0, 0);
-		font.draw(batch, "1.", Constants.VIEWPORT_WIDTH/4, 270);
-		font.draw(batch, "2.", Constants.VIEWPORT_WIDTH/4, 240);
-		font.draw(batch, "3.", Constants.VIEWPORT_WIDTH/4, 210);
-		font.draw(batch, "4.", Constants.VIEWPORT_WIDTH/4, 180);
-		font.draw(batch, "5.", Constants.VIEWPORT_WIDTH/4, 150);
+		font.draw(batch, "1.", Constants.VIEWPORT_WIDTH/3, 350);
+		font.draw(batch, "2.", Constants.VIEWPORT_WIDTH/3, 320);
+		font.draw(batch, "3.", Constants.VIEWPORT_WIDTH/3, 290);
+		font.draw(batch, "4.", Constants.VIEWPORT_WIDTH/3, 260);
+		font.draw(batch, "5.", Constants.VIEWPORT_WIDTH/3, 230);
 		batch.end();
 	
 		for (int i = 0; i < 5; i++) {
 			batch.begin();
-			font.draw(batch, Score.getHighscoreAtPosition(i), Constants.VIEWPORT_WIDTH/4 + 100, 270 - (30 * i));
+			font.draw(batch, Score.getHighscoreAtPosition(i), Constants.VIEWPORT_WIDTH/3 + 100, 350 - (30 * i));
 			batch.end();
 		}
 		
@@ -60,24 +60,16 @@ public class HighscoreScreen implements Screen {
 
 	@Override
 	public void show() {
-		backgroundTexture = new Texture(Gdx.files.internal("ui/mainMenuBackground.png"));
+		backgroundTexture = new Texture(Gdx.files.internal("ui/highscoreBackground.png"));
 		
 		stage = new Stage();
 		batch = new SpriteBatch();
 		
 		Gdx.input.setInputProcessor(stage);
 		
-		highscoreLabel = new Image(new Texture(Gdx.files.internal("ui/highScoreLabel.png")));
-		highscoreLabel.setX(Constants.VIEWPORT_WIDTH/2 - highscoreLabel.getWidth()/2);
-		highscoreLabel.setY(295);
-		
-		stage.addActor(highscoreLabel);
-		
 		backButton = new Image(new Texture(Gdx.files.internal("ui/buttonBack.png")));
 		backButton.setX(Constants.VIEWPORT_WIDTH/2 - backButton.getWidth()/2);
 		backButton.setY(20);
-		
-		stage.addActor(backButton);
 		
 		backButton.addListener(new ClickListener() {
 			@Override
@@ -85,6 +77,8 @@ public class HighscoreScreen implements Screen {
 				((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu());
 			}
 		});
+
+		stage.addActor(backButton);
 	}
 
 	@Override
