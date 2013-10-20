@@ -23,6 +23,10 @@ public class Score {
 		}
 	}
 	
+	public static void resetScore () {
+		currentScore = 0;
+	}
+	
 	public static UserScore[] getHighscoreList () {
 		FileHandle file = Gdx.files.internal("highscore.txt");
 		String text = file.readString();

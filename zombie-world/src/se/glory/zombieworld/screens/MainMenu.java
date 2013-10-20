@@ -1,6 +1,7 @@
 package se.glory.zombieworld.screens;
 
 import se.glory.zombieworld.utilities.Constants;
+import se.glory.zombieworld.utilities.Score;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -84,6 +85,7 @@ public class MainMenu implements Screen {
 		buttonPlay.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				Score.resetScore();
 				((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen());
 			}
 		});
