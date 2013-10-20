@@ -110,6 +110,7 @@ public class Player implements Creature {
 		if(StageModel.quickSelection.isListEmpty()) {
 			equippedWeapon = item;
 			StageModel.quickSelection.getSelectionStick().changeStickBackground(item.getTexture());
+			StageModel.quickSelection.setSelection();
 			
 			//StageModel.quickSelection.getSelectionStick().changeStickBackground(item.getTexture());
 		}

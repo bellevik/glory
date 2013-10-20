@@ -70,6 +70,10 @@ public class QuickSelection {
 	public void changeItem(int pos, EquippableItem item) {
 		itemContainers[pos].newItem(item);
 	}
+	
+	public void setSelection() {
+		selection = 0;
+	}
 
 	/*
 	 * Repositions elements to fit different screen-sizes. 
