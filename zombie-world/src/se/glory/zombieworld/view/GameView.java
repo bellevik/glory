@@ -151,7 +151,7 @@ public class GameView {
 
 		for (Body body : WorldModel.drawableBodies) {
 			Identity identity = (Identity) body.getUserData();
-			if(identity.getType() == MoveableBodyType.STREETOBJECT ){
+			if(identity.getType() == MoveableBodyType.STREETOBJECT || identity.getType() == MoveableBodyType.BULLET){
 				Texture texture = identity.getTexture();
 
 				batch.begin();
