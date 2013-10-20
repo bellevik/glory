@@ -18,14 +18,19 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 public class ItemInShopContainer {
 
 	private Stage stage;
-	private Texture texture;
+	private Texture texture, healthBarTexture;
 	private Image bg;
 	private Image bgOwned;
 	private Texture weapon;
 	private Image weaponActor;
+	private Image weaponNameActor;
+	
 	private ItemBar rangeIndicatorBar;
 	private ItemBar fireRateIndicatorBar;
 	private ItemBar dmgIndicatorBar;
+	
+	private Image rangeImage, fireRateImage, damageImage, healthImage;
+	
 	private String itemName;
 	private String itemCost;
 	private EquippableItem item;
@@ -55,17 +60,39 @@ public class ItemInShopContainer {
 
 		rangeIndicatorBar = new ItemBar(stage, (int)x+80, (int)y+10, range);
 		rangeIndicatorBar.setVisibility(false);
+		//------
+		rangeImage = new Image(new Texture(Gdx.files.internal("img/shop/rangetext.png")));
+		stage.addActor(rangeImage);
+		rangeImage.setPosition(rangeIndicatorBar.getActorX() + rangeIndicatorBar.getWidth() / 2 - rangeImage.getWidth() / 2, rangeIndicatorBar.getActorY() + rangeIndicatorBar.getHeight() - 5);
+		rangeImage.setVisible(false);
+		
+		healthBarTexture = (item.getItemType() == Constants.ItemType.CONSUMABLE) ? new Texture(Gdx.files.internal("img/shop/healtext.png")) : new Texture(Gdx.files.internal("img/shop/damagetext.png"));
 		
 		dmgIndicatorBar = new ItemBar(stage, (int)x+80, (int)y+40, dmg);
 		dmgIndicatorBar.setVisibility(false);
+		//------
+		damageImage = new Image(healthBarTexture);
+		stage.addActor(damageImage);
+		damageImage.setPosition(dmgIndicatorBar.getActorX() + dmgIndicatorBar.getWidth() / 2 - damageImage.getWidth() / 2, dmgIndicatorBar.getActorY() + dmgIndicatorBar.getHeight() - 5);
+		damageImage.setVisible(false);
 		
 		fireRateIndicatorBar = new ItemBar(stage, (int)x+80, (int)y+70, fireRate);
 		fireRateIndicatorBar.setVisibility(false);
+		//------
+		fireRateImage = new Image(new Texture(Gdx.files.internal("img/shop/fireratetext.png")));
+		stage.addActor(fireRateImage);
+		fireRateImage.setPosition(fireRateIndicatorBar.getActorX() + fireRateIndicatorBar.getWidth() / 2 - fireRateImage.getWidth() / 2, fireRateIndicatorBar.getActorY() + fireRateIndicatorBar.getHeight() - 5);
+		fireRateImage.setVisible(false);
 		
 		weaponActor = new Image (weapon);
 		stage.addActor(weaponActor);
 		weaponActor.setPosition(x+10, y+10);
 		weaponActor.setVisible(false);
+		
+		weaponNameActor = new Image (new Texture(Gdx.files.internal("data/weapons/"+item.getItemName()+"/"+item.getItemName()+"nametext.png")));
+		stage.addActor(weaponNameActor);
+		weaponNameActor.setPosition(weaponActor.getX() + weaponActor.getWidth() / 2 - weaponNameActor.getWidth() / 2, weaponActor.getY() + weaponActor.getHeight());
+		weaponNameActor.setVisible(false);
 		
 		
 	}public void setContainerVisability(boolean visable){
@@ -75,9 +102,13 @@ public class ItemInShopContainer {
 
 		bg.setVisible(visable);
 		weaponActor.setVisible(visable);
+		weaponNameActor.setVisible(visable);
 		rangeIndicatorBar.setVisibility(visable);
 		dmgIndicatorBar.setVisibility(visable);
 		fireRateIndicatorBar.setVisibility(visable);
+		fireRateImage.setVisible(visable);
+		damageImage.setVisible(visable);
+		rangeImage.setVisible(visable);
 		
 	}public void buyItem(){
 		WorldModel.player.addItemToQuickSwap(item);
