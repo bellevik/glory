@@ -301,7 +301,6 @@ public class GameScreen implements Screen {
 
 				if (c != null) {
 					new StreetObject(c.getTile().getProperties().get("object").toString(),x*16+8,y*16+8);
-					System.out.println("created at : "+ x+ ", "+y);
 				}
 
 			}		

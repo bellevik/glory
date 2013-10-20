@@ -82,8 +82,6 @@ public class Joystick {
         stage.getRoot().removeActor(touchpad);
         touchpad = new Touchpad(10, touchpadStyle);
         touchpad.setBounds(x, y, width, height);
-		
-        System.out.println("Texture: " + texture);
         
         stage.addActor(touchpad);
 	}

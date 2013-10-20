@@ -44,25 +44,17 @@ public class AIModel {
 	}
 	
 	public void removeHuman(Human human) {
-		Gdx.app.error("MyTag", "TO REMOVE HUMAN");
 		((Identity)human.getBody().getUserData()).setDead(true);
 		humans.remove(human);
-		Gdx.app.error("MyTag", "REMOVED HUMAN");
 	}
 	
 	public void addZombie(float x, float y) {
-		Gdx.app.error("MyTag", "TO ADD ZOMBIE");
-		Zombie z = new Zombie(x, y);
-		((Identity)z.getBody().getUserData()).setDead(false);
-		zombies.add(z);
-		Gdx.app.error("MyTag", "ADDED ZOMBIE");
+		zombies.add(new Zombie(x, y));
 	}
 	
 	public void removeZombie(Zombie zombie) {
-		Gdx.app.error("MyTag", "TO REMOVE ZOMBIE");
 		((Identity)zombie.getBody().getUserData()).setDead(true);
 		zombies.remove(zombie);
-		Gdx.app.error("MyTag", "REMOVED ZOMBIE");
 	}
 	
 	public void setMapSize(int mapWidth, int mapHeight) {
@@ -83,31 +75,9 @@ public class AIModel {
 	}
 	
 	public void update() {
-		for (Human h : humans) {
-			if (h.getBody() == null)
-				Gdx.app.error("MyTag", "ERROR 1");
-		}
-		
-		for (Human h : deadHumans) {
-			if (h.getBody() == null)
-				Gdx.app.error("MyTag", "ERROR 2");
-		}
-		
-		for (Zombie h : zombies) {
-			if (h.getBody() == null)
-				Gdx.app.error("MyTag", "ERROR 3");
-		}
-		
-		for (Zombie h : deadZombies) {
-			if (h.getBody() == null)
-				Gdx.app.error("MyTag", "ERROR 4");
-		}
-		
-		
-		
 		clearZombies();
 		turnHumansToZombie();
-		//clearZombies();
+		
 		// TODO Add new zombie if max creatures > current creatures
 		updateHumansDumb();
 		updateZombiesDumb();
@@ -400,9 +370,6 @@ public class AIModel {
 	
 	//Updates human health if they are infected
 	private void updateHumanHealth(Human h) {
-		if (h == null)
-			Gdx.app.error("MyTag", "ERROR 7");
-		
 		UtilityTimer infectedHealthTimer = h.getInfectedHealthTimer();
 		
 		if(infectedHealthTimer != null && infectedHealthTimer.isDone()) {
@@ -417,9 +384,6 @@ public class AIModel {
 	
 	//Adds zombie to the deadZombie list if the health is zero so the body can be removed correctly
 	private void checkZombieHealth(Zombie z) {
-		if (z == null)
-			Gdx.app.error("MyTag", "ERROR 6");
-		
 		if(z.getHealth() <= 0) {
 			deadZombies.add(z);
 		}

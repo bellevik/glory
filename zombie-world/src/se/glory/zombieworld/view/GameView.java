@@ -2,11 +2,9 @@ package se.glory.zombieworld.view;
 
 import java.util.ArrayList;
 
-import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.Creature;
 import se.glory.zombieworld.model.entities.items.WeaponLoot;
-import se.glory.zombieworld.model.entities.obstacles.CustomObstacle;
 import se.glory.zombieworld.utilities.Animator;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Constants.MoveableBodyType;
@@ -31,7 +29,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class GameView {
 	private SpriteBatch batch;
@@ -154,79 +151,75 @@ public class GameView {
 		WorldModel.world.getBodies(WorldModel.drawableBodies);
 
 		for (Body body : WorldModel.drawableBodies) {
-			//if (body.getUserData() != null && body.getUserData().getClass().equals(Identity.class)) {
-				Identity identity = (Identity) body.getUserData();
-					//System.out.println(identity.getType() == Constants.MoveableBodyType.STREETOBJECT);
-					if(identity.getType() == MoveableBodyType.STREETOBJECT ){
-						Texture texture = identity.getTexture();
-						//System.out.println(body.getPosition().x + " : " + body.getPosition().y);
-						batch.begin();
-						batch.draw(texture, body.getPosition().x*Constants.BOX_TO_WORLD - texture.getWidth()/2, body.getPosition().y*Constants.BOX_TO_WORLD - texture.getHeight()/15);
-						batch.end();
-					}
-					float width = identity.getWidth();
-					float height = identity.getHeight();
+			Identity identity = (Identity) body.getUserData();
+			if(identity.getType() == MoveableBodyType.STREETOBJECT ){
+				Texture texture = identity.getTexture();
 
-					//Check if the body is a creature
-					if(identity.getObj() instanceof Creature){
-						/*
-						 * Calculates the angle each body is facing to display the
-						 * correct animation.
-						 */
-						float T = body.getAngle();
-
-						if (T > Math.PI)
-							T = (float) (-2 * Math.PI + T);
-						if (T < -Math.PI)
-							T = (float) (2 * Math.PI + T);
-
-						angle = T * MathUtils.radiansToDegrees;
-
-						//Gets what type of creature the object is
-						MoveableBodyType name = identity.getType();
-
-						Animation ani = null;
-
-						/*
-						 * Check to see in what direction the body is facing, and gets the 
-						 * appropriate animation.
-						 */
-						if(angle > -22  && angle <= 22){
-							//Facing east
-							ani = animator.getAnimation(name, 2);
-						}else if(angle > 22 && angle <= 67){
-							//Facing northeast
-							ani = animator.getAnimation(name, 3);
-						}else if(angle > 67 && angle <= 112){
-							//Facing north
-							ani = animator.getAnimation(name, 4);
-						}else if(angle > 112 && angle <= 157){
-							//Facing northwest
-							ani = animator.getAnimation(name, 5);
-						}else if(angle > 157 || angle <= -157){
-							//Facing west
-							ani = animator.getAnimation(name, 6);
-						}else if(angle > -157 && angle <= -112){
-							//Facing southwest
-							ani = animator.getAnimation(name, 7);
-						}else if(angle > -112 && angle <= -67){
-							//Facing south
-							ani = animator.getAnimation(name, 0);
-						}else if(angle > -67 && angle <= -22){
-							//Facing southeast
-							ani = animator.getAnimation(name, 1);
-						}
-
-						if (ani != null) {
-							animator.drawAnimation(batch, body.getPosition().x, body.getPosition().y, ani, ((Creature)identity.getObj()).isMoving());
-						}
-					} else if (identity.getObj() instanceof WeaponLoot) {
-						animator.drawAnimation(batch, body.getPosition().x, body.getPosition().y, animator.getAnimation(MoveableBodyType.WEAPON, 0), true);
-					}
+				batch.begin();
+				batch.draw(texture, body.getPosition().x*Constants.BOX_TO_WORLD - texture.getWidth()/2, body.getPosition().y*Constants.BOX_TO_WORLD - texture.getHeight()/15);
+				batch.end();
 			}
 
-			WorldModel.drawableBodies.clear();
-		
+			//Check if the body is a creature
+			if(identity.getObj() instanceof Creature){
+				/*
+				 * Calculates the angle each body is facing to display the
+				 * correct animation.
+				 */
+				float T = body.getAngle();
+
+				if (T > Math.PI)
+					T = (float) (-2 * Math.PI + T);
+				if (T < -Math.PI)
+					T = (float) (2 * Math.PI + T);
+
+				angle = T * MathUtils.radiansToDegrees;
+
+				//Gets what type of creature the object is
+				MoveableBodyType name = identity.getType();
+
+				Animation ani = null;
+
+				/*
+				 * Check to see in what direction the body is facing, and gets the 
+				 * appropriate animation.
+				 */
+				if(angle > -22  && angle <= 22){
+					//Facing east
+					ani = animator.getAnimation(name, 2);
+				}else if(angle > 22 && angle <= 67){
+					//Facing northeast
+					ani = animator.getAnimation(name, 3);
+				}else if(angle > 67 && angle <= 112){
+					//Facing north
+					ani = animator.getAnimation(name, 4);
+				}else if(angle > 112 && angle <= 157){
+					//Facing northwest
+					ani = animator.getAnimation(name, 5);
+				}else if(angle > 157 || angle <= -157){
+					//Facing west
+					ani = animator.getAnimation(name, 6);
+				}else if(angle > -157 && angle <= -112){
+					//Facing southwest
+					ani = animator.getAnimation(name, 7);
+				}else if(angle > -112 && angle <= -67){
+					//Facing south
+					ani = animator.getAnimation(name, 0);
+				}else if(angle > -67 && angle <= -22){
+					//Facing southeast
+					ani = animator.getAnimation(name, 1);
+				}
+
+				if (ani != null) {
+					animator.drawAnimation(batch, body.getPosition().x, body.getPosition().y, ani, ((Creature)identity.getObj()).isMoving());
+				}
+			} else if (identity.getObj() instanceof WeaponLoot) {
+				animator.drawAnimation(batch, body.getPosition().x, body.getPosition().y, animator.getAnimation(MoveableBodyType.WEAPON, 0), true);
+			}
+		}
+
+		WorldModel.drawableBodies.clear();
+
 	}
 
 	/*
@@ -261,7 +254,7 @@ public class GameView {
 				}
 			}
 		}
-		
+
 		//Bad fix to make it change position depending on players position since it is not
 		//an actor and has to be placed as part of the world
 		if(WorldModel.player.getInfectedHealthTimer() != null) {

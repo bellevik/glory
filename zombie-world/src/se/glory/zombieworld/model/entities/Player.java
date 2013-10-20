@@ -290,8 +290,6 @@ public class Player implements Creature {
 	}
 
 	public void kill() {
-		//	(Identity)player.getBody().getUserData();
-		Gdx.app.error("MyTag", "Set dead 6");
 		((Identity)this.getBody().getUserData()).setDead(true);
 	}
 

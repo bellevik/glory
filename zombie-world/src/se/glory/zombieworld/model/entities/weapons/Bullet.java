@@ -8,7 +8,6 @@ import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Identity;
 import se.glory.zombieworld.utilities.TextureHandler;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -61,18 +60,6 @@ public class Bullet {
 		
 		bulletBody.setLinearVelocity(8 * xAngle, 8 * yAngle);
 
-		/*
-		Timer.schedule(new Task(){
-		    @Override
-		    public void run() {
-		    	if (this != null && bulletBody.getUserData() != null) {
-		    		Identity tmp = (Identity) bulletBody.getUserData();
-			    	tmp.setDead(true);
-		    	}
-		    }
-		}, range);*/
-		
-		
 		t = new Timer();
 		tt = new TimerTask() {
 		    @Override
@@ -83,6 +70,7 @@ public class Bullet {
 		    	}
 		    };
 		};
+		
 		t.schedule(tt,(long)(range*1000));
 		
 	}

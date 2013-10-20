@@ -85,7 +85,7 @@ public class WorldModel {
 								if(id.getType() == Constants.MoveableBodyType.BULLET) {
 									((Bullet)id.getObj()).destroyTimer();
 								}
-								Gdx.app.error("MyTaf", "SWEEP BODY: " + ((Identity)(body.getUserData())).getType() + " IS DEAD: " + ((Identity)(body.getUserData())).isDead());
+								
 								WorldModel.world.destroyBody(body);
 							}
 						}
