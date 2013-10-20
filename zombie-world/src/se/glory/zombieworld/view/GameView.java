@@ -135,7 +135,6 @@ public class GameView {
 	 */
 	public void drawLabelOnScreen(String label, float x, float y) {
 		batch.begin();
-		font.setColor(Color.RED);
 		font.draw(batch, label, x, y);
 		batch.end();
 	}
