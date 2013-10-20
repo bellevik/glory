@@ -58,7 +58,10 @@ public class GameView {
 
 		animator = new Animator();
 
-		doors.add(new Point(116, 130));
+		doors.add(new Point(95, 149));
+		doors.add(new Point(160, 30));
+		doors.add(new Point(187, 189));
+		doors.add(new Point(17, 195));
 	}
 
 	public TiledMapTileLayer getMapLayer(String name) {
