@@ -17,10 +17,12 @@ import se.glory.zombieworld.utilities.TextureHandler;
 import se.glory.zombieworld.view.GameView;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 
@@ -35,6 +37,9 @@ public class GameScreen implements Screen {
 	private ShopView shopView;
 
 	private SoundPlayer soundPlayer;
+	
+	/* Temporary WASD-movement */
+	float rotation = 0;
 
 	/*
 	 * This method will be called all the time throughout the game. Libgdx method!
@@ -44,6 +49,33 @@ public class GameScreen implements Screen {
 		gameView.render();
 
 		if(Constants.gameState == Constants.GameState.RUNNING) {
+			
+			/* Temporary WASD-movement */
+			float pVelocityX = 0;
+			float pVelocityY = 0;
+			if(Gdx.input.isKeyPressed(Input.Keys.A)) {
+				pVelocityX = -1;
+			}
+			if(Gdx.input.isKeyPressed(Input.Keys.D)) {
+				if(pVelocityX == 0) {
+					pVelocityX = 1;
+				} else {
+					pVelocityX = 0;
+				}
+			}
+			if(Gdx.input.isKeyPressed(Input.Keys.W)) {
+				pVelocityY = 1;
+			}
+			if(Gdx.input.isKeyPressed(Input.Keys.S)) {
+				if(pVelocityY == 0) {
+					pVelocityY = -1;
+				} else {
+					pVelocityY = 0;
+				}
+			}
+			WorldModel.player.getBody().setLinearVelocity(pVelocityX * 2, pVelocityY * 2);
+			/* End of temporary WASD-movement */
+			
 			if (ready) {
 				ready = false;
 				Timer.schedule(new Task(){
@@ -55,17 +87,43 @@ public class GameScreen implements Screen {
 				}, (float) .3);
 			}
 
-			// Update player movement
-			WorldModel.player.getBody().setLinearVelocity(StageModel.moveStick.getTouchpad().getKnobPercentX() * 2, StageModel.moveStick.getTouchpad().getKnobPercentY() * 2);
+			// Update player movement (Don't use with WASD-demo)
+			//WorldModel.player.getBody().setLinearVelocity(StageModel.moveStick.getTouchpad().getKnobPercentX() * 2, StageModel.moveStick.getTouchpad().getKnobPercentY() * 2);
 			
 			//The four floats below will represent the percentage in X and Y direction of the Joysticks
 			float moveKnobX = StageModel.moveStick.getTouchpad().getKnobPercentX();
 			float moveKnobY = StageModel.moveStick.getTouchpad().getKnobPercentY();
 			float fireKnobX = StageModel.fireStick.getTouchpad().getKnobPercentX();
 			float fireKnobY = StageModel.fireStick.getTouchpad().getKnobPercentY();
-			//This method will rotate the player
-			WorldModel.player.applyRotationToPlayer(moveKnobX, moveKnobY, fireKnobX, fireKnobY);
+			
+			//This method will rotate the player (Don't use with WASD-demo)
+			//WorldModel.player.applyRotationToPlayer(moveKnobX, moveKnobY, fireKnobX, fireKnobY);
 
+			/* Temporary WASD-movement */
+			if((int)pVelocityX == 1 && (int)pVelocityY == 0) {
+				rotation = 0;
+			} else if((int)pVelocityX == 1 && (int)pVelocityY == 1) {
+				rotation = 45;
+			} else if((int)pVelocityX == 0 && (int)pVelocityY == 1) {
+				rotation = 90;
+			} else if((int)pVelocityX == -1 && (int)pVelocityY == 1) {
+				rotation = 135;
+			} else if((int)pVelocityX == -1 && (int)pVelocityY == 0) {
+				rotation = 180;
+			} else if((int)pVelocityX == -1 && (int)pVelocityY == -1) {
+				rotation = 225;
+			} else if((int)pVelocityX == 0 && (int)pVelocityY == -1) {
+				rotation = 270;
+			} else if((int)pVelocityX == 1 && (int)pVelocityY == -1) {
+				rotation = 315;
+			}
+			if(fireKnobX == 0 && fireKnobY == 0) {
+				WorldModel.player.getBody().setTransform(WorldModel.player.getBody().getPosition(), rotation * MathUtils.degreesToRadians);
+			} else {
+				WorldModel.player.rotatePlayer(fireKnobX, fireKnobY);
+			}
+			/* End of temporary WASD-movement */
+			
 			//If someone is touching the right joystick then we need the player to be ready to shoot
 			if (fireKnobX != 0 && fireKnobY != 0) {
 				WorldModel.player.shoot();

@@ -41,7 +41,7 @@ public class Bullet {
 		
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = bulletShape;
-		fixtureDef.density = 0.5f;
+		fixtureDef.density = 0.0001f;
 		fixtureDef.friction = 0.4f;
 		fixtureDef.restitution = 0.6f;
 		

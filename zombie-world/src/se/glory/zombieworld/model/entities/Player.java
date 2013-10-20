@@ -237,7 +237,7 @@ public class Player implements Creature {
 	 */
 	public void rotatePlayer (float knobX, float knobY) {
 		float knobDegree;
-
+		
 		if (knobY >= 0) {
 			knobDegree = (int) (Math.acos(knobX) * MathUtils.radiansToDegrees);
 		} else {
