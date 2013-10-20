@@ -10,15 +10,16 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 
 public class GameOverScreen implements Screen {
 	private Stage stage;
@@ -69,13 +70,22 @@ public class GameOverScreen implements Screen {
 		highscoreLabel.setX(Constants.VIEWPORT_WIDTH/2 - highscoreLabel.getWidth()/2);
 		highscoreLabel.setY(295);
 		
-		stage.addActor(highscoreLabel);
-		
 		backButton = new Image(new Texture(Gdx.files.internal("ui/buttonBack.png")));
 		backButton.setX(Constants.VIEWPORT_WIDTH/2 - backButton.getWidth()/2);
 		backButton.setY(20);
 		
-		stage.addActor(backButton);
+		Texture texture = new Texture(Gdx.files.internal("ui/textfieldBackground.png"));
+		Sprite sprite = new Sprite(texture);
+		SpriteDrawable spDraw = new SpriteDrawable(sprite);
+		
+		TextFieldStyle textfieldStyle = new TextFieldStyle();
+		textfieldStyle.background = spDraw;
+		textfieldStyle.fontColor = Color.BLACK;
+		textfieldStyle.font = font;
+		
+		textfield = new TextField("Type your name", textfieldStyle);
+		textfield.setSize(200, 30);
+		textfield.setPosition(Constants.VIEWPORT_WIDTH/2 - textfield.getWidth()/2, 150);
 		
 		backButton.addListener(new ClickListener() {
 			@Override
@@ -83,7 +93,10 @@ public class GameOverScreen implements Screen {
 				((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu());
 			}
 		});
-		
+
+		stage.addActor(highscoreLabel);
+		stage.addActor(backButton);
+		stage.addActor(textfield);
 		
 		Gdx.input.setInputProcessor(stage);		
 	}
