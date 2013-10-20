@@ -18,6 +18,8 @@ public class MainMenu implements Screen {
 	
 	private SpriteBatch batch;
 	
+	private int yDiff = 75;
+	
 	private Texture backgroundTexture, buttonExitTexture, buttonPlayTexture, buttonSettingsTexture, buttonHighscoreTexture, buttonTutorialTexture;
 	private Image buttonExit, buttonPlay, buttonSettings, buttonHighscore, buttonTutorial;
     
@@ -63,20 +65,20 @@ public class MainMenu implements Screen {
 		
 		buttonTutorial = new Image(buttonTutorialTexture);
 		buttonTutorial.setX(Constants.VIEWPORT_WIDTH/2 - buttonTutorialTexture.getWidth()/2);
-		buttonTutorial.setY(buttonPlay.getY() - 75);
+		buttonTutorial.setY(buttonPlay.getY() - yDiff);
 		
 		
 		buttonSettings = new Image(buttonSettingsTexture);
 		buttonSettings.setX(Constants.VIEWPORT_WIDTH/2 - buttonSettingsTexture.getWidth()/2);
-		buttonSettings.setY(buttonTutorial.getY() - 75);
+		buttonSettings.setY(buttonTutorial.getY() - yDiff);
 		
 		buttonHighscore = new Image(buttonHighscoreTexture);
-		buttonHighscore.setX(Constants.VIEWPORT_WIDTH/2 - buttonSettingsTexture.getWidth()/2);
-		buttonHighscore.setY(buttonSettings.getY() - 75);
+		buttonHighscore.setX(Constants.VIEWPORT_WIDTH/2 - buttonHighscoreTexture.getWidth()/2);
+		buttonHighscore.setY(buttonSettings.getY() - yDiff);
 		
 		buttonExit = new Image(buttonExitTexture);
-		buttonExit.setX(Constants.VIEWPORT_WIDTH/2 - buttonExitTexture.getWidth()/2);
-		buttonExit.setY(buttonHighscore.getY() - 75);
+		buttonExit.setX(Constants.VIEWPORT_WIDTH/2 - buttonExitTexture.getWidth()/2 - 10);
+		buttonExit.setY(buttonHighscore.getY() - 65);
 
 		//Adding listeners to buttons
 		buttonPlay.addListener(new ClickListener() {
