@@ -25,6 +25,9 @@ public class Score {
 	
 	public static void resetScore () {
 		currentScore = 0;
+		zombiesKilled = 0;
+		humansKilled = 0;
+		shotsFired = 0;
 	}
 	
 	public static UserScore[] getHighscoreList () {
