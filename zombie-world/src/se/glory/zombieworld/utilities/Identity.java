@@ -30,7 +30,6 @@ public class Identity {
 		return isDead;
 	}
 	public void setDead(boolean isDead) {
-		Gdx.app.error("MyTag", "SET DEAD: " + type + " : " + isDead);
 		this.isDead = isDead;
 	}
 	public Constants.MoveableBodyType getType() {
