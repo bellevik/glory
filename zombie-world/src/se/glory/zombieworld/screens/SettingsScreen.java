@@ -73,7 +73,7 @@ public class SettingsScreen implements Screen {
 		
 		batch = new SpriteBatch();
 		
-		backgroundTexture = new Texture(Gdx.files.internal("ui/mainMenuBackground.png"));
+		backgroundTexture = new Texture(Gdx.files.internal("ui/settingsBackground.png"));
 		musicLabelTexture = new Texture(Gdx.files.internal("ui/buttonMusic.png"));
 		SFXLabelTexture = new Texture(Gdx.files.internal("ui/buttonSFX.png"));
 		backButtonTexture = new Texture(Gdx.files.internal("ui/buttonBack.png"));

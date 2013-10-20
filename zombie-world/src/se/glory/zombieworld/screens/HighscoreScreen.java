@@ -60,7 +60,7 @@ public class HighscoreScreen implements Screen {
 
 	@Override
 	public void show() {
-		backgroundTexture = new Texture(Gdx.files.internal("ui/mainMenuBackground.png"));
+		backgroundTexture = new Texture(Gdx.files.internal("ui/highscoreBackground.png"));
 		
 		stage = new Stage();
 		batch = new SpriteBatch();
