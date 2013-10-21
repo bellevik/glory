@@ -24,9 +24,9 @@ public class Animator {
 	private final int DOOR_FRAME_ROWS = 3;
 	
 	// Animation speeds
-	private final float WALKSPEED = 1.525f;
+	private final float WALKSPEED = 4f;
 	private final float OPENINGSPEED = 0.750f;
-	private final float ROTATESPEED = 0.4f;
+	private final float ROTATESPEED = 2f;
 	
 	private Texture spriteSheet;
 	private TextureRegion currentFrame;

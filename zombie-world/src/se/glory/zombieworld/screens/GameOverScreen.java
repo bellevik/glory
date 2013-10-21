@@ -43,10 +43,10 @@ public class GameOverScreen implements Screen {
 		
 		batch.begin();
 		batch.draw(backgroundTexture, 0, 0);
-		font.draw(batch, "Your score was: " + Score.currentScore + ".", Constants.VIEWPORT_WIDTH/2, 270);
-		font.draw(batch, "You killed " + Score.zombiesKilled + " zombbies!", Constants.VIEWPORT_WIDTH/2, 250);
-		font.draw(batch, "You killed " + Score.humansKilled + " humans!", Constants.VIEWPORT_WIDTH/2, 230);
-		font.draw(batch, "You fired " + Score.shotsFired + " bullets!", Constants.VIEWPORT_WIDTH/2, 210);
+		font.draw(batch, "Your score was: " + Score.currentScore + ".", Constants.VIEWPORT_WIDTH/2 - 100, 270);
+		font.draw(batch, "You killed " + Score.zombiesKilled + " zombbies!", Constants.VIEWPORT_WIDTH/2 - 100, 250);
+		font.draw(batch, "You killed " + Score.humansKilled + " humans!", Constants.VIEWPORT_WIDTH/2 - 100, 230);
+		font.draw(batch, "You fired " + Score.shotsFired + " bullets!", Constants.VIEWPORT_WIDTH/2 - 100, 210);
 		batch.end();
 		
 		stage.act(delta);

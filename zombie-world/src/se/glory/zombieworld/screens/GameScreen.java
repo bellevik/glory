@@ -237,9 +237,8 @@ public class GameScreen implements Screen {
 
 		SpriteBatch batch = new SpriteBatch();
 
-		new WeaponLoot(100, 100);
-		new WeaponLoot(200, 200);
-		//new WeaponLoot(300, 300);
+		new WeaponLoot(1800, 2900);
+		new WeaponLoot(1800, 2800);
 
 		gameView = new GameView(batch);
 		worldModel.setupAIModel(gameView.getMapLayer("blocked"));
@@ -257,9 +256,20 @@ public class GameScreen implements Screen {
 			worldModel.getAIModel().addHuman(10*16, i*2*16);
 		}
 		
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; j++) {
+				worldModel.getAIModel().addHuman(50 + 100 * i, 50 + 100 * j);
+			}
+		}
+		
 		for(int i = 10; i < 12; i+=1) {
 			worldModel.getAIModel().addZombie(8*16, i*2*16);
 		}
+		worldModel.getAIModel().addZombie(0, 0);
+		worldModel.getAIModel().addZombie(64, 64);
+		worldModel.getAIModel().addZombie(0, 64);
+		worldModel.getAIModel().addZombie(900, 1400);
+		worldModel.getAIModel().addZombie(1300, 700);
 		
 		//worldModel.getAIModel().addZombie(8*16, 10*2*16);
 		
