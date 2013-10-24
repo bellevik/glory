@@ -7,10 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
-public class ProgressBar extends Actor{
-
+public class ProgressBar extends Actor {
 	private Texture texture;
-	private Image actor;
 	
 	private int lastHealthPercent, healthGoal;
 	private int maxHealthPercent = 100;
@@ -18,7 +16,6 @@ public class ProgressBar extends Actor{
 	//Positioning for the healthbar
 	private int x;
 	private int y;
-	private float width, height;
 	
 	private int xMargin = 5;
 	private int yMargin = 4;
@@ -29,14 +26,12 @@ public class ProgressBar extends Actor{
 	private Image bgActor, fgActor;
 	
 	public ProgressBar(Stage stage, int x, int y, int xMargin, int yMargin, int fillLength, int maxPercent, Texture bg, Texture fill, Texture fg){
-
 		this.x = x;
 		this.y = y;
 		this.xMargin = xMargin;
 		this.yMargin = yMargin;
 		this.fillLength = fillLength;
 		maxHealthPercent = maxPercent;
-		width = fillLength * maxPercent;
 
 		lastHealthPercent = maxHealthPercent;
 		
@@ -76,13 +71,10 @@ public class ProgressBar extends Actor{
 	}
 	
 	public void updatePosition() {
-	//	x = ((Constants.VIEWPORT_WIDTH/2) - (310/2));
-	//	y = (62);
 		bgActor.setPosition(x, y);
 		
 		for(int i=0; i<maxHealthPercent; i++) {
 			progressBarAmount[i].updatePosition();
-//			infectedHealthBarAmount[i].updatePosition();
 		}
 		
 		fgActor.setPosition(x, y);	
@@ -160,15 +152,16 @@ public class ProgressBar extends Actor{
 	
 	//Not in use right now. May be removed later
 	public void updateHealth(int healthToUpdate) {
-		if(lastHealthPercent < healthToUpdate) {
+		if (lastHealthPercent < healthToUpdate) {
 			for(int i=lastHealthPercent; i<healthToUpdate; i++) {
 				progressBarAmount[i].show();
 			}
-		}else{
+		} else {
 			for(int i=lastHealthPercent; i>healthToUpdate; i--) {
 				progressBarAmount[i-1].hide();
 			}
 		}
+		
 		lastHealthPercent = healthToUpdate;
 	}
 	

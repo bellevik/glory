@@ -11,7 +11,6 @@ import se.glory.zombieworld.utilities.Identity;
 import se.glory.zombieworld.utilities.Point;
 import se.glory.zombieworld.utilities.UtilityTimer;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Vector2;
@@ -106,7 +105,6 @@ public class WorldModel {
 		
 		if(StageModel.healthBar.getHealthPercentGoal() != player.getHealthPercentage()) {
 			StageModel.healthBar.setHealthPercentGoal(player.getHealthPercentage());
-			//.updateHealth(player.getHealthPercentage());
 		}
 		StageModel.healthBar.updateHealthMovementSlowly();
 	}

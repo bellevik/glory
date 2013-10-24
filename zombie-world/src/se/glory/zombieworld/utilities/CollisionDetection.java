@@ -33,27 +33,6 @@ public class CollisionDetection implements ContactListener {
 			return;
 		}
 
-		// If two humans collide, fix this.
-		/*if (i1.getType() == Constants.MoveableBodyType.HUMAN && i2.getType() == Constants.MoveableBodyType.HUMAN) {
-			// Make the first human turn to his right for 15 updates
-			Human h1 = (Human) i1.getObj();
-			Vector2 h1v = h1.getBody().getLinearVelocity().cpy().rotate(90);	
-
-			if (h1.getState() != Human.State.COLLIDING) {
-				h1.setState(Human.State.COLLIDING);
-				h1.setCollidingInfo(h1v, 15);
-			}
-
-			// Make the second human turn to his right for 15 updates
-			Human h2 = (Human) i2.getObj();
-			Vector2 h2v = h2.getBody().getLinearVelocity().cpy().rotate(90);
-
-			if (h1.getState() != Human.State.COLLIDING) {
-				h2.setState(Human.State.COLLIDING);
-				h2.setCollidingInfo(h2v, 15);
-			}
-		}*/
-
 		if (i1.getType() == Constants.MoveableBodyType.HUMAN || i2.getType() == Constants.MoveableBodyType.HUMAN) {
 			if (i1.getType() == Constants.MoveableBodyType.HUMAN) {
 				Human h1 = (Human) i1.getObj();
@@ -62,7 +41,7 @@ public class CollisionDetection implements ContactListener {
 					Vector2 direction = h1.getBody().getLinearVelocity().cpy().rotate(90);
 
 					((Human) i1.getObj()).setState(Human.State.COLLIDING);
-					h1.setCollidingInfo(direction, 20);
+					h1.setDumbWalk(direction, 20);
 				}
 			}
 
@@ -73,7 +52,7 @@ public class CollisionDetection implements ContactListener {
 					Vector2 direction = h2.getBody().getLinearVelocity().cpy().rotate(90);
 
 					((Human) i2.getObj()).setState(Human.State.COLLIDING);
-					h2.setCollidingInfo(direction, 20);
+					h2.setDumbWalk(direction, 20);
 				}
 			}
 		}
@@ -85,14 +64,7 @@ public class CollisionDetection implements ContactListener {
 			//Making a local object of the current object player depending on which object in the collision it is
 			Player player = i1.getType() == Constants.MoveableBodyType.PLAYER ? (Player)i1.getObj() : (Player)i2.getObj();
 
-			/*Player player = null;
-			if(i1.getType() == Constants.MoveableBodyType.PLAYER) {
-				player = (Player)i1.getObj();
-			}else if(i2.getType() == Constants.MoveableBodyType.PLAYER) {
-				player = (Player)i2.getObj();
-			}*/
-
-			//infecting the player
+			//Infecting the player
 			if(player != null) {
 				if (player.getInfectedHealthTimer() == null) {
 					player.infect();
@@ -125,13 +97,6 @@ public class CollisionDetection implements ContactListener {
 			//Making a local object of the current object player depending on which object in the collision it is
 			Human h = i1.getType() == Constants.MoveableBodyType.HUMAN ? (Human)i1.getObj() : (Human)i2.getObj();
 
-			/*Player player = null;
-			if(i1.getType() == Constants.MoveableBodyType.PLAYER) {
-				player = (Player)i1.getObj();
-			}else if(i2.getType() == Constants.MoveableBodyType.PLAYER) {
-				player = (Player)i2.getObj();
-			}*/
-
 			//infecting the player
 			if(h != null) {
 				if (h.getInfectedHealthTimer() == null) {
@@ -142,14 +107,12 @@ public class CollisionDetection implements ContactListener {
 			}
 		}
 
-
-
 		//Checks if the first collision body is of type Item and the other is of type Player
 		// OR the first is Player and the second is Item
 		if (i1.getType() == Constants.MoveableBodyType.ITEM && i2.getType() == Constants.MoveableBodyType.PLAYER || i1.getType() == Constants.MoveableBodyType.PLAYER && i2.getType() == Constants.MoveableBodyType.ITEM) {
 			//These 2 ifs checks wheater its the first or second body that is the Item
 			//In the if we set the items dead boolean to true, for later removal of the item
-			if (i1.getType() == Constants.MoveableBodyType.ITEM){
+			if (i1.getType() == Constants.MoveableBodyType.ITEM) {
 				i1.setDead(true);
 				WorldModel.player.addItemToQuickSwap(((WeaponLoot)i1.getObj()).getWeapon());
 			} else if (i2.getType() == Constants.MoveableBodyType.ITEM) {
@@ -168,7 +131,6 @@ public class CollisionDetection implements ContactListener {
 				i2.setOpen(true);
 			}
 		}
-		// TODO Test theese two ifs on a Windows computer / Android phone
 
 		//This statement checks if a bullet collides with a zombie or a zombie with a bullet
 		//then removes both of them from the world
@@ -202,7 +164,6 @@ public class CollisionDetection implements ContactListener {
 			}
 
 			h.changeHealth(-bulletDamage);
-
 		}
 
 		if (i1.getType() == Constants.MoveableBodyType.BULLET && i2.getType() == Constants.MoveableBodyType.PLAYER || i1.getType() == Constants.MoveableBodyType.PLAYER && i2.getType() == Constants.MoveableBodyType.BULLET) {
@@ -235,5 +196,4 @@ public class CollisionDetection implements ContactListener {
 	public void postSolve(Contact contact, ContactImpulse impulse) {
 
 	}
-
 }

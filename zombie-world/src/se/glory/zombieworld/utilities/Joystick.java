@@ -45,7 +45,6 @@ public class Joystick {
         						break;
         }
         
-        
         //Create TouchPad Style
         touchpadStyle = new TouchpadStyle();
         //Create Drawable's from TouchPad skin
@@ -104,5 +103,4 @@ public class Joystick {
 		
         stage.addActor(touchpad);
 	}
-
 }

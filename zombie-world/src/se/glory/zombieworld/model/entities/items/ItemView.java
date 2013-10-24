@@ -2,7 +2,6 @@ package se.glory.zombieworld.model.entities.items;
 
 import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.model.entities.weapons.EquippableItem;
-import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.ScreenCoordinates;
 
 import com.badlogic.gdx.Gdx;
@@ -19,8 +18,10 @@ public class ItemView {
 	/* The x- and y-coordinates of the bottom-left ItemContainer */
 	private int cornerX = 224;
 	private int cornerY = 150;
+	
 	/* The selected ItemContainer in the main inventory */
 	private int currentSelection;
+	
 	/* The selected ItemContainer in the QuickSelection */
 	private int currentQuickSelection;
 	private CurrentSelection selection;
@@ -79,15 +80,6 @@ public class ItemView {
 	 * and the QuickSelection.
 	 */
 	public void manageItems() {
-		
-		/* Checks if the position of the Items are off and corrects them */
-		/*if(itemContainers[0].getX() == itemContainers[0].getItem().getIcon().getX()) {
-			for(int i = 0; i < itemContainers.length; i++) {
-				itemContainers[i].setX(itemContainers[i].getX());
-				itemContainers[i].setY(itemContainers[i].getY());
-			}
-		}*/
-		
 		/* Check if the ItemContainer's already are visible to only show them is necessary */
 		if(!itemContainers[0].isActorVisible()) {
 			background.setVisible(true);

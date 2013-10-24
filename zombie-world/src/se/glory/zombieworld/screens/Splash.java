@@ -15,12 +15,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Splash implements Screen {
-
-	
 	private Sprite splash;
 	private SpriteBatch batch;
 	private TweenManager tweenManager;
-	
 	
 	@Override
 	public void render(float delta) {
@@ -32,7 +29,6 @@ public class Splash implements Screen {
 		batch.begin();
 		splash.draw(batch);
 		batch.end();
-		
 	}
 
 	@Override

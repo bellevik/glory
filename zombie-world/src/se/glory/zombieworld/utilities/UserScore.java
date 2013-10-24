@@ -13,5 +13,4 @@ public class UserScore implements Comparable<UserScore> {
 	public int compareTo(UserScore o) {
 		return (this.score > o.score) ? -1 : (this.score < o.score) ? 1 : 0;
 	}
-	
 }

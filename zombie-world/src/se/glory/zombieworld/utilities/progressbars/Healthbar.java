@@ -1,17 +1,10 @@
 package se.glory.zombieworld.utilities.progressbars;
 
-import se.glory.zombieworld.model.StageModel;
-import se.glory.zombieworld.utilities.Animator;
 import se.glory.zombieworld.utilities.Constants;
-import se.glory.zombieworld.utilities.Constants.MoveableBodyType;
-import se.glory.zombieworld.view.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class Healthbar {
 	private int maxHealthPercent = 100;

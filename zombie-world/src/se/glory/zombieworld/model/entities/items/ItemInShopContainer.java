@@ -4,21 +4,15 @@ import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.weapons.EquippableItem;
 import se.glory.zombieworld.utilities.Constants;
-import se.glory.zombieworld.utilities.ScreenCoordinates;
 import se.glory.zombieworld.utilities.progressbars.ItemBar;
-import se.glory.zombieworld.view.GameView;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class ItemInShopContainer {
-
-	private Stage stage;
-	private Texture texture, healthBarTexture;
+	private Texture healthBarTexture;
 	private Image bg;
 	private Image bgOwned;
 	private Texture weapon;
@@ -29,18 +23,14 @@ public class ItemInShopContainer {
 	private ItemBar fireRateIndicatorBar;
 	private ItemBar dmgIndicatorBar;
 	
-	private Image rangeImage, fireRateImage, damageImage, healthImage;
+	private Image rangeImage, fireRateImage, damageImage;
 	
-	private String itemName;
-	private String itemCost;
 	private EquippableItem item;
 	
 	
 	public ItemInShopContainer(Stage stage, float x, float y, EquippableItem item){
-		this.stage = stage;
 		this.item = item;
 		weapon =item.getShopTexture();
-		
 		
 		bg = new Image(new Texture(Gdx.files.internal("img/shop/shopframe.png")));	
 		stage.addActor(bg);

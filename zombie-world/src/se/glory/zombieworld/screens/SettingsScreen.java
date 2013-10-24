@@ -65,12 +65,10 @@ public class SettingsScreen implements Screen {
 	}
 
 	@Override
-	public void show() {
-		
+	public void show() {	
 		font = new BitmapFont();
 		
-		stage = new Stage();
-		
+		stage = new Stage();	
 		batch = new SpriteBatch();
 		
 		backgroundTexture = new Texture(Gdx.files.internal("ui/settingsBackground.png"));
@@ -82,8 +80,7 @@ public class SettingsScreen implements Screen {
 		sliderKnobTexture = new Texture(Gdx.files.internal("ui/sliderKnob.png"));
 		
 		sliderBarSprite = new Sprite(sliderBarTexture);
-		sliderKnobSprite = new Sprite(sliderKnobTexture);
-		
+		sliderKnobSprite = new Sprite(sliderKnobTexture);	
 		
 		sliderBar = new SpriteDrawable(sliderBarSprite);
 		sliderKnob = new SpriteDrawable(sliderKnobSprite);
@@ -133,8 +130,7 @@ public class SettingsScreen implements Screen {
 				((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu());
 			}
 		});
-		
-		
+			
 		stage.addActor(SFXVolume);
 		stage.addActor(musicVolume);
 		stage.addActor(musicLabel);

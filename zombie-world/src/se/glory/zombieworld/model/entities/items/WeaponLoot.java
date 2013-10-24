@@ -2,7 +2,6 @@ package se.glory.zombieworld.model.entities.items;
 
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.weapons.EquippableItem;
-import se.glory.zombieworld.model.entities.weapons.WeaponArsenal;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Constants.ItemType;
 import se.glory.zombieworld.utilities.Identity;
@@ -53,8 +52,6 @@ public class WeaponLoot {
 		FixtureDef fixtureDef= new FixtureDef();
 		fixtureDef.shape = shape;
 		body.createFixture(fixtureDef);
-		
-		//Texture texture = new Texture(Gdx.files.internal("img/loot.png"));
 		
 		Identity identity = new Identity();
 		identity.setWidth(width);

@@ -14,9 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class TutorialScreen implements Screen {
-	
 	private Stage stage;
-	
 	private SpriteBatch batch;
 
 	private Texture firstTutorial, secondTutorial, thirdTutorial, nextTexture, currentTexture;
@@ -31,7 +29,6 @@ public class TutorialScreen implements Screen {
 		batch.draw(currentTexture, 0, 0);
 		batch.end();
 		
-
 		stage.act(delta);
 		stage.draw();
 	}
@@ -44,10 +41,7 @@ public class TutorialScreen implements Screen {
 
 	@Override
 	public void show() {
-		
-		
 		stage = new Stage();
-		
 		batch = new SpriteBatch();
 		
 		firstTutorial = new Texture(Gdx.files.internal("ui/tutorial1.png"));
@@ -97,5 +91,4 @@ public class TutorialScreen implements Screen {
 	public void dispose() {
 		
 	}
-
 }

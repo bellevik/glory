@@ -14,7 +14,6 @@ import se.glory.zombieworld.utilities.Score;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -42,7 +41,6 @@ public class GameView {
 
 	private ArrayList<Point> doors = new ArrayList<Point>();
 
-	// TODO Move the font to a separate class
 	BitmapFont font = new BitmapFont(Gdx.files.internal("font/scoreFont.fnt"),
 			Gdx.files.internal("font/scoreFont_0.png"), false);
 
@@ -53,7 +51,7 @@ public class GameView {
 		debugRenderer = new Box2DDebugRenderer();
 		camera = new OrthographicCamera();
 
-		map = new TmxMapLoader().load("img/tilemap/theWorld.tmx");
+		map = new TmxMapLoader().load("img/tilemap/map.tmx");
 		mapRenderer = new OrthogonalTiledMapRenderer(map);
 
 		animator = new Animator();
@@ -88,7 +86,6 @@ public class GameView {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 
-		// TODO: Test enable blending
 		batch.enableBlending();
 
 		mapRenderer.setView(camera);
@@ -110,8 +107,6 @@ public class GameView {
 
 		// Draw textures
 		drawEntites();
-
-		//drawTextures();
 
 		// Draw certain map layers on top of player
 		mapRenderer.getSpriteBatch().begin();
@@ -150,6 +145,9 @@ public class GameView {
 	 * its own draw method.
 	 */
 	public void drawEntites() {
+		// Update the state time of animator
+		animator.updateStateTimer();
+		
 		WorldModel.world.getBodies(WorldModel.drawableBodies);
 
 		for (Body body : WorldModel.drawableBodies) {
@@ -259,7 +257,7 @@ public class GameView {
 
 		//Bad fix to make it change position depending on players position since it is not
 		//an actor and has to be placed as part of the world
-		if(WorldModel.player.getInfectedHealthTimer() != null) {
+		if (WorldModel.player.getInfectedHealthTimer() != null) {
 			Animation infectedAnimation = animator.getAnimation(MoveableBodyType.INFECTEDBAR, 0);
 			animator.drawAnimation(batch, (float)(WorldModel.player.getTileX()*16+Constants.VIEWPORT_WIDTH*0.03)*Constants.WORLD_TO_BOX, (float)(WorldModel.player.getTileY()*16-Constants.VIEWPORT_HEIGHT*0.34)*Constants.WORLD_TO_BOX, infectedAnimation, true);
 		}

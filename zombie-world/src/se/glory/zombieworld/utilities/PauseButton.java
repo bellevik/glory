@@ -16,10 +16,10 @@ public class PauseButton {
 	
 	public PauseButton(Stage stage, float x, float y) {
 		texture = new Texture(Gdx.files.internal("img/pauseButton.png"));
+		
 		image = new Image(texture);
 		stage.addActor(image);
 		image.setPosition(x, y);
-		
 	}
 	
 	/*
@@ -45,6 +45,5 @@ public class PauseButton {
 		} else {
 			return false;
 		}
-
 	}
 }

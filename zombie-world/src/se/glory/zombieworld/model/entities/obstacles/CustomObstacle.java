@@ -2,7 +2,6 @@ package se.glory.zombieworld.model.entities.obstacles;
 
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.utilities.Constants;
-import se.glory.zombieworld.utilities.Constants.MoveableBodyType;
 import se.glory.zombieworld.utilities.Identity;
 
 import com.badlogic.gdx.math.Vector2;

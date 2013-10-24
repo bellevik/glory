@@ -3,9 +3,6 @@ package se.glory.zombieworld.model;
 import java.util.ArrayList;
 import java.util.Random;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
-
 import se.glory.zombieworld.model.entities.Creature;
 import se.glory.zombieworld.model.entities.Human;
 import se.glory.zombieworld.model.entities.Zombie;
@@ -13,11 +10,9 @@ import se.glory.zombieworld.utilities.AStarPathFinder;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Identity;
 import se.glory.zombieworld.utilities.Point;
-import se.glory.zombieworld.utilities.Score;
 import se.glory.zombieworld.utilities.UtilityTimer;
 
-// TODO: If zombie is chasing a human and lose trail, 
-// it needs a new path - now it will use the same => try to walk through walls!
+import com.badlogic.gdx.math.Vector2;
 
 public class AIModel {
 	private ArrayList<Human> humans = new ArrayList<Human>();
@@ -78,9 +73,13 @@ public class AIModel {
 		clearZombies();
 		turnHumansToZombie();
 		
-		// TODO Add new zombie if max creatures > current creatures
-		updateHumansDumb();
-		updateZombiesDumb();
+		if (Constants.DUMB_AI_MODE) {
+			updateHumansDumb();
+			updateZombiesDumb();
+		} else {
+			updateHumans();
+			updateZombies();
+		}
 	}
 	
 	private void updateHumansDumb() {
@@ -139,14 +138,12 @@ public class AIModel {
 					h.setState(Human.State.IDLE);
 				
 				if (h.getState() == Human.State.IDLE) {
-					Random generator = new Random();
-					
-					int distance = generator.nextInt(200);
+					int distance = gen.nextInt(200);
 					Vector2 direction = new Vector2(0,1);
-					direction.setAngle(generator.nextInt(360));
+					direction.setAngle(gen.nextInt(360));
 					
 					h.setState(Human.State.DUMB_AI);
-					h.setCollidingInfo(direction, distance);
+					h.setDumbWalk(direction, distance);
 				}
 				
 				h.walk();
@@ -199,14 +196,12 @@ public class AIModel {
 					h.setState(Human.State.IDLE);
 				
 				if (h.getState() == Human.State.IDLE) {
-					Random generator = new Random();
-					
-					int goalX = generator.nextInt(mapWidth);
-					int goalY = generator.nextInt(mapHeight);
+					int goalX = gen.nextInt(mapWidth);
+					int goalY = gen.nextInt(mapHeight);
 					
 					while (blockedTiles.contains(new Point(goalX, goalY))) {
-						goalX = generator.nextInt(mapWidth);
-						goalY = generator.nextInt(mapHeight);
+						goalX = gen.nextInt(mapWidth);
+						goalY = gen.nextInt(mapHeight);
 					}
 					
 					int x = (int) h.getTileX();
@@ -268,14 +263,12 @@ public class AIModel {
 					z.setState(Zombie.State.IDLE);
 				
 				if (z.getState() == Zombie.State.IDLE) {
-					Random generator = new Random();
-					
-					int distance = generator.nextInt(200);
+					int distance = gen.nextInt(200);
 					Vector2 direction = new Vector2(0,1);
-					direction.setAngle(generator.nextInt(360));
+					direction.setAngle(gen.nextInt(360));
 					
 					z.setState(Zombie.State.DUMB_AI);
-					z.setCollidingInfo(direction, distance);
+					z.setDumbWalk(direction, distance);
 				}
 				
 				z.walk();
@@ -308,14 +301,12 @@ public class AIModel {
 				z.setState(Zombie.State.CHASING);
 			} else {
 				if (z.getState() == Zombie.State.IDLE) {
-					Random generator = new Random();
-					
-					int goalX = generator.nextInt(mapWidth);
-					int goalY = generator.nextInt(mapHeight);
+					int goalX = gen.nextInt(mapWidth);
+					int goalY = gen.nextInt(mapHeight);
 					
 					while (blockedTiles.contains(new Point(goalX, goalY))) {
-						goalX = generator.nextInt(mapWidth);
-						goalY = generator.nextInt(mapHeight);
+						goalX = gen.nextInt(mapWidth);
+						goalY = gen.nextInt(mapHeight);
 					}
 					
 					int x = (int) z.getTileX();

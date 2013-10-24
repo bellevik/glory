@@ -1,6 +1,5 @@
 package se.glory.zombieworld.model.entities.items;
 
-import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.weapons.EquippableItem;
 import se.glory.zombieworld.utilities.Constants;
@@ -9,7 +8,6 @@ import se.glory.zombieworld.utilities.Joystick;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 /*
  * Class representing the QuickSelection-menu.
@@ -36,10 +34,7 @@ public class QuickSelection {
 			itemContainers[i] = new ItemContainer(stage, (float)(selectionX + Math.cos(radians)), (float)(selectionY + Math.sin(radians)), true);
 		}
 
-		//itemContainers[0].newItem(new Image(new Texture(Gdx.files.internal("img/human.png"))));
-
 		selectionStick = new Joystick(stage, selectionX, selectionY, 64, 64, Constants.TouchpadType.ITEM_SELECTION);
-
 		currentSelection = new CurrentSelection(stage, selectionStick.getTouchpad().getX(), selectionStick.getTouchpad().getY(), true);
 	}
 
@@ -95,6 +90,7 @@ public class QuickSelection {
 	 */
 	public boolean existsInList(EquippableItem item) {
 		boolean exists = false;
+		
 		for(int i = 0; i < itemContainers.length; i++) {
 			if(itemContainers[i].getItem() != null) {
 				if(itemContainers[i].getItem().getItemName().equals(item.getItemName())) {
@@ -102,6 +98,7 @@ public class QuickSelection {
 				}
 			}
 		}
+		
 		return exists;
 	}
 
@@ -110,11 +107,13 @@ public class QuickSelection {
 	 */
 	public boolean isListEmpty() {
 		boolean empty = true;
+		
 		for(int i = 0; i < itemContainers.length; i++) {
 			if(itemContainers[i].getItem() != null) {
 				empty = false;
 			}
 		}
+		
 		return empty;
 	}
 
@@ -124,12 +123,14 @@ public class QuickSelection {
 	 */
 	public int touchedContainer(float x, float y) {
 		int touched = 5;
+		
 		for(int i = 0; i < itemContainers.length; i++) {
 			if(x > itemContainers[i].getBackground().getX() && x < itemContainers[i].getBackground().getX() + 64
 					&& y > itemContainers[i].getBackground().getY() && y < itemContainers[i].getBackground().getY() + 64) {
 				touched = i;
 			}
 		}
+		
 		return touched;
 	}
 	
@@ -175,7 +176,7 @@ public class QuickSelection {
 
 		} else {
 
-			/* Decreses the distance between the selection-stick and the ItemContainers */
+			/* Decreases the distance between the selection-stick and the ItemContainers */
 			if(Math.abs(Math.sqrt(vertical + horizontal)) > 16) {
 				distance -= 16;
 				

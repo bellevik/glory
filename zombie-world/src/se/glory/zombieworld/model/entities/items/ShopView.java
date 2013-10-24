@@ -1,14 +1,11 @@
 package se.glory.zombieworld.model.entities.items;
 
-import se.glory.zombieworld.model.entities.weapons.ERangedWeapon;
 import se.glory.zombieworld.model.entities.weapons.EquippableItem;
 import se.glory.zombieworld.model.entities.weapons.WeaponArsenal;
-import se.glory.zombieworld.screens.GameScreen;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Score;
 import se.glory.zombieworld.utilities.ScreenCoordinates;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -17,8 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class ShopView {
-	
-
 	private Image doneButton;
 	private EquippableItem [] weapon;
 	private ItemInShopContainer[] itemInShopContainers;
@@ -44,11 +39,6 @@ public class ShopView {
 		doneButton.setPosition(400, 10);
 		stage.addActor(doneButton);
 		doneButton.setVisible(false);
-		
-		
-		
-		
-		
 		
 		strWeaponList = wa.getWeaponList();
 		itemInShopContainers = new ItemInShopContainer[strWeaponList.length];
@@ -83,7 +73,7 @@ public class ShopView {
 						itemInShopContainers[i].buyItem();
 						Score.currentScore -= itemInShopContainers[i].getItem().getPrice();
 					} else {
-						// TODO Priont that the player aint got no money!!!!!!!
+						// Player ain't got enough money.
 					}
 				}
 					

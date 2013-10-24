@@ -1,18 +1,16 @@
 package se.glory.zombieworld.screens;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.model.WorldModel;
-import se.glory.zombieworld.model.entities.items.ShopView;
 import se.glory.zombieworld.model.entities.items.WeaponLoot;
 import se.glory.zombieworld.model.entities.obstacles.CustomObstacle;
 import se.glory.zombieworld.model.entities.obstacles.StreetObject;
 import se.glory.zombieworld.utilities.Constants;
-import se.glory.zombieworld.utilities.Point;
 import se.glory.zombieworld.utilities.Score;
 import se.glory.zombieworld.utilities.SoundPlayer;
+import se.glory.zombieworld.utilities.SpawnController;
 import se.glory.zombieworld.utilities.TextureHandler;
 import se.glory.zombieworld.view.GameView;
 
@@ -32,7 +30,8 @@ public class GameScreen implements Screen {
 
 	private WorldModel worldModel;
 	private GameView gameView;
-	private ShopView shopView;
+	
+	private SpawnController spawnController;
 
 	private SoundPlayer soundPlayer;
 
@@ -181,75 +180,27 @@ public class GameScreen implements Screen {
 
 		new WeaponLoot(100, 100);
 		new WeaponLoot(200, 200);
-		//new WeaponLoot(300, 300);
 
 		gameView = new GameView(batch);
 		worldModel.setupAIModel(gameView.getMapLayer("blocked"));
 
 		StageModel.createUI(batch);
 
+		spawnController = new SpawnController(worldModel.getAIModel());
+		
 		// ## Add humans
-		//addRandomCreatures(10, Constants.MoveableBodyType.HUMAN);
-
-		// ## Add zombies
-		//addRandomCreatures(2, Constants.MoveableBodyType.ZOMBIE);
-		
-		
-		for(int i = 10; i < 12; i+=1) {
-			worldModel.getAIModel().addHuman(10*16, i*2*16);
+		for (int i = 0; i < 6; i++) {
+			spawnController.spawnCreature(Constants.MoveableBodyType.HUMAN);
 		}
-		
-		for(int i = 10; i < 12; i+=1) {
-			worldModel.getAIModel().addZombie(8*16, i*2*16);
-		}
-		
-		//worldModel.getAIModel().addZombie(8*16, 10*2*16);
-		
-		/*
-		worldModel.getAIModel().addHuman(10*16, 10*16);
-		worldModel.getAIModel().addHuman(12*16, 11*16);
-		worldModel.getAIModel().addHuman(14*16, 12*16);
-		worldModel.getAIModel().addHuman(16*16, 13*16);
-		worldModel.getAIModel().addHuman(18*16, 14*16);
-		worldModel.getAIModel().addHuman(20*16, 15*16);
-		worldModel.getAIModel().addZombie(22*16, 16*16);
-		worldModel.getAIModel().addHuman(24*16, 17*16);
-		worldModel.getAIModel().addHuman(26*16, 18*16);
-		worldModel.getAIModel().addZombie(28*16, 19*16);
-		worldModel.getAIModel().addHuman(30*16, 20*16);
-		worldModel.getAIModel().addHuman(32*16, 21*16);
-		worldModel.getAIModel().addHuman(34*16, 22*16);
-		*/
 
+		// ## Add a zombie
+		spawnController.spawnCreature(Constants.MoveableBodyType.ZOMBIE);
 
 		createStaticWalls();
 
 		soundPlayer = new SoundPlayer();
 		soundPlayer.playBackgroundMusic();
 		createObjects();
-	}
-	
-	private void addRandomCreatures(int num, Constants.MoveableBodyType type) {
-		int mapWidth = gameView.getMapLayer("blocked").getWidth();
-		int mapHeight = gameView.getMapLayer("blocked").getHeight();
-		ArrayList<Point> blockedTiles = worldModel.getAIModel().getBlockedTiles();
-		
-		Random generator = new Random();
-		
-		for (int i = 0; i < num; i++) {
-			int x = generator.nextInt(mapWidth);
-			int y = generator.nextInt(mapHeight);
-			
-			while (blockedTiles.contains(new Point(x, y))) {
-				x = generator.nextInt(mapWidth);
-				y = generator.nextInt(mapHeight);
-			}
-			
-			if (type == Constants.MoveableBodyType.HUMAN)
-				worldModel.getAIModel().addHuman(x*16, y*16);
-			else if (type == Constants.MoveableBodyType.ZOMBIE)
-				worldModel.getAIModel().addZombie(x*16, y*16);
-		}
 	}
 
 	private void createStaticWalls() {

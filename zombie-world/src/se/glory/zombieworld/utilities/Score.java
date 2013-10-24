@@ -2,8 +2,6 @@ package se.glory.zombieworld.utilities;
 
 import java.util.Arrays;
 
-import se.glory.zombieworld.model.entities.weapons.EquippableItem;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
@@ -67,13 +65,14 @@ public class Score {
 		Arrays.sort(score);
 		
 		String hs = "";
+		
 		for (int j = 0; j < 4; j++) {
 			hs += score[j].name + ":" + score[j].score + "::";
 		}
+		
 		hs += score[4].name + ":" + score[4].score;
 		
 		FileHandle file = Gdx.files.local("highscore.txt");
 		file.writeString(hs, false);
 	}
-	
 }

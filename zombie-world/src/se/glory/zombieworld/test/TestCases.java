@@ -1,21 +1,13 @@
 package se.glory.zombieworld.test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
-import static org.junit.matchers.JUnitMatchers.*;
-import static org.hamcrest.CoreMatchers.*;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.Creature;
@@ -24,7 +16,6 @@ import se.glory.zombieworld.model.entities.Zombie;
 import se.glory.zombieworld.utilities.AStarPathFinder;
 import se.glory.zombieworld.utilities.Point;
 import se.glory.zombieworld.utilities.UtilityTimer;
-import se.glory.zombieworld.utilities.progressbars.Healthbar;
 
 public class TestCases {
 
@@ -37,28 +28,33 @@ public class TestCases {
 	public void testTimer() {
 		//Creates a new timer with the interval 1000 milliseconds
 		UtilityTimer timer = new UtilityTimer(1000);
+		
 		//Checks that the interval is what we wanted
 		assertThat(timer.getInterval(), is(1000));
+		
 		//Resets the timer
 		timer.resetTimer();
+		
 		//Checks that the timer is not done (has not passed 1 second)
 		assertThat(timer.isDone(), is(false));
+		
 		//Waits for the timer to get through the 1 second
 		while(!timer.isDone()){
 			//Checks that the elapsed time has not reached the interval time yet
 			assertTrue("Elapsed time less than interval", timer.getElapsedTime() < 1000);
 			assertTrue("Elapsed time more than 0", timer.getElapsedTime() >= 0);
 		}
+		
 		//Checks so the timer really is done
 		assertThat(timer.isDone(), is(true));
+		
 		//Checks the elapsed time to see if it really is the same as interval
 		//to make sure it is done
 		assertThat(timer.getElapsedTime(), is((long)timer.getInterval()));
 	}
 	
 	@Test
-	public void testAStarPathFinder() {
-		
+	public void testAStarPathFinder() {	
 		//Creates the list with blocked points the AStar algorithm has to get through
 		ArrayList<Point> blocked = new ArrayList<Point>();
 		
@@ -97,6 +93,7 @@ public class TestCases {
 		
 		//Asserts the correct path has the same points as the shortestPath
 		assertThat(correctPath, is(shortestPath));
+		
 		//Asserts the false path does not have the same points as the shortestPath to make sure the assertThat doesn't accept all paths
 		assertThat(falsePath, not(shortestPath));
 	}

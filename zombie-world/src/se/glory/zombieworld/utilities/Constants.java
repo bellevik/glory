@@ -5,6 +5,7 @@ public class Constants {
 	public static final float BOX_TO_WORLD = 100f;
 	
 	public static final boolean DEBUG_MODE = false;
+	public static final boolean DUMB_AI_MODE = true;
 	
 	public static final int WEAPON_TYPE = 0;
 	public static final int WEAPON_DAMAGE = 1;
@@ -30,8 +31,6 @@ public class Constants {
 	public static final float MAX_FIRE_RATE = 4;
 	
 	public static GameState gameState = GameState.RUNNING;
-
-	//public static boolean isRunning = true;
 	
 	public static enum GameState {
 		RUNNING, PAUSE, SHOP;
@@ -56,5 +55,4 @@ public class Constants {
 	public static enum ScoreType {
 		KILL_ZOMBIE, KILL_HUMAN, TIME;
 	}
-	
 }

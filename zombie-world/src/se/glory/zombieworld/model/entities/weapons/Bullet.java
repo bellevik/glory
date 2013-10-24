@@ -71,7 +71,7 @@ public class Bullet {
 		    };
 		};
 		
-		t.schedule(tt,(long)(range*1000));
+		t.schedule(tt, (long)(range*1000));
 		
 	}
 	

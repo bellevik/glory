@@ -4,9 +4,7 @@ import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.weapons.Bullet;
 import se.glory.zombieworld.model.entities.weapons.EquippableItem;
-import se.glory.zombieworld.model.entities.weapons.ERangedWeapon;
 import se.glory.zombieworld.screens.GameOverScreen;
-import se.glory.zombieworld.screens.MainMenu;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Identity;
 import se.glory.zombieworld.utilities.Score;
@@ -14,7 +12,6 @@ import se.glory.zombieworld.utilities.UtilityTimer;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -23,8 +20,6 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 
@@ -40,9 +35,6 @@ public class Player implements Creature {
 
 	private Body body;
 	private BodyDef bodyDef;
-
-	// The currently-selected weapon
-	private int currentItem;
 
 	private Animation animation;
 
@@ -334,5 +326,13 @@ public class Player implements Creature {
 	}
 	public void setRecentlyBought(boolean value){
 		recentlyBought=value;
+	}
+
+	public void setEmptyClip(boolean value) {
+		emptyClip = value;
+	}
+
+	public boolean getEmptyClip() {
+		return emptyClip;
 	}
 }

@@ -5,7 +5,6 @@ import java.util.Random;
 
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Point;
-import se.glory.zombieworld.utilities.TextureHandler;
 
 import com.badlogic.gdx.math.Vector2;
 
@@ -17,11 +16,11 @@ public class Human extends MoveableBody implements Creature {
 	
 	private int logicCounter;
 	
-	private int collidingNumber = 0;
-	private Vector2 collidingDirection = null;
+	private int walkDirectionCounter = 0;
+	private Vector2 walkDirection = null;
 
 	public Human(float x, float y) {
-		super(x, y, 15, 15, TextureHandler.humanTexture, Constants.MoveableBodyShape.CIRCLE , Constants.MoveableBodyType.HUMAN);
+		super(x, y, 15, 15, null, Constants.MoveableBodyShape.CIRCLE , Constants.MoveableBodyType.HUMAN);
 		logicCounter = new Random().nextInt(60);
 	}
 	
@@ -34,9 +33,9 @@ public class Human extends MoveableBody implements Creature {
 		logicCounter = 60;
 	}
 	
-	public void setCollidingInfo(Vector2 direction, int collidingNumber) {
-		this.collidingDirection = direction;
-		this.collidingNumber = collidingNumber;
+	public void setDumbWalk(Vector2 direction, int length) {
+		walkDirection = direction;
+		walkDirectionCounter = length;
 	}
 	
 	public void setWalkPath(ArrayList<Point> walkPath) {
@@ -44,31 +43,39 @@ public class Human extends MoveableBody implements Creature {
 	}
 	
 	public void walk() {
+		if (Constants.DUMB_AI_MODE) {
+			walkDumb();
+		} else {
+			walkSmart();
+		}
+	}
+	
+	public void walkDumb() {
 		if (state == State.DUMB_AI || state == State.COLLIDING) {
-			getBody().setLinearVelocity(collidingDirection.x, collidingDirection.y);
+			getBody().setLinearVelocity(walkDirection.x, walkDirection.y);
 			
-			collidingNumber--;
-			if (collidingNumber < 1)
+			walkDirectionCounter--;
+			if (walkDirectionCounter < 1)
 				state = State.IDLE;
 		}
 	}
 	
-	/*public void walk() {
+	public void walkSmart() {
 		// Check if in colliding state, if so, walk according to the calculated direction
 		if (state == State.COLLIDING) {
-			float angle = (float) Math.atan(collidingDirection.y/collidingDirection.x);
+			float angle = (float) Math.atan(walkDirection.y/walkDirection.x);
 			
-			if (collidingDirection.x < 0)
+			if (walkDirection.x < 0)
 				angle = angle - (float) Math.PI;
 			
-			getBody().setLinearVelocity(collidingDirection.x, collidingDirection.y);
+			getBody().setLinearVelocity(walkDirection.x, walkDirection.y);
 			getBody().setTransform(getBody().getPosition(), angle);
 			
-			collidingNumber--;
+			walkDirectionCounter--;
 			
 			// If the number of updates since the collision are reached, 
 			// set state to IDLE, i.e. get a new random spot to travel to.
-			if (collidingNumber < 1) {
+			if (walkDirectionCounter < 1) {
 				walkPath.clear();
 				state = State.IDLE;
 			}
@@ -101,7 +108,7 @@ public class Human extends MoveableBody implements Creature {
 		} else {
 			setState(State.IDLE);
 		}
-	}*/
+	}
 
 	public State getState() {
 		return state;

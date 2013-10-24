@@ -10,9 +10,6 @@ import com.badlogic.gdx.graphics.Texture;
  * memory.
  */
 public class TextureHandler {
-	
-	public static Texture humanTexture;
-	public static Texture zombieTexture;
 	public static Texture bulletTexture;
 	
 	public static void createTextures() {

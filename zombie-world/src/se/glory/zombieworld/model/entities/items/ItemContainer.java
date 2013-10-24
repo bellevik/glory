@@ -18,7 +18,6 @@ public class ItemContainer {
 	private Stage stage;
 	private Texture texture;
 	private Image background;
-	//private Image currentItem;
 	
 	private EquippableItem item;
 	

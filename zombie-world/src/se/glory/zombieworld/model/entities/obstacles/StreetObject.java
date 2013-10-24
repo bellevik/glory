@@ -7,9 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
 public class StreetObject extends CustomObstacle{
-	
-
-	Texture image;
+	private Texture image;
 
 	public StreetObject(String name, float x, float y){
 		super();
@@ -21,15 +19,6 @@ public class StreetObject extends CustomObstacle{
 			image =new Texture(Gdx.files.internal("img/streettextures/parkBench.png"));
 			super.setBox(x, y, image.getWidth(), image.getHeight());
 		}
-		/*switch (type){
-		case LAMP:
-			image =new Texture(Gdx.files.internal("img/streettextures/streetlight.png"));
-			break;
-		case TREE:
-			break;
-		case PARKBENCH:			
-						
-			break;*/
 			
 		Identity identity = new Identity();
 		identity.setType(Constants.MoveableBodyType.STREETOBJECT);

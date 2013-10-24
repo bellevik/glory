@@ -24,9 +24,9 @@ public class Animator {
 	private final int DOOR_FRAME_ROWS = 3;
 	
 	// Animation speeds
-	private final float WALKSPEED = 1.525f;
-	private final float OPENINGSPEED = 0.750f;
-	private final float ROTATESPEED = 0.4f;
+	private final float WALKSPEED = .2f;
+	private final float OPENINGSPEED = 0.002f;
+	private final float ROTATESPEED = 0.02f;
 	
 	private Texture spriteSheet;
 	private TextureRegion currentFrame;
@@ -85,14 +85,9 @@ public class Animator {
 		for (int i = 0; i < shotgunAnimations.length; i++){
 			shotgunAnimations[i] = createAnimation("playerSheetShotgun.png", character, i);
 		}
-		// TODO: Ekman får fixa med weaponsloot animationerna
 		
-		/*for (int i = 0; i < weaponLootAnimations.length; i++){
-			weaponLootAnimations[i] = createAnimation("AKSheet66.png", weapon, i);
-		}*/
 		weaponLoot = createAnimation("AKSheet66.png", weapon, 0);
 		infectedBarAnimation = createAnimation("infectedSheet.png", infectedBar, 0);
-		
 	}
 	
 	public Texture getClosedDoor(){
@@ -150,7 +145,7 @@ public class Animator {
 			//Dividing the spritesheet into regions with an image in each frame
 			TextureRegion[][] tmp = TextureRegion.split(spriteSheet, spriteSheet.getWidth() / CHAR_FRAME_COLS, spriteSheet.getHeight() / CHAR_FRAME_ROWS);
 
-			//Specifiying number of images in the array that will be animated
+			//Specifying number of images in the array that will be animated
 			frames = new TextureRegion[CHAR_FRAME_COLS];
 			
 			//Creates different animations depending on the direction
@@ -166,7 +161,7 @@ public class Animator {
 			//Dividing the spritesheet into regions with an image in each frame
 			TextureRegion[][] tmp = TextureRegion.split(spriteSheet, spriteSheet.getWidth() / DOOR_FRAME_COLS, spriteSheet.getHeight() / DOOR_FRAME_ROWS);
 			
-			//Specifiying number of images in the array that will be animated
+			//Specifying number of images in the array that will be animated
 			frames = new TextureRegion[DOOR_FRAME_COLS];
 			
 			//Creates the animation for a closed door
@@ -180,8 +175,7 @@ public class Animator {
 			animation = new Animation(OPENINGSPEED, frames);
 			index = 0;
 			
-		}else if(type.equals(weapon)){
-			
+		} else if(type.equals(weapon)) {
 			int col = spriteSheet.getWidth() / 64;
 			int row = spriteSheet.getHeight() / 64;
 			
@@ -194,11 +188,12 @@ public class Animator {
 					frames[index++] = tmp[i][j];
 				}
 			}
+			
 			//Parameters (update speed, array of TextureRegions to make an animation)
 			animation = new Animation(ROTATESPEED, frames);
 			index = 0;
 			
-		}else if(type.equals(infectedBar)){
+		} else if(type.equals(infectedBar)) {
 			int col = spriteSheet.getWidth() / 310;
 			int row = spriteSheet.getHeight() / 80;
 			
@@ -211,6 +206,7 @@ public class Animator {
 					frames[index++] = tmp[i][j];
 				}
 			}
+			
 			//Parameters (update speed, array of TextureRegions to make an animation)
 			animation = new Animation(WALKSPEED, frames);
 			index = 0;
@@ -218,15 +214,16 @@ public class Animator {
 		return animation;
 	}
 	
+	public void updateStateTimer() {
+		//stateTimer = the time spent in the state represented by this animation
+		stateTimer += Gdx.graphics.getDeltaTime();
+	}
+	
 	/*
 	 * Gets the current frame in the animation and draws to the screen.
 	 */
 	public void drawAnimation(SpriteBatch batch, float x, float y, Animation ani, boolean isLooping){
-
-		//stateTimer = the time spent in the state represented by this animation
-        stateTimer += Gdx.graphics.getDeltaTime();
-        
-        if(Constants.gameState == Constants.GameState.RUNNING) {
+		if(Constants.gameState == Constants.GameState.RUNNING) {
         	//Get the current frame and loops if the creature is moving
             currentFrame = ani.getKeyFrame(stateTimer, isLooping);
         } else {

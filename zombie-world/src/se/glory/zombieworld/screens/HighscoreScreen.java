@@ -1,7 +1,5 @@
 package se.glory.zombieworld.screens;
 
-import java.util.HashMap;
-
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Score;
 
@@ -20,11 +18,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 public class HighscoreScreen implements Screen {
 	private Stage stage;
 	private SpriteBatch batch;
-	private Image highscoreLabel, backButton;
+	private Image backButton;
 	
 	private Texture backgroundTexture;
 	
-	// TODO Move the font to a separate class
 	BitmapFont font = new BitmapFont(Gdx.files.internal("font/scoreFont.fnt"),
 			Gdx.files.internal("font/scoreFont_0.png"), false);
 
@@ -32,7 +29,6 @@ public class HighscoreScreen implements Screen {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(255, 255, 255, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
 		
 		batch.begin();
 		batch.draw(backgroundTexture, 0, 0);

@@ -9,21 +9,20 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class EquippableItem {
+	private String name;
+	private ItemType itemType;
+	private float damage;
+	private float range;
+	private int clipSize;
+	private int clips;
+	private float fireRate;
+	private int currentClipSize;
+	private int offset;
+	private int price;
 
-	protected String name;
-	protected ItemType itemType;
-	protected float damage;
-	protected float range;
-	protected int clipSize;
-	protected int clips;
-	protected float fireRate;
-	protected int currentClipSize;
-	protected int offset;
-	protected int price;
-
-	protected Texture texture;
-	protected Texture shopTexture;
-	protected Image icon;
+	private Texture texture;
+	private Texture shopTexture;
+	private Image icon;
 
 	public EquippableItem(String name, String itemType, float damage, float range, int clipSize, int clips, float fireRate, int price) {
 		this.name = name;
@@ -94,8 +93,8 @@ public class EquippableItem {
 	 * the inventory
 	 */
 	public void addClip (int clips) {
-		if (WorldModel.player.emptyClip) {
-			WorldModel.player.emptyClip = false;
+		if (WorldModel.player.getEmptyClip()) {
+			WorldModel.player.setEmptyClip(false);
 		}
 		this.clips += clips;
 		this.currentClipSize = clipSize;
@@ -116,7 +115,7 @@ public class EquippableItem {
 			} else {
 				clips = 0;
 				currentClipSize = 0;
-				WorldModel.player.emptyClip = true;
+				WorldModel.player.setEmptyClip(true);
 			}
 		}
 	}
