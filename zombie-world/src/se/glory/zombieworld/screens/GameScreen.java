@@ -180,6 +180,9 @@ public class GameScreen implements Screen {
 
 		new WeaponLoot(100, 100);
 		new WeaponLoot(200, 200);
+		
+		// Creates a weapon "on" the Player for test-purposes
+		new WeaponLoot(WorldModel.weaponArsenal.getWeapon("pistol"), 600, 600);
 
 		gameView = new GameView(batch);
 		worldModel.setupAIModel(gameView.getMapLayer("blocked"));
