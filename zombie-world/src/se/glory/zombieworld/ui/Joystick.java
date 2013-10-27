@@ -1,4 +1,7 @@
-package se.glory.zombieworld.utilities;
+package se.glory.zombieworld.ui;
+
+import se.glory.zombieworld.utilities.Constants;
+import se.glory.zombieworld.utilities.Constants.TouchpadType;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;

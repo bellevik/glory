@@ -1,4 +1,4 @@
-package se.glory.zombieworld.utilities;
+package se.glory.zombieworld.utilities.misc;
 
 public class Point {
 	private int x;

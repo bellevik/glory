@@ -1,12 +1,12 @@
-package se.glory.zombieworld.model.entities.weapons;
+package se.glory.zombieworld.model.entities.items;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 import se.glory.zombieworld.model.WorldModel;
+import se.glory.zombieworld.model.entities.Identity;
 import se.glory.zombieworld.utilities.Constants;
-import se.glory.zombieworld.utilities.Identity;
-import se.glory.zombieworld.utilities.TextureHandler;
+import se.glory.zombieworld.view.TextureHandler;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.physics.box2d.Body;

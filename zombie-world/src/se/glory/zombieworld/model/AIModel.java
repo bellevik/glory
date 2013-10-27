@@ -3,14 +3,14 @@ package se.glory.zombieworld.model;
 import java.util.ArrayList;
 import java.util.Random;
 
+import se.glory.zombieworld.ai.AStarPathFinder;
 import se.glory.zombieworld.model.entities.Creature;
 import se.glory.zombieworld.model.entities.Human;
+import se.glory.zombieworld.model.entities.Identity;
 import se.glory.zombieworld.model.entities.Zombie;
-import se.glory.zombieworld.utilities.AStarPathFinder;
 import se.glory.zombieworld.utilities.Constants;
-import se.glory.zombieworld.utilities.Identity;
-import se.glory.zombieworld.utilities.Point;
 import se.glory.zombieworld.utilities.UtilityTimer;
+import se.glory.zombieworld.utilities.misc.Point;
 
 import com.badlogic.gdx.math.Vector2;
 

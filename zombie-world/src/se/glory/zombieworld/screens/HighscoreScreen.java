@@ -1,7 +1,7 @@
 package se.glory.zombieworld.screens;
 
 import se.glory.zombieworld.utilities.Constants;
-import se.glory.zombieworld.utilities.Score;
+import se.glory.zombieworld.utilities.misc.Score;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;

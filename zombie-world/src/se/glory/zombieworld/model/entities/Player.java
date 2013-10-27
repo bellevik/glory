@@ -2,13 +2,12 @@ package se.glory.zombieworld.model.entities;
 
 import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.model.WorldModel;
-import se.glory.zombieworld.model.entities.weapons.Bullet;
-import se.glory.zombieworld.model.entities.weapons.EquippableItem;
+import se.glory.zombieworld.model.entities.items.Bullet;
+import se.glory.zombieworld.model.entities.items.EquippableItem;
 import se.glory.zombieworld.screens.GameOverScreen;
 import se.glory.zombieworld.utilities.Constants;
-import se.glory.zombieworld.utilities.Identity;
-import se.glory.zombieworld.utilities.Score;
 import se.glory.zombieworld.utilities.UtilityTimer;
+import se.glory.zombieworld.utilities.misc.Score;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;

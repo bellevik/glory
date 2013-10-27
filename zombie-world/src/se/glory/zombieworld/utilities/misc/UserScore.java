@@ -1,4 +1,4 @@
-package se.glory.zombieworld.utilities;
+package se.glory.zombieworld.utilities.misc;
 
 public class UserScore implements Comparable<UserScore> {
 	public final String name;

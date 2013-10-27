@@ -1,7 +1,7 @@
 package se.glory.zombieworld.screens;
 
 import se.glory.zombieworld.utilities.Constants;
-import se.glory.zombieworld.utilities.SoundPlayer;
+import se.glory.zombieworld.utilities.misc.SoundPlayer;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;

@@ -2,10 +2,12 @@ package se.glory.zombieworld.utilities;
 
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.Human;
+import se.glory.zombieworld.model.entities.Identity;
 import se.glory.zombieworld.model.entities.Player;
 import se.glory.zombieworld.model.entities.Zombie;
+import se.glory.zombieworld.model.entities.items.Bullet;
 import se.glory.zombieworld.model.entities.items.WeaponLoot;
-import se.glory.zombieworld.model.entities.weapons.Bullet;
+import se.glory.zombieworld.utilities.misc.Score;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;

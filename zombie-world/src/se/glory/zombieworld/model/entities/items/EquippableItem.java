@@ -1,4 +1,4 @@
-package se.glory.zombieworld.model.entities.weapons;
+package se.glory.zombieworld.model.entities.items;
 
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.utilities.Constants;

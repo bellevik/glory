@@ -1,4 +1,4 @@
-package se.glory.zombieworld.model.entities.items;
+package se.glory.zombieworld.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

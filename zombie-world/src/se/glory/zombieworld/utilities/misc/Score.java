@@ -1,6 +1,9 @@
-package se.glory.zombieworld.utilities;
+package se.glory.zombieworld.utilities.misc;
 
 import java.util.Arrays;
+
+import se.glory.zombieworld.utilities.Constants;
+import se.glory.zombieworld.utilities.Constants.ScoreType;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;

@@ -1,11 +1,11 @@
 package se.glory.zombieworld.model;
 
-import se.glory.zombieworld.model.entities.items.ItemView;
-import se.glory.zombieworld.model.entities.items.QuickSelection;
-import se.glory.zombieworld.model.entities.items.ShopView;
+import se.glory.zombieworld.ui.ItemView;
+import se.glory.zombieworld.ui.Joystick;
+import se.glory.zombieworld.ui.PauseButton;
+import se.glory.zombieworld.ui.QuickSelection;
+import se.glory.zombieworld.ui.ShopView;
 import se.glory.zombieworld.utilities.Constants;
-import se.glory.zombieworld.utilities.Joystick;
-import se.glory.zombieworld.utilities.PauseButton;
 import se.glory.zombieworld.utilities.progressbars.Healthbar;
 
 import com.badlogic.gdx.Gdx;

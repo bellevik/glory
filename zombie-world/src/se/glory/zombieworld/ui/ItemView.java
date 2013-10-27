@@ -1,8 +1,8 @@
-package se.glory.zombieworld.model.entities.items;
+package se.glory.zombieworld.ui;
 
 import se.glory.zombieworld.model.StageModel;
-import se.glory.zombieworld.model.entities.weapons.EquippableItem;
-import se.glory.zombieworld.utilities.ScreenCoordinates;
+import se.glory.zombieworld.model.entities.items.EquippableItem;
+import se.glory.zombieworld.utilities.misc.ScreenCoordinates;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

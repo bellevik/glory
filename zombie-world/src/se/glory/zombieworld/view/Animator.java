@@ -1,6 +1,8 @@
-package se.glory.zombieworld.utilities;
+package se.glory.zombieworld.view;
 
 import se.glory.zombieworld.model.WorldModel;
+import se.glory.zombieworld.utilities.Constants;
+import se.glory.zombieworld.utilities.Constants.GameState;
 import se.glory.zombieworld.utilities.Constants.MoveableBodyType;
 
 import com.badlogic.gdx.Gdx;

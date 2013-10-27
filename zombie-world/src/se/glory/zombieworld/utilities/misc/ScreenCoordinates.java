@@ -1,4 +1,6 @@
-package se.glory.zombieworld.utilities;
+package se.glory.zombieworld.utilities.misc;
+
+import se.glory.zombieworld.utilities.Constants;
 
 import com.badlogic.gdx.Gdx;
 

@@ -1,7 +1,7 @@
 package se.glory.zombieworld.model.entities.obstacles;
 
+import se.glory.zombieworld.model.entities.Identity;
 import se.glory.zombieworld.utilities.Constants;
-import se.glory.zombieworld.utilities.Identity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

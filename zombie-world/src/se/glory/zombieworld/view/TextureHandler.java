@@ -1,4 +1,4 @@
-package se.glory.zombieworld.utilities;
+package se.glory.zombieworld.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

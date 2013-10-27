@@ -1,4 +1,4 @@
-package se.glory.zombieworld.model.entities.weapons;
+package se.glory.zombieworld.model.entities.items;
 
 import java.util.HashMap;
 import java.util.Random;

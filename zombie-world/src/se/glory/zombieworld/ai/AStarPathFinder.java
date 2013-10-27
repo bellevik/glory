@@ -1,7 +1,9 @@
-package se.glory.zombieworld.utilities;
+package se.glory.zombieworld.ai;
 
 import java.util.ArrayList;
 import java.util.Collections;
+
+import se.glory.zombieworld.utilities.misc.Point;
 
 /*
  * This is a static class implementing the path finding algorithm known as A*. 

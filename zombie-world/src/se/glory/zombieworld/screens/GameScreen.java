@@ -2,17 +2,17 @@ package se.glory.zombieworld.screens;
 
 import java.util.Random;
 
+import se.glory.zombieworld.ai.SpawnController;
 import se.glory.zombieworld.model.StageModel;
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.items.WeaponLoot;
 import se.glory.zombieworld.model.entities.obstacles.CustomObstacle;
 import se.glory.zombieworld.model.entities.obstacles.StreetObject;
 import se.glory.zombieworld.utilities.Constants;
-import se.glory.zombieworld.utilities.Score;
-import se.glory.zombieworld.utilities.SoundPlayer;
-import se.glory.zombieworld.utilities.SpawnController;
-import se.glory.zombieworld.utilities.TextureHandler;
+import se.glory.zombieworld.utilities.misc.Score;
+import se.glory.zombieworld.utilities.misc.SoundPlayer;
 import se.glory.zombieworld.view.GameView;
+import se.glory.zombieworld.view.TextureHandler;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;

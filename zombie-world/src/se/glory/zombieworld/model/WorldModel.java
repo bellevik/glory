@@ -2,14 +2,14 @@ package se.glory.zombieworld.model;
 
 import java.util.ArrayList;
 
+import se.glory.zombieworld.model.entities.Identity;
 import se.glory.zombieworld.model.entities.Player;
-import se.glory.zombieworld.model.entities.weapons.Bullet;
-import se.glory.zombieworld.model.entities.weapons.WeaponArsenal;
+import se.glory.zombieworld.model.entities.items.Bullet;
+import se.glory.zombieworld.model.entities.items.WeaponArsenal;
 import se.glory.zombieworld.utilities.CollisionDetection;
 import se.glory.zombieworld.utilities.Constants;
-import se.glory.zombieworld.utilities.Identity;
-import se.glory.zombieworld.utilities.Point;
 import se.glory.zombieworld.utilities.UtilityTimer;
+import se.glory.zombieworld.utilities.misc.Point;
 
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;

@@ -1,9 +1,12 @@
-package se.glory.zombieworld.utilities;
+package se.glory.zombieworld.ai;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 import se.glory.zombieworld.model.AIModel;
+import se.glory.zombieworld.utilities.Constants;
+import se.glory.zombieworld.utilities.Constants.MoveableBodyType;
+import se.glory.zombieworld.utilities.misc.Point;
 
 public class SpawnController {
 	private int TILE_SIZE = 16;

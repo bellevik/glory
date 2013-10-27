@@ -4,13 +4,12 @@ import java.util.ArrayList;
 
 import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.Creature;
+import se.glory.zombieworld.model.entities.Identity;
 import se.glory.zombieworld.model.entities.items.WeaponLoot;
-import se.glory.zombieworld.utilities.Animator;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Constants.MoveableBodyType;
-import se.glory.zombieworld.utilities.Identity;
-import se.glory.zombieworld.utilities.Point;
-import se.glory.zombieworld.utilities.Score;
+import se.glory.zombieworld.utilities.misc.Point;
+import se.glory.zombieworld.utilities.misc.Score;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;

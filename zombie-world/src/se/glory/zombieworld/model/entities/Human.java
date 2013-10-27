@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import se.glory.zombieworld.utilities.Constants;
-import se.glory.zombieworld.utilities.Point;
+import se.glory.zombieworld.utilities.misc.Point;
 
 import com.badlogic.gdx.math.Vector2;
 
