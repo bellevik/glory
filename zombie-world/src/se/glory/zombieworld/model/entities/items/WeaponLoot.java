@@ -1,14 +1,10 @@
 package se.glory.zombieworld.model.entities.items;
 
 import se.glory.zombieworld.model.WorldModel;
-import se.glory.zombieworld.model.entities.weapons.EMeleeWeapon;
-import se.glory.zombieworld.model.entities.weapons.WeaponArsenal;
+import se.glory.zombieworld.model.entities.Identity;
 import se.glory.zombieworld.utilities.Constants;
 import se.glory.zombieworld.utilities.Constants.ItemType;
-import se.glory.zombieworld.utilities.Identity;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -22,10 +18,9 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
  * in the world and got space in its inventory the player will get the Weapon in its
  * inventory. 
  */
-public class WeaponLoot implements Item {
-	private EMeleeWeapon weapon;
+public class WeaponLoot {
+	private EquippableItem weapon;
 	private Constants.ItemType type;
-	private float x, y;
 	private final float width = 16;
 	private final float height = 16;
 	
@@ -42,10 +37,8 @@ public class WeaponLoot implements Item {
 	/*
 	 * This constructor will place a weapon on the type weaponName at (x, y)
 	 */
-	public WeaponLoot(EMeleeWeapon weapon, float x, float y) {
+	public WeaponLoot(EquippableItem weapon, float x, float y) {
 		this.weapon = weapon;
-		this.x = x;
-		this.y = y;
 		
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyType.StaticBody;
@@ -59,29 +52,25 @@ public class WeaponLoot implements Item {
 		fixtureDef.shape = shape;
 		body.createFixture(fixtureDef);
 		
-		//Texture texture = new Texture(Gdx.files.internal("img/loot.png"));
-		
 		Identity identity = new Identity();
 		identity.setWidth(width);
 		identity.setHeight(height);
-		identity.setTexture(weapon.getTexture(0));
+		identity.setTexture(weapon.getTexture());
 		identity.setType(Constants.MoveableBodyType.ITEM);
 		identity.setObj(this);
 		
 		body.setUserData(identity);
 	}
 
-	@Override
 	public ItemType getItemType() {
 		return type;
 	}
 
-	@Override
 	public String getItemName() {
-		return "";
+		return weapon.getItemName();
 	}
 
-	public EMeleeWeapon getWeapon() {
+	public EquippableItem getWeapon() {
 		return weapon;
 	}
 }

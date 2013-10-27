@@ -1,11 +1,12 @@
 package se.glory.zombieworld.model;
 
-import se.glory.zombieworld.model.entities.items.Healthbar;
-import se.glory.zombieworld.model.entities.items.ItemView;
-import se.glory.zombieworld.model.entities.items.QuickSelection;
+import se.glory.zombieworld.ui.ItemView;
+import se.glory.zombieworld.ui.Joystick;
+import se.glory.zombieworld.ui.PauseButton;
+import se.glory.zombieworld.ui.QuickSelection;
+import se.glory.zombieworld.ui.ShopView;
 import se.glory.zombieworld.utilities.Constants;
-import se.glory.zombieworld.utilities.Joystick;
-import se.glory.zombieworld.utilities.PauseButton;
+import se.glory.zombieworld.utilities.progressbars.Healthbar;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -16,6 +17,7 @@ public class StageModel {
 	public static Healthbar healthBar;
 	public static QuickSelection quickSelection;
 	public static ItemView itemView;
+	public static ShopView shopView;
 	public static Joystick moveStick, fireStick;
 	public static PauseButton pauseButton;
 	
@@ -27,11 +29,12 @@ public class StageModel {
 		
 		itemView = new ItemView(stage);
 		quickSelection = new QuickSelection(stage);
+
+		healthBar = new Healthbar(stage);
 		
+		shopView = new ShopView(stage);
 		
 		pauseButton = new PauseButton(stage, 15, Constants.VIEWPORT_HEIGHT - 32 - 15);
-		
-		healthBar = new Healthbar(stage);
 		
 		Gdx.input.setInputProcessor(stage);
 	}

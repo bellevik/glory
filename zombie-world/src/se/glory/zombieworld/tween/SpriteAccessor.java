@@ -5,7 +5,6 @@ import aurelienribon.tweenengine.TweenAccessor;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class SpriteAccessor implements TweenAccessor<Sprite> {
-
 	public static final int ALPHA = 0;
 	
 	@Override
@@ -30,5 +29,4 @@ public class SpriteAccessor implements TweenAccessor<Sprite> {
 			assert false;
 		}
 	}
-
 }

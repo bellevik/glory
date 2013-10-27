@@ -2,61 +2,59 @@ package se.glory.zombieworld.test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-
+import se.glory.zombieworld.ai.AStarPathFinder;
+import se.glory.zombieworld.model.WorldModel;
 import se.glory.zombieworld.model.entities.Creature;
 import se.glory.zombieworld.model.entities.Human;
 import se.glory.zombieworld.model.entities.Zombie;
-import se.glory.zombieworld.model.entities.items.Healthbar;
-import se.glory.zombieworld.utilities.AStarPathFinder;
-import se.glory.zombieworld.utilities.Point;
-
-import com.badlogic.gdx.physics.box2d.World;
+import se.glory.zombieworld.utilities.UtilityTimer;
+import se.glory.zombieworld.utilities.misc.Point;
 
 public class TestCases {
 
-	World testWorld;
+	WorldModel testWorld;
 	ArrayList<Zombie> zombies = new ArrayList<Zombie>();
 	ArrayList<Creature> humans = new ArrayList<Creature>();
 	Human testHuman;
 	
 	@Test
-	public void testReactions() {
-		//difficult without creating a world...
+	public void testTimer() {
+		//Creates a new timer with the interval 1000 milliseconds
+		UtilityTimer timer = new UtilityTimer(1000);
 		
-	//	assertTrue("truetrue", new Vector2(20,0).x==20);
-	//	testWorld = new World(new Vector2(0, 0), true);
-	//	testHuman = new Human(testWorld, 150, 150);
-	//	humans.add(testHuman);
-	//	zombies.add(new Zombie(testWorld, 200,150));
+		//Checks that the interval is what we wanted
+		assertThat(timer.getInterval(), is(1000));
 		
-	//	assertsEquals("Human starts at correct x position", 150, 150);
-	//	assertsEquals(150, 150);
-		assertNotNull("Human object null", testHuman);
-		assertTrue("truetrue", testHuman.getBody().getPosition().x==150);
-//		assertsEquals("Human starts at correct y position", expected, actual)
+		//Resets the timer
+		timer.resetTimer();
 		
-	//	testHuman.autoUpdateMovement(zombies);
-		fail("Test not finished");
+		//Checks that the timer is not done (has not passed 1 second)
+		assertThat(timer.isDone(), is(false));
+		
+		//Waits for the timer to get through the 1 second
+		while(!timer.isDone()){
+			//Checks that the elapsed time has not reached the interval time yet
+			assertTrue("Elapsed time less than interval", timer.getElapsedTime() < 1000);
+			assertTrue("Elapsed time more than 0", timer.getElapsedTime() >= 0);
+		}
+		
+		//Checks so the timer really is done
+		assertThat(timer.isDone(), is(true));
+		
+		//Checks the elapsed time to see if it really is the same as interval
+		//to make sure it is done
+		assertThat(timer.getElapsedTime(), is((long)timer.getInterval()));
 	}
 	
 	@Test
-	public void testAStarPathFinder() {
-		
+	public void testAStarPathFinder() {	
 		//Creates the list with blocked points the AStar algorithm has to get through
 		ArrayList<Point> blocked = new ArrayList<Point>();
 		
@@ -95,13 +93,8 @@ public class TestCases {
 		
 		//Asserts the correct path has the same points as the shortestPath
 		assertThat(correctPath, is(shortestPath));
+		
 		//Asserts the false path does not have the same points as the shortestPath to make sure the assertThat doesn't accept all paths
 		assertThat(falsePath, not(shortestPath));
-	}
-	
-	@Test
-	public void testHealthBar() {
-		//Difficult without creating a stage....
-		fail("Test not finished");
 	}
 }

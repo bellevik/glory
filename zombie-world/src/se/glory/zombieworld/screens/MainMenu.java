@@ -1,6 +1,7 @@
 package se.glory.zombieworld.screens;
 
 import se.glory.zombieworld.utilities.Constants;
+import se.glory.zombieworld.utilities.misc.Score;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -18,8 +19,10 @@ public class MainMenu implements Screen {
 	
 	private SpriteBatch batch;
 	
-	private Texture backgroundTexture, buttonExitTexture, buttonPlayTexture, buttonSettingsTexture;
-	private Image buttonExit, buttonPlay, buttonSettings;
+	private int yDiff = 75;
+	
+	private Texture backgroundTexture, buttonExitTexture, buttonPlayTexture, buttonSettingsTexture, buttonHighscoreTexture, buttonTutorialTexture;
+	private Image buttonExit, buttonPlay, buttonSettings, buttonHighscore, buttonTutorial;
     
 	@Override
 	public void render(float delta) {
@@ -36,40 +39,60 @@ public class MainMenu implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		
+		double scale = Constants.VIEWPORT_WIDTH / (double) width;
+		Constants.VIEWPORT_HEIGHT = (int) (height * scale);
 	}
 
 	@Override
 	public void show() {
+		
 		stage = new Stage();
 		
 		batch = new SpriteBatch();
 		
 		backgroundTexture = new Texture(Gdx.files.internal("ui/mainMenuBackground.png"));
-		buttonExitTexture = new Texture(Gdx.files.internal("ui/buttonExit.png"));
 		buttonPlayTexture = new Texture(Gdx.files.internal("ui/buttonPlay.png"));
+		buttonTutorialTexture = new Texture(Gdx.files.internal("ui/tutorialButton.png"));
 		buttonSettingsTexture = new Texture(Gdx.files.internal("ui/buttonSettings.png"));
+		buttonHighscoreTexture = new Texture(Gdx.files.internal("ui/highScoreLabel.png"));
+		buttonExitTexture = new Texture(Gdx.files.internal("ui/buttonExit.png"));
 		
 		Gdx.input.setInputProcessor(stage);
 		
 		//Create buttons
 		buttonPlay = new Image(buttonPlayTexture);
 		buttonPlay.setX(Constants.VIEWPORT_WIDTH/2 - buttonPlayTexture.getWidth()/2);
-		buttonPlay.setY(250);
+		buttonPlay.setY(300);
+		
+		buttonTutorial = new Image(buttonTutorialTexture);
+		buttonTutorial.setX(Constants.VIEWPORT_WIDTH/2 - buttonTutorialTexture.getWidth()/2);
+		buttonTutorial.setY(buttonPlay.getY() - yDiff);
+		
 		
 		buttonSettings = new Image(buttonSettingsTexture);
 		buttonSettings.setX(Constants.VIEWPORT_WIDTH/2 - buttonSettingsTexture.getWidth()/2);
-		buttonSettings.setY(buttonPlay.getY() - 75);
+		buttonSettings.setY(buttonTutorial.getY() - yDiff);
+		
+		buttonHighscore = new Image(buttonHighscoreTexture);
+		buttonHighscore.setX(Constants.VIEWPORT_WIDTH/2 - buttonHighscoreTexture.getWidth()/2);
+		buttonHighscore.setY(buttonSettings.getY() - yDiff);
 		
 		buttonExit = new Image(buttonExitTexture);
-		buttonExit.setX(Constants.VIEWPORT_WIDTH/2 - buttonExitTexture.getWidth()/2);
-		buttonExit.setY(buttonSettings.getY() - 75);
+		buttonExit.setX(Constants.VIEWPORT_WIDTH/2 - buttonExitTexture.getWidth()/2 - 10);
+		buttonExit.setY(buttonHighscore.getY() - 65);
 
 		//Adding listeners to buttons
-		buttonExit.addListener(new ClickListener(){
+		buttonPlay.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				Gdx.app.exit();
+				Score.resetScore();
+				((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen());
+			}
+		});
+		buttonTutorial.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				((Game) Gdx.app.getApplicationListener()).setScreen(new TutorialScreen());
 			}
 		});
 		buttonSettings.addListener(new ClickListener(){
@@ -78,21 +101,32 @@ public class MainMenu implements Screen {
 				((Game) Gdx.app.getApplicationListener()).setScreen(new SettingsScreen());
 			}
 		});
-		buttonPlay.addListener(new ClickListener() {
+		buttonHighscore.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				((Game) Gdx.app.getApplicationListener()).setScreen(new GameScreen());
+				((Game) Gdx.app.getApplicationListener()).setScreen(new HighscoreScreen());
+			}
+		});
+		buttonExit.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				Gdx.app.exit();
 			}
 		});
 		
 		stage.addActor(buttonPlay);
+		stage.addActor(buttonTutorial);
 		stage.addActor(buttonSettings);
 		stage.addActor(buttonExit);
+		stage.addActor(buttonHighscore);
 	}
 
 	@Override
 	public void hide() {
-		
+		buttonPlay.clear();
+		buttonTutorial.clear();
+		buttonSettings.clear();
+		buttonExit.clear();
 	}
 
 	@Override
@@ -107,6 +141,6 @@ public class MainMenu implements Screen {
 
 	@Override
 	public void dispose() {
-		
+		stage.dispose();
 	}
 }

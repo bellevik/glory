@@ -1,6 +1,7 @@
 package se.glory.zombieworld.screens;
 
 import se.glory.zombieworld.utilities.Constants;
+import se.glory.zombieworld.utilities.misc.SoundPlayer;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -44,6 +45,9 @@ public class SettingsScreen implements Screen {
 		SFXValue = (int) SFXVolume.getVisualValue() + "%";
 		musicValue = (int) musicVolume.getVisualValue() + "%";
 		
+		SoundPlayer.setMusicVolume(musicVolume.getVisualValue()/100);
+		SoundPlayer.setSFXVolume(SFXVolume.getVisualValue()/100);
+		
 		batch.begin();
 		batch.draw(backgroundTexture, 0, 0);
 		font.draw(batch, musicValue, musicVolume.getX() + musicVolume.getWidth() + 10, 300);
@@ -61,15 +65,13 @@ public class SettingsScreen implements Screen {
 	}
 
 	@Override
-	public void show() {
-		
+	public void show() {	
 		font = new BitmapFont();
 		
-		stage = new Stage();
-		
+		stage = new Stage();	
 		batch = new SpriteBatch();
 		
-		backgroundTexture = new Texture(Gdx.files.internal("ui/mainMenuBackground.png"));
+		backgroundTexture = new Texture(Gdx.files.internal("ui/settingsBackground.png"));
 		musicLabelTexture = new Texture(Gdx.files.internal("ui/buttonMusic.png"));
 		SFXLabelTexture = new Texture(Gdx.files.internal("ui/buttonSFX.png"));
 		backButtonTexture = new Texture(Gdx.files.internal("ui/buttonBack.png"));
@@ -78,8 +80,7 @@ public class SettingsScreen implements Screen {
 		sliderKnobTexture = new Texture(Gdx.files.internal("ui/sliderKnob.png"));
 		
 		sliderBarSprite = new Sprite(sliderBarTexture);
-		sliderKnobSprite = new Sprite(sliderKnobTexture);
-		
+		sliderKnobSprite = new Sprite(sliderKnobTexture);	
 		
 		sliderBar = new SpriteDrawable(sliderBarSprite);
 		sliderKnob = new SpriteDrawable(sliderKnobSprite);
@@ -93,8 +94,8 @@ public class SettingsScreen implements Screen {
 		
 		musicVolume = new Slider(0, 100, 1, false, new Slider.SliderStyle(sliderBar, sliderKnob));
 		musicVolume.setX(Constants.VIEWPORT_WIDTH/2 - musicVolume.getWidth()/2);
-		musicVolume.setY(250 + musicVolume.getHeight());
-		musicVolume.setValue(100);
+		musicVolume.setY(250 + musicVolume.getHeight());	
+		musicVolume.setValue(SoundPlayer.getMusicVolume() * 100);
 		
 		
 		SFXLabel = new Image(SFXLabelTexture);
@@ -104,7 +105,7 @@ public class SettingsScreen implements Screen {
 		SFXVolume = new Slider(0, 100, 1, false, new Slider.SliderStyle(sliderBar, sliderKnob));
 		SFXVolume.setX(Constants.VIEWPORT_WIDTH/2 - SFXVolume.getWidth()/2);
 		SFXVolume.setY(200 + SFXVolume.getHeight());
-		SFXVolume.setValue(100);
+		SFXVolume.setValue(SoundPlayer.getSFXVolume() * 100);
 		
 		backButton = new Image(backButtonTexture);
 		backButton.setX(Constants.VIEWPORT_WIDTH/2 - SFXLabelTexture.getWidth()/2);
@@ -129,8 +130,7 @@ public class SettingsScreen implements Screen {
 				((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu());
 			}
 		});
-		
-		
+			
 		stage.addActor(SFXVolume);
 		stage.addActor(musicVolume);
 		stage.addActor(musicLabel);

@@ -2,13 +2,14 @@ package se.glory.zombieworld.model;
 
 import java.util.ArrayList;
 
+import se.glory.zombieworld.model.entities.Identity;
 import se.glory.zombieworld.model.entities.Player;
-import se.glory.zombieworld.model.entities.weapons.WeaponArsenal;
+import se.glory.zombieworld.model.entities.items.Bullet;
+import se.glory.zombieworld.model.entities.items.WeaponArsenal;
 import se.glory.zombieworld.utilities.CollisionDetection;
 import se.glory.zombieworld.utilities.Constants;
-import se.glory.zombieworld.utilities.Identity;
-import se.glory.zombieworld.utilities.Point;
 import se.glory.zombieworld.utilities.UtilityTimer;
+import se.glory.zombieworld.utilities.misc.Point;
 
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
@@ -32,7 +33,7 @@ public class WorldModel {
 		world = new World(new Vector2(0, 0), true);
 		aiModel = new AIModel();
 		
-		player = new Player (300, 300, 16, 16);
+		player = new Player(600, 600, 16, 16);
 		
 		weaponArsenal = new WeaponArsenal();
 		
@@ -74,11 +75,16 @@ public class WorldModel {
 		WorldModel.world.getBodies(WorldModel.removeableBodies);
 		
 		for (Body body : WorldModel.removeableBodies) {
-			if(body.getUserData() != null){
-				if ( body.getUserData().getClass().equals(Identity.class) ) {
-					if(body!=null) {
-						if (((Identity)(body.getUserData())).isDead()) {
+			if (body != null) {
+				if (body.getUserData() != null){
+					if (body.getUserData().getClass().equals(Identity.class)) {
+						Identity id = (Identity)body.getUserData();
+						if (id.isDead()) {
 							if (!WorldModel.world.isLocked()) {
+								if(id.getType() == Constants.MoveableBodyType.BULLET) {
+									((Bullet)id.getObj()).destroyTimer();
+								}
+								
 								WorldModel.world.destroyBody(body);
 							}
 						}
@@ -99,7 +105,6 @@ public class WorldModel {
 		
 		if(StageModel.healthBar.getHealthPercentGoal() != player.getHealthPercentage()) {
 			StageModel.healthBar.setHealthPercentGoal(player.getHealthPercentage());
-			//.updateHealth(player.getHealthPercentage());
 		}
 		StageModel.healthBar.updateHealthMovementSlowly();
 	}
